@@ -718,7 +718,7 @@ msgstr[1] "%1% minutės"
 msgstr[2] "%1% minučių"
 
 #: src/mmg/tabs/scanning_for_playlists_dlg.cpp:41
-#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:141
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:148
 #, boost-format
 msgid "%1% of %2% file(s) processed"
 msgstr ""
@@ -842,7 +842,7 @@ msgid "&About\tF1"
 msgstr "&Apie\tF1"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:45
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:51
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:52
 msgid "&Add"
 msgstr "Pri&dėti"
 
@@ -855,7 +855,7 @@ msgstr "Įtraukti į &darbų eilę"
 msgid "&Attachments\tAlt-2"
 msgstr "&Priedai\tAlt-2"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:52
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:53
 msgid "&Cancel"
 msgstr ""
 
@@ -2600,7 +2600,7 @@ msgstr ""
 msgid "Cluster timecode: %|1$.3f|s"
 msgstr ""
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:67
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:68
 #, fuzzy
 msgid "Codec"
 msgstr "Kodeko ID"
@@ -3112,7 +3112,7 @@ msgstr "Aprašas jau yra"
 msgid "Description:"
 msgstr "Aprašas:"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:37
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:38
 msgid "Details"
 msgstr ""
 
@@ -3123,7 +3123,7 @@ msgid "Dirac"
 msgstr "Dirac"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:74
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:74
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:75
 msgid "Directory"
 msgstr "Katalogas"
 
@@ -3212,13 +3212,13 @@ msgstr "Atlikta.\n"
 msgid "Download URL:"
 msgstr "Parsisiuntimo URL:"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:60
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:61
 #, fuzzy
 msgid "Duration"
 msgstr "Trukmė:"
 
 #: src/mmg/tabs/global.cpp:212
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:39
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:40
 msgid "Duration:"
 msgstr "Trukmė:"
 
@@ -3630,8 +3630,8 @@ msgid "File modified"
 msgstr "Rinkmena pakeista"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:72
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:58
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:72
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:59
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:73
 msgid "File name"
 msgstr "Rinkmenos vardas"
 
@@ -4510,7 +4510,7 @@ msgstr ""
 
 #: src/common/property_element.cpp:128
 #: src/mmg/header_editor/frame.cpp:414
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:69
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:70
 msgid "Language"
 msgstr "Kalba"
 
@@ -5149,7 +5149,7 @@ msgstr "Nėra ką daryti. \n"
 msgid "Notice"
 msgstr "Pranešimas"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:43
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:44
 #, fuzzy
 msgid "Number of chapters:"
 msgstr "&Naujas skyrius"
@@ -5419,7 +5419,7 @@ msgstr "Taškelio aukštis: %1%"
 msgid "Pixel width: %1%"
 msgstr "Taškelio plotis: %1%"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:47
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:48
 msgid "Playlist items:"
 msgstr ""
 
@@ -5884,7 +5884,7 @@ msgstr ""
 msgid "Scan directory for other playlists:"
 msgstr ""
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:32
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:33
 #, fuzzy
 msgid "Scanned files"
 msgstr "Esami priedai"
@@ -6281,14 +6281,14 @@ msgstr ""
 msgid "Single field frame before GOP header detected. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr ""
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:62
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:63
 #, fuzzy
 msgid "Size"
 msgstr "Dydis:"
 
 #: src/mmg/tabs/global.cpp:195
 #: src/mmg/tabs/global.cpp:198
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:41
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:42
 msgid "Size:"
 msgstr "Dydis:"
 
@@ -7894,7 +7894,7 @@ msgstr ""
 msgid "Tracks, chapters and tags:"
 msgstr "Takeliai, skyriai ir gairės:"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:45
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:46
 #, fuzzy
 msgid "Tracks:"
 msgstr "Takelio pavadinimas:"
@@ -7917,7 +7917,7 @@ msgstr ""
 msgid "Two VobSub tracks can only be extracted into the same file if their CodecPrivate data matches. This is not the case for the tracks %1% and %2%.\n"
 msgstr ""
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:65
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:66
 #, fuzzy
 msgid "Type"
 msgstr "Tipas:"
@@ -8443,7 +8443,7 @@ msgstr "papildyti"
 #: src/info/mkvinfo.cpp:939
 #: src/input/r_matroska.cpp:97
 #: src/mmg/mmg.cpp:65
-#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:180
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:187
 msgid "audio"
 msgstr "garsas"
 
@@ -9294,7 +9294,7 @@ msgstr "subtitrai"
 
 #: src/info/mkvinfo.cpp:941
 #: src/mmg/mmg.cpp:67
-#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:180
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:187
 msgid "subtitles"
 msgstr "subtitrai"
 
@@ -9342,7 +9342,7 @@ msgstr "und (nenurodyta)"
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/mmg.cpp:68
 #: src/mmg/tabs/input.cpp:549
-#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:180
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:187
 msgid "unknown"
 msgstr "nežinoma"
 
@@ -9367,7 +9367,7 @@ msgstr ""
 #: src/info/mkvinfo.cpp:940
 #: src/input/r_matroska.cpp:99
 #: src/mmg/mmg.cpp:66
-#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:180
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:187
 msgid "video"
 msgstr "vaizdo įrašas"
 

@@ -744,7 +744,7 @@ msgstr[0] "%1% minuto"
 msgstr[1] "%1% minutos"
 
 #: src/mmg/tabs/scanning_for_playlists_dlg.cpp:41
-#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:141
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:148
 #, boost-format
 msgid "%1% of %2% file(s) processed"
 msgstr ""
@@ -853,7 +853,7 @@ msgid "&About\tF1"
 msgstr "&Acerca\tF1"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:45
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:51
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:52
 msgid "&Add"
 msgstr "&Adicionar"
 
@@ -866,7 +866,7 @@ msgstr "&Adicionar à lista de tarefas"
 msgid "&Attachments\tAlt-2"
 msgstr "&Anexos\tAlt-2"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:52
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:53
 msgid "&Cancel"
 msgstr "&Cancelar"
 
@@ -2621,7 +2621,7 @@ msgstr ""
 msgid "Cluster timecode: %|1$.3f|s"
 msgstr ""
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:67
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:68
 #, fuzzy
 msgid "Codec"
 msgstr "Codec"
@@ -3133,7 +3133,7 @@ msgstr "A descição já existe"
 msgid "Description:"
 msgstr "Descrição:"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:37
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:38
 msgid "Details"
 msgstr ""
 
@@ -3144,7 +3144,7 @@ msgid "Dirac"
 msgstr ""
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:74
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:74
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:75
 msgid "Directory"
 msgstr "Localização"
 
@@ -3233,12 +3233,12 @@ msgstr "Feito.\n"
 msgid "Download URL:"
 msgstr "URL para download:"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:60
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:61
 msgid "Duration"
 msgstr "Duração"
 
 #: src/mmg/tabs/global.cpp:212
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:39
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:40
 msgid "Duration:"
 msgstr "Duração:"
 
@@ -3655,8 +3655,8 @@ msgid "File modified"
 msgstr "Ficheiro modificado"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:72
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:58
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:72
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:59
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:73
 msgid "File name"
 msgstr "Nome do ficheiro"
 
@@ -4541,7 +4541,7 @@ msgstr ""
 
 #: src/common/property_element.cpp:128
 #: src/mmg/header_editor/frame.cpp:414
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:69
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:70
 msgid "Language"
 msgstr "Idioma"
 
@@ -5178,7 +5178,7 @@ msgstr "Nada para fazer.\n"
 msgid "Notice"
 msgstr ""
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:43
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:44
 #, fuzzy
 msgid "Number of chapters:"
 msgstr "&Novos capítulos"
@@ -5448,7 +5448,7 @@ msgstr ""
 msgid "Pixel width: %1%"
 msgstr ""
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:47
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:48
 msgid "Playlist items:"
 msgstr ""
 
@@ -5915,7 +5915,7 @@ msgstr "Pesquisar outras playlists na pasta"
 msgid "Scan directory for other playlists:"
 msgstr "Pesquisar outras playlists na pasta:"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:32
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:33
 #, fuzzy
 msgid "Scanned files"
 msgstr "Ficheiros anexados"
@@ -6317,13 +6317,13 @@ msgstr ""
 msgid "Single field frame before GOP header detected. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr ""
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:62
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:63
 msgid "Size"
 msgstr "Tamanho:"
 
 #: src/mmg/tabs/global.cpp:195
 #: src/mmg/tabs/global.cpp:198
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:41
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:42
 msgid "Size:"
 msgstr "Tamanho:"
 
@@ -7953,7 +7953,7 @@ msgstr ""
 msgid "Tracks, chapters and tags:"
 msgstr "Pistas, capítulos e etiquetas (Tags):"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:45
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:46
 #, fuzzy
 msgid "Tracks:"
 msgstr "Nome da pista:"
@@ -7976,7 +7976,7 @@ msgstr ""
 msgid "Two VobSub tracks can only be extracted into the same file if their CodecPrivate data matches. This is not the case for the tracks %1% and %2%.\n"
 msgstr ""
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:65
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:66
 #, fuzzy
 msgid "Type"
 msgstr "Tipo"
@@ -8505,7 +8505,7 @@ msgstr "acrescentar"
 #: src/info/mkvinfo.cpp:939
 #: src/input/r_matroska.cpp:97
 #: src/mmg/mmg.cpp:65
-#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:180
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:187
 msgid "audio"
 msgstr "áudio"
 
@@ -9351,7 +9351,7 @@ msgstr "legenda"
 
 #: src/info/mkvinfo.cpp:941
 #: src/mmg/mmg.cpp:67
-#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:180
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:187
 msgid "subtitles"
 msgstr "legendas"
 
@@ -9399,7 +9399,7 @@ msgstr "N/A (indeterminado)"
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/mmg.cpp:68
 #: src/mmg/tabs/input.cpp:549
-#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:180
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:187
 msgid "unknown"
 msgstr "desconhecido"
 
@@ -9424,7 +9424,7 @@ msgstr ""
 #: src/info/mkvinfo.cpp:940
 #: src/input/r_matroska.cpp:99
 #: src/mmg/mmg.cpp:66
-#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:180
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:187
 msgid "video"
 msgstr "vídeo"
 

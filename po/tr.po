@@ -854,7 +854,7 @@ msgstr[0] "%1% dakika"
 msgstr[1] "%1% dakika"
 
 #: src/mmg/tabs/scanning_for_playlists_dlg.cpp:41
-#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:141
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:148
 #, boost-format
 msgid "%1% of %2% file(s) processed"
 msgstr "%1% / %2% dosya işlendi"
@@ -977,7 +977,7 @@ msgid "&About\tF1"
 msgstr "&Hakkında\tF1"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:45
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:51
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:52
 msgid "&Add"
 msgstr "&Ekle"
 
@@ -990,7 +990,7 @@ msgstr "İş kuyruğuna &ekle"
 msgid "&Attachments\tAlt-2"
 msgstr "&Ekler\tAlt-2"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:52
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:53
 msgid "&Cancel"
 msgstr "İ&ptal"
 
@@ -2751,7 +2751,7 @@ msgstr "Küme önceki boyutu: %1%"
 msgid "Cluster timecode: %|1$.3f|s"
 msgstr "Küme zaman kodu: %|1$.3f|s"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:67
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:68
 msgid "Codec"
 msgstr "Kodek"
 
@@ -3262,7 +3262,7 @@ msgstr "Tanım zaten var"
 msgid "Description:"
 msgstr "Tanım:"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:37
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:38
 msgid "Details"
 msgstr "Ayrıntılar"
 
@@ -3273,7 +3273,7 @@ msgid "Dirac"
 msgstr "Dirac"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:74
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:74
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:75
 msgid "Directory"
 msgstr "Dizin"
 
@@ -3362,12 +3362,12 @@ msgstr "Bitti.\n"
 msgid "Download URL:"
 msgstr "İndirme URL'si:"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:60
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:61
 msgid "Duration"
 msgstr "Süre"
 
 #: src/mmg/tabs/global.cpp:212
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:39
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:40
 msgid "Duration:"
 msgstr "Süre:"
 
@@ -3782,8 +3782,8 @@ msgid "File modified"
 msgstr "Dosya değiştirildi"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:72
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:58
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:72
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:59
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:73
 msgid "File name"
 msgstr "Dosya adı"
 
@@ -4672,7 +4672,7 @@ msgstr "Bağlama işareti: %1%"
 
 #: src/common/property_element.cpp:128
 #: src/mmg/header_editor/frame.cpp:414
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:69
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:70
 msgid "Language"
 msgstr "Dil"
 
@@ -5312,7 +5312,7 @@ msgstr "Hiçbir şey yapma.\n"
 msgid "Notice"
 msgstr "Bildiri"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:43
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:44
 msgid "Number of chapters:"
 msgstr "Bölüm sayısı:"
 
@@ -5580,7 +5580,7 @@ msgstr "Piksel yüksekliği: %1%"
 msgid "Pixel width: %1%"
 msgstr "Piksel genişliği: %1%"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:47
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:48
 msgid "Playlist items:"
 msgstr "Oynatma listesi öğeleri:"
 
@@ -6049,7 +6049,7 @@ msgstr "Diğer oynatma listeleri için dizini tara"
 msgid "Scan directory for other playlists:"
 msgstr "Diğer oynatma listeleri için dizini tara:"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:32
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:33
 msgid "Scanned files"
 msgstr "Taranan dosyalar"
 
@@ -6450,13 +6450,13 @@ msgstr "Basit Blok (%1% iz numarası %2%, %3% kare, zaman kodu %|4$.3f|s = %5%)"
 msgid "Single field frame before GOP header detected. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "GOP başlığından önce tek alan karesi saptandı. Çoklamak için denemeden önce MPEG2 görüntü akışını düzeltin.\n"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:62
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:63
 msgid "Size"
 msgstr "Boyut"
 
 #: src/mmg/tabs/global.cpp:195
 #: src/mmg/tabs/global.cpp:198
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:41
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:42
 msgid "Size:"
 msgstr "Boyut:"
 
@@ -8101,7 +8101,7 @@ msgstr "Desteklenmeyen içerik şifreleme şemalı (sıkıştırma veya şifrele
 msgid "Tracks, chapters and tags:"
 msgstr "İzler, bölümler ve etiketler:"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:45
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:46
 msgid "Tracks:"
 msgstr "İzler:"
 
@@ -8123,7 +8123,7 @@ msgstr ""
 msgid "Two VobSub tracks can only be extracted into the same file if their CodecPrivate data matches. This is not the case for the tracks %1% and %2%.\n"
 msgstr "İki VobSub izi sadece CodecPrivate verisi eşleşirse aynı dosya içine çıkartılabilir. Bu, iz %1% ve %2% durumu için değildir.\n"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:65
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:66
 msgid "Type"
 msgstr "Türü"
 
@@ -8657,7 +8657,7 @@ msgstr "ilave et"
 #: src/info/mkvinfo.cpp:939
 #: src/input/r_matroska.cpp:97
 #: src/mmg/mmg.cpp:65
-#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:180
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:187
 msgid "audio"
 msgstr "ses"
 
@@ -9505,7 +9505,7 @@ msgstr "altyazı"
 
 #: src/info/mkvinfo.cpp:941
 #: src/mmg/mmg.cpp:67
-#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:180
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:187
 msgid "subtitles"
 msgstr "altyazı"
 
@@ -9553,7 +9553,7 @@ msgstr "und (Belirsiz)"
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/mmg.cpp:68
 #: src/mmg/tabs/input.cpp:549
-#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:180
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:187
 msgid "unknown"
 msgstr "bilinmiyor"
 
@@ -9578,7 +9578,7 @@ msgstr "doğrulama başarısız: bölümler->CheckMandatory() yanlış. Bu olmam
 #: src/info/mkvinfo.cpp:940
 #: src/input/r_matroska.cpp:99
 #: src/mmg/mmg.cpp:66
-#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:180
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:187
 msgid "video"
 msgstr "görüntü"
 

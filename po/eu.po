@@ -864,7 +864,7 @@ msgstr[0] "%1% minutu"
 msgstr[1] "%1% minutu"
 
 #: src/mmg/tabs/scanning_for_playlists_dlg.cpp:41
-#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:141
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:148
 #, boost-format
 msgid "%1% of %2% file(s) processed"
 msgstr "%1% of %2% agiri prozesatuta"
@@ -987,7 +987,7 @@ msgid "&About\tF1"
 msgstr "&Honi buruz\tF1"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:45
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:51
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:52
 msgid "&Add"
 msgstr "&Gehitu"
 
@@ -1000,7 +1000,7 @@ msgstr "&Gehitu lana lerrora"
 msgid "&Attachments\tAlt-2"
 msgstr "&Eranskinak\tAlt-2"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:52
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:53
 msgid "&Cancel"
 msgstr "E&zeztatu"
 
@@ -2758,7 +2758,7 @@ msgstr "Klusterraren aurreko neurria: %1%"
 msgid "Cluster timecode: %|1$.3f|s"
 msgstr "Klusterraren denbora-kodea: %|1$.3f|s"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:67
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:68
 msgid "Codec"
 msgstr "Kodeka"
 
@@ -3269,7 +3269,7 @@ msgstr "Azalpena jadanik badago"
 msgid "Description:"
 msgstr "Azalpena:"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:37
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:38
 msgid "Details"
 msgstr "Xehetasunak"
 
@@ -3280,7 +3280,7 @@ msgid "Dirac"
 msgstr "Dirac"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:74
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:74
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:75
 msgid "Directory"
 msgstr "Zuzenbidea"
 
@@ -3369,12 +3369,12 @@ msgstr "Eginda.\n"
 msgid "Download URL:"
 msgstr "Jeisketa URL-a:"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:60
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:61
 msgid "Duration"
 msgstr "Iraupena"
 
 #: src/mmg/tabs/global.cpp:212
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:39
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:40
 msgid "Duration:"
 msgstr "Iraupena:"
 
@@ -3789,8 +3789,8 @@ msgid "File modified"
 msgstr "Agiria aldatuta"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:72
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:58
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:72
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:59
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:73
 msgid "File name"
 msgstr "Agiri izena"
 
@@ -4674,7 +4674,7 @@ msgstr "Lokarri ikurra: %1%"
 
 #: src/common/property_element.cpp:128
 #: src/mmg/header_editor/frame.cpp:414
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:69
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:70
 msgid "Language"
 msgstr "Hizkuntza"
 
@@ -5312,7 +5312,7 @@ msgstr "Ezer ez egiteko.\n"
 msgid "Notice"
 msgstr "Oharra"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:43
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:44
 msgid "Number of chapters:"
 msgstr "Atal zenbatekoa:"
 
@@ -5580,7 +5580,7 @@ msgstr "Pixel garaiera: %1%"
 msgid "Pixel width: %1%"
 msgstr "Pixel zabalera: %1%"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:47
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:48
 msgid "Playlist items:"
 msgstr "Irakur-zerrendako gaiak:"
 
@@ -6050,7 +6050,7 @@ msgstr "Mihatu zuzenbidea beste irakur-zerrendentzat"
 msgid "Scan directory for other playlists:"
 msgstr "Mihatu zuzenbidea beste irakur-zerrendentzat:"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:32
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:33
 msgid "Scanned files"
 msgstr "Mihatutako agiriak"
 
@@ -6451,13 +6451,13 @@ msgstr "Bloke-Arrunta (%1% bide zenbakia %2%, %3% frame, denbora-kodea %|4$.3f|s
 msgid "Single field frame before GOP header detected. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "Eremu bakarreko framea atzeman da GOP idazburuaren aurretik. Zuzendu MPEG2 bideo jarioa hura multiplexatzen saiatu aurretik.\n"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:62
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:63
 msgid "Size"
 msgstr "Neurria"
 
 #: src/mmg/tabs/global.cpp:195
 #: src/mmg/tabs/global.cpp:198
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:41
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:42
 msgid "Size:"
 msgstr "Neurria:"
 
@@ -8124,7 +8124,7 @@ msgstr "Eduki kodeaketa eskema sostengatu gabeko bideak (konpresioa edo enkripta
 msgid "Tracks, chapters and tags:"
 msgstr "Bideak, atalak eta etiketak:"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:45
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:46
 msgid "Tracks:"
 msgstr "Bideak:"
 
@@ -8146,7 +8146,7 @@ msgstr "TrueHD audio jarioek bi frame mota ezautzen dute: aldibereturiko frameak
 msgid "Two VobSub tracks can only be extracted into the same file if their CodecPrivate data matches. This is not the case for the tracks %1% and %2%.\n"
 msgstr "Bi VobSub bideak bakarrik atera daitezke agiri berdinera beren Kodek-Pribatu datuak bat badatoz. Hau ez da gertatzen %1% eta %2% bideetan.\n"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:65
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:66
 msgid "Type"
 msgstr "Mota"
 
@@ -8680,7 +8680,7 @@ msgstr "erantsi"
 #: src/info/mkvinfo.cpp:939
 #: src/input/r_matroska.cpp:97
 #: src/mmg/mmg.cpp:65
-#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:180
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:187
 msgid "audio"
 msgstr "audioa"
 
@@ -9528,7 +9528,7 @@ msgstr "azpidatzia"
 
 #: src/info/mkvinfo.cpp:941
 #: src/mmg/mmg.cpp:67
-#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:180
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:187
 msgid "subtitles"
 msgstr "azpidatziak"
 
@@ -9576,7 +9576,7 @@ msgstr "und (Zehaztugabea)"
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/mmg.cpp:68
 #: src/mmg/tabs/input.cpp:549
-#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:180
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:187
 msgid "unknown"
 msgstr "ezezaguna"
 
@@ -9601,7 +9601,7 @@ msgstr "egiaztapen  hutsegitea: atalak ->CheckMandatory() faltsua da. Hau ez lit
 #: src/info/mkvinfo.cpp:940
 #: src/input/r_matroska.cpp:99
 #: src/mmg/mmg.cpp:66
-#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:180
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:187
 msgid "video"
 msgstr "bideoa"
 

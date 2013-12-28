@@ -837,7 +837,7 @@ msgstr[0] "%1% 分鐘"
 msgstr[1] "%1% 分鐘"
 
 #: src/mmg/tabs/scanning_for_playlists_dlg.cpp:41
-#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:141
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:148
 #, boost-format
 msgid "%1% of %2% file(s) processed"
 msgstr "總共 %2% 個檔案，已處理 %1% 個"
@@ -960,7 +960,7 @@ msgid "&About\tF1"
 msgstr "關於(&A)\tF1"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:45
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:51
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:52
 msgid "&Add"
 msgstr "加入(&A)"
 
@@ -973,7 +973,7 @@ msgstr "加入到任務佇列(&A)"
 msgid "&Attachments\tAlt-2"
 msgstr "附件選項(&A)\tAlt-2"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:52
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:53
 msgid "&Cancel"
 msgstr "取消(&C)"
 
@@ -2724,7 +2724,7 @@ msgstr "叢集上一個長度: %1%"
 msgid "Cluster timecode: %|1$.3f|s"
 msgstr "叢集時間碼: %|1$.3f|s"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:67
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:68
 msgid "Codec"
 msgstr "編解碼器"
 
@@ -3235,7 +3235,7 @@ msgstr "描述已存在"
 msgid "Description:"
 msgstr "描述:"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:37
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:38
 msgid "Details"
 msgstr "詳細資訊"
 
@@ -3246,7 +3246,7 @@ msgid "Dirac"
 msgstr "Dirac"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:74
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:74
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:75
 msgid "Directory"
 msgstr "目錄"
 
@@ -3335,12 +3335,12 @@ msgstr "完成。\n"
 msgid "Download URL:"
 msgstr "下載網址:"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:60
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:61
 msgid "Duration"
 msgstr "時間長度"
 
 #: src/mmg/tabs/global.cpp:212
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:39
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:40
 msgid "Duration:"
 msgstr "時間長度:"
 
@@ -3755,8 +3755,8 @@ msgid "File modified"
 msgstr "檔案已修改"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:72
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:58
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:72
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:59
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:73
 msgid "File name"
 msgstr "檔名"
 
@@ -4642,7 +4642,7 @@ msgstr "“緊縮”標記: %1%"
 
 #: src/common/property_element.cpp:128
 #: src/mmg/header_editor/frame.cpp:414
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:69
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:70
 msgid "Language"
 msgstr "語言"
 
@@ -5282,7 +5282,7 @@ msgstr "什麼都不做。\n"
 msgid "Notice"
 msgstr "注意"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:43
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:44
 msgid "Number of chapters:"
 msgstr "章節數:"
 
@@ -5550,7 +5550,7 @@ msgstr "像素高度: %1%"
 msgid "Pixel width: %1%"
 msgstr "像素寬度: %1%"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:47
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:48
 msgid "Playlist items:"
 msgstr "播放清單項目:"
 
@@ -6018,7 +6018,7 @@ msgstr "掃描其他播放清單的目錄"
 msgid "Scan directory for other playlists:"
 msgstr "掃描其他播放清單的目錄:"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:32
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:33
 msgid "Scanned files"
 msgstr "掃描的檔案"
 
@@ -6420,13 +6420,13 @@ msgstr "簡單區塊 (%1%軌道編號 %2%, %3% 畫格, 時間碼 %|4$.3f|s = %5%
 msgid "Single field frame before GOP header detected. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "在 GOP 表頭前偵測到單圖場畫格。在分離前請修復 MPEG2 視訊串流。\n"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:62
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:63
 msgid "Size"
 msgstr "大小"
 
 #: src/mmg/tabs/global.cpp:195
 #: src/mmg/tabs/global.cpp:198
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:41
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:42
 msgid "Size:"
 msgstr "大小:"
 
@@ -8076,7 +8076,7 @@ msgstr "使用不支援的內容編碼（壓縮或加密）方案的軌道不能
 msgid "Tracks, chapters and tags:"
 msgstr "軌道、章節和標籤:"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:45
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:46
 msgid "Tracks:"
 msgstr "軌道列表:"
 
@@ -8098,7 +8098,7 @@ msgstr "TrueHD 音訊流支援兩種畫格類: 同步畫格和非同步畫格。
 msgid "Two VobSub tracks can only be extracted into the same file if their CodecPrivate data matches. This is not the case for the tracks %1% and %2%.\n"
 msgstr "兩個 VobSub 軌道只能提取至同一個檔案中，如果 CodecPrivate 資料相符的話。此問題只出在軌道 %1% 與 %2%。\n"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:65
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:66
 msgid "Type"
 msgstr "類型"
 
@@ -8631,7 +8631,7 @@ msgstr "添加"
 #: src/info/mkvinfo.cpp:939
 #: src/input/r_matroska.cpp:97
 #: src/mmg/mmg.cpp:65
-#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:180
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:187
 msgid "audio"
 msgstr "音訊"
 
@@ -9479,7 +9479,7 @@ msgstr "字幕"
 
 #: src/info/mkvinfo.cpp:941
 #: src/mmg/mmg.cpp:67
-#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:180
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:187
 msgid "subtitles"
 msgstr "字幕"
 
@@ -9527,7 +9527,7 @@ msgstr "und (未定)"
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/mmg.cpp:68
 #: src/mmg/tabs/input.cpp:549
-#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:180
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:187
 msgid "unknown"
 msgstr "未知"
 
@@ -9552,7 +9552,7 @@ msgstr "verify failed: chapters->CheckMandatory() 為 false。這不該發生。
 #: src/info/mkvinfo.cpp:940
 #: src/input/r_matroska.cpp:99
 #: src/mmg/mmg.cpp:66
-#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:180
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:187
 msgid "video"
 msgstr "視訊"
 

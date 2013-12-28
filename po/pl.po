@@ -845,7 +845,7 @@ msgstr[1] "%1% minuty"
 msgstr[2] "%1% minut"
 
 #: src/mmg/tabs/scanning_for_playlists_dlg.cpp:41
-#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:141
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:148
 #, boost-format
 msgid "%1% of %2% file(s) processed"
 msgstr "%1% z %2% plików wykonano"
@@ -969,7 +969,7 @@ msgid "&About\tF1"
 msgstr "&Informacje\tF1"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:45
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:51
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:52
 msgid "&Add"
 msgstr "&Dodaj"
 
@@ -982,7 +982,7 @@ msgstr "&Dodaj zadanie do kolejki"
 msgid "&Attachments\tAlt-2"
 msgstr "&Załączniki\tAlt-2"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:52
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:53
 msgid "&Cancel"
 msgstr "&Anuluj"
 
@@ -2738,7 +2738,7 @@ msgstr ""
 msgid "Cluster timecode: %|1$.3f|s"
 msgstr ""
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:67
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:68
 msgid "Codec"
 msgstr "Kodek"
 
@@ -3249,7 +3249,7 @@ msgstr "Opis już istnieje"
 msgid "Description:"
 msgstr "Opis:"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:37
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:38
 msgid "Details"
 msgstr "Szczegóły"
 
@@ -3260,7 +3260,7 @@ msgid "Dirac"
 msgstr "Dirac"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:74
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:74
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:75
 msgid "Directory"
 msgstr "Ścieżka"
 
@@ -3349,12 +3349,12 @@ msgstr "Zrobione.\n"
 msgid "Download URL:"
 msgstr "Adres pobierania:"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:60
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:61
 msgid "Duration"
 msgstr "Czas trwania"
 
 #: src/mmg/tabs/global.cpp:212
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:39
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:40
 msgid "Duration:"
 msgstr "Czas trwania:"
 
@@ -3769,8 +3769,8 @@ msgid "File modified"
 msgstr "Plik został zmodyfikowany"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:72
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:58
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:72
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:59
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:73
 msgid "File name"
 msgstr "Nazwa pliku"
 
@@ -4654,7 +4654,7 @@ msgstr ""
 
 #: src/common/property_element.cpp:128
 #: src/mmg/header_editor/frame.cpp:414
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:69
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:70
 msgid "Language"
 msgstr "Język"
 
@@ -5294,7 +5294,7 @@ msgstr "Nie ma nic do zrobienia.\n"
 msgid "Notice"
 msgstr "Uwaga"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:43
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:44
 msgid "Number of chapters:"
 msgstr "Ilość rozdziałów:"
 
@@ -5562,7 +5562,7 @@ msgstr "Wysokość w pikselach: %1%"
 msgid "Pixel width: %1%"
 msgstr "Szerokość w pikselach: %1%"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:47
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:48
 msgid "Playlist items:"
 msgstr "Pozycje listy odtwarzania:"
 
@@ -6030,7 +6030,7 @@ msgstr "Skanuj folder aby odnaleźć inne listy odtwarzania"
 msgid "Scan directory for other playlists:"
 msgstr "Skanuj folder aby odnaleźć inne listy odtwarzania:"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:32
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:33
 msgid "Scanned files"
 msgstr "Skanowane pliki"
 
@@ -6432,13 +6432,13 @@ msgstr ""
 msgid "Single field frame before GOP header detected. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "Wykryto pojedynczą klatkę przed nagłówkiem GOP. Napraw ścieżkę obrazu MPEG2 zanim zaczniesz ją muksować.\n"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:62
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:63
 msgid "Size"
 msgstr "Rozmiar"
 
 #: src/mmg/tabs/global.cpp:195
 #: src/mmg/tabs/global.cpp:198
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:41
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:42
 msgid "Size:"
 msgstr "Rozmiar:"
 
@@ -8091,7 +8091,7 @@ msgstr "Ścieżki zawierające nie wspierane schematy kodowania (kompresja lub s
 msgid "Tracks, chapters and tags:"
 msgstr "Ścieżki, rozdziały i tagi:"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:45
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:46
 msgid "Tracks:"
 msgstr "Ścieżki:"
 
@@ -8113,7 +8113,7 @@ msgstr "Ścieżki dźwiękowe TrueHD posiadają dwa rodzaje klatek: klatki zsync
 msgid "Two VobSub tracks can only be extracted into the same file if their CodecPrivate data matches. This is not the case for the tracks %1% and %2%.\n"
 msgstr "Dwie ścieżki VobSub mogą być wyodrębnione do tego samego pliku tylko jeśli ich CodecPrivate jest taki sam. To nie jest wymagane dla ścieżek %1% i %2%.\n"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:65
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:66
 msgid "Type"
 msgstr "Typ"
 
@@ -8647,7 +8647,7 @@ msgstr "scal"
 #: src/info/mkvinfo.cpp:939
 #: src/input/r_matroska.cpp:97
 #: src/mmg/mmg.cpp:65
-#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:180
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:187
 msgid "audio"
 msgstr "dźwięk"
 
@@ -9495,7 +9495,7 @@ msgstr "napisy"
 
 #: src/info/mkvinfo.cpp:941
 #: src/mmg/mmg.cpp:67
-#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:180
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:187
 msgid "subtitles"
 msgstr "napisy"
 
@@ -9543,7 +9543,7 @@ msgstr "und (Nieokreślony)"
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/mmg.cpp:68
 #: src/mmg/tabs/input.cpp:549
-#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:180
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:187
 msgid "unknown"
 msgstr "nieznany"
 
@@ -9568,7 +9568,7 @@ msgstr ""
 #: src/info/mkvinfo.cpp:940
 #: src/input/r_matroska.cpp:99
 #: src/mmg/mmg.cpp:66
-#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:180
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:187
 msgid "video"
 msgstr "obraz"
 
