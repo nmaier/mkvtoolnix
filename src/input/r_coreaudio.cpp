@@ -63,10 +63,10 @@ void
 coreaudio_reader_c::identify() {
   if (m_supported) {
     id_result_container();
-    id_result_track(0, ID_RESULT_TRACK_AUDIO, m_codec);
+    id_result_track(0, ID_RESULT_TRACK_AUDIO, m_codec.get_name(m_codec_name));
 
   } else
-    id_result_container_unsupported(m_in->get_file_name(), (boost::format("CoreAudio (%1%)") % m_codec).str());
+    id_result_container_unsupported(m_in->get_file_name(), (boost::format("CoreAudio (%1%)") % m_codec_name).str());
 }
 
 void
@@ -104,11 +104,11 @@ coreaudio_reader_c::dump_headers()
                         "    magic cookie:      %10%\n"
                         )
           % m_ti.m_fname
-          % m_codec % m_supported % m_sample_rate % m_flags % m_bytes_per_packet % m_frames_per_packet % m_channels % m_bites_per_sample
+          % m_codec_name % m_supported % m_sample_rate % m_flags % m_bytes_per_packet % m_frames_per_packet % m_channels % m_bites_per_sample
           % (m_magic_cookie ? (boost::format("present, size %1%") % m_magic_cookie->get_size()).str() : std::string{"not present"})
           );
 
-  if ((m_codec == "ALAC") && m_magic_cookie && (m_magic_cookie->get_size() >= sizeof(alac::codec_config_t))) {
+  if (m_codec.is(CT_A_ALAC) && m_magic_cookie && (m_magic_cookie->get_size() >= sizeof(alac::codec_config_t))) {
     auto cfg = reinterpret_cast<alac::codec_config_t *>(m_magic_cookie->get_buffer());
 
     mxdebug(boost::format("ALAC magic cookie dump:\n"
@@ -144,7 +144,7 @@ coreaudio_reader_c::create_packetizer(int64_t) {
   if (!demuxing_requested('a', 0) || (NPTZR() != 0) || ! m_supported)
     return;
 
-  if (m_codec == "ALAC")
+  if (m_codec.is(CT_A_ALAC))
     add_packetizer(create_alac_packetizer());
   else
     assert(false);
@@ -266,19 +266,20 @@ coreaudio_reader_c::parse_desc_chunk() {
     m_sample_rate = chunk.read_double();
     m_frames_to_timecode.set(1000000000, m_sample_rate);
 
-    if (4 != chunk.read(m_codec, 4)) {
-      m_codec.clear();
+    if (4 != chunk.read(m_codec_name, 4)) {
+      m_codec_name.clear();
       throw mtx::mm_io::end_of_file_x{};
     }
 
-    balg::to_upper(m_codec);
+    balg::to_upper(m_codec_name);
+    m_codec             = codec_c::look_up(m_codec_name);
     m_flags             = chunk.read_uint32_be();
     m_bytes_per_packet  = chunk.read_uint32_be();
     m_frames_per_packet = chunk.read_uint32_be();
     m_channels          = chunk.read_uint32_be();
     m_bites_per_sample  = chunk.read_uint32_be();
 
-    if (m_codec == "ALAC")
+    if (m_codec.is(CT_A_ALAC))
       m_supported = true;
 
   } catch (mtx::mm_io::exception &ex) {
@@ -342,7 +343,7 @@ coreaudio_reader_c::parse_kuki_chunk() {
   if (!chunk)
     return;
 
-  if (m_codec == "ALAC")
+  if (m_codec.is(CT_A_ALAC))
     handle_alac_magic_cookie(chunk);
 }
 
