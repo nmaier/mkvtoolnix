@@ -213,6 +213,7 @@ select_scanned_file_dlg::update_info() {
   for (auto &file : playlist.files) {
     auto id = m_lc_items->InsertItem(idx, wxFileName{file}.GetFullName());
     m_lc_items->SetItem(id, 1, wxFileName{file}.GetPath());
+    ++idx;
   }
 
   m_lc_items->SetColumnWidth(0, wxLIST_AUTOSIZE);
