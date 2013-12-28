@@ -22,6 +22,7 @@
 #include <wx/button.h>
 #include <wx/dialog.h>
 
+#include "mmg/window_geometry_saver.h"
 #include "mmg/tabs/playlist_file.h"
 
 #define ID_LC_PLAYLIST_FILE 16050
@@ -35,6 +36,8 @@ protected:
 
   std::vector<playlist_file_cptr> m_playlists;
   int m_selected_playlist_idx;
+
+  window_geometry_saver_c m_geometry_saver;
 
 public:
   select_scanned_file_dlg(wxWindow *parent, std::vector<playlist_file_cptr> const &playlists, wxString const &orig_file_name);

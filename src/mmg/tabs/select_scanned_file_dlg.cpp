@@ -24,9 +24,10 @@
 select_scanned_file_dlg::select_scanned_file_dlg(wxWindow *parent,
                                                  std::vector<playlist_file_cptr> const &playlists,
                                                  wxString const &orig_file_name)
-  : wxDialog(parent, wxID_ANY, Z("Select file to add"), wxDefaultPosition, wxSize{1000, 650})
+  : wxDialog{parent, wxID_ANY, Z("Select file to add"), wxDefaultPosition, wxSize{1000, 650}, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxMINIMIZE_BOX | wxMAXIMIZE_BOX}
   , m_playlists{playlists}
   , m_selected_playlist_idx{0}
+  , m_geometry_saver{this, "select_scanned_file_dlg"}
 {
   // controls left column
 	auto st_scanned_files = new wxStaticText(this, wxID_ANY, Z("Scanned files"));
@@ -139,6 +140,8 @@ select_scanned_file_dlg::select_scanned_file_dlg(wxWindow *parent,
 	Layout();
 
 	Centre(wxBOTH);
+
+  m_geometry_saver.set_default_size(1000, 650, true).restore();
 
   update_info();
 }
