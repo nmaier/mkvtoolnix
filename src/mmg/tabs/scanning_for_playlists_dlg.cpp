@@ -98,6 +98,11 @@ scanning_for_playlists_dlg::scan() {
   m_scanner->Run();
   ShowModal();
 
+#if defined(SYS_WINDOWS)
+  if (m_taskbar_progress)
+    m_taskbar_progress->set_state(TBPF_NOPROGRESS);
+#endif  // SYS_WINDOWS
+
   if (m_aborted)
     return wxID_CANCEL;
 
