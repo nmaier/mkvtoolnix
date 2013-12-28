@@ -32,7 +32,7 @@ ivf_reader_c::probe_file(mm_io_c *io,
   if (io->read(&header, sizeof(ivf::file_header_t)) < sizeof(ivf::file_header_t))
     return 0;
 
-  if (memcmp(header.file_magic, "DKIF", 4) || (header.get_codec() == ivf::UNKNOWN_CODEC))
+  if (memcmp(header.file_magic, "DKIF", 4) || header.get_codec().is(CT_UNKNOWN))
     return 0;
 
   return 1;
@@ -73,7 +73,7 @@ ivf_reader_c::create_packetizer(int64_t) {
   if (!demuxing_requested('v', 0) || (NPTZR() != 0))
     return;
 
-  auto packetizer = new vpx_video_packetizer_c(this, m_ti, m_codec);
+  auto packetizer = new vpx_video_packetizer_c(this, m_ti, m_codec.get_type());
   add_packetizer(packetizer);
 
   packetizer->set_video_pixel_width(m_width);
@@ -111,7 +111,7 @@ ivf_reader_c::read(generic_packetizer_c *,
 
   int64_t timestamp = get_uint64_le(&header.timestamp) * 1000000000ull * m_frame_rate_den / m_frame_rate_num;
 
-  mxverb(3, boost::format("r_ivf.cpp: key %5% header.ts %1% num %2% den %3% res %4%\n") % get_uint64_le(&header.timestamp) % m_frame_rate_num % m_frame_rate_den % timestamp % ivf::is_keyframe(buffer, m_codec));
+  mxverb(3, boost::format("r_ivf.cpp: key %5% header.ts %1% num %2% den %3% res %4%\n") % get_uint64_le(&header.timestamp) % m_frame_rate_num % m_frame_rate_den % timestamp % ivf::is_keyframe(buffer, m_codec.get_type()));
 
   PTZR0->process(new packet_t(buffer, timestamp));
 
@@ -121,5 +121,5 @@ ivf_reader_c::read(generic_packetizer_c *,
 void
 ivf_reader_c::identify() {
   id_result_container();
-  id_result_track(0, ID_RESULT_TRACK_VIDEO, m_codec == ivf::VP8 ? "VP8" : "VP9");
+  id_result_track(0, ID_RESULT_TRACK_VIDEO, m_codec.get_name());
 }

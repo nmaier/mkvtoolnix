@@ -1459,7 +1459,7 @@ ogm_v_vp8_demuxer_c::initialize() {
 
 generic_packetizer_c *
 ogm_v_vp8_demuxer_c::create_packetizer() {
-  auto ptzr_obj = new vpx_video_packetizer_c(reader, m_ti, ivf::VP8);
+  auto ptzr_obj = new vpx_video_packetizer_c(reader, m_ti, CT_V_VP8);
 
   ptzr_obj->set_video_pixel_width(pixel_width);
   ptzr_obj->set_video_pixel_height(pixel_height);

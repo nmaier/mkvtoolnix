@@ -354,7 +354,7 @@ avi_reader_c::create_mpeg4_p10_packetizer() {
 void
 avi_reader_c::create_vp8_packetizer() {
   m_ti.m_private_data.reset();
-  m_vptzr = add_packetizer(new vpx_video_packetizer_c(this, m_ti, ivf::VP8));
+  m_vptzr = add_packetizer(new vpx_video_packetizer_c(this, m_ti, CT_V_VP8));
 
   PTZR(m_vptzr)->set_track_default_duration(1000000000ll / m_fps);
   PTZR(m_vptzr)->set_video_pixel_width(AVI_video_width(m_avi));

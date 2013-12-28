@@ -1368,7 +1368,7 @@ kax_reader_c::create_video_packetizer(kax_track_t *t,
       show_packetizer_info(t->tnum, t->ptzr_ptr);
 
     } else if ((t->codec_id == MKV_V_VP8) || (t->codec_id == MKV_V_VP9)) {
-      set_track_packetizer(t, new vpx_video_packetizer_c(this, nti, t->codec_id == MKV_V_VP8 ? ivf::VP8 : ivf::VP9));
+      set_track_packetizer(t, new vpx_video_packetizer_c(this, nti, t->codec_id == MKV_V_VP8 ? CT_V_VP8 : CT_V_VP9));
       show_packetizer_info(t->tnum, t->ptzr_ptr);
       t->handle_packetizer_pixel_dimensions();
       t->handle_packetizer_default_duration();
