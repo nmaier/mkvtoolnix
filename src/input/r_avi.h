@@ -16,11 +16,9 @@
 
 #include "common/common_pch.h"
 
-#include <stdio.h>
-
 #include <avilib.h>
 
-#include "common/mm_io.h"
+#include "common/codec.h"
 #include "merge/pr_generic.h"
 #include "common/error.h"
 #include "input/subtitles.h"
@@ -30,6 +28,7 @@ typedef struct avi_demuxer_t {
   int m_ptzr;
   int m_channels, m_bits_per_sample, m_samples_per_second, m_aid;
   int64_t m_bytes_processed;
+  codec_c m_codec;
 
   avi_demuxer_t()
     : m_ptzr(-1)
