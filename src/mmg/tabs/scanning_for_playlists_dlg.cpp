@@ -27,7 +27,7 @@ scanning_for_playlists_dlg::scanning_for_playlists_dlg(wxWindow *parent,
                                                        wxString const &original_file_name,
                                                        wxArrayString const &original_output,
                                                        std::vector<wxString> const &other_file_names)
-  : wxDialog{parent, wxID_ANY, Z("Scanning directory"), wxDefaultPosition, wxSize(350, 160)}
+  : wxDialog{parent, wxID_ANY, Z("Scanning directory")}
 #if defined(SYS_WINDOWS)
   , m_taskbar_progress{}
 #endif  // SYS_WINDOWS
@@ -68,6 +68,8 @@ scanning_for_playlists_dlg::scanning_for_playlists_dlg(wxWindow *parent,
 	siz_all->Add(siz_button,         1, wxEXPAND,         5);
 
 	SetSizerAndFit(siz_all);
+  auto min_size = GetMinSize();
+  SetSize(wxSize{min_size.GetWidth() + 50, min_size.GetHeight()});
 	Layout();
 
 	Centre(wxBOTH);
