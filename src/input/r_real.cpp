@@ -16,6 +16,7 @@
 #include <matroska/KaxTrackVideo.h>
 
 #include "common/bit_cursor.h"
+#include "common/codec.h"
 #include "common/ebml.h"
 #include "common/endian.h"
 #include "common/error.h"
@@ -587,18 +588,10 @@ real_reader_c::identify() {
 
   size_t i;
   for (i = 0; i < demuxers.size(); i++) {
-    real_demuxer_cptr demuxer = demuxers[i];
+    auto demuxer = demuxers[i];
+    auto type    = RMFF_TRACK_TYPE_AUDIO == demuxer->track->type ? ID_RESULT_TRACK_AUDIO : ID_RESULT_TRACK_VIDEO;
 
-    std::string type, codec;
-    if (!strcasecmp(demuxer->fourcc, "raac") || !strcasecmp(demuxer->fourcc, "racp")) {
-      type  = ID_RESULT_TRACK_AUDIO;
-      codec = "AAC";
-    } else {
-      type  = RMFF_TRACK_TYPE_AUDIO == demuxer->track->type ? ID_RESULT_TRACK_AUDIO : ID_RESULT_TRACK_VIDEO;
-      codec = demuxer->fourcc;
-    }
-
-    id_result_track(demuxer->track->id, type, codec);
+    id_result_track(demuxer->track->id, type, codec_c::get_name(demuxer->fourcc, demuxer->fourcc));
   }
 }
 
