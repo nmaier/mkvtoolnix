@@ -93,7 +93,7 @@ ssa_reader_c::get_progress() {
 void
 ssa_reader_c::identify() {
   id_result_container();
-  id_result_track(0, ID_RESULT_TRACK_SUBTITLES, "SSA/ASS");
+  id_result_track(0, ID_RESULT_TRACK_SUBTITLES, codec_c::get_name(CT_S_SSA_ASS, "SSA/ASS"));
 
   size_t i;
   for (i = 0; i < g_attachments.size(); i++)
