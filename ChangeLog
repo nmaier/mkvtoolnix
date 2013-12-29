@@ -1,5 +1,9 @@
 2013-12-29  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mkvinfo: bug fix: when setting the language with --ui-language
+        a few strings were still translated using the system's default
+        language.
+
         * mkvextract: bug fix: if the track headers were located at the
         end of the file (e.g. after modification with mkvpropedit or mmg's
         header editor) then mkvextract was writing files with a length 0

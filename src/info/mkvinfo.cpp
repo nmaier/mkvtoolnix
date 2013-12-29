@@ -185,6 +185,7 @@ size_t s_mkvmerge_track_id = 0;
 
 void
 init_common_boost_formats() {
+  g_common_boost_formats.clear();
   BF_ADD(Y("(Unknown element: %1%; ID: 0x%2% size: %3%)"));                                                     //  0 -- BF_SHOW_UNKNOWN_ELEMENT
   BF_ADD(Y("EbmlVoid (size: %1%)"));                                                                            //  1 -- BF_EBMLVOID
   BF_ADD(Y("length %1%, data: %2%"));                                                                           //  2 -- BF_FORMAT_BINARY_1
@@ -1722,7 +1723,6 @@ setup(const std::string &locale) {
   mtx_common_init("mkvinfo");
 
   init_locales(locale);
-
   init_common_boost_formats();
 
   version_info = get_version_info("mkvinfo", vif_full);
@@ -1744,6 +1744,8 @@ main(int argc,
   setup();
 
   g_options = info_cli_parser_c(command_line_utf8(argc, argv)).run();
+
+  init_common_boost_formats();
 
   if (g_options.m_use_gui)
     return ui_run(argc, argv);
