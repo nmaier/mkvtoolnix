@@ -13,6 +13,7 @@
 
 #include "common/common_pch.h"
 
+#include "common/codec.h"
 #include "common/error.h"
 #include "common/hacks.h"
 #include "common/mm_io_x.h"
@@ -90,8 +91,9 @@ mp3_reader_c::read(generic_packetizer_c *,
 
 void
 mp3_reader_c::identify() {
+  auto type = (boost::format("MP%1%") % m_mp3header.layer).str();
   id_result_container();
-  id_result_track(0, ID_RESULT_TRACK_AUDIO, (boost::format("MPEG-%1% layer %2%") % (m_mp3header.version == 1 ? "1" : m_mp3header.version == 2 ? "2" : "2.5") % m_mp3header.layer).str());
+  id_result_track(0, ID_RESULT_TRACK_AUDIO, codec_c::get_name(type, type));
 }
 
 int

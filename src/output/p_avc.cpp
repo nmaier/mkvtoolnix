@@ -13,9 +13,9 @@
 
 #include "common/common_pch.h"
 
+#include "common/codec.h"
 #include "common/hacks.h"
 #include "common/math.h"
-#include "common/matroska.h"
 #include "common/mpeg4_p10.h"
 #include "merge/connection_checks.h"
 #include "merge/output_control.h"

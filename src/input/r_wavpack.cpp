@@ -14,6 +14,7 @@
 
 #include "common/common_pch.h"
 
+#include "common/codec.h"
 #include "common/endian.h"
 #include "common/error.h"
 #include "input/r_wavpack.h"
@@ -227,5 +228,5 @@ wavpack_reader_c::read(generic_packetizer_c *,
 void
 wavpack_reader_c::identify() {
   id_result_container();
-  id_result_track(0, ID_RESULT_TRACK_AUDIO, "WAVPACK");
+  id_result_track(0, ID_RESULT_TRACK_AUDIO, codec_c::get_name(CT_A_WAVPACK4, "WAVPACK"));
 }

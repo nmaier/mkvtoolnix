@@ -32,7 +32,6 @@
 #include "common/hacks.h"
 #include "common/kax_analyzer.h"
 #include "common/math.h"
-#include "common/matroska.h"
 #include "common/mm_io.h"
 #include "common/mm_io_x.h"
 #include "common/strings/formatting.h"

@@ -16,6 +16,7 @@
 
 #include "common/common_pch.h"
 
+#include "common/codec.h"
 #include "common/mm_io.h"
 #include "common/error.h"
 #include "common/samples_timecode_conv.h"
@@ -42,7 +43,8 @@ private:
 
   coreaudio_packet_itr m_current_packet;
 
-  std::string m_codec;
+  codec_c m_codec;
+  std::string m_codec_name;
   bool m_supported;
 
   double m_sample_rate;

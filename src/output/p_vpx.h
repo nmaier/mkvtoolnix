@@ -22,10 +22,10 @@
 class vpx_video_packetizer_c: public generic_packetizer_c {
 protected:
   int64_t m_previous_timecode;
-  ivf::codec_e m_codec;
+  codec_type_e m_codec;
 
 public:
-  vpx_video_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, ivf::codec_e p_codec);
+  vpx_video_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, codec_type_e p_codec);
 
   virtual int process(packet_cptr packet);
   virtual void set_headers();

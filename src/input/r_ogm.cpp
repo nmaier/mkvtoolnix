@@ -27,6 +27,7 @@
 
 #include "common/aac.h"
 #include "common/chapters/chapters.h"
+#include "common/codec.h"
 #include "common/debugging.h"
 #include "common/ebml.h"
 #include "common/endian.h"
@@ -34,7 +35,6 @@
 #include "common/iso639.h"
 #include "common/ivf.h"
 #include "common/math.h"
-#include "common/matroska.h"
 #include "common/mpeg4_p2.h"
 #include "common/ogmstreams.h"
 #include "input/r_ogm.h"
@@ -74,9 +74,6 @@ public:
   virtual const char *get_type() {
     return ID_RESULT_TRACK_AUDIO;
   };
-  virtual std::string get_codec() {
-    return "AAC";
-  };
 };
 
 class ogm_a_ac3_demuxer_c: public ogm_demuxer_c {
@@ -89,9 +86,6 @@ public:
 
   virtual const char *get_type() {
     return ID_RESULT_TRACK_AUDIO;
-  };
-  virtual std::string get_codec() {
-    return "AC3";
   };
 };
 
@@ -106,9 +100,6 @@ public:
   virtual const char *get_type() {
     return ID_RESULT_TRACK_AUDIO;
   };
-  virtual std::string get_codec() {
-    return "MP2/MP3";
-  };
 };
 
 class ogm_a_pcm_demuxer_c: public ogm_demuxer_c {
@@ -121,9 +112,6 @@ public:
 
   virtual const char *get_type() {
     return ID_RESULT_TRACK_AUDIO;
-  };
-  virtual std::string get_codec() {
-    return "PCM";
   };
 };
 
@@ -143,9 +131,6 @@ public:
   virtual const char *get_type() {
     return ID_RESULT_TRACK_AUDIO;
   };
-  virtual std::string get_codec() {
-    return "Opus";
-  };
 };
 
 debugging_option_c ogm_a_opus_demuxer_c::ms_debug{"opus"};
@@ -163,9 +148,6 @@ public:
   virtual const char *get_type() {
     return ID_RESULT_TRACK_AUDIO;
   };
-  virtual std::string get_codec() {
-    return "Vorbis";
-  };
 };
 
 class ogm_s_text_demuxer_c: public ogm_demuxer_c {
@@ -180,9 +162,6 @@ public:
 
   virtual const char *get_type() {
     return ID_RESULT_TRACK_SUBTITLES;
-  };
-  virtual std::string get_codec() {
-    return "Text";
   };
 };
 
@@ -210,10 +189,6 @@ public:
 public:
   ogm_v_avc_demuxer_c(ogm_reader_c *p_reader);
 
-  virtual std::string get_codec() {
-    return "h.264/AVC";
-  };
-
   virtual generic_packetizer_c *create_packetizer();
 };
 
@@ -226,10 +201,6 @@ public:
 
   virtual const char *get_type() {
     return ID_RESULT_TRACK_VIDEO;
-  };
-
-  virtual std::string get_codec() {
-    return "Theora";
   };
 
   virtual void initialize();
@@ -253,10 +224,6 @@ public:
     return ID_RESULT_TRACK_VIDEO;
   };
 
-  virtual std::string get_codec() {
-    return "VP8";
-  };
-
   virtual void initialize();
   virtual generic_packetizer_c *create_packetizer();
   virtual void process_page(int64_t granulepos);
@@ -271,10 +238,6 @@ public:
 
   virtual const char *get_type() {
     return ID_RESULT_TRACK_SUBTITLES;
-  };
-
-  virtual std::string get_codec() {
-    return "Kate";
   };
 
   virtual void initialize();
@@ -522,7 +485,7 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
 
     else {
       dmx         = new ogm_demuxer_c(this);
-      dmx->stype  = OGM_STREAM_TYPE_A_FLAC;
+      dmx->codec  = codec_c::look_up(CT_A_FLAC);
       dmx->in_use = true;
     }
 
@@ -732,7 +695,7 @@ ogm_reader_c::identify() {
   // Check if a video track has a TITLE comment. If yes we use this as the
   // new segment title / global file title.
   for (i = 0; i < sdemuxers.size(); i++)
-    if ((sdemuxers[i]->title != "") && (sdemuxers[i]->stype == OGM_STREAM_TYPE_V_MSCOMP)) {
+    if ((sdemuxers[i]->title != "") && sdemuxers[i]->ms_compat) {
       verbose_info.push_back(std::string("title:") + escape(sdemuxers[i]->title));
       break;
     }
@@ -745,7 +708,7 @@ ogm_reader_c::identify() {
     if (sdemuxers[i]->language != "")
       verbose_info.push_back(std::string("language:") + escape(sdemuxers[i]->language));
 
-    if ((sdemuxers[i]->title != "") && (sdemuxers[i]->stype != OGM_STREAM_TYPE_V_MSCOMP))
+    if ((sdemuxers[i]->title != "") && !sdemuxers[i]->ms_compat)
       verbose_info.push_back(std::string("track_name:") + escape(sdemuxers[i]->title));
 
     if ((0 != sdemuxers[i]->display_width) && (0 != sdemuxers[i]->display_height))
@@ -769,7 +732,7 @@ ogm_reader_c::handle_stream_comments() {
 
   for (i = 0; i < sdemuxers.size(); i++) {
     ogm_demuxer_cptr &dmx = sdemuxers[i];
-    if ((OGM_STREAM_TYPE_A_FLAC == dmx->stype) || (2 > dmx->packet_data.size()))
+    if (dmx->codec.is(CT_A_FLAC) || (2 > dmx->packet_data.size()))
       continue;
 
     comments = extract_vorbis_comments(dmx->packet_data[1]);
@@ -827,7 +790,7 @@ ogm_reader_c::handle_stream_comments() {
     bool segment_title_set = false;
     if (title != "") {
       title = cch->utf8(title);
-      if (!g_segment_title_set && g_segment_title.empty() && (OGM_STREAM_TYPE_V_MSCOMP == dmx->stype)) {
+      if (!g_segment_title_set && g_segment_title.empty() && dmx->ms_compat) {
         g_segment_title     = title;
         g_segment_title_set = true;
         segment_title_set   = true;
@@ -906,7 +869,7 @@ ogm_demuxer_c::ogm_demuxer_c(ogm_reader_c *p_reader)
   : reader(p_reader)
   , m_ti(p_reader->m_ti)
   , ptzr(-1)
-  , stype(OGM_STREAM_TYPE_UNKNOWN)
+  , ms_compat{}
   , serialno(0)
   , eos(0)
   , units_processed(0)
@@ -1001,7 +964,7 @@ ogm_demuxer_c::process_header_page() {
 ogm_a_aac_demuxer_c::ogm_a_aac_demuxer_c(ogm_reader_c *p_reader)
   : ogm_demuxer_c(p_reader)
 {
-  stype = OGM_STREAM_TYPE_A_AAC;
+  codec = codec_c::look_up(CT_A_AAC);
 }
 
 generic_packetizer_c *
@@ -1042,7 +1005,7 @@ ogm_a_aac_demuxer_c::create_packetizer() {
 ogm_a_ac3_demuxer_c::ogm_a_ac3_demuxer_c(ogm_reader_c *p_reader)
   : ogm_demuxer_c(p_reader)
 {
-  stype = OGM_STREAM_TYPE_A_AC3;
+  codec = codec_c::look_up(CT_A_AC3);
 }
 
 generic_packetizer_c *
@@ -1060,7 +1023,7 @@ ogm_a_ac3_demuxer_c::create_packetizer() {
 ogm_a_mp3_demuxer_c::ogm_a_mp3_demuxer_c(ogm_reader_c *p_reader)
   : ogm_demuxer_c(p_reader)
 {
-  stype = OGM_STREAM_TYPE_A_MP3;
+  codec = codec_c::look_up(CT_A_MP3);
 }
 
 generic_packetizer_c *
@@ -1078,7 +1041,7 @@ ogm_a_mp3_demuxer_c::create_packetizer() {
 ogm_a_pcm_demuxer_c::ogm_a_pcm_demuxer_c(ogm_reader_c *p_reader)
   : ogm_demuxer_c(p_reader)
 {
-  stype = OGM_STREAM_TYPE_A_PCM;
+  codec = codec_c::look_up(CT_A_PCM);
 }
 
 generic_packetizer_c *
@@ -1096,7 +1059,7 @@ ogm_a_pcm_demuxer_c::create_packetizer() {
 ogm_a_vorbis_demuxer_c::ogm_a_vorbis_demuxer_c(ogm_reader_c *p_reader)
   : ogm_demuxer_c(p_reader)
 {
-  stype              = OGM_STREAM_TYPE_A_VORBIS;
+  codec              = codec_c::look_up(CT_A_VORBIS);
   num_header_packets = 3;
 }
 
@@ -1132,7 +1095,7 @@ ogm_a_opus_demuxer_c::ogm_a_opus_demuxer_c(ogm_reader_c *p_reader)
   : ogm_demuxer_c(p_reader)
   , m_calculated_end_timecode{timecode_c::ns(0)}
 {
-  stype              = OGM_STREAM_TYPE_A_OPUS;
+  codec              = codec_c::look_up(CT_A_OPUS);
   num_header_packets = 2;
 }
 
@@ -1178,7 +1141,7 @@ ogm_a_opus_demuxer_c::process_page(int64_t granulepos) {
 ogm_s_text_demuxer_c::ogm_s_text_demuxer_c(ogm_reader_c *p_reader)
   : ogm_demuxer_c(p_reader)
 {
-  stype = OGM_STREAM_TYPE_A_AAC;
+  codec = codec_c::look_up(CT_S_SRT);
 }
 
 generic_packetizer_c *
@@ -1218,7 +1181,7 @@ ogm_s_text_demuxer_c::process_page(int64_t granulepos) {
 ogm_v_avc_demuxer_c::ogm_v_avc_demuxer_c(ogm_reader_c *p_reader)
   : ogm_v_mscomp_demuxer_c(p_reader)
 {
-  stype                  = OGM_STREAM_TYPE_V_AVC;
+  codec                  = codec_c::look_up(CT_V_MPEG4_P10);
   num_non_header_packets = 3;
 }
 
@@ -1240,7 +1203,7 @@ ogm_v_mscomp_demuxer_c::ogm_v_mscomp_demuxer_c(ogm_reader_c *p_reader)
   : ogm_demuxer_c(p_reader)
   , frames_since_granulepos_change(0)
 {
-  stype = OGM_STREAM_TYPE_V_MSCOMP;
+  ms_compat = true;
 }
 
 std::string
@@ -1257,6 +1220,7 @@ ogm_v_mscomp_demuxer_c::get_codec() {
 void
 ogm_v_mscomp_demuxer_c::initialize() {
   stream_header *sth = (stream_header *)(packet_data[0]->get_buffer() + 1);
+  codec              = codec_c::look_up(get_codec());
 
   if (0 > g_video_fps)
     g_video_fps = 10000000.0 / (float)get_uint64_le(&sth->time_unit);
@@ -1349,7 +1313,7 @@ ogm_v_mscomp_demuxer_c::process_page(int64_t granulepos) {
 ogm_v_theora_demuxer_c::ogm_v_theora_demuxer_c(ogm_reader_c *p_reader)
   : ogm_demuxer_c(p_reader)
 {
-  stype              = OGM_STREAM_TYPE_V_THEORA;
+  codec              = codec_c::look_up(CT_V_THEORA);
   num_header_packets = 3;
 
   memset(&theora, 0, sizeof(theora_identification_header_t));
@@ -1425,7 +1389,7 @@ ogm_v_vp8_demuxer_c::ogm_v_vp8_demuxer_c(ogm_reader_c *p_reader,
   , num_header_packets_skipped(1)
   , frames_since_granulepos_change(0)
 {
-  stype              = OGM_STREAM_TYPE_V_VP8;
+  codec              = codec_c::look_up(CT_V_VP8);
   num_header_packets = 2;
 
   memcpy(&vp8_header, op.packet, sizeof(vp8_ogg_header_t));
@@ -1459,7 +1423,7 @@ ogm_v_vp8_demuxer_c::initialize() {
 
 generic_packetizer_c *
 ogm_v_vp8_demuxer_c::create_packetizer() {
-  auto ptzr_obj = new vpx_video_packetizer_c(reader, m_ti, ivf::VP8);
+  auto ptzr_obj = new vpx_video_packetizer_c(reader, m_ti, CT_V_VP8);
 
   ptzr_obj->set_video_pixel_width(pixel_width);
   ptzr_obj->set_video_pixel_height(pixel_height);
@@ -1517,7 +1481,7 @@ ogm_v_vp8_demuxer_c::process_page(int64_t granulepos) {
 ogm_s_kate_demuxer_c::ogm_s_kate_demuxer_c(ogm_reader_c *p_reader)
   : ogm_demuxer_c(p_reader)
 {
-  stype              = OGM_STREAM_TYPE_S_KATE;
+  codec              = codec_c::look_up(CT_S_KATE);
   num_header_packets = 1; /* at least 1, will be updated upon reading the ID header */
 
   memset(&kate, 0, sizeof(kate_identification_header_t));

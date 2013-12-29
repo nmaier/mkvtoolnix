@@ -13,8 +13,8 @@
 
 #include "common/common_pch.h"
 
+#include "common/codec.h"
 #include "common/ivf.h"
-#include "common/matroska.h"
 #include "merge/connection_checks.h"
 #include "output/p_vpx.h"
 
@@ -22,7 +22,7 @@ using namespace libmatroska;
 
 vpx_video_packetizer_c::vpx_video_packetizer_c(generic_reader_c *p_reader,
                                                track_info_c &p_ti,
-                                               ivf::codec_e p_codec)
+                                               codec_type_e p_codec)
   : generic_packetizer_c(p_reader, p_ti)
   , m_previous_timecode(-1)
   , m_codec{p_codec}
@@ -30,7 +30,7 @@ vpx_video_packetizer_c::vpx_video_packetizer_c(generic_reader_c *p_reader,
   m_timecode_factory_application_mode = TFA_SHORT_QUEUEING;
 
   set_track_type(track_video);
-  set_codec_id(p_codec == ivf::VP8 ? MKV_V_VP8 : MKV_V_VP9);
+  set_codec_id(p_codec == CT_V_VP8 ? MKV_V_VP8 : MKV_V_VP9);
 }
 
 void

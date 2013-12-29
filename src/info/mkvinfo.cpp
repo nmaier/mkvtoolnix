@@ -68,11 +68,11 @@
 
 #include "common/chapters/chapters.h"
 #include "common/checksums.h"
+#include "common/codec.h"
 #include "common/command_line.h"
 #include "common/ebml.h"
 #include "common/endian.h"
 #include "common/kax_file.h"
-#include "common/matroska.h"
 #include "common/mm_io.h"
 #include "common/mm_io_x.h"
 #include "common/mpeg4_p10.h"

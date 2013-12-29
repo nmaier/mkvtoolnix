@@ -17,8 +17,7 @@
 
 #include "common/common_pch.h"
 
-#include <stdio.h>
-
+#include "common/codec.h"
 #include "common/dts.h"
 #include "common/error.h"
 #include "common/mm_io.h"
@@ -34,6 +33,7 @@ public:
   wave_header          *m_wheader;
   generic_packetizer_c *m_ptzr;
   track_info_c         &m_ti;
+  codec_c               m_codec;
 
 public:
   wav_demuxer_c(wav_reader_c *reader, wave_header *wheader);
@@ -44,8 +44,6 @@ public:
   virtual void process(int64_t len) = 0;
 
   virtual generic_packetizer_c *create_packetizer() = 0;
-
-  virtual std::string get_codec() = 0;
 
   virtual bool probe(mm_io_cptr &io) = 0;
 };

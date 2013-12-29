@@ -17,8 +17,8 @@
 
 #include "common/amf.h"
 #include "common/bit_cursor.h"
+#include "common/codec.h"
 #include "common/endian.h"
-#include "common/matroska.h"
 #include "common/mm_io_x.h"
 #include "common/mpeg4_p10.h"
 #include "input/r_flv.h"

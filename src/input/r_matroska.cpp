@@ -43,13 +43,13 @@
 #include "common/alac.h"
 #include "common/at_scope_exit.h"
 #include "common/chapters/chapters.h"
+#include "common/codec.h"
 #include "common/ebml.h"
 #include "common/endian.h"
 #include "common/hacks.h"
 #include "common/iso639.h"
 #include "common/ivf.h"
 #include "common/math.h"
-#include "common/matroska.h"
 #include "common/mm_io.h"
 #include "common/strings/formatting.h"
 #include "common/strings/parsing.h"
@@ -277,13 +277,14 @@ kax_reader_c::verify_acm_audio_track(kax_track_t *t) {
 
   }
 
-  alWAVEFORMATEX *wfe = reinterpret_cast<alWAVEFORMATEX *>(t->private_data);
-  t->a_formattag      = get_uint16_le(&wfe->w_format_tag);
+  auto wfe       = reinterpret_cast<alWAVEFORMATEX *>(t->private_data);
+  t->a_formattag = get_uint16_le(&wfe->w_format_tag);
+  t->codec       = codec_c::look_up_audio_format(t->a_formattag);
 
-  if ((0xfffe == t->a_formattag) && (!unlace_vorbis_private_data(t, static_cast<unsigned char *>(t->private_data) + sizeof(alWAVEFORMATEX), t->private_size - sizeof(alWAVEFORMATEX)))) {
+  if (t->codec.is(CT_A_VORBIS) && (!unlace_vorbis_private_data(t, static_cast<unsigned char *>(t->private_data) + sizeof(alWAVEFORMATEX), t->private_size - sizeof(alWAVEFORMATEX)))) {
     // Force the passthrough packetizer to be used if the data behind
     // the WAVEFORMATEX does not contain valid laced Vorbis headers.
-    t->a_formattag = 0;
+    t->codec = codec_c{};
     return true;
   }
 
@@ -309,7 +310,7 @@ kax_reader_c::verify_acm_audio_track(kax_track_t *t) {
 
   u = get_uint16_le(&wfe->w_bits_per_sample);
   if (t->a_bps != u) {
-    if (verbose && ((0x0001 == t->a_formattag) || (0x0003 == t->a_formattag)))
+    if (verbose && t->codec.is(CT_A_PCM))
       mxwarn(boost::format(Y("matroska_reader: (MS compatibility mode for track %1%) Matroska says that there are %2% bits per sample, "
                              "but the WAVEFORMATEX says that there are %3%.\n")) % t->tnum % t->a_bps % u);
     if (0 == t->a_bps)
@@ -321,8 +322,6 @@ kax_reader_c::verify_acm_audio_track(kax_track_t *t) {
 
 bool
 kax_reader_c::verify_alac_audio_track(kax_track_t *t) {
-  t->a_formattag = FOURCC('A', 'L', 'A', 'C');
-
   if (t->private_data && (sizeof(alac::codec_config_t) <= t->private_size))
     return true;
 
@@ -332,17 +331,20 @@ kax_reader_c::verify_alac_audio_track(kax_track_t *t) {
   return false;
 }
 
-bool
-kax_reader_c::verify_flac_audio_track(kax_track_t *t) {
 #if defined(HAVE_FLAC_FORMAT_H)
-  t->a_formattag = FOURCC('f', 'L', 'a', 'C');
+bool
+kax_reader_c::verify_flac_audio_track(kax_track_t *) {
   return true;
+}
 
 #else
+
+bool
+kax_reader_c::verify_flac_audio_track(kax_track_t *t) {
   mxwarn(boost::format(Y("matroska_reader: mkvmerge was not compiled with FLAC support. Ignoring track %1%.\n")) % t->tnum);
   return false;
-#endif
 }
+#endif
 
 bool
 kax_reader_c::verify_vorbis_audio_track(kax_track_t *t) {
@@ -351,8 +353,6 @@ kax_reader_c::verify_vorbis_audio_track(kax_track_t *t) {
       mxwarn(boost::format(Y("matroska_reader: The CodecID for track %1% is '%2%', but the private codec data does not contain valid headers.\n")) % t->tnum % MKV_A_VORBIS);
     return false;
   }
-
-  t->a_formattag = 0xFFFE;
 
   // mkvmerge around 0.6.x had a bug writing a default duration
   // for Vorbis m_tracks but not the correct durations for the
@@ -375,8 +375,6 @@ kax_reader_c::verify_opus_audio_track(kax_track_t *t) {
     return false;
   }
 
-  t->a_formattag = FOURCC('O', 'p', 'u', 's');
-
   return true;
 }
 
@@ -388,41 +386,19 @@ kax_reader_c::verify_audio_track(kax_track_t *t) {
   bool is_ok = true;
   if (t->codec_id == MKV_A_ACM)
     is_ok = verify_acm_audio_track(t);
-  else if ((t->codec_id == MKV_A_MP3) || (t->codec_id == MKV_A_MP2))
-    t->a_formattag = 0x0055;
-  else if (balg::starts_with(t->codec_id, MKV_A_AC3) || (t->codec_id == MKV_A_EAC3))
-    t->a_formattag = 0x2000;
-  else if (t->codec_id == MKV_A_ALAC)
-    is_ok = verify_alac_audio_track(t);
-  else if (t->codec_id == MKV_A_DTS)
-    t->a_formattag = 0x2001;
-  else if (t->codec_id == MKV_A_PCM)
-    t->a_formattag = 0x0001;
-  else if (t->codec_id == MKV_A_PCM_FLOAT)
-    t->a_formattag = 0x0003;
-  else if (t->codec_id == MKV_A_VORBIS)
-    is_ok = verify_vorbis_audio_track(t);
-  else if (   (t->codec_id == MKV_A_AAC_2MAIN)
-           || (t->codec_id == MKV_A_AAC_2LC)
-           || (t->codec_id == MKV_A_AAC_2SSR)
-           || (t->codec_id == MKV_A_AAC_4MAIN)
-           || (t->codec_id == MKV_A_AAC_4LC)
-           || (t->codec_id == MKV_A_AAC_4SSR)
-           || (t->codec_id == MKV_A_AAC_4LTP)
-           || (t->codec_id == MKV_A_AAC_2SBR)
-           || (t->codec_id == MKV_A_AAC_4SBR)
-           || (t->codec_id == MKV_A_AAC))
-    t->a_formattag = FOURCC('M', 'P', '4', 'A');
-  else if (balg::starts_with(t->codec_id, "A_REAL/"))
-    t->a_formattag = FOURCC('r', 'e', 'a', 'l');
-  else if (t->codec_id == MKV_A_FLAC)
-    is_ok = verify_flac_audio_track(t);
-  else if (t->codec_id == MKV_A_TTA)
-    t->a_formattag = FOURCC('T', 'T', 'A', '1');
-  else if (t->codec_id == MKV_A_WAVPACK4)
-    t->a_formattag = FOURCC('W', 'V', 'P', '4');
-  else if (balg::starts_with(t->codec_id, MKV_A_OPUS))
-    is_ok = verify_opus_audio_track(t);
+
+  else {
+    t->codec = codec_c::look_up(t->codec_id);
+
+    if (t->codec.is(CT_A_ALAC))
+      is_ok = verify_alac_audio_track(t);
+    else if (t->codec.is(CT_A_VORBIS))
+      is_ok = verify_vorbis_audio_track(t);
+    else if (t->codec.is(CT_A_FLAC))
+      is_ok = verify_flac_audio_track(t);
+    else if (t->codec.is(CT_A_OPUS))
+      is_ok = verify_opus_audio_track(t);
+  }
 
   if (!is_ok)
     return;
@@ -447,9 +423,9 @@ kax_reader_c::verify_mscomp_video_track(kax_track_t *t) {
       return false;
   }
 
-  t->ms_compat            = 1;
-  alBITMAPINFOHEADER *bih = reinterpret_cast<alBITMAPINFOHEADER *>(t->private_data);
-  uint32_t u              = get_uint32_le(&bih->bi_width);
+  t->ms_compat = 1;
+  auto bih     = reinterpret_cast<alBITMAPINFOHEADER *>(t->private_data);
+  auto u       = get_uint32_le(&bih->bi_width);
 
   if (t->v_width != u) {
     if (verbose)
@@ -469,6 +445,8 @@ kax_reader_c::verify_mscomp_video_track(kax_track_t *t) {
   }
 
   memcpy(t->v_fourcc, &bih->bi_compression, 4);
+  t->v_fourcc[4] = 0;
+  t->codec       = codec_c::look_up(t->v_fourcc);
 
   return true;
 }
@@ -486,15 +464,19 @@ kax_reader_c::verify_theora_video_track(kax_track_t *t) {
 
 void
 kax_reader_c::verify_video_track(kax_track_t *t) {
-  if (t->codec_id == "")
+  if (t->codec_id.empty())
     return;
 
   bool is_ok = true;
   if (t->codec_id == MKV_V_MSCOMP)
     is_ok = verify_mscomp_video_track(t);
 
-  else if (t->codec_id == MKV_V_THEORA)
-    is_ok = verify_theora_video_track(t);
+  else {
+    t->codec = codec_c::look_up(t->codec_id);
+
+    if (t->codec.is(CT_V_THEORA))
+      is_ok = verify_theora_video_track(t);
+  }
 
   if (!is_ok)
     return;
@@ -539,12 +521,13 @@ kax_reader_c::verify_vobsub_subtitle_track(kax_track_t *t) {
 
 void
 kax_reader_c::verify_subtitle_track(kax_track_t *t) {
-  bool is_ok = true;
+  auto is_ok = true;
+  t->codec   = codec_c::look_up(t->codec_id);
 
-  if (t->codec_id == MKV_S_VOBSUB)
+  if (t->codec.is(CT_S_VOBSUB))
     is_ok = verify_vobsub_subtitle_track(t);
 
-  else if (t->codec_id == MKV_S_KATE)
+  else if (t->codec.is(CT_S_KATE))
     is_ok = verify_kate_subtitle_track(t);
 
   t->ok = is_ok ? 1 : 0;
@@ -552,7 +535,9 @@ kax_reader_c::verify_subtitle_track(kax_track_t *t) {
 
 void
 kax_reader_c::verify_button_track(kax_track_t *t) {
-  if (t->codec_id != MKV_B_VOBBTN) {
+  t->codec = codec_c::look_up(t->codec_id);
+
+  if (!t->codec.is(CT_B_VOBBTN)) {
     if (verbose)
       mxwarn(boost::format(Y("matroska_reader: The CodecID '%1%' for track %2% is unknown.\n")) % t->codec_id % t->tnum);
     return;
@@ -1333,60 +1318,47 @@ kax_reader_c::set_packetizer_headers(kax_track_t *t) {
 void
 kax_reader_c::create_video_packetizer(kax_track_t *t,
                                       track_info_c &nti) {
-  if ((t->codec_id == MKV_V_MSCOMP) && mpeg4::p10::is_avc_fourcc(t->v_fourcc) && !hack_engaged(ENGAGE_ALLOW_AVC_IN_VFW_MODE))
+  if (t->codec.is(CT_V_MPEG4_P10) && t->ms_compat && !hack_engaged(ENGAGE_ALLOW_AVC_IN_VFW_MODE))
     create_mpeg4_p10_es_video_packetizer(t, nti);
 
-  else if (   balg::starts_with(t->codec_id, "V_MPEG4")
-           || (t->codec_id == MKV_V_MSCOMP)
-           || balg::starts_with(t->codec_id, "V_REAL")
-           || (t->codec_id == MKV_V_QUICKTIME)
-           || (t->codec_id == MKV_V_MPEG1)
-           || (t->codec_id == MKV_V_MPEG2)
-           || (t->codec_id == MKV_V_THEORA)
-           || (t->codec_id == MKV_V_DIRAC)
-           || (t->codec_id == MKV_V_VP8)
-           || (t->codec_id == MKV_V_VP9)) {
-    if ((t->codec_id == MKV_V_MPEG1) || (t->codec_id == MKV_V_MPEG2)) {
-      int version = t->codec_id[6] - '0';
-      set_track_packetizer(t, new mpeg1_2_video_packetizer_c(this, nti, version, t->v_frate, t->v_width, t->v_height, t->v_dwidth, t->v_dheight, true));
-      show_packetizer_info(t->tnum, t->ptzr_ptr);
+  else if (t->codec.is(CT_V_MPEG12)) {
+    int version = t->codec_id[6] - '0';
+    set_track_packetizer(t, new mpeg1_2_video_packetizer_c(this, nti, version, t->v_frate, t->v_width, t->v_height, t->v_dwidth, t->v_dheight, true));
+    show_packetizer_info(t->tnum, t->ptzr_ptr);
 
-    } else if (IS_MPEG4_L2_CODECID(t->codec_id) || IS_MPEG4_L2_FOURCC(t->v_fourcc)) {
-      bool is_native = IS_MPEG4_L2_CODECID(t->codec_id);
-      set_track_packetizer(t, new mpeg4_p2_video_packetizer_c(this, nti, t->v_frate, t->v_width, t->v_height, is_native));
-      show_packetizer_info(t->tnum, t->ptzr_ptr);
+  } else if (t->codec.is(CT_V_MPEG4_P2)) {
+    bool is_native = IS_MPEG4_L2_CODECID(t->codec_id);
+    set_track_packetizer(t, new mpeg4_p2_video_packetizer_c(this, nti, t->v_frate, t->v_width, t->v_height, is_native));
+    show_packetizer_info(t->tnum, t->ptzr_ptr);
 
-    } else if (t->codec_id == MKV_V_MPEG4_AVC)
-      create_mpeg4_p10_video_packetizer(t, nti);
+  } else if (t->codec.is(CT_V_MPEG4_P10))
+    create_mpeg4_p10_video_packetizer(t, nti);
 
-    else if (t->codec_id == MKV_V_THEORA) {
-      set_track_packetizer(t, new theora_video_packetizer_c(this, nti, t->v_frate, t->v_width, t->v_height));
-      show_packetizer_info(t->tnum, t->ptzr_ptr);
+  else if (t->codec.is(CT_V_THEORA)) {
+    set_track_packetizer(t, new theora_video_packetizer_c(this, nti, t->v_frate, t->v_width, t->v_height));
+    show_packetizer_info(t->tnum, t->ptzr_ptr);
 
-    } else if (t->codec_id == MKV_V_DIRAC) {
-      set_track_packetizer(t, new dirac_video_packetizer_c(this, nti));
-      show_packetizer_info(t->tnum, t->ptzr_ptr);
+  } else if (t->codec.is(CT_V_DIRAC)) {
+    set_track_packetizer(t, new dirac_video_packetizer_c(this, nti));
+    show_packetizer_info(t->tnum, t->ptzr_ptr);
 
-    } else if ((t->codec_id == MKV_V_VP8) || (t->codec_id == MKV_V_VP9)) {
-      set_track_packetizer(t, new vpx_video_packetizer_c(this, nti, t->codec_id == MKV_V_VP8 ? ivf::VP8 : ivf::VP9));
-      show_packetizer_info(t->tnum, t->ptzr_ptr);
-      t->handle_packetizer_pixel_dimensions();
-      t->handle_packetizer_default_duration();
+  } else if (t->codec.is(CT_V_VP8) || t->codec.is(CT_V_VP9)) {
+    set_track_packetizer(t, new vpx_video_packetizer_c(this, nti, t->codec.get_type()));
+    show_packetizer_info(t->tnum, t->ptzr_ptr);
+    t->handle_packetizer_pixel_dimensions();
+    t->handle_packetizer_default_duration();
 
-    } else if ((t->codec_id == MKV_V_MSCOMP) && vc1::is_fourcc(t->v_fourcc))
-      create_vc1_video_packetizer(t, nti);
+  } else if (t->codec.is(CT_V_VC1))
+    create_vc1_video_packetizer(t, nti);
 
-    else {
-      set_track_packetizer(t, new video_packetizer_c(this, nti, t->codec_id.c_str(), t->v_frate, t->v_width, t->v_height));
-      show_packetizer_info(t->tnum, t->ptzr_ptr);
-    }
+  else {
+    set_track_packetizer(t, new video_packetizer_c(this, nti, t->codec_id.c_str(), t->v_frate, t->v_width, t->v_height));
+    show_packetizer_info(t->tnum, t->ptzr_ptr);
+  }
 
-    t->handle_packetizer_display_dimensions();
-    t->handle_packetizer_pixel_cropping();
-    t->handle_packetizer_stereo_mode();
-
-  } else
-    init_passthrough_packetizer(t);
+  t->handle_packetizer_display_dimensions();
+  t->handle_packetizer_pixel_cropping();
+  t->handle_packetizer_stereo_mode();
 }
 
 void
@@ -1398,7 +1370,7 @@ kax_reader_c::create_aac_audio_packetizer(kax_track_t *t,
   int profile          = 0;
   int detected_profile = AAC_PROFILE_MAIN;
 
-  if (FOURCC('M', 'P', '4', 'A') == t->a_formattag) {
+  if (!t->ms_compat) {
     if (t->private_data && (2 <= t->private_size)) {
       int channels, sfreq, osfreq;
       bool sbr;
@@ -1486,10 +1458,8 @@ kax_reader_c::create_flac_audio_packetizer(kax_track_t *t,
                                            track_info_c &nti) {
   nti.m_private_data.reset();
 
-  if (FOURCC('f', 'L', 'a', 'C') == t->a_formattag)
-    set_track_packetizer(t, new flac_packetizer_c(this, nti, static_cast<unsigned char *>(t->private_data), t->private_size));
-  else
-    set_track_packetizer(t, new flac_packetizer_c(this, nti, static_cast<unsigned char *>(t->private_data) + sizeof(alWAVEFORMATEX), t->private_size - sizeof(alWAVEFORMATEX)));
+  unsigned int offset = t->ms_compat ? sizeof(alWAVEFORMATEX) : 0u;
+  set_track_packetizer(t, new flac_packetizer_c(this, nti, static_cast<unsigned char *>(t->private_data) + offset, t->private_size - offset));
 
   show_packetizer_info(t->tnum, t->ptzr_ptr);
 }
@@ -1522,7 +1492,7 @@ kax_reader_c::create_opus_audio_packetizer(kax_track_t *t,
 void
 kax_reader_c::create_pcm_audio_packetizer(kax_track_t *t,
                                           track_info_c &nti) {
-  set_track_packetizer(t, new pcm_packetizer_c(this, nti, t->a_sfreq, t->a_channels, t->a_bps, 0x0003 == t->a_formattag ? pcm_packetizer_c::ieee_float : pcm_packetizer_c::little_endian_integer));
+  set_track_packetizer(t, new pcm_packetizer_c(this, nti, t->a_sfreq, t->a_channels, t->a_bps, t->codec_id == MKV_A_PCM_FLOAT ? pcm_packetizer_c::ieee_float : pcm_packetizer_c::little_endian_integer));
   show_packetizer_info(t->tnum, t->ptzr_ptr);
 }
 
@@ -1563,39 +1533,39 @@ kax_reader_c::create_wavpack_audio_packetizer(kax_track_t *t,
 void
 kax_reader_c::create_audio_packetizer(kax_track_t *t,
                                       track_info_c &nti) {
-  if ((0x0001 == t->a_formattag) || (0x0003 == t->a_formattag))
+  if (t->codec.is(CT_A_PCM))
     create_pcm_audio_packetizer(t, nti);
 
-  else if (0x0055 == t->a_formattag)
+  else if (t->codec.is(CT_A_MP2) || t->codec.is(CT_A_MP3))
     create_mp3_audio_packetizer(t, nti);
 
-  else if (0x2000 == t->a_formattag)
+  else if (t->codec.is(CT_A_AC3))
     create_ac3_audio_packetizer(t, nti);
 
-  else if (0x2001 == t->a_formattag)
+  else if (t->codec.is(CT_A_DTS))
     create_dts_audio_packetizer(t, nti);
 
-  else if (0xFFFE == t->a_formattag)
+  else if (t->codec.is(CT_A_VORBIS))
     create_vorbis_audio_packetizer(t, nti);
 
-  else if (FOURCC('A', 'L', 'A', 'C') == t->a_formattag)
+  else if (t->codec.is(CT_A_ALAC))
     create_alac_audio_packetizer(t, nti);
 
-  else if ((FOURCC('M', 'P', '4', 'A') == t->a_formattag) || (0x00ff == t->a_formattag))
+  else if (t->codec.is(CT_A_AAC))
     create_aac_audio_packetizer(t, nti);
 
 #if defined(HAVE_FLAC_FORMAT_H)
-  else if ((FOURCC('f', 'L', 'a', 'C') == t->a_formattag) || (0xf1ac == t->a_formattag))
+  else if (t->codec.is(CT_A_FLAC))
     create_flac_audio_packetizer(t, nti);
 #endif
 
-  else if (FOURCC('O', 'p', 'u', 's') == t->a_formattag)
+  else if (t->codec.is(CT_A_OPUS))
     create_opus_audio_packetizer(t, nti);
 
-  else if (FOURCC('T', 'T', 'A', '1') == t->a_formattag)
+  else if (t->codec.is(CT_A_TTA))
     create_tta_audio_packetizer(t, nti);
 
-  else if (FOURCC('W', 'V', 'P', '4') == t->a_formattag)
+  else if (t->codec.is(CT_A_WAVPACK4))
     create_wavpack_audio_packetizer(t, nti);
 
   else
@@ -1608,7 +1578,7 @@ kax_reader_c::create_audio_packetizer(kax_track_t *t,
 void
 kax_reader_c::create_subtitle_packetizer(kax_track_t *t,
                                          track_info_c &nti) {
-  if (t->codec_id == MKV_S_VOBSUB) {
+  if (t->codec.is(CT_S_VOBSUB)) {
     set_track_packetizer(t, new vobsub_packetizer_c(this, nti));
     show_packetizer_info(t->tnum, t->ptzr_ptr);
 
@@ -1622,12 +1592,12 @@ kax_reader_c::create_subtitle_packetizer(kax_track_t *t,
 
     t->sub_type = 't';
 
-  } else if (t->codec_id == MKV_S_KATE) {
+  } else if (t->codec.is(CT_S_KATE)) {
     set_track_packetizer(t, new kate_packetizer_c(this, nti));
     show_packetizer_info(t->tnum, t->ptzr_ptr);
     t->sub_type = 'k';
 
-  } else if (t->codec_id == MKV_S_HDMV_PGS) {
+  } else if (t->codec.is(CT_S_PGS)) {
     set_track_packetizer(t, new pgs_packetizer_c(this, nti));
     show_packetizer_info(t->tnum, t->ptzr_ptr);
     t->sub_type = 'p';
@@ -1640,7 +1610,7 @@ kax_reader_c::create_subtitle_packetizer(kax_track_t *t,
 void
 kax_reader_c::create_button_packetizer(kax_track_t *t,
                                        track_info_c &nti) {
-  if (t->codec_id != MKV_B_VOBBTN) {
+  if (!t->codec.is(CT_B_VOBBTN)) {
     init_passthrough_packetizer(t);
     return;
   }
@@ -2087,12 +2057,8 @@ kax_reader_c::process_block_group(KaxCluster *cluster,
     return;
   }
 
-  if (bref_found) {
-    if (FOURCC('r', 'e', 'a', 'l') == block_track->a_formattag)
-      block_bref = block_track->previous_timecode;
-    else
-      block_bref += m_last_timecode;
-  }
+  if (bref_found)
+    block_bref += m_last_timecode;
   if (fref_found)
     block_fref += m_last_timecode;
 
@@ -2217,10 +2183,8 @@ kax_reader_c::identify() {
     verbose_info.push_back((boost::format("forced_track:%1%")  % (track->forced_track  ? 1 : 0)).str());
     verbose_info.push_back((boost::format("enabled_track:%1%") % (track->enabled_track ? 1 : 0)).str());
 
-    if ((track->codec_id == MKV_V_MSCOMP) && mpeg4::p10::is_avc_fourcc(track->v_fourcc))
-      verbose_info.push_back("packetizer:mpeg4_p10_es_video");
-    else if (track->codec_id == MKV_V_MPEG4_AVC)
-      verbose_info.push_back("packetizer:mpeg4_p10_video");
+    if (track->codec.is(CT_V_MPEG4_P10))
+      verbose_info.push_back(track->ms_compat ? "packetizer:mpeg4_p10_es_video" : "packetizer:mpeg4_p10_video");
 
     if (0 != track->default_duration)
       verbose_info.push_back((boost::format("default_duration:%1%") % track->default_duration).str());
@@ -2235,16 +2199,15 @@ kax_reader_c::identify() {
     if (track->content_decoder.has_encodings())
       verbose_info.push_back((boost::format("content_encoding_algorithms:%1%") % escape(track->content_decoder.descriptive_algorithm_list())).str());
 
-    std::string info = track->codec_id;
+    std::string info;
+    if (track->codec)
+      info = track->codec.get_name();
 
-    if (track->ms_compat)
-      info += std::string(", ") +
-        (  track->type        == 'v'    ? std::string(track->v_fourcc)
-         : track->a_formattag == 0x0001 ? std::string("PCM")
-         : track->a_formattag == 0x0003 ? std::string("PCM")
-         : track->a_formattag == 0x0055 ? std::string("MP3")
-         : track->a_formattag == 0x2000 ? std::string("AC3")
-         :                                (boost::format(Y("unknown, format tag 0x%|1$04x|")) % track->a_formattag).str());
+    else if (track->ms_compat)
+      info = track->type == 'v' ? std::string{track->v_fourcc} : (boost::format(Y("unknown, format tag 0x%|1$04x|")) % track->a_formattag).str();
+
+    else
+      info = track->codec_id;
 
     id_result_track(track->tnum,
                       track->type == 'v' ? ID_RESULT_TRACK_VIDEO

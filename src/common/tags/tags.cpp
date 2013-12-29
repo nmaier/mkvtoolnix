@@ -20,8 +20,8 @@
 #include "common/common_pch.h"
 #include "common/chapters/chapters.h"
 #include "common/ebml.h"
-#include "common/matroska.h"
 #include "common/tags/tags.h"
+#include "common/tags/target_type.h"
 
 #include <matroska/KaxTags.h>
 #include <matroska/KaxTag.h>

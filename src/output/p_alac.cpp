@@ -14,8 +14,8 @@
 #include "common/common_pch.h"
 
 #include "common/alac.h"
+#include "common/codec.h"
 #include "common/hacks.h"
-#include "common/matroska.h"
 #include "merge/connection_checks.h"
 #include "output/p_alac.h"
 

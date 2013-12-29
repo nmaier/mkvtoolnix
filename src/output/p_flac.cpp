@@ -19,8 +19,8 @@
 #include <vorbis/codec.h>
 
 #include "common/checksums.h"
+#include "common/codec.h"
 #include "common/flac.h"
-#include "common/matroska.h"
 #include "merge/connection_checks.h"
 #include "output/p_flac.h"
 

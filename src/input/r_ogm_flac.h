@@ -60,10 +60,6 @@ public:
     return "audio";
   };
 
-  virtual std::string get_codec() {
-    return "FLAC";
-  };
-
   virtual void initialize();
 
   virtual generic_packetizer_c *create_packetizer();

@@ -25,15 +25,13 @@ file_header_t::file_header_t()
   memset(this, 0, sizeof(*this));
 }
 
-codec_e
+codec_c
 file_header_t::get_codec()
   const {
   auto f = fourcc_c{fourcc};
-  if (f.equiv("VP80"))
-    return VP8;
-  if (f.equiv("VP90"))
-    return VP9;
-  return UNKNOWN_CODEC;
+  return codec_c::look_up(  f.equiv("VP80") ? CT_V_VP8
+                          : f.equiv("VP90") ? CT_V_VP9
+                          :                   CT_UNKNOWN);
 }
 
 frame_header_t::frame_header_t()
@@ -43,7 +41,7 @@ frame_header_t::frame_header_t()
 
 bool
 is_keyframe(memory_cptr const &buffer,
-            codec_e codec) {
+            codec_type_e codec) {
   // Remember: bit numbers start with the least significant bit. Bit 0
   // == 1, bit 1 == 2 etc.
 
@@ -52,7 +50,7 @@ is_keyframe(memory_cptr const &buffer,
 
   auto data = buffer->get_buffer();
 
-  if (codec == VP8)
+  if (codec == CT_V_VP8)
     return (data[0] & 0x01) == 0x00;
 
   // VP9

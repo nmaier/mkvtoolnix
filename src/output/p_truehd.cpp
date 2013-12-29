@@ -14,7 +14,7 @@
 #include "common/common_pch.h"
 
 #include "common/hacks.h"
-#include "common/matroska.h"
+#include "common/codec.h"
 #include "common/truehd.h"
 #include "merge/connection_checks.h"
 #include "merge/output_control.h"

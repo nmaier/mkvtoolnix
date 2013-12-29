@@ -16,32 +16,13 @@
 
 #include "common/common_pch.h"
 
-#include <stdio.h>
-
 #include <ogg/ogg.h>
 
+#include "common/codec.h"
 #include "common/mm_io.h"
 #include "merge/pr_generic.h"
 #include "common/theora.h"
 #include "common/kate.h"
-
-enum ogm_stream_type_e {
-  OGM_STREAM_TYPE_UNKNOWN,
-  OGM_STREAM_TYPE_A_AAC,
-  OGM_STREAM_TYPE_A_AC3,
-  OGM_STREAM_TYPE_A_FLAC,
-  OGM_STREAM_TYPE_A_MP2,
-  OGM_STREAM_TYPE_A_MP3,
-  OGM_STREAM_TYPE_A_OPUS,
-  OGM_STREAM_TYPE_A_PCM,
-  OGM_STREAM_TYPE_A_VORBIS,
-  OGM_STREAM_TYPE_S_KATE,
-  OGM_STREAM_TYPE_S_TEXT,
-  OGM_STREAM_TYPE_V_AVC,
-  OGM_STREAM_TYPE_V_MSCOMP,
-  OGM_STREAM_TYPE_V_THEORA,
-  OGM_STREAM_TYPE_V_VP8,
-};
 
 class ogm_reader_c;
 
@@ -54,7 +35,8 @@ public:
   int ptzr;
   int64_t track_id;
 
-  ogm_stream_type_e stype;
+  codec_c codec;
+  bool ms_compat;
   int serialno, eos;
   unsigned int units_processed, num_header_packets, num_non_header_packets;
   bool headers_read;
@@ -74,7 +56,7 @@ public:
     return "unknown";
   };
   virtual std::string get_codec() {
-    return "unknown";
+    return codec.get_name("unknown");
   };
 
   virtual void initialize() {

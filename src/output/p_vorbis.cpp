@@ -16,7 +16,7 @@
 #include <ogg/ogg.h>
 #include <vorbis/codec.h>
 
-#include "common/matroska.h"
+#include "common/codec.h"
 #include "merge/connection_checks.h"
 #include "merge/output_control.h"
 #include "output/p_vorbis.h"

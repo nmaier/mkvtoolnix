@@ -15,8 +15,8 @@
 
 #include <matroska/KaxContentEncoding.h>
 
+#include "common/codec.h"
 #include "common/compression.h"
-#include "common/matroska.h"
 #include "common/mm_io.h"
 #include "input/subtitles.h"
 #include "output/p_vobsub.h"

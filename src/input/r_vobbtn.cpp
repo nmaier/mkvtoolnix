@@ -14,6 +14,7 @@
 
 #include "common/common_pch.h"
 
+#include "common/codec.h"
 #include "common/endian.h"
 #include "common/mm_io.h"
 #include "common/strings/formatting.h"
@@ -98,5 +99,5 @@ vobbtn_reader_c::read(generic_packetizer_c *,
 void
 vobbtn_reader_c::identify() {
   id_result_container();
-  id_result_track(0, ID_RESULT_TRACK_BUTTONS, (boost::format("MPEG PCI, width %1% / height %2%") % width % height).str());
+  id_result_track(0, ID_RESULT_TRACK_BUTTONS, codec_c::get_name(CT_B_VOBBTN, "VobBtn"));
 }

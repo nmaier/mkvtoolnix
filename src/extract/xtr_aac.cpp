@@ -13,8 +13,8 @@
 #include "common/common_pch.h"
 
 #include "common/aac.h"
+#include "common/codec.h"
 #include "common/ebml.h"
-#include "common/matroska.h"
 #include "extract/xtr_aac.h"
 
 xtr_aac_c::xtr_aac_c(const std::string &codec_id,

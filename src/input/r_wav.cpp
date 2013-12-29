@@ -72,9 +72,6 @@ public:
 
   virtual void process(int64_t len);
   virtual generic_packetizer_c *create_packetizer();
-  virtual std::string get_codec() {
-    return m_ac3header.is_eac3() ? "EAC3" : "AC3";
-  };
 
 protected:
   virtual int decode_buffer(int len);
@@ -142,9 +139,6 @@ public:
 
   virtual void process(int64_t len);
   virtual generic_packetizer_c *create_packetizer();
-  virtual std::string get_codec() {
-    return "DTS";
-  };
 
 private:
   virtual int decode_buffer(int len);
@@ -171,9 +165,6 @@ public:
 
   virtual void process(int64_t len);
   virtual generic_packetizer_c *create_packetizer();
-  virtual std::string get_codec() {
-    return "PCM";
-  };
 
   virtual bool probe(mm_io_cptr &) {
     return true;
@@ -190,6 +181,8 @@ wav_ac3acm_demuxer_c::wav_ac3acm_demuxer_c(wav_reader_c *reader,
 
   m_buf[0] = memory_c::alloc(AC3ACM_READ_SIZE);
   m_buf[1] = memory_c::alloc(AC3ACM_READ_SIZE);
+
+  m_codec  = codec_c::look_up(CT_A_AC3);
 }
 
 wav_ac3acm_demuxer_c::~wav_ac3acm_demuxer_c() {
@@ -315,6 +308,8 @@ wav_dts_demuxer_c::wav_dts_demuxer_c(wav_reader_c *reader,
 
   m_buf[0] = memory_c::alloc(DTS_READ_SIZE);
   m_buf[1] = memory_c::alloc(DTS_READ_SIZE);
+
+  m_codec  = codec_c::look_up(CT_A_DTS);
 }
 
 wav_dts_demuxer_c::~wav_dts_demuxer_c() {
@@ -392,6 +387,8 @@ wav_pcm_demuxer_c::wav_pcm_demuxer_c(wav_reader_c *reader,
 
   m_bps    = get_uint16_le(&m_wheader->common.wChannels) * get_uint16_le(&m_wheader->common.wBitsPerSample) * get_uint32_le(&m_wheader->common.dwSamplesPerSec) / 8;
   m_buffer = memory_c::alloc(m_bps);
+
+  m_codec  = codec_c::look_up(CT_A_PCM);
 }
 
 wav_pcm_demuxer_c::~wav_pcm_demuxer_c() {
@@ -672,7 +669,7 @@ void
 wav_reader_c::identify() {
   if (m_demuxer) {
     id_result_container();
-    id_result_track(0, ID_RESULT_TRACK_AUDIO, m_demuxer->get_codec());
+    id_result_track(0, ID_RESULT_TRACK_AUDIO, m_demuxer->m_codec.get_name());
 
   } else {
     uint16_t format_tag = get_uint16_le(&m_wheader.common.wFormatTag);

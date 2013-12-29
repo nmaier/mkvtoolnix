@@ -15,8 +15,8 @@
 
 #include <sstream>
 
+#include "common/codec.h"
 #include "common/iso639.h"
-#include "common/matroska.h"
 #include "common/mm_io.h"
 #include "common/mm_io_x.h"
 #include "common/strings/parsing.h"
@@ -225,6 +225,6 @@ usf_reader_c::identify() {
     if (!track->m_language.empty())
       verbose_info.push_back(std::string("language:") + escape(track->m_language));
 
-    id_result_track(i, ID_RESULT_TRACK_SUBTITLES, "USF", verbose_info);
+    id_result_track(i, ID_RESULT_TRACK_SUBTITLES, codec_c::get_name(CT_S_USF, "USF"), verbose_info);
   }
 }

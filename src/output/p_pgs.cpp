@@ -15,8 +15,8 @@
 
 #include <matroska/KaxContentEncoding.h>
 
+#include "common/codec.h"
 #include "common/compression.h"
-#include "common/matroska.h"
 #include "common/pgssup.h"
 #include "output/p_pgs.h"
 

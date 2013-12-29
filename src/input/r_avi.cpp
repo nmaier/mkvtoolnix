@@ -24,12 +24,12 @@
 #include <avilib.h>
 
 #include "common/aac.h"
+#include "common/codec.h"
 #include "common/endian.h"
 #include "common/error.h"
 #include "common/hacks.h"
 #include "common/ivf.h"
 #include "common/math.h"
-#include "common/matroska.h"
 #include "common/mpeg1_2.h"
 #include "common/mpeg4_p2.h"
 #include "common/mpeg4_p10.h"
@@ -354,7 +354,7 @@ avi_reader_c::create_mpeg4_p10_packetizer() {
 void
 avi_reader_c::create_vp8_packetizer() {
   m_ti.m_private_data.reset();
-  m_vptzr = add_packetizer(new vpx_video_packetizer_c(this, m_ti, ivf::VP8));
+  m_vptzr = add_packetizer(new vpx_video_packetizer_c(this, m_ti, CT_V_VP8));
 
   PTZR(m_vptzr)->set_track_default_duration(1000000000ll / m_fps);
   PTZR(m_vptzr)->set_video_pixel_width(AVI_video_width(m_avi));
@@ -479,37 +479,28 @@ avi_reader_c::add_audio_demuxer(int aid) {
   else
     m_ti.m_private_data.reset();
 
-  switch(audio_format) {
-    case 0x0001:                // raw PCM audio
-    case 0x0003:                // raw PCM audio (float)
-      packetizer = new pcm_packetizer_c(this, m_ti, demuxer.m_samples_per_second, demuxer.m_channels, demuxer.m_bits_per_sample, 0x0003 == audio_format ? pcm_packetizer_c::ieee_float : pcm_packetizer_c::little_endian_integer);
-      break;
+  demuxer.m_codec = codec_c::look_up_audio_format(audio_format);
 
-    case 0x0050:                // MP2
-    case 0x0055:                // MP3
-      packetizer = new mp3_packetizer_c(this, m_ti, demuxer.m_samples_per_second, demuxer.m_channels, false);
-      break;
+  if (demuxer.m_codec.is(CT_A_PCM))
+    packetizer = new pcm_packetizer_c(this, m_ti, demuxer.m_samples_per_second, demuxer.m_channels, demuxer.m_bits_per_sample, 0x0003 == audio_format ? pcm_packetizer_c::ieee_float : pcm_packetizer_c::little_endian_integer);
 
-    case 0x2000:                // AC3
-      packetizer = new ac3_packetizer_c(this, m_ti, demuxer.m_samples_per_second, demuxer.m_channels, 0);
-      break;
+  else if (demuxer.m_codec.is(CT_A_MP2) || demuxer.m_codec.is(CT_A_MP3))
+    packetizer = new mp3_packetizer_c(this, m_ti, demuxer.m_samples_per_second, demuxer.m_channels, false);
 
-    case 0x2001:                // DTS
-      packetizer = create_dts_packetizer(aid);
-      break;
+  else if (demuxer.m_codec.is(CT_A_AC3))
+    packetizer = new ac3_packetizer_c(this, m_ti, demuxer.m_samples_per_second, demuxer.m_channels, 0);
 
-    case 0x00ff:
-    case 0x706d:                // AAC
-      packetizer = create_aac_packetizer(aid, demuxer);
-      break;
+  else if (demuxer.m_codec.is(CT_A_DTS))
+    packetizer = create_dts_packetizer(aid);
 
-    case 0x566f:                // Vorbis
-      packetizer = create_vorbis_packetizer(aid);
-      break;
+  else if (demuxer.m_codec.is(CT_A_AAC))
+    packetizer = create_aac_packetizer(aid, demuxer);
 
-    default:
-      mxerror_tid(m_ti.m_fname, aid + 1, boost::format(Y("Unknown/unsupported audio format 0x%|1$04x| for this audio track.\n")) % audio_format);
-  }
+  else if (demuxer.m_codec.is(CT_A_VORBIS))
+    packetizer = create_vorbis_packetizer(aid);
+
+  else
+    mxerror_tid(m_ti.m_fname, aid + 1, boost::format(Y("Unknown/unsupported audio format 0x%|1$04x| for this audio track.\n")) % audio_format);
 
   show_packetizer_info(aid + 1, packetizer);
 
@@ -528,11 +519,11 @@ avi_reader_c::create_aac_packetizer(int aid,
   int profile, channels, sample_rate, output_sample_rate;
   bool is_sbr;
 
-  bool headerless        = (AVI_audio_format(m_avi) != 0x706d);
+  bool headerless = (AVI_audio_format(m_avi) != 0x706d);
 
   if (!m_ti.m_private_data
-      || (   (0x706d                       == AVI_audio_format(m_avi))
-             && ((sizeof(alWAVEFORMATEX) + 7)  < m_ti.m_private_data->get_size()))) {
+      || (   !headerless
+          && ((sizeof(alWAVEFORMATEX) + 7)  < m_ti.m_private_data->get_size()))) {
     channels             = AVI_audio_channels(m_avi);
     sample_rate          = AVI_audio_rate(m_avi);
     if (44100 > sample_rate) {
@@ -557,10 +548,10 @@ avi_reader_c::create_aac_packetizer(int aid,
       profile = AAC_PROFILE_SBR;
   }
 
-  demuxer.m_samples_per_second     = sample_rate;
-  demuxer.m_channels               = channels;
+  demuxer.m_samples_per_second = sample_rate;
+  demuxer.m_channels           = channels;
 
-  generic_packetizer_c *packetizer = new aac_packetizer_c(this, m_ti, AAC_ID_MPEG4, profile, demuxer.m_samples_per_second, demuxer.m_channels, false, headerless);
+  auto packetizer              = new aac_packetizer_c(this, m_ti, AAC_ID_MPEG4, profile, demuxer.m_samples_per_second, demuxer.m_channels, false, headerless);
 
   if (is_sbr)
     packetizer->set_audio_output_sampling_freq(output_sample_rate);
@@ -873,21 +864,15 @@ avi_reader_c::identify_video() {
   std::vector<std::string> extended_info;
 
   const char *fourcc_str = AVI_video_compressor(m_avi);
-  std::string type       = fourcc_str;
+  auto codec             = codec_c::look_up(fourcc_str);
 
-  if (IS_MPEG4_L2_FOURCC(fourcc_str))
+  if (codec.is(CT_V_MPEG4_P2))
     extended_identify_mpeg4_l2(extended_info);
 
-  else if (mpeg4::p10::is_avc_fourcc(fourcc_str))
+  else if (codec.is(CT_V_MPEG4_P10))
     extended_info.push_back("packetizer:mpeg4_p10_es_video");
 
-  else if (mpeg1_2::is_fourcc(get_uint32_le(fourcc_str)))
-    type = "MPEG-1/2";
-
-  else if (type == "VP80")
-    type = "VP8";
-
-  id_result_track(0, ID_RESULT_TRACK_VIDEO, type, join(" ", extended_info));
+  id_result_track(0, ID_RESULT_TRACK_VIDEO, codec.get_name(fourcc_str), join(" ", extended_info));
 }
 
 void
@@ -902,18 +887,8 @@ avi_reader_c::identify_audio() {
       audio_format = get_uint32_le(&ext->extension.guid.data1);
     }
 
-    std::string type
-      = (0x0001 == audio_format) || (0x0003 == audio_format) ? "PCM"
-      : (0x0050 == audio_format)                             ? "MP2"
-      : (0x0055 == audio_format)                             ? "MP3"
-      : (0x2000 == audio_format)                             ? "AC3"
-      : (0x2001 == audio_format)                             ? "DTS"
-      : (0x0050 == audio_format)                             ? "MP2"
-      : (0x00ff == audio_format) || (0x706d == audio_format) ? "AAC"
-      : (0x566f == audio_format)                             ? "Vorbis"
-      :                                                        (boost::format("unsupported (0x%|1$04x|)") % audio_format).str();
-
-    id_result_track(i + 1, ID_RESULT_TRACK_AUDIO, type);
+    auto codec = codec_c::look_up_audio_format(audio_format);
+    id_result_track(i + 1, ID_RESULT_TRACK_AUDIO, codec.get_name((boost::format("unsupported (0x%|1$04x|)") % audio_format).str()));
   }
 }
 
@@ -922,8 +897,8 @@ avi_reader_c::identify_subtitles() {
   size_t i;
   for (i = 0; m_subtitle_demuxers.size() > i; ++i)
     id_result_track(1 + AVI_audio_tracks(m_avi) + i, ID_RESULT_TRACK_SUBTITLES,
-                      avi_subs_demuxer_t::TYPE_SRT == m_subtitle_demuxers[i].m_type ? "SRT"
-                    : avi_subs_demuxer_t::TYPE_SSA == m_subtitle_demuxers[i].m_type ? "SSA/ASS"
+                      avi_subs_demuxer_t::TYPE_SRT == m_subtitle_demuxers[i].m_type ? codec_c::get_name(CT_S_SRT, "SRT")
+                    : avi_subs_demuxer_t::TYPE_SSA == m_subtitle_demuxers[i].m_type ? codec_c::get_name(CT_S_SSA_ASS, "SSA/ASS")
                     :                                                                 "unknown");
 }
 
