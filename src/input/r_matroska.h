@@ -17,6 +17,7 @@
 
 #include "common/common_pch.h"
 
+#include "common/codec.h"
 #include "common/content_decoder.h"
 #include "common/error.h"
 #include "common/kax_file.h"
@@ -37,6 +38,7 @@ struct kax_track_t {
   uint64_t tnum, track_number, track_uid;
 
   std::string codec_id;
+  codec_c codec;
   bool ms_compat;
 
   char type; // 'v' = video, 'a' = audio, 't' = text subs, 'b' = buttons
