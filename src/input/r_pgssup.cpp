@@ -13,8 +13,7 @@
 
 #include "common/common_pch.h"
 
-#include <algorithm>
-
+#include "common/codec.h"
 #include "common/endian.h"
 #include "common/pgssup.h"
 #include "input/r_pgssup.h"
@@ -111,5 +110,5 @@ pgssup_reader_c::read(generic_packetizer_c *,
 void
 pgssup_reader_c::identify() {
   id_result_container();
-  id_result_track(0, ID_RESULT_TRACK_SUBTITLES, "PGS");
+  id_result_track(0, ID_RESULT_TRACK_SUBTITLES, codec_c::get_name(CT_S_PGS, "PGS"));
 }
