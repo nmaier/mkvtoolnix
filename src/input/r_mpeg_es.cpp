@@ -15,6 +15,7 @@
 
 #include <cstring>
 
+#include "common/codec.h"
 #include "common/endian.h"
 #include "common/error.h"
 #include "common/mm_io_x.h"
@@ -232,6 +233,7 @@ mpeg_es_reader_c::read_frame(M2VParser &parser,
 
 void
 mpeg_es_reader_c::identify() {
+  auto codec = (boost::format("mpg%1%") % version).str();
   id_result_container();
-  id_result_track(0, ID_RESULT_TRACK_VIDEO, (boost::format("MPEG %1%") % version).str());
+  id_result_track(0, ID_RESULT_TRACK_VIDEO, codec_c::get_name(codec, codec));
 }
