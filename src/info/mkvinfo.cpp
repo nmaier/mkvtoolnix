@@ -425,7 +425,7 @@ read_master(EbmlMaster *m,
 
 std::string
 format_binary(EbmlBinary &bin,
-              size_t max_len = 10) {
+              size_t max_len = 16) {
   size_t len         = std::min(max_len, static_cast<size_t>(bin.GetSize()));
   const binary *b    = bin.GetBuffer();
   std::string result = (BF_FORMAT_BINARY_1 % bin.GetSize() % to_hex(b, len)).str();
@@ -443,7 +443,7 @@ format_binary(EbmlBinary &bin,
 
 inline std::string
 format_binary(EbmlBinary *bin,
-              size_t max_len = 10) {
+              size_t max_len = 16) {
   return format_binary(*bin, max_len);
 }
 
