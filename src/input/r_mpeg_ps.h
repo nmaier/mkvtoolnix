@@ -17,6 +17,7 @@
 #include "common/common_pch.h"
 
 #include "common/bit_cursor.h"
+#include "common/codec.h"
 #include "common/debugging.h"
 #include "common/dts.h"
 #include "common/mm_multi_file_io.h"
@@ -109,7 +110,7 @@ struct mpeg_ps_track_t {
   char type;                    // 'v' for video, 'a' for audio, 's' for subs
   mpeg_ps_id_t id;
   int sort_key;
-  uint32_t fourcc;
+  codec_c codec;
 
   bool provide_timecodes;
   int64_t timecode_offset, timecode_b_frame_offset;
@@ -132,7 +133,6 @@ struct mpeg_ps_track_t {
     ptzr(-1),
     type(0),
     sort_key(0),
-    fourcc(0),
     provide_timecodes(false),
     timecode_offset(std::numeric_limits<int64_t>::max()),
     timecode_b_frame_offset{0},
