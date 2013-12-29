@@ -330,9 +330,22 @@ find_and_verify_track_uids(KaxTracks &tracks,
       mxerror(boost::format(Y("No track with the ID %1% was found in the source file.\n")) % tspec.tid);
 }
 
+static void
+handle_segment_info(EbmlMaster *info,
+                    kax_file_c *file,
+                    uint64_t &tc_scale) {
+  auto ktc_scale = FindChild<KaxTimecodeScale>(info);
+  if (!ktc_scale)
+    return;
+
+  tc_scale = ktc_scale->GetValue();
+  file->set_timecode_scale(tc_scale);
+}
+
 bool
 extract_tracks(const std::string &file_name,
-               std::vector<track_spec_t> &tspecs) {
+               std::vector<track_spec_t> &tspecs,
+               kax_analyzer_c::parse_mode_e parse_mode) {
   if (tspecs.empty())
     mxerror(Y("Nothing to do.\n"));
 
@@ -348,8 +361,30 @@ extract_tracks(const std::string &file_name,
   }
 
   int64_t file_size = in->get_size();
+  uint64_t tc_scale = TIMECODE_SCALE;
+  bool segment_info_found = false, tracks_found = false;
+
+  // open input file
+  auto analyzer = std::make_shared<kax_analyzer_c>(static_cast<mm_file_io_c *>(in.get()));
+  if (analyzer->process(parse_mode, MODE_READ)) {
+    auto af_master    = ebml_master_cptr{ analyzer->read_all(EBML_INFO(KaxInfo)) };
+    auto segment_info = dynamic_cast<KaxInfo *>(af_master.get());
+    if (segment_info) {
+      segment_info_found = true;
+      handle_segment_info(segment_info, file.get(), tc_scale);
+    }
+
+    af_master   = ebml_master_cptr{ analyzer->read_all(EBML_INFO(KaxTracks)) };
+    auto tracks = dynamic_cast<KaxTracks *>(af_master.get());
+    if (tracks) {
+      tracks_found = true;
+      find_and_verify_track_uids(*tracks, tspecs);
+      create_extractors(*tracks, tspecs);
+    }
+  }
 
   try {
+    in->setFilePointer(0);
     EbmlStream *es = new EbmlStream(*in);
 
     // Find the EbmlHead element. Must be the first one.
@@ -383,31 +418,17 @@ extract_tracks(const std::string &file_name,
       delete l0;
     }
 
-    bool tracks_found = false;
     EbmlElement *l1   = nullptr;
-    uint64_t tc_scale = TIMECODE_SCALE;
 
     KaxChapters all_chapters;
     KaxTags all_tags;
 
     while ((l1 = file->read_next_level1_element())) {
-      if (Is<KaxInfo>(l1)) {
-        // General info about this Matroska file
-        show_element(l1, 1, Y("Segment information"));
+      if (Is<KaxInfo>(l1) && !segment_info_found) {
+        segment_info_found = true;
+        handle_segment_info(static_cast<EbmlMaster *>(l1), file.get(), tc_scale);
 
-        auto ktc_scale = FindChild<KaxTimecodeScale>(l1);
-        if (ktc_scale) {
-          tc_scale = ktc_scale->GetValue();
-          file->set_timecode_scale(tc_scale);
-          show_element(ktc_scale, 2, boost::format(Y("Timecode scale: %1%")) % tc_scale);
-        }
-
-      } else if ((Is<KaxTracks>(l1)) && !tracks_found) {
-
-        // Yep, we've found our KaxTracks element. Now find all tracks
-        // contained in this segment.
-        show_element(l1, 1, Y("Segment tracks"));
-
+      } else if (Is<KaxTracks>(l1) && !tracks_found) {
         tracks_found = true;
         find_and_verify_track_uids(*dynamic_cast<KaxTracks *>(l1), tspecs);
         create_extractors(*dynamic_cast<KaxTracks *>(l1), tspecs);

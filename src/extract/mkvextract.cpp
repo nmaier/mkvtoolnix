@@ -83,7 +83,7 @@ main(int argc,
   options_c options = extract_cli_parser_c(command_line_utf8(argc, argv)).run();
 
   if (options_c::em_tracks == options.m_extraction_mode) {
-    extract_tracks(options.m_file_name, options.m_tracks);
+    extract_tracks(options.m_file_name, options.m_tracks, options.m_parse_mode);
 
     if (0 == verbose)
       mxinfo(Y("Progress: 100%\n"));
