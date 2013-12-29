@@ -19,6 +19,7 @@
 
 #include "common/aac.h"
 #include "common/byte_buffer.h"
+#include "common/codec.h"
 #include "common/endian.h"
 #include "common/dts.h"
 #include "common/mm_io.h"
@@ -267,7 +268,7 @@ public:
 
   bool processed;
   mpeg_ts_pid_type_e type;          //can be PAT_TYPE, PMT_TYPE, ES_VIDEO_TYPE, ES_AUDIO_TYPE, ES_SUBT_TYPE, ES_UNKNOWN
-  uint32_t fourcc;
+  codec_c codec;
   uint16_t pid;
   bool data_ready;
   int pes_payload_size;             // size of the current PID payload in bytes
@@ -307,7 +308,6 @@ public:
     : reader(p_reader)
     , processed(false)
     , type(ES_UNKNOWN)
-    , fourcc(0)
     , pid(0)
     , data_ready(false)
     , pes_payload_size(0)

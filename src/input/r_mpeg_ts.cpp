@@ -115,7 +115,7 @@ mpeg_ts_track_c::new_stream_v_mpeg_1_2() {
   if (!frame)
     return FILE_STATUS_MOREDATA;
 
-  fourcc         = FOURCC('M', 'P', 'G', '0' + m_m2v_parser->GetMPEGVersion());
+  codec          = codec_c::look_up(CT_V_MPEG12);
   v_interlaced   = !seq_hdr.progressiveSequence;
   v_version      = m_m2v_parser->GetMPEGVersion();
   v_width        = seq_hdr.width;
@@ -161,7 +161,7 @@ mpeg_ts_track_c::new_stream_v_avc() {
   if (!m_avc_parser->headers_parsed())
     return FILE_STATUS_MOREDATA;
 
-  fourcc   = FOURCC('A', 'V', 'C', '1');
+  codec    = codec_c::look_up(CT_V_MPEG4_P10);
   v_width  = m_avc_parser->get_width();
   v_height = m_avc_parser->get_height();
 
@@ -192,7 +192,7 @@ mpeg_ts_track_c::new_stream_a_mpeg() {
   decode_mp3_header(m_probe_data->get_buffer() + offset, &header);
   a_channels    = header.channels;
   a_sample_rate = header.sampling_frequency;
-  fourcc        = FOURCC('M', 'P', '0' + header.layer, ' ');
+  codec         = codec_c::look_up(CT_A_MP3);
 
   mxverb(3, boost::format("new_stream_a_mpeg: Channels: %1%, sample rate: %2%\n") %a_channels % a_sample_rate);
   return 0;
@@ -509,26 +509,7 @@ mpeg_ts_reader_c::identify() {
   for (i = 0; i < tracks.size(); i++) {
     mpeg_ts_track_ptr &track = tracks[i];
 
-    if (!track->probed_ok)
-      continue;
-
-    const char *fourcc = FOURCC('M', 'P', 'G', '1') == track->fourcc ? "MPEG-1"
-                       : FOURCC('M', 'P', 'G', '2') == track->fourcc ? "MPEG-2"
-                       : FOURCC('A', 'V', 'C', '1') == track->fourcc ? "AVC/h.264"
-                       : FOURCC('W', 'V', 'C', '1') == track->fourcc ? "VC1"
-                       : FOURCC('M', 'P', '1', ' ') == track->fourcc ? "MPEG-1 layer 1"
-                       : FOURCC('M', 'P', '2', ' ') == track->fourcc ? "MPEG-1 layer 2"
-                       : FOURCC('M', 'P', '3', ' ') == track->fourcc ? "MPEG-1 layer 3"
-                       : FOURCC('A', 'A', 'C', ' ') == track->fourcc ? "AAC"
-                       : FOURCC('A', 'C', '3', ' ') == track->fourcc ? "AC3"
-                       : FOURCC('D', 'T', 'S', ' ') == track->fourcc ? "DTS"
-                       : FOURCC('T', 'R', 'H', 'D') == track->fourcc ? "TrueHD"
-                       : FOURCC('P', 'G', 'S', ' ') == track->fourcc ? "HDMV PGS"
-                       // : FOURCC('P', 'C', 'M', ' ') == track->fourcc ? "PCM"
-                       // : FOURCC('L', 'P', 'C', 'M') == track->fourcc ? "LPCM"
-                       :                                               nullptr;
-
-    if (!fourcc)
+    if (!track->probed_ok || !track->codec)
       continue;
 
     verbose_info.clear();
@@ -541,7 +522,7 @@ mpeg_ts_reader_c::identify() {
                      : ES_VIDEO_TYPE == track->type ? ID_RESULT_TRACK_VIDEO
                      :                                ID_RESULT_TRACK_SUBTITLES;
 
-    id_result_track(i, type, fourcc, verbose_info);
+    id_result_track(i, type, track->codec.get_name(), verbose_info);
   }
 
   if (!m_chapter_timecodes.empty())
@@ -701,63 +682,57 @@ mpeg_ts_reader_c::parse_pmt(unsigned char *pmt) {
 
     switch(pmt_pid_info->stream_type) {
       case ISO_11172_VIDEO:
-        track->type   = ES_VIDEO_TYPE;
-        track->fourcc = FOURCC('M', 'P', 'G', '1');
-        break;
       case ISO_13818_VIDEO:
-        track->type   = ES_VIDEO_TYPE;
-        track->fourcc = FOURCC('M', 'P', 'G', '2');
+        track->type      = ES_VIDEO_TYPE;
+        track->codec     = codec_c::look_up(CT_V_MPEG12);
         break;
       case ISO_14496_PART2_VIDEO:
-        track->type   = ES_VIDEO_TYPE;
-        track->fourcc = FOURCC('M', 'P', 'G', '4');
+        track->type      = ES_VIDEO_TYPE;
+        track->codec     = codec_c::look_up(CT_V_MPEG4_P2);
         break;
       case ISO_14496_PART10_VIDEO:
-        track->type   = ES_VIDEO_TYPE;
-        track->fourcc = FOURCC('A', 'V', 'C', '1');
+        track->type      = ES_VIDEO_TYPE;
+        track->codec     = codec_c::look_up(CT_V_MPEG4_P10);
         break;
       case STREAM_VIDEO_VC1:
-        track->type   = ES_VIDEO_TYPE;
-        track->fourcc = FOURCC('W', 'V', 'C', '1');
+        track->type      = ES_VIDEO_TYPE;
+        track->codec     = codec_c::look_up(CT_V_VC1);
         break;
       case ISO_11172_AUDIO:
       case ISO_13818_AUDIO:
-        track->type   = ES_AUDIO_TYPE;
-        track->fourcc = FOURCC('M', 'P', '2', ' ');
+        track->type      = ES_AUDIO_TYPE;
+        track->codec     = codec_c::look_up(CT_A_MP3);
         break;
       case ISO_13818_PART7_AUDIO:
-        track->type   = ES_AUDIO_TYPE;
-        track->fourcc = FOURCC('A', 'A', 'C', ' ');
-        break;
       case ISO_14496_PART3_AUDIO:
-        track->type   = ES_AUDIO_TYPE;
-        track->fourcc = FOURCC('A', 'A', 'C', ' ');
+        track->type      = ES_AUDIO_TYPE;
+        track->codec     = codec_c::look_up(CT_A_AAC);
         break;
       case STREAM_AUDIO_AC3:
       case STREAM_AUDIO_AC3_PLUS: // EAC3
-        track->type   = ES_AUDIO_TYPE;
-        track->fourcc = FOURCC('A', 'C', '3', ' ');
+        track->type      = ES_AUDIO_TYPE;
+        track->codec     = codec_c::look_up(CT_A_AC3);
         break;
       case STREAM_AUDIO_AC3_LOSSLESS:
-        track->type   = ES_AUDIO_TYPE;
-        track->fourcc = FOURCC('T', 'R', 'H', 'D');
+        track->type      = ES_AUDIO_TYPE;
+        track->codec     = codec_c::look_up(CT_A_TRUEHD);
         break;
       case STREAM_AUDIO_DTS:
       case STREAM_AUDIO_DTS_HD:
       case STREAM_AUDIO_DTS_HD_MA:
-        track->type   = ES_AUDIO_TYPE;
-        track->fourcc = FOURCC('D', 'T', 'S', ' ');
+        track->type      = ES_AUDIO_TYPE;
+        track->codec     = codec_c::look_up(CT_A_DTS);
         break;
       case STREAM_SUBTITLES_HDMV_PGS:
         track->type      = ES_SUBT_TYPE;
-        track->fourcc    = FOURCC('P', 'G', 'S', ' ');
+        track->codec     = codec_c::look_up(CT_S_PGS);
         track->probed_ok = true;
         break;
       case ISO_13818_PES_PRIVATE:
         break;
       default:
         mxdebug_if(m_debug_pat_pmt, boost::format("mpeg_ts:parse_pmt: Unknown stream type: %1%\n") % (int)pmt_pid_info->stream_type);
-        track->type   = ES_UNKNOWN;
+        track->type      = ES_UNKNOWN;
         break;
     }
 
@@ -770,31 +745,31 @@ mpeg_ts_reader_c::parse_pmt(unsigned char *pmt) {
       switch(pmt_descriptor->tag) {
         case 0x56: // Teletext descriptor
           if (pmt_pid_info->stream_type == ISO_13818_PES_PRIVATE) { // PES containig private data
-            track->type   = ES_UNKNOWN;
-            type_known    = true;
+            track->type = ES_UNKNOWN;
+            type_known  = true;
             mxdebug_if(m_debug_pat_pmt, "mpeg_ts:parse_pmt: Teletext found but not handled !!\n");
           }
           break;
         case 0x59: // Subtitles descriptor
           if (pmt_pid_info->stream_type == ISO_13818_PES_PRIVATE) { // PES containig private data
-            track->type   = ES_SUBT_TYPE;
-            track->fourcc = FOURCC('V', 'S', 'U', 'B');
-            type_known    = true;
+            track->type  = ES_SUBT_TYPE;
+            track->codec = codec_c::look_up(CT_S_VOBSUB);
+            type_known   = true;
           }
           break;
         case 0x6A: // AC3 descriptor
         case 0x7A: // EAC3 descriptor
           if (pmt_pid_info->stream_type == ISO_13818_PES_PRIVATE) { // PES containig private data
-            track->type   = ES_AUDIO_TYPE;
-            track->fourcc = FOURCC('A', 'C', '3', ' ');
-            type_known    = true;
+            track->type  = ES_AUDIO_TYPE;
+            track->codec = codec_c::look_up(CT_A_AC3);
+            type_known   = true;
           }
           break;
         case 0x7b: // DTS descriptor
           if (pmt_pid_info->stream_type == ISO_13818_PES_PRIVATE) { // PES containig private data
-            track->type   = ES_AUDIO_TYPE;
-            track->fourcc = FOURCC('D', 'T', 'S', ' ');
-            type_known    = true;
+            track->type  = ES_AUDIO_TYPE;
+            track->codec = codec_c::look_up(CT_A_DTS);
+            type_known   = true;
           }
           break;
         case 0x0a: // ISO 639 language descriptor
@@ -812,8 +787,8 @@ mpeg_ts_reader_c::parse_pmt(unsigned char *pmt) {
     // Default to AC3 if it's a PES private stream type that's missing
     // a known/more concrete descriptor tag.
     if ((pmt_pid_info->stream_type == ISO_13818_PES_PRIVATE) && !type_known) {
-      track->type   = ES_AUDIO_TYPE;
-      track->fourcc = FOURCC('A', 'C', '3', ' ');
+      track->type  = ES_AUDIO_TYPE;
+      track->codec = codec_c::look_up(CT_A_AC3);
     }
 
     pmt_pid_info = (mpeg_ts_pmt_pid_info_t *)((unsigned char *)pmt_pid_info + sizeof(mpeg_ts_pmt_pid_info_t) + es_info_length);
@@ -824,8 +799,7 @@ mpeg_ts_reader_c::parse_pmt(unsigned char *pmt) {
       track->data_ready = false;
       tracks.push_back(track);
       es_to_process++;
-      uint32_t fourcc = get_uint32_be(&track->fourcc);
-      mxdebug_if(m_debug_pat_pmt, boost::format("mpeg_ts:parse_pmt: PID %1% has type: 0x%|2$08x| (%3%)\n") % track->pid % fourcc % std::string(reinterpret_cast<char *>(&fourcc), 4));
+      mxdebug_if(m_debug_pat_pmt, boost::format("mpeg_ts:parse_pmt: PID %1% has type: %2%\n") % track->pid % track->codec.get_name());
     }
   }
 
@@ -944,25 +918,25 @@ mpeg_ts_reader_c::probe_packet_complete(mpeg_ts_track_ptr &track) {
     result = parse_pmt(track->pes_payload->get_buffer());
 
   else if (track->type == ES_VIDEO_TYPE) {
-    if ((FOURCC('M', 'P', 'G', '1') == track->fourcc) || (FOURCC('M', 'P', 'G', '2') == track->fourcc))
+    if (track->codec.is(CT_V_MPEG12))
       result = track->new_stream_v_mpeg_1_2();
-    else if (FOURCC('A', 'V', 'C', '1') == track->fourcc)
+    else if (track->codec.is(CT_V_MPEG4_P10))
       result = track->new_stream_v_avc();
-    else if (FOURCC('W', 'V', 'C', '1') == track->fourcc)
+    else if (track->codec.is(CT_V_VC1))
       result = track->new_stream_v_vc1();
 
     track->pes_payload->set_chunk_size(512 * 1024);
 
   } else if (track->type == ES_AUDIO_TYPE) {
-    if (FOURCC('M', 'P', '2', ' ') == track->fourcc)
+    if (track->codec.is(CT_A_MP3))
       result = track->new_stream_a_mpeg();
-    else if (FOURCC('A', 'A', 'C', ' ') == track->fourcc)
+    else if (track->codec.is(CT_A_AAC))
       result = track->new_stream_a_aac();
-    else if (FOURCC('A', 'C', '3', ' ') == track->fourcc)
+    else if (track->codec.is(CT_A_AC3))
       result = track->new_stream_a_ac3();
-    else if (FOURCC('D', 'T', 'S', ' ') == track->fourcc)
+    else if (track->codec.is(CT_A_DTS))
       result = track->new_stream_a_dts();
-    else if (FOURCC('T', 'R', 'H', 'D') == track->fourcc)
+    else if (track->codec.is(CT_A_TRUEHD))
       result = track->new_stream_a_truehd();
 
   }
@@ -1111,13 +1085,11 @@ mpeg_ts_reader_c::create_packetizer(int64_t id) {
   m_ti.m_language = track->language;
 
   if (ES_AUDIO_TYPE == track->type) {
-    if (   (FOURCC('M', 'P', '1', ' ') == track->fourcc)
-        || (FOURCC('M', 'P', '2', ' ') == track->fourcc)
-        || (FOURCC('M', 'P', '3', ' ') == track->fourcc)) {
+    if (track->codec.is(CT_A_MP3)) {
       track->ptzr = add_packetizer(new mp3_packetizer_c(this, m_ti, track->a_sample_rate, track->a_channels, (0 != track->a_sample_rate) && (0 != track->a_channels)));
       show_packetizer_info(id, PTZR(track->ptzr));
 
-    } else if (FOURCC('A', 'A', 'C', ' ') == track->fourcc) {
+    } else if (track->codec.is(CT_A_AAC)) {
       aac_packetizer_c *aac_packetizer = new aac_packetizer_c(this, m_ti, track->m_aac_header.id, track->m_aac_header.profile, track->m_aac_header.sample_rate, track->m_aac_header.channels, false);
       track->ptzr                      = add_packetizer(aac_packetizer);
 
@@ -1125,31 +1097,30 @@ mpeg_ts_reader_c::create_packetizer(int64_t id) {
         aac_packetizer->set_audio_output_sampling_freq(track->m_aac_header.sample_rate * 2);
       show_packetizer_info(id, aac_packetizer);
 
-    } else if (FOURCC('A', 'C', '3', ' ') == track->fourcc) {
+    } else if (track->codec.is(CT_A_AC3)) {
       track->ptzr = add_packetizer(new ac3_packetizer_c(this, m_ti, track->a_sample_rate, track->a_channels, track->a_bsid));
       show_packetizer_info(id, PTZR(track->ptzr));
 
-    } else if (FOURCC('D', 'T', 'S', ' ') == track->fourcc) {
+    } else if (track->codec.is(CT_A_DTS)) {
       track->ptzr = add_packetizer(new dts_packetizer_c(this, m_ti, track->a_dts_header));
       show_packetizer_info(id, PTZR(track->ptzr));
 
-    } else if (FOURCC('T', 'R', 'H', 'D') == track->fourcc) {
+    } else if (track->codec.is(CT_A_TRUEHD)) {
       track->ptzr = add_packetizer(new truehd_packetizer_c(this, m_ti, truehd_frame_t::truehd, track->a_sample_rate, track->a_channels));
       show_packetizer_info(id, PTZR(track->ptzr));
     }
 
   } else if (ES_VIDEO_TYPE == track->type) {
-    if (   (FOURCC('M', 'P', 'G', '1') == track->fourcc)
-        || (FOURCC('M', 'P', 'G', '2') == track->fourcc))
+    if (track->codec.is(CT_V_MPEG12))
       create_mpeg1_2_video_packetizer(track);
 
-    else if (track->fourcc == FOURCC('A', 'V', 'C', '1'))
+    else if (track->codec.is(CT_V_MPEG4_P10))
       create_mpeg4_p10_es_video_packetizer(track);
 
-    else if (track->fourcc == FOURCC('W', 'V', 'C', '1'))
+    else if (track->codec.is(CT_V_VC1))
       create_vc1_video_packetizer(track);
 
-  } else if (FOURCC('P', 'G', 'S', ' ') == track->fourcc)
+  } else if (track->codec.is(CT_S_PGS))
     create_hdmv_pgs_subtitles_packetizer(track);
 
   if (-1 != track->ptzr)
