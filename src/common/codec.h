@@ -59,6 +59,7 @@
 #define MKV_V_MPEG4_ASP  "V_MPEG4/ISO/ASP"
 #define MKV_V_MPEG4_AP   "V_MPEG4/ISO/AP"
 #define MKV_V_MPEG4_AVC  "V_MPEG4/ISO/AVC"
+#define MKV_V_MPEGH_HEVC "V_MPEGH/ISO/HEVC"
 #define MKV_V_MSCOMP     "V_MS/VFW/FOURCC"
 #define MKV_V_REALV1     "V_REAL/RV10"
 #define MKV_V_REALV2     "V_REAL/RV20"
@@ -87,6 +88,7 @@ enum codec_type_e {
   , CT_V_MPEG12 = 0x1000
   , CT_V_MPEG4_P2
   , CT_V_MPEG4_P10
+  , CT_V_MPEGH_P2
   , CT_V_REAL
   , CT_V_THEORA
   , CT_V_DIRAC
