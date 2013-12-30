@@ -78,11 +78,6 @@ xtr_avc_c::create_file(xtr_base_c *master,
   if (mpriv->get_size() <= pos)
     return;
 
-  unsigned int numvps = buf[pos++] & 0x1f;
-
-  for (i = 0; (i < numvps) && (mpriv->get_size() > pos); ++i)
-    write_nal(buf, pos, mpriv->get_size(), 2);
-
   unsigned int numpps = buf[pos++];
 
   for (i = 0; (i < numpps) && (mpriv->get_size() > pos); ++i)
