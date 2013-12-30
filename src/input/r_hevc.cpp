@@ -12,15 +12,6 @@
 
 #include "common/common_pch.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
-
-#include <algorithm>
-#include <deque>
-#include <list>
-
 #include "common/byte_buffer.h"
 #include "common/codec.h"
 #include "common/error.h"
