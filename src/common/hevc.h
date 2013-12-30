@@ -314,8 +314,8 @@ struct sei_info_t {
   }
 
   ~sei_info_t() {
-      if(divx_payload)
-          free(divx_payload);
+    if(divx_payload)
+      free(divx_payload);
   }
 };
 
@@ -353,8 +353,8 @@ void rbsp_to_nalu(memory_cptr &buffer);
 bool parse_vps(memory_cptr &buffer, vps_info_t &vps);
 bool parse_sps(memory_cptr &buffer, sps_info_t &sps, std::vector<vps_info_t> &m_vps_info_list, bool keep_ar_info = false);
 bool parse_pps(memory_cptr &buffer, pps_info_t &pps);
-bool parse_sei(memory_cptr &buffer/*, sei_info_t &sei*/);
-bool handle_sei_payload(mm_mem_io_c &byte_reader, unsigned int sei_payload_type, unsigned int sei_payload_size /*, sei_info_t &sei*/);
+bool parse_sei(memory_cptr &buffer);
+bool handle_sei_payload(mm_mem_io_c &byte_reader, unsigned int sei_payload_type, unsigned int sei_payload_size);
 
 par_extraction_t extract_par(memory_cptr const &buffer);
 bool is_hevc_fourcc(const char *fourcc);
