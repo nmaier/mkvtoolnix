@@ -1,3 +1,9 @@
+2013-12-30  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: bug fix: Improved the AC3 header decoding error
+        handling so that the AC3 parsing routines won't get stuck in
+        endless loops when encountering certain garbage data patterns.
+
 2013-12-29  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: enhancement: unified codec names output by mkvmerge's

@@ -94,6 +94,9 @@ ac3::frame_c::decode_header_type_eac3(bit_reader_c &bc) {
   m_sub_stream_id = bc.get_bits(3);
   m_bytes         = (bc.get_bits(11) + 1) << 1;
 
+  if (!m_bytes)
+    return false;
+
   uint8_t fscod   = bc.get_bits(2);
   uint8_t fscod2  = bc.get_bits(2);
 
@@ -185,7 +188,7 @@ ac3::frame_c::decode_header_type_ac3(bit_reader_c &bc) {
   m_samples          = 1536;
   m_frame_type       = EAC3_FRAME_TYPE_INDEPENDENT;
 
-  return true;
+  return m_bytes != 0;
 }
 
 int
