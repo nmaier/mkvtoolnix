@@ -326,7 +326,7 @@ is_adts_header(const unsigned char *buf,
   aac_header->header_byte_size = (aac_header->header_bit_size + 7) / 8;
   aac_header->data_byte_size   = aac_header->bytes - aac_header->header_bit_size / 8;
 
-  return true;
+  return aac_header->header_bit_size != 0;
 }
 
 int
