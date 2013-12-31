@@ -1041,7 +1041,7 @@ check_append_mapping() {
     // Check each mapping entry for validity.
 
     // 1. Is there a file with the src_file_id?
-    if ((0 > amap.src_file_id) || (g_files.size() <= static_cast<size_t>(amap.src_file_id)))
+    if (g_files.size() <= amap.src_file_id)
       mxerror(boost::format(Y("There is no file with the ID '%1%'. The argument for '--append-to' was invalid.\n")) % amap.src_file_id);
 
     // 2. Is the "source" file in "append mode", meaning does its file name
@@ -1051,7 +1051,7 @@ check_append_mapping() {
       mxerror(boost::format(Y("The file no. %1% ('%2%') is not being appended. The argument for '--append-to' was invalid.\n")) % amap.src_file_id % src_file->name);
 
     // 3. Is there a file with the dst_file_id?
-    if ((0 > amap.dst_file_id) || (g_files.size() <= static_cast<size_t>(amap.dst_file_id)))
+    if (g_files.size() <= amap.dst_file_id)
       mxerror(boost::format(Y("There is no file with the ID '%1%'. The argument for '--append-to' was invalid.\n")) % amap.dst_file_id);
 
     // 4. G_Files cannot be appended to itself.
@@ -1062,18 +1062,15 @@ check_append_mapping() {
   // Now let's check each appended file if there are NO append to mappings
   // available (in which case we fill in default ones) or if there are fewer
   // mappings than tracks that are to be copied (which is an error).
-  int file_id = -1;
   for (auto &src_file : g_files) {
-    ++file_id;
-
     if (!src_file.appending)
       continue;
 
-    size_t count = boost::count_if(g_append_mapping, [=](const append_spec_t &e) { return e.src_file_id == file_id; });
+    size_t count = boost::count_if(g_append_mapping, [&](const append_spec_t &e) { return e.src_file_id == src_file.id; });
 
     if ((0 < count) && (src_file.reader->m_used_track_ids.size() > count))
       mxerror(boost::format(Y("Only partial append mappings were given for the file no. %1% ('%2%'). Either don't specify any mapping (in which case the "
-                              "default mapping will be used) or specify a mapping for all tracks that are to be copied.\n")) % file_id % src_file.name);
+                              "default mapping will be used) or specify a mapping for all tracks that are to be copied.\n")) % src_file.id % src_file.name);
     else if (0 == count) {
       std::string missing_mappings;
 
@@ -1081,9 +1078,9 @@ check_append_mapping() {
       for (auto id : src_file.reader->m_used_track_ids) {
         append_spec_t new_amap;
 
-        new_amap.src_file_id  = file_id;
+        new_amap.src_file_id  = src_file.id;
         new_amap.src_track_id = id;
-        new_amap.dst_file_id  = file_id - 1;
+        new_amap.dst_file_id  = src_file.id - 1;
         new_amap.dst_track_id = id;
         g_append_mapping.push_back(new_amap);
 
@@ -1093,7 +1090,7 @@ check_append_mapping() {
       }
       mxinfo(boost::format(Y("No append mapping was given for the file no. %1% ('%2%'). A default mapping of %3% will be used instead. "
                              "Please keep that in mind if mkvmerge aborts with an error message regarding invalid '--append-to' options.\n"))
-             % file_id % src_file.name % missing_mappings);
+             % src_file.id % src_file.name % missing_mappings);
     }
   }
 
@@ -1148,7 +1145,7 @@ check_append_mapping() {
     src_file = g_files.begin() + amap.src_file_id;
     src_ptzr = nullptr;
     mxforeach(gptzr, src_file->reader->m_reader_packetizers)
-      if ((*gptzr)->m_ti.m_id == amap.src_track_id) {
+      if (static_cast<size_t>((*gptzr)->m_ti.m_id) == amap.src_track_id) {
         src_ptzr = (*gptzr);
         break;
       }
@@ -1156,7 +1153,7 @@ check_append_mapping() {
     dst_file = g_files.begin() + amap.dst_file_id;
     dst_ptzr = nullptr;
     mxforeach(gptzr, dst_file->reader->m_reader_packetizers)
-      if ((*gptzr)->m_ti.m_id == amap.dst_track_id) {
+      if (static_cast<size_t>((*gptzr)->m_ti.m_id) == amap.dst_track_id) {
         dst_ptzr = (*gptzr);
         break;
       }
@@ -1873,7 +1870,7 @@ append_track(packetizer_t &ptzr,
   // stored in ptzr.
   std::vector<generic_packetizer_c *>::const_iterator gptzr;
   mxforeach(gptzr, src_file.reader->m_reader_packetizers)
-    if (amap.src_track_id == (*gptzr)->m_ti.m_id)
+    if (amap.src_track_id == static_cast<size_t>((*gptzr)->m_ti.m_id))
       break;
 
   if (src_file.reader->m_reader_packetizers.end() == gptzr)
@@ -2008,13 +2005,13 @@ append_track(packetizer_t &ptzr,
       std::vector<append_spec_t>::const_iterator cmp_amap;
       mxforeach(cmp_amap, g_append_mapping)
         if (   (cmp_amap->src_file_id  == amap.src_file_id)
-            && (cmp_amap->src_track_id == src_file.reader->m_ptzr_first_packet->m_ti.m_id)
+            && (cmp_amap->src_track_id == static_cast<size_t>(src_file.reader->m_ptzr_first_packet->m_ti.m_id))
             && (cmp_amap->dst_file_id  == amap.dst_file_id))
           break;
 
       if (g_append_mapping.end() != cmp_amap)
         mxforeach(gptzr, dst_file.reader->m_reader_packetizers)
-          if ((*gptzr)->m_ti.m_id == cmp_amap->dst_track_id) {
+          if (static_cast<size_t>((*gptzr)->m_ti.m_id) == cmp_amap->dst_track_id) {
             timecode_adjustment = (*gptzr)->m_max_timecode_seen;
             break;
           }
@@ -2073,7 +2070,7 @@ append_tracks_maybe() {
 
     append_spec_t *amap = nullptr;
     for (auto &amap_idx : g_append_mapping)
-      if ((amap_idx.dst_file_id == ptzr.file) && (amap_idx.dst_track_id == ptzr.packetizer->m_ti.m_id)) {
+      if ((amap_idx.dst_file_id == static_cast<size_t>(ptzr.file)) && (amap_idx.dst_track_id == static_cast<size_t>(ptzr.packetizer->m_ti.m_id))) {
         amap = &amap_idx;
         break;
       }

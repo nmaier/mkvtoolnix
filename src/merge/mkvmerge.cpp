@@ -1276,11 +1276,7 @@ parse_arg_append_to(const std::string &s) {
         || !parse_number(parts[0], mapping.src_file_id)
         || !parse_number(parts[1], mapping.src_track_id)
         || !parse_number(parts[2], mapping.dst_file_id)
-        || !parse_number(parts[3], mapping.dst_track_id)
-        || (0 > mapping.src_file_id)
-        || (0 > mapping.src_track_id)
-        || (0 > mapping.dst_file_id)
-        || (0 > mapping.dst_track_id))
+        || !parse_number(parts[3], mapping.dst_track_id))
       mxerror(boost::format(Y("'%1%' is not a valid mapping of file and track IDs in '--append-to %2%'.\n")) % entry % s);
 
     g_append_mapping.push_back(mapping);
@@ -1696,6 +1692,7 @@ handle_file_name_arg(const std::string &this_arg,
   filelist_t file;
   file.all_names = file_names;
   file.name      = file_names[0];
+  file.id        = g_files.size();
 
   if (file_names.size() == 1) {
     if ('+' == this_arg[0]) {

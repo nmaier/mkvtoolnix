@@ -45,10 +45,7 @@ class generic_packetizer_c;
 class generic_reader_c;
 
 struct append_spec_t {
-  int64_t src_file_id;
-  int64_t src_track_id;
-  int64_t dst_file_id;
-  int64_t dst_track_id;
+  size_t src_file_id, src_track_id, dst_file_id, dst_track_id;
 };
 
 inline
@@ -101,6 +98,7 @@ struct filelist_t {
   std::string name;
   std::vector<std::string> all_names;
   int64_t size;
+  size_t id;
 
   file_type_e type;
 
@@ -117,6 +115,7 @@ struct filelist_t {
 
   filelist_t()
     : size{}
+    , id{}
     , type{FILE_TYPE_IS_UNKNOWN}
     , reader{}
     , ti{}
