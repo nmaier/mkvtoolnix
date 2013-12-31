@@ -2376,6 +2376,8 @@ add_filelists_for_playlists() {
   if (num_playlists == num_files_in_playlists)
     return;
 
+  if (g_gui_mode)
+    mxinfo(boost::format("#GUI#begin_scanning_playlists#num_playlists=%1%#num_files_in_playlists=%2%\n") % num_playlists % num_files_in_playlists);
   mxinfo(boost::format(NY("Scanning %1% files in %2% playlist.\n", "Scanning %1% files in %2% playlists.\n", num_playlists)) % num_files_in_playlists % num_playlists);
 
   std::vector<filelist_t> new_filelists;
@@ -2405,6 +2407,8 @@ add_filelists_for_playlists() {
 
   display_playlist_scan_progress(num_files_in_playlists, num_files_in_playlists);
 
+  if (g_gui_mode)
+    mxinfo("#GUI#end_scanning_playlists\n");
   mxinfo(boost::format(Y("Done scanning playlists.\n")));
 }
 
