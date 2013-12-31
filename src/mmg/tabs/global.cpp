@@ -275,7 +275,7 @@ tab_global::translate_split_args() {
   } else if (7 == mode) {
     st_split_args->SetLabel(Z("Chapter numbers:"));
     std::vector<std::string> help = {
-      Y("Either the word 'all' which selects all chapters or a comma-separated list of chapter numbers after which to split."),
+      Y("Either the word 'all' which selects all chapters or a comma-separated list of chapter numbers before which to split."),
       Y("The numbering starts at 1."),
       Y("Splitting will occur right before the first key frame whose timecode is equal to or bigger than the start timecode for the chapters whose numbers are listed."),
       Y("A chapter starting at 0s is never considered for splitting and discarded silently."),
