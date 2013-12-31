@@ -49,7 +49,7 @@ protected:
 #if defined(SYS_WINDOWS)
   taskbar_progress_c *m_taskbar_progress;
 #endif  // SYS_WINDOWS
-  bool m_abort_button_changed;
+  bool m_abort_button_changed, m_scanning_playlists;
 
   int m_exit_code, m_progress;
   int64_t m_next_remaining_time_update, m_start_time;
