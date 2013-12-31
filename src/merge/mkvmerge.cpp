@@ -2399,8 +2399,22 @@ main(int argc,
 
   create_readers();
 
-  if (g_packetizers.empty() && !g_files.empty())
-    mxerror(Y("No streams to output were found. Aborting.\n"));
+  if (!g_identifying) {
+    create_packetizers();
+    if (g_packetizers.empty() && !g_files.empty())
+      mxerror(Y("No streams to output were found. Aborting.\n"));
+
+    check_track_id_validity();
+    check_append_mapping();
+    calc_attachment_sizes();
+    calc_max_chapter_size();
+  }
+
+  // Finally parse the chapter splitting argument.
+  if (!g_splitting_by_chapters_arg.empty())
+    parse_arg_split_chapters(g_splitting_by_chapters_arg);
+
+  g_cluster_helper->dump_split_points();
 
   create_next_output_file();
   main_loop();

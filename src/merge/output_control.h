@@ -231,7 +231,13 @@ extern append_mode_e g_append_mode;
 extern bool g_stereo_mode_used;
 
 void get_file_type(filelist_t &file);
+
 void create_readers();
+void create_packetizers();
+void calc_attachment_sizes();
+void calc_max_chapter_size();
+void check_track_id_validity();
+void check_append_mapping();
 
 void cleanup();
 void main_loop();

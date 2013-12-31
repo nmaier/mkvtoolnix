@@ -1040,7 +1040,7 @@ render_attachments(IOCallback *out) {
    For files that aren't managed with '--append-to' default entries have
    to be created.
 */
-static void
+void
 check_append_mapping() {
   std::vector<int64_t>::iterator id;
   std::vector<filelist_t>::iterator src_file, dst_file;
@@ -1275,6 +1275,16 @@ calc_max_chapter_size() {
   }
 }
 
+void
+calc_attachment_sizes() {
+  // Calculate the size of all attachments for split control.
+  for (auto &att : g_attachments) {
+    g_attachment_sizes_first += att.data->get_size();
+    if (att.to_all_files)
+      g_attachment_sizes_others += att.data->get_size();
+  }
+}
+
 /** \brief Creates the file readers
 
    For each file the appropriate file reader class is instantiated.
@@ -1405,42 +1415,29 @@ create_readers() {
       mxerror(boost::format(Y("The demultiplexer for the file '%1%' failed to initialize:\n%2%\n")) % file.ti->m_fname % error.error());
     }
   }
+}
 
-  if (!g_identifying) {
-    // Create the packetizers.
-    for (auto &file : g_files) {
-      file.reader->m_appending = file.appending;
-      file.reader->create_packetizers();
+void
+create_packetizers() {
+  // Create the packetizers.
+  for (auto &file : g_files) {
+    file.reader->m_appending = file.appending;
+    file.reader->create_packetizers();
 
-      if (!s_appending_files)
-        s_appending_files = file.appending;
-    }
-    // Check if all track IDs given on the command line are actually
-    // present.
-    for (auto &file : g_files) {
-      file.reader->check_track_ids_and_packetizers();
-      file.num_unfinished_packetizers     = file.reader->m_reader_packetizers.size();
-      file.old_num_unfinished_packetizers = file.num_unfinished_packetizers;
-    }
-
-    // Check if the append mappings are ok.
-    check_append_mapping();
-
-    // Calculate the size of all attachments for split control.
-    for (auto &att : g_attachments) {
-      g_attachment_sizes_first += att.data->get_size();
-      if (att.to_all_files)
-        g_attachment_sizes_others += att.data->get_size();
-    }
-
-    calc_max_chapter_size();
+    if (!s_appending_files)
+      s_appending_files = file.appending;
   }
+}
 
-  // Finally parse the chapter splitting argument.
-  if (!g_splitting_by_chapters_arg.empty())
-    parse_arg_split_chapters(g_splitting_by_chapters_arg);
-
-  g_cluster_helper->dump_split_points();
+void
+check_track_id_validity() {
+  // Check if all track IDs given on the command line are actually
+  // present.
+  for (auto &file : g_files) {
+    file.reader->check_track_ids_and_packetizers();
+    file.num_unfinished_packetizers     = file.reader->m_reader_packetizers.size();
+    file.old_num_unfinished_packetizers = file.num_unfinished_packetizers;
+  }
 }
 
 /** \brief Transform the output filename and insert the current file number
