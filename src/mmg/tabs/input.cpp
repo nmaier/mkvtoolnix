@@ -513,7 +513,7 @@ tab_input::run_mkvmerge_identification(wxString const &file_name,
     const unsigned char utf8_bom[3] = {0xef, 0xbb, 0xbf};
     wxFile opt_file{opt_file_name, wxFile::write};
     opt_file.Write(utf8_bom, 3);
-    opt_file.Write(wxT("--output-charset\nUTF-8\n--identify-for-mmg\n"));
+    opt_file.Write(wxT("--output-charset\nUTF-8\n--identify-for-mmg\n--gui-mode\n"));
     auto arg_utf8 = escape(wxMB(file_name));
     opt_file.Write(arg_utf8.c_str(), arg_utf8.length());
     opt_file.Write(wxT("\n"));

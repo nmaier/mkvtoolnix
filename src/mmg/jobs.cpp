@@ -191,6 +191,7 @@ job_run_dialog::start_next_job() {
 
   static const unsigned char utf8_bom[3] = {0xef, 0xbb, 0xbf};
   opt_file->Write(utf8_bom, 3);
+  opt_file->Write(wxT("--gui-mode\n"));
 
   mdlg->update_command_line();
   wxArrayString *arg_list = &mdlg->get_command_line_args();

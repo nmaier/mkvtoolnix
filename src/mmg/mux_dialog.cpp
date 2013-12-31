@@ -103,6 +103,7 @@ mux_dialog::run() {
     const unsigned char utf8_bom[3] = {0xef, 0xbb, 0xbf};
     wxFile opt_file{opt_file_name, wxFile::write};
     opt_file.Write(utf8_bom, 3);
+    opt_file.Write(wxT("--gui-mode\n"));
 
     for (size_t i = 1; i < arg_list.Count(); i++) {
       if (arg_list[i].IsEmpty())
