@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: mkvtoolnix 6.6.0\n"
 "Report-Msgid-Bugs-To: moritz@bunkus.org\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2013-12-31 22:26+0100\n"
+"PO-Revision-Date: 2013-12-31 23:50+0100\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "Language: de\n"
@@ -7275,7 +7275,7 @@ msgstr "Das erste Wort ist der Modus und teilt Mkvextract mit, was extrahiert we
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:60
 msgid "The following list shows the files that make up this playlist."
-msgstr ""
+msgstr "Die folgende Liste zeigt alle Dateien an, aus denen diese Abspielliste besteht."
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:65
 msgid "The following parts are read after the primary file as if they were all part of one big file."
@@ -7926,7 +7926,7 @@ msgstr "Dies ist der Titel, den Abspielprogramme als Name oder Titel des Films a
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:62
 msgid "This list is for informational purposes only and cannot be changed."
-msgstr ""
+msgstr "Die Liste dient nur der Information und kann nicht verändert werden."
 
 #: src/mmg/mmg_dialog.cpp:1971
 msgid "This message will only shown to you once."
@@ -8497,9 +8497,8 @@ msgstr "Videospur %u"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:42
 #: src/mmg/tabs/additional_parts_dlg.cpp:54
-#, fuzzy
 msgid "View files in playlist"
-msgstr "Überprüfe %1% Dateien in %2% Abspielliste.\n"
+msgstr "Dateien in Abspielliste anzeigen"
 
 #: src/mmg/jobs.cpp:519
 msgid "View the output that mkvmerge generated during the muxing process for the selected job(s)"
@@ -9696,4 +9695,3 @@ msgstr "ja"
 
 #~ msgid "VP8"
 #~ msgstr "VP8"
-
