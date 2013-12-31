@@ -22,6 +22,7 @@
 
 #include "common/bitvalue.h"
 #include "common/file_types.h"
+#include "common/mm_mpls_multi_file_io.h"
 #include "common/segmentinfo.h"
 #include "merge/pr_generic.h"
 
@@ -113,6 +114,11 @@ struct filelist_t {
   std::vector<deferred_connection_t> deferred_connections;
   int64_t deferred_max_timecode_seen;
 
+  bool is_playlist;
+  std::vector<generic_reader_c *> playlist_readers;
+  size_t playlist_index, playlist_previous_filelist_id;
+  mm_mpls_multi_file_io_cptr playlist_mpls_in;
+
   filelist_t()
     : size{}
     , id{}
@@ -125,6 +131,9 @@ struct filelist_t {
     , num_unfinished_packetizers{}
     , old_num_unfinished_packetizers{}
     , deferred_max_timecode_seen{-1}
+    , is_playlist{}
+    , playlist_index{}
+    , playlist_previous_filelist_id{}
   {
   }
 };

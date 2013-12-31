@@ -66,6 +66,7 @@
 #include "common/hacks.h"
 #include "common/math.h"
 #include "common/mm_io_x.h"
+#include "common/mm_mpls_multi_file_io.h"
 #include "common/mm_read_buffer_io.h"
 #include "common/mm_write_buffer_io.h"
 #include "common/strings/formatting.h"
@@ -334,6 +335,19 @@ open_input_file(filelist_t &file) {
   }
 }
 
+static bool
+open_playlist_file(filelist_t &file,
+                   mm_io_c *in) {
+  auto mpls_in = mm_mpls_multi_file_io_c::open_multi(in);
+  if (!mpls_in)
+    return false;
+
+  file.is_playlist      = true;
+  file.playlist_mpls_in = std::static_pointer_cast<mm_mpls_multi_file_io_c>(mpls_in);
+
+  return true;
+}
+
 /** \brief Probe the file type
 
    Opens the input file and calls the \c probe_file function for each known
@@ -344,6 +358,10 @@ get_file_type(filelist_t &file) {
   mm_io_cptr af_io = open_input_file(file);
   mm_io_c *io      = af_io.get();
   int64_t size     = std::min(io->get_size(), static_cast<int64_t>(1 << 25));
+
+  auto is_playlist = !file.is_playlist && open_playlist_file(file, io);
+  if (is_playlist)
+    io = file.playlist_mpls_in.get();
 
   file_type_e type = FILE_TYPE_IS_UNKNOWN;
   // File types that can be detected unambiguously but are not supported
@@ -1285,7 +1303,7 @@ void
 create_readers() {
   for (auto &file : g_files) {
     try {
-      mm_io_cptr input_file = open_input_file(file);
+      mm_io_cptr input_file = file.playlist_mpls_in ? std::static_pointer_cast<mm_io_c>(file.playlist_mpls_in) : open_input_file(file);
 
       switch (file.type) {
         case FILE_TYPE_AAC:
