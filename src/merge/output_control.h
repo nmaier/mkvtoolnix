@@ -66,6 +66,13 @@ bool operator !=(const append_spec_t &a1,
   return !(a1 == a2);
 }
 
+inline std::ostream &
+operator<<(std::ostream &str,
+           append_spec_t const &spec) {
+  str << spec.src_file_id << ":" << spec.src_track_id << ":" << spec.dst_file_id << ":" << spec.dst_track_id;
+  return str;
+}
+
 struct packetizer_t {
   file_status_e status, old_status;
   packet_cptr pack;

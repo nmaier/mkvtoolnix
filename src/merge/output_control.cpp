@@ -245,13 +245,6 @@ family_uids_c::add_family_uid(const KaxSegmentFamily &family) {
   return true;
 }
 
-std::ostream &
-operator<<(std::ostream &str,
-           const append_spec_t &spec) {
-  str << spec.src_file_id << ":" << spec.src_track_id << ":" << spec.dst_file_id << ":" << spec.dst_track_id;
-  return str;
-}
-
 static int64_t
 calculate_file_duration() {
   return irnd(static_cast<double>(g_cluster_helper->get_duration()) / static_cast<double>(g_timecode_scale));
