@@ -1133,6 +1133,11 @@ to select idle I/O priority in addition to the lowest possible process priority\
 実験的機能をオンにします。利用可能な機能のリストは\fBmkvmerge \-\-engage list\fRで得られます。これらの機能は通常の状況で使用されることは意図されていません。
 .RE
 .PP
+\fB\-\-gui\-mode\fR
+.RS 4
+Turns on GUI mode\&. In this mode specially\-formatted lines may be output that can tell a controlling GUI what\*(Aqs happening\&. These messages follow the format \*(Aq#GUI#message\*(Aq\&. The message may be followed by key/value pairs as in \*(Aq#GUI#message#key1=value1#key2=value2\&...\*(Aq\&. Neither the messages nor the keys are ever translated and always output in English\&.
+.RE
+.PP
 \fB@\fR\fIoptions\-file\fR
 .RS 4
 ファイル\fIoptions\-file\fRから追加のコマンドライン引数を読み込みます。詳細はオプションファイルのセクションを参照してください。

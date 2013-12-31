@@ -150,6 +150,18 @@
      </listitem>
     </varlistentry>
 
+    <varlistentry id="mkvextract.description.gui_mode">
+     <term><option>--gui-mode</option></term>
+     <listitem>
+      <para>
+       Turns on GUI mode. In this mode specially-formatted lines may be output that can tell a controlling GUI what's happening. These
+       messages follow the format '<literal>#GUI#message</literal>'. The message may be followed by key/value pairs as in
+       '<literal>#GUI#message#key1=value1#key2=value2…</literal>'. Neither the messages nor the keys are ever translated and always output
+       in English.
+      </para>
+     </listitem>
+    </varlistentry>
+
     <varlistentry>
      <term><option>-v</option>, <option>--verbose</option></term>
      <listitem>
