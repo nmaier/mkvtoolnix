@@ -959,7 +959,7 @@ msgstr "關於(&A)"
 msgid "&About\tF1"
 msgstr "關於(&A)\tF1"
 
-#: src/mmg/tabs/additional_parts_dlg.cpp:45
+#: src/mmg/tabs/additional_parts_dlg.cpp:47
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:52
 msgid "&Add"
 msgstr "加入(&A)"
@@ -989,7 +989,7 @@ msgstr "章節編輯器(&C)\tAlt-4"
 msgid "&Check for updates"
 msgstr "檢查更新(&C)"
 
-#: src/mmg/tabs/additional_parts_dlg.cpp:50
+#: src/mmg/tabs/additional_parts_dlg.cpp:52
 #: src/mmg/update_checker.cpp:79
 msgid "&Close"
 msgstr "關閉(&C)"
@@ -1019,7 +1019,7 @@ msgid "&Don't scan, just add the file"
 msgstr "不掃描直接加入此檔案(&D)"
 
 #: src/mmg/jobs.cpp:500
-#: src/mmg/tabs/additional_parts_dlg.cpp:48
+#: src/mmg/tabs/additional_parts_dlg.cpp:50
 msgid "&Down"
 msgstr "下移(&D)"
 
@@ -1116,7 +1116,7 @@ msgstr "重新啟用(&R)"
 msgid "&Reload\tCtrl-R"
 msgstr "重新載入(&R)\tCtrl-R"
 
-#: src/mmg/tabs/additional_parts_dlg.cpp:46
+#: src/mmg/tabs/additional_parts_dlg.cpp:48
 msgid "&Remove"
 msgstr "移除(&R)"
 
@@ -1145,7 +1145,7 @@ msgstr "儲存設定檔(&S)\tCtrl-S"
 msgid "&Scan for other playlists"
 msgstr "掃描其他播放清單(&S)"
 
-#: src/mmg/tabs/additional_parts_dlg.cpp:49
+#: src/mmg/tabs/additional_parts_dlg.cpp:51
 msgid "&Sort"
 msgstr "排序(&S)"
 
@@ -1158,7 +1158,7 @@ msgid "&Troubleshooting"
 msgstr "故障排除(&T)"
 
 #: src/mmg/jobs.cpp:497
-#: src/mmg/tabs/additional_parts_dlg.cpp:47
+#: src/mmg/tabs/additional_parts_dlg.cpp:49
 msgid "&Up"
 msgstr "上移(&U)"
 
@@ -1984,7 +1984,7 @@ msgstr "加入"
 msgid "Add &command line options"
 msgstr "加入命令列選項(&C)"
 
-#: src/mmg/tabs/additional_parts_dlg.cpp:147
+#: src/mmg/tabs/additional_parts_dlg.cpp:157
 msgid "Add additional parts"
 msgstr "加入附加部分"
 
@@ -2024,7 +2024,7 @@ msgstr "加入此檔案「檔名」作為新附件"
 msgid "Added on"
 msgstr "加入時間"
 
-#: src/mmg/tabs/additional_parts_dlg.cpp:38
+#: src/mmg/tabs/additional_parts_dlg.cpp:42
 msgid "Additional source file parts"
 msgstr "附加來源檔案分割數"
 
@@ -2175,7 +2175,7 @@ msgstr "軌道 %1% 的另一個預設軌已設定。「%3%」的 %2% 軌道的�
 msgid "Another muxing job in still in progress. Please wait until it has finished or abort it manually before starting a new one."
 msgstr "另一個合成任務仍在處理中。要啟動一項新任務，請等待上一個任務完成或手動中止它。"
 
-#: src/mmg/tabs/input.cpp:1348
+#: src/mmg/tabs/input.cpp:1354
 #, c-format, boost-format
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr "不允許將一個檔案的軌道添加至同一個檔案的其他軌道。出現問題的軌道編號為 %u 與 %u。"
@@ -2804,7 +2804,7 @@ msgstr "命令列選項:"
 msgid "Command line saved."
 msgstr "命令列已儲存。"
 
-#: src/mmg/tabs/input.cpp:583
+#: src/mmg/tabs/input.cpp:586
 msgid "Command line used:"
 msgstr "使用命令列:"
 
@@ -2864,7 +2864,7 @@ msgstr "CoreAudio"
 
 #: src/mmg/jobs.cpp:181
 #: src/mmg/mux_dialog.cpp:120
-#: src/mmg/tabs/input.cpp:523
+#: src/mmg/tabs/input.cpp:526
 #, c-format, boost-format
 msgid "Could not create a temporary file for mkvmerge's command line option called '%s' (error code %d, %s)."
 msgstr "無法為 mkvmerge 的命令列選項建立暫存檔案「%s」(錯誤代碼 %d, %s)。"
@@ -3245,12 +3245,12 @@ msgstr "詳細資訊"
 msgid "Dirac"
 msgstr "Dirac"
 
-#: src/mmg/tabs/additional_parts_dlg.cpp:74
+#: src/mmg/tabs/additional_parts_dlg.cpp:84
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:75
 msgid "Directory"
 msgstr "目錄"
 
-#: src/mmg/tabs/additional_parts_dlg.cpp:54
+#: src/mmg/tabs/additional_parts_dlg.cpp:56
 msgid "Directory:"
 msgstr "目錄:"
 
@@ -3413,7 +3413,7 @@ msgstr "每個範圍由起始和結束時間碼中間加上「-」組成，例�
 msgid "EbmlVoid (size: %1%)"
 msgstr "Ebml 空隙 (大小: %1%)"
 
-#: src/mmg/tabs/additional_parts_dlg.cpp:52
+#: src/mmg/tabs/additional_parts_dlg.cpp:54
 msgid "Edit additional source file parts"
 msgstr "編輯附加來源檔案分割數"
 
@@ -3723,7 +3723,7 @@ msgstr "檔案包含的畫格數比預期的少，或者檔在 %1% 畫格後被�
 
 #: src/mmg/mmg_dialog.cpp:799
 #: src/mmg/mux_dialog.cpp:121
-#: src/mmg/tabs/input.cpp:524
+#: src/mmg/tabs/input.cpp:527
 msgid "File creation failed"
 msgstr "建立檔案失敗"
 
@@ -3737,22 +3737,22 @@ msgstr "檔案資料, 大小: %1%"
 msgid "File description: %1%"
 msgstr "檔案描述: %1%"
 
-#: src/mmg/tabs/input.cpp:576
-#: src/mmg/tabs/input.cpp:591
+#: src/mmg/tabs/input.cpp:579
+#: src/mmg/tabs/input.cpp:594
 msgid "File identification failed"
 msgstr "檔案無法識別"
 
-#: src/mmg/tabs/input.cpp:571
+#: src/mmg/tabs/input.cpp:574
 #, c-format, boost-format
 msgid "File identification failed for '%s'. Return code: %d"
 msgstr "檔案「%s」無法識別。返回碼: %d"
 
-#: src/mmg/tabs/input.cpp:574
+#: src/mmg/tabs/input.cpp:577
 #, c-format, boost-format
 msgid "File identification failed. Return code: %d. Errno: %d (%s). Make sure that you've selected a mkvmerge executable in the settings dialog."
 msgstr "檔案識別失敗。返回碼: %d。錯誤代號: %d (%s)。請確認您在設定對話窗中選擇了 mkvmerge 可執行檔。"
 
-#: src/mmg/tabs/input.cpp:720
+#: src/mmg/tabs/input.cpp:723
 msgid "File is already processed"
 msgstr "檔案已處理完畢"
 
@@ -3760,7 +3760,7 @@ msgstr "檔案已處理完畢"
 msgid "File modified"
 msgstr "檔案已修改"
 
-#: src/mmg/tabs/additional_parts_dlg.cpp:72
+#: src/mmg/tabs/additional_parts_dlg.cpp:82
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:59
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:73
 msgid "File name"
@@ -3776,7 +3776,7 @@ msgstr "檔名: %1%"
 msgid "File parsing failed"
 msgstr "解析檔案失敗"
 
-#: src/mmg/tabs/input.cpp:800
+#: src/mmg/tabs/input.cpp:803
 msgid "File removal not possible"
 msgstr "檔案不能移除"
 
@@ -4143,7 +4143,7 @@ msgstr "匯入的圖片，自 %1%"
 msgid "Incompatible mkvmerge version"
 msgstr "不相容的 mkvmerge 版本"
 
-#: src/mmg/tabs/input.cpp:1010
+#: src/mmg/tabs/input.cpp:1016
 msgid "Incompatible track"
 msgstr "不相容的軌道"
 
@@ -5231,7 +5231,7 @@ msgstr "沒有發現符合編輯規格「%1%」的軌道。%2%\n"
 msgid "No track with the ID %1% was found in the source file.\n"
 msgstr "在來源檔案裡找不到 ID 為 %1% 的軌道。\n"
 
-#: src/mmg/tabs/input.cpp:742
+#: src/mmg/tabs/input.cpp:745
 msgid "No tracks found"
 msgstr "未發現軌道"
 
@@ -5461,7 +5461,7 @@ msgstr "所選任務的輸出資訊:"
 msgid "Output sampling frequency: %1%"
 msgstr "輸出取樣頻率: %1%"
 
-#: src/mmg/tabs/input.cpp:587
+#: src/mmg/tabs/input.cpp:590
 msgid "Output:"
 msgstr "輸出:"
 
@@ -5610,7 +5610,7 @@ msgstr "上一個剪輯 UID: %1%"
 msgid "Previous segment's unique ID"
 msgstr "上一個剪輯的唯一 ID"
 
-#: src/mmg/tabs/additional_parts_dlg.cpp:53
+#: src/mmg/tabs/additional_parts_dlg.cpp:55
 msgid "Primary file name:"
 msgstr "主要檔名:"
 
@@ -6730,7 +6730,7 @@ msgstr "無法解析 FLAC 頭: 找不到媒體流資訊結構。\n"
 msgid "The FPS is 0.0 but the reader did not provide a timecode for a packet. %1%\n"
 msgstr "FPS 為 0.0 且讀取器未提供套件的時間碼。%1%\n"
 
-#: src/mmg/tabs/input.cpp:1409
+#: src/mmg/tabs/input.cpp:1415
 #, c-format, boost-format
 msgid "The FPS setting for track nr. %s in file '%s' is invalid."
 msgstr "軌 %s（自檔案「%s」）的 FPS 設定無效。"
@@ -6740,7 +6740,7 @@ msgstr "軌 %s（自檔案「%s」）的 FPS 設定無效。"
 msgid "The FourCC must be exactly four characters long in '%1% %2%'.\n"
 msgstr "FourCC 值必須為四個字元的長度，在「%1% %2%」。\n"
 
-#: src/mmg/tabs/input.cpp:1397
+#: src/mmg/tabs/input.cpp:1403
 #, c-format, boost-format
 msgid "The FourCC setting for track nr. %s in file '%s' is not exactly four characters long."
 msgstr "檔案「%s」中軌道 nr. %s 的 FourCC 設定值不是正好四個字元長。"
@@ -6865,7 +6865,7 @@ msgstr "「%2%」的「%1%」參數無效: 元件「%3%」的冒號過多。\n"
 msgid "The argument to '--timecode-scale' must be a number.\n"
 msgstr "「--timecode-scale」的參數必須為數字。\n"
 
-#: src/mmg/tabs/input.cpp:1451
+#: src/mmg/tabs/input.cpp:1457
 #, c-format, boost-format
 msgid "The aspect ratio setting for track nr. %s in file '%s' is invalid."
 msgstr "軌道編號 %s（檔案「%s」）的外觀比例設定無效。"
@@ -6946,7 +6946,7 @@ msgstr "國家「%s」不是有效的 ccTLD，不能選擇。"
 msgid "The cue entries (the index) are being written...\n"
 msgstr "正在寫入 cue 項目 (此索引)...\n"
 
-#: src/mmg/tabs/input.cpp:796
+#: src/mmg/tabs/input.cpp:799
 #, c-format, boost-format
 msgid "The current file (number %d) cannot be removed. There are other files -- at least file number %d -- whose tracks are supposed to be appended to tracks from this file. Please remove those files first."
 msgstr "目前檔案 (序號 %d) 不能移除。有其他檔案 -- 至少檔案號為 %d 的檔案 -- 有要添加至此檔某軌道的軌道。請先移除那些檔案。"
@@ -6961,7 +6961,7 @@ msgstr "目前套件的時間碼比前一個套件的小。這通常表明來源
 msgid "The default language code '%1%' is not a valid ISO639-2 language code and will be ignored.\n"
 msgstr "預設語言碼「%1%」不是有效的 ISO639-2 語言碼，將被忽略。\n"
 
-#: src/mmg/tabs/input.cpp:1376
+#: src/mmg/tabs/input.cpp:1382
 #, c-format, boost-format
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr "對檔案「%s」的 %s 軌的延遲設定無效。"
@@ -7086,7 +7086,7 @@ msgstr "此檔案「%1%」類型不支援 (%2%)。\n"
 msgid "The file '%s' does not exist."
 msgstr "檔案「%s」不存在。"
 
-#: src/mmg/tabs/input.cpp:718
+#: src/mmg/tabs/input.cpp:721
 #, c-format, boost-format
 msgid "The file '%s' is already processed in combination with the file '%s'. It cannot be added a second time."
 msgstr "此檔案「%s」已經用檔案「%s」以結合方式處理。它不能重複加入。"
@@ -7132,7 +7132,7 @@ msgstr "檔頭讀取異常。\n"
 msgid "The file headers could not be parsed, e.g. because they're incomplete, invalid or damaged."
 msgstr "無法解析此檔案表頭，可能是因為檔案不完整、無效或已損壞。"
 
-#: src/mmg/tabs/input.cpp:556
+#: src/mmg/tabs/input.cpp:559
 #, c-format, boost-format
 msgid "The file is an unsupported container format (%s)."
 msgstr "此檔案為不支援的容器格式 (%s)。"
@@ -7216,7 +7216,11 @@ msgstr "第一種模式會提取一些軌道到外部檔案。"
 msgid "The first word tells mkvextract what to extract. The second must be the source file. There are few global options that can be used with all modes. All other options depend on the mode."
 msgstr "第一個單字可告訴 mkvextract 提取什麼。第二個必須是來源檔。有一些整體選項可以在所有模式中使用。全部其他選項取決於使用的模式。"
 
-#: src/mmg/tabs/additional_parts_dlg.cpp:57
+#: src/mmg/tabs/additional_parts_dlg.cpp:60
+msgid "The following list shows the files that make up this playlist."
+msgstr ""
+
+#: src/mmg/tabs/additional_parts_dlg.cpp:65
 msgid "The following parts are read after the primary file as if they were all part of one big file."
 msgstr "最初檔案後面會讀取下列分割數如同一個大檔案的所有部分。"
 
@@ -7254,12 +7258,12 @@ msgstr "給定的時間碼縮放比例超出有效範圍 (1...10000000 或 -1 �
 msgid "The height of the two tracks is different: %1% and %2%"
 msgstr "兩軌高度不同: %1% 與 %2%"
 
-#: src/mmg/tabs/input.cpp:742
+#: src/mmg/tabs/input.cpp:745
 #, c-format, boost-format
 msgid "The input file '%s' does not contain any tracks."
 msgstr "輸入檔「%s」不包含任何軌道。"
 
-#: src/mmg/tabs/input.cpp:1293
+#: src/mmg/tabs/input.cpp:1299
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -7275,7 +7279,7 @@ msgstr ""
 "\n"
 "(問題出在 tab_input::load(), #1)"
 
-#: src/mmg/tabs/input.cpp:1300
+#: src/mmg/tabs/input.cpp:1306
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -7291,7 +7295,7 @@ msgstr ""
 "\n"
 "(問題出在 tab_input::load(), #2)"
 
-#: src/mmg/tabs/input.cpp:1313
+#: src/mmg/tabs/input.cpp:1319
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -7543,7 +7547,7 @@ msgstr "附件「%1%」的大小為 0。\n"
 msgid "The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n"
 msgstr "來源檔案「%1%」無法成功開啟，或者無法透過定位至末端檢索。\n"
 
-#: src/mmg/tabs/input.cpp:1387
+#: src/mmg/tabs/input.cpp:1393
 #, c-format, boost-format
 msgid "The stretch setting for track nr. %s in file '%s' is invalid."
 msgstr "軌道 %s（自檔案「%s」）的延展設定無效。"
@@ -7847,6 +7851,10 @@ msgstr "這是附件在輸出檔中存儲的名稱。預設為原檔案的名稱
 msgid "This is the title that players may show as the 'main title' for this movie."
 msgstr "這是播放器將作為此影片的“主標題”顯示的標題。"
 
+#: src/mmg/tabs/additional_parts_dlg.cpp:62
+msgid "This list is for informational purposes only and cannot be changed."
+msgstr ""
+
 #: src/mmg/mmg_dialog.cpp:1971
 msgid "This message will only shown to you once."
 msgstr "此訊息只會顯示一次。"
@@ -7892,7 +7900,7 @@ msgstr "這不該發生。請聯繫作者 Moritz Bunkus <moritz@bunkus.org>，�
 msgid "This track contains SBR AAC/HE-AAC/AAC+ data. Only needed for AAC input files, because SBR AAC cannot be detected automatically for these files. Not needed for AAC tracks read from MP4 or Matroska files."
 msgstr "此軌道包含 SBR AAC/HE-AAC/AAC+ 資料。本選項只對 AAC 輸入檔有必要，因為這類檔案的 SBR AAC 不能被自動偵測。對於從 MP4 或 Matroska 檔案讀取的 AAC 軌道，不必在意本選項。"
 
-#: src/mmg/tabs/input.cpp:1010
+#: src/mmg/tabs/input.cpp:1016
 msgid "This track is not compatible with the WebM mode and cannot be enabled."
 msgstr "此軌道不能和 WebM 模式相容且無法啟用。"
 
@@ -8132,7 +8140,7 @@ msgstr "類型:"
 msgid "Type: %1% (%2%)"
 msgstr "類型: %1% (%2%)"
 
-#: src/mmg/tabs/additional_parts_dlg.cpp:59
+#: src/mmg/tabs/additional_parts_dlg.cpp:67
 msgid "Typical use cases include reading VOBs from a DVD (e.g. VTS_01_1.VOB, VTS_01_2.VOB, VTS_01_3.VOB)."
 msgstr "典型使用情形包括讀取 DVD 的 VOB (例如 VTS_01_1.VOB、VTS_01_2.VOB、VTS_01_3.VOB)。"
 
@@ -8239,7 +8247,7 @@ msgstr "不帶正負號的整數"
 msgid "Unsupported MPEG mpeg_version: 0x%|1$02x| in packet %2% for timecode %3%, assuming MPEG2. No further warnings will be printed for this track.\n"
 msgstr "不支援 MPEG mpeg_version: 0x%|1$02x| 於資料套件 %2% 時間碼 %3% 處，假定為 MPEG2。不會再對此軌輸出警告。\n"
 
-#: src/mmg/tabs/input.cpp:559
+#: src/mmg/tabs/input.cpp:562
 msgid "Unsupported format"
 msgstr "不支援的格式"
 
@@ -8399,6 +8407,12 @@ msgstr "視訊軌"
 #, c-format, boost-format
 msgid "Video track %u"
 msgstr "視訊軌 %u"
+
+#: src/mmg/tabs/additional_parts_dlg.cpp:42
+#: src/mmg/tabs/additional_parts_dlg.cpp:54
+#, fuzzy
+msgid "View files in playlist"
+msgstr "視訊顯示單位"
 
 #: src/mmg/jobs.cpp:519
 msgid "View the output that mkvmerge generated during the muxing process for the selected job(s)"
@@ -9142,12 +9156,12 @@ msgstr "mkvmerge GUI 準備就緒"
 msgid "mkvmerge GUI settings (*.mmg)|*.mmg|%s"
 msgstr "mkvmerge GUI 設定檔 (*.mmg)|*.mmg|%s"
 
-#: src/mmg/tabs/input.cpp:1351
-#: src/mmg/tabs/input.cpp:1377
-#: src/mmg/tabs/input.cpp:1388
-#: src/mmg/tabs/input.cpp:1398
-#: src/mmg/tabs/input.cpp:1410
-#: src/mmg/tabs/input.cpp:1452
+#: src/mmg/tabs/input.cpp:1357
+#: src/mmg/tabs/input.cpp:1383
+#: src/mmg/tabs/input.cpp:1394
+#: src/mmg/tabs/input.cpp:1404
+#: src/mmg/tabs/input.cpp:1416
+#: src/mmg/tabs/input.cpp:1458
 msgid "mkvmerge GUI: error"
 msgstr "mkvmerge GUI: 發生錯誤"
 
@@ -9537,7 +9551,7 @@ msgstr "und (未定)"
 #: src/input/r_matroska.cpp:2217
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/mmg.cpp:68
-#: src/mmg/tabs/input.cpp:549
+#: src/mmg/tabs/input.cpp:552
 #: src/mmg/tabs/scanning_for_playlists_dlg.cpp:187
 msgid "unknown"
 msgstr "未知"

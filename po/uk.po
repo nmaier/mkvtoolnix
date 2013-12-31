@@ -983,7 +983,7 @@ msgstr "&Про програму"
 msgid "&About\tF1"
 msgstr "&Про програму\tF1"
 
-#: src/mmg/tabs/additional_parts_dlg.cpp:45
+#: src/mmg/tabs/additional_parts_dlg.cpp:47
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:52
 msgid "&Add"
 msgstr "&Додати"
@@ -1013,7 +1013,7 @@ msgstr "&Редактор розділів\tAlt-4"
 msgid "&Check for updates"
 msgstr "&Перевірити наявність оновлень програми"
 
-#: src/mmg/tabs/additional_parts_dlg.cpp:50
+#: src/mmg/tabs/additional_parts_dlg.cpp:52
 #: src/mmg/update_checker.cpp:79
 msgid "&Close"
 msgstr "&Закрити"
@@ -1043,7 +1043,7 @@ msgid "&Don't scan, just add the file"
 msgstr "&Не сканувати, лише додати файл"
 
 #: src/mmg/jobs.cpp:500
-#: src/mmg/tabs/additional_parts_dlg.cpp:48
+#: src/mmg/tabs/additional_parts_dlg.cpp:50
 msgid "&Down"
 msgstr "&Вниз"
 
@@ -1140,7 +1140,7 @@ msgstr "&Повторно ввімкнути"
 msgid "&Reload\tCtrl-R"
 msgstr "&Перезавантажити\tCtrl-R"
 
-#: src/mmg/tabs/additional_parts_dlg.cpp:46
+#: src/mmg/tabs/additional_parts_dlg.cpp:48
 msgid "&Remove"
 msgstr "&Видалити"
 
@@ -1169,7 +1169,7 @@ msgstr "&Зберегти налаштування\tCtrl-S"
 msgid "&Scan for other playlists"
 msgstr "&Сканувати інші списки відтворення"
 
-#: src/mmg/tabs/additional_parts_dlg.cpp:49
+#: src/mmg/tabs/additional_parts_dlg.cpp:51
 msgid "&Sort"
 msgstr "&Сортувати"
 
@@ -1182,7 +1182,7 @@ msgid "&Troubleshooting"
 msgstr "&Вирішення проблем"
 
 #: src/mmg/jobs.cpp:497
-#: src/mmg/tabs/additional_parts_dlg.cpp:47
+#: src/mmg/tabs/additional_parts_dlg.cpp:49
 msgid "&Up"
 msgstr "&Вгору"
 
@@ -2013,7 +2013,7 @@ msgstr "Додати"
 msgid "Add &command line options"
 msgstr "&Додати параметри командного рядка"
 
-#: src/mmg/tabs/additional_parts_dlg.cpp:147
+#: src/mmg/tabs/additional_parts_dlg.cpp:157
 msgid "Add additional parts"
 msgstr "Додати додаткові частини"
 
@@ -2053,7 +2053,7 @@ msgstr "Додати файл 'назва файла' як нове вкладе
 msgid "Added on"
 msgstr "Додано"
 
-#: src/mmg/tabs/additional_parts_dlg.cpp:38
+#: src/mmg/tabs/additional_parts_dlg.cpp:42
 msgid "Additional source file parts"
 msgstr "Додаткові частини вхідного файла"
 
@@ -2208,7 +2208,7 @@ msgstr "Інша типова доріжка для %1% доріжок вже б
 msgid "Another muxing job in still in progress. Please wait until it has finished or abort it manually before starting a new one."
 msgstr "Інше завдання щодо мультиплексування ще триває. Будь ласка, почекайте, поки воно завершиться, або перервіть його вручну, перш ніж починати нове."
 
-#: src/mmg/tabs/input.cpp:1348
+#: src/mmg/tabs/input.cpp:1354
 #, c-format, boost-format
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr "Додавання доріжки з файлу до іншої доріжки цього ж файлу не допускається. Це стосується доріжок номер %u і %u."
@@ -2837,7 +2837,7 @@ msgstr "Параметри командного рядка:"
 msgid "Command line saved."
 msgstr "Командний рядок збережено."
 
-#: src/mmg/tabs/input.cpp:583
+#: src/mmg/tabs/input.cpp:586
 msgid "Command line used:"
 msgstr "Командний рядок, що використовується:"
 
@@ -2897,7 +2897,7 @@ msgstr "CoreAudio"
 
 #: src/mmg/jobs.cpp:181
 #: src/mmg/mux_dialog.cpp:120
-#: src/mmg/tabs/input.cpp:523
+#: src/mmg/tabs/input.cpp:526
 #, c-format, boost-format
 msgid "Could not create a temporary file for mkvmerge's command line option called '%s' (error code %d, %s)."
 msgstr "Не вдалося створити тимчасовий файл для опції  '%s' командного рядка mkvmerge (код помилки %d, %s)."
@@ -3278,12 +3278,12 @@ msgstr "Подробиці"
 msgid "Dirac"
 msgstr "Dirac"
 
-#: src/mmg/tabs/additional_parts_dlg.cpp:74
+#: src/mmg/tabs/additional_parts_dlg.cpp:84
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:75
 msgid "Directory"
 msgstr "Тека"
 
-#: src/mmg/tabs/additional_parts_dlg.cpp:54
+#: src/mmg/tabs/additional_parts_dlg.cpp:56
 msgid "Directory:"
 msgstr "Тека:"
 
@@ -3446,7 +3446,7 @@ msgstr "Кожен діапазон складається з тайм-коді�
 msgid "EbmlVoid (size: %1%)"
 msgstr "EbmlVoid (розмір: %1%)"
 
-#: src/mmg/tabs/additional_parts_dlg.cpp:52
+#: src/mmg/tabs/additional_parts_dlg.cpp:54
 msgid "Edit additional source file parts"
 msgstr "Редагувати додаткові частини вхідного файла"
 
@@ -3755,7 +3755,7 @@ msgstr "Файл містить меншу кількість кадрів, ні
 
 #: src/mmg/mmg_dialog.cpp:799
 #: src/mmg/mux_dialog.cpp:121
-#: src/mmg/tabs/input.cpp:524
+#: src/mmg/tabs/input.cpp:527
 msgid "File creation failed"
 msgstr "Помилка створення файлу"
 
@@ -3769,22 +3769,22 @@ msgstr "Файл даних, розмір: %1%"
 msgid "File description: %1%"
 msgstr "Опис файлу: %1%"
 
-#: src/mmg/tabs/input.cpp:576
-#: src/mmg/tabs/input.cpp:591
+#: src/mmg/tabs/input.cpp:579
+#: src/mmg/tabs/input.cpp:594
 msgid "File identification failed"
 msgstr "Ідентифікувати файл не вдалося"
 
-#: src/mmg/tabs/input.cpp:571
+#: src/mmg/tabs/input.cpp:574
 #, c-format, boost-format
 msgid "File identification failed for '%s'. Return code: %d"
 msgstr "Не вдалося ідентифікувати файл '%s'. Код повернення: %d"
 
-#: src/mmg/tabs/input.cpp:574
+#: src/mmg/tabs/input.cpp:577
 #, c-format, boost-format
 msgid "File identification failed. Return code: %d. Errno: %d (%s). Make sure that you've selected a mkvmerge executable in the settings dialog."
 msgstr "Ідентифікувати файл не вдалося. Код повернення: %d. Помилка: %d (%s). Переконайтеся, що ви вибрали саме виконуваний файл mkvmerge в діалозі налаштувань."
 
-#: src/mmg/tabs/input.cpp:720
+#: src/mmg/tabs/input.cpp:723
 msgid "File is already processed"
 msgstr "Файл вже оброблений"
 
@@ -3792,7 +3792,7 @@ msgstr "Файл вже оброблений"
 msgid "File modified"
 msgstr "Файл змінено"
 
-#: src/mmg/tabs/additional_parts_dlg.cpp:72
+#: src/mmg/tabs/additional_parts_dlg.cpp:82
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:59
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:73
 msgid "File name"
@@ -3808,7 +3808,7 @@ msgstr "Назва файла: %1%"
 msgid "File parsing failed"
 msgstr "Не вдалося виконати обробку файлу"
 
-#: src/mmg/tabs/input.cpp:800
+#: src/mmg/tabs/input.cpp:803
 msgid "File removal not possible"
 msgstr "Видалення файла не є можливим"
 
@@ -4175,7 +4175,7 @@ msgstr "Імпортовано зображення з %1%"
 msgid "Incompatible mkvmerge version"
 msgstr "Несумісна версія mkvmerge"
 
-#: src/mmg/tabs/input.cpp:1010
+#: src/mmg/tabs/input.cpp:1016
 msgid "Incompatible track"
 msgstr "Несумісна доріжка"
 
@@ -5262,7 +5262,7 @@ msgstr "Не знайдено доріжки, що відповідає спец
 msgid "No track with the ID %1% was found in the source file.\n"
 msgstr "Доріжки з ID %1% не було знайдено у вхідному файлі.\n"
 
-#: src/mmg/tabs/input.cpp:742
+#: src/mmg/tabs/input.cpp:745
 msgid "No tracks found"
 msgstr "Доріжки не знайдені"
 
@@ -5492,7 +5492,7 @@ msgstr "Вихідна інформація щодо вибраних завда
 msgid "Output sampling frequency: %1%"
 msgstr "Вихідна частота дискретизації: %1%"
 
-#: src/mmg/tabs/input.cpp:587
+#: src/mmg/tabs/input.cpp:590
 msgid "Output:"
 msgstr "Вихідна інформація:"
 
@@ -5643,7 +5643,7 @@ msgstr "UID попереднього сегмента: %1%"
 msgid "Previous segment's unique ID"
 msgstr "Унікальний ID попереднього сегмента"
 
-#: src/mmg/tabs/additional_parts_dlg.cpp:53
+#: src/mmg/tabs/additional_parts_dlg.cpp:55
 msgid "Primary file name:"
 msgstr "Назва основного файла:"
 
@@ -6765,7 +6765,7 @@ msgstr "Заголовки FLAC не можуть бути проаналізо�
 msgid "The FPS is 0.0 but the reader did not provide a timecode for a packet. %1%\n"
 msgstr "Значення кадрів за секунду є 0.0, але зчитувач не надав тайм-коду для пакета. %1%\n"
 
-#: src/mmg/tabs/input.cpp:1409
+#: src/mmg/tabs/input.cpp:1415
 #, c-format, boost-format
 msgid "The FPS setting for track nr. %s in file '%s' is invalid."
 msgstr "Значення кадрів за секунду для доріжки номер %s у файлі '%s' є невірним."
@@ -6775,7 +6775,7 @@ msgstr "Значення кадрів за секунду для доріжки 
 msgid "The FourCC must be exactly four characters long in '%1% %2%'.\n"
 msgstr "FourCC повинен складатися рівно з чотирьох символів в '%1% %2%'.\n"
 
-#: src/mmg/tabs/input.cpp:1397
+#: src/mmg/tabs/input.cpp:1403
 #, c-format, boost-format
 msgid "The FourCC setting for track nr. %s in file '%s' is not exactly four characters long."
 msgstr "FourCC для доріжки номер %s у файлі '%s' не містить точно чотири символи."
@@ -6900,7 +6900,7 @@ msgstr "Аргумент '%1%' у '%2%' некорректний: надто б�
 msgid "The argument to '--timecode-scale' must be a number.\n"
 msgstr "Аргумент '--timecode-scale' повинен бути числом.\n"
 
-#: src/mmg/tabs/input.cpp:1451
+#: src/mmg/tabs/input.cpp:1457
 #, c-format, boost-format
 msgid "The aspect ratio setting for track nr. %s in file '%s' is invalid."
 msgstr "Налаштування співвідношення сторін для доріжки номер %s у файлі '%s' є некорректними."
@@ -6981,7 +6981,7 @@ msgstr "Країна '%s' не є корректною з-поміж таких 
 msgid "The cue entries (the index) are being written...\n"
 msgstr "Елементи cue (індекс) в процесі запису...\n"
 
-#: src/mmg/tabs/input.cpp:796
+#: src/mmg/tabs/input.cpp:799
 #, c-format, boost-format
 msgid "The current file (number %d) cannot be removed. There are other files -- at least file number %d -- whose tracks are supposed to be appended to tracks from this file. Please remove those files first."
 msgstr "Не можливо видалити поточний файл (номер %d). Є й інші файли - принаймні файл номер %d -- чиї доріжки повинні бути приєднані до доріжок з цього файлу. Будь ласка, видаліть спочатку дані файли."
@@ -6996,7 +6996,7 @@ msgstr "Тайм-код поточного пакету є меншим ніж �
 msgid "The default language code '%1%' is not a valid ISO639-2 language code and will be ignored.\n"
 msgstr "Типовий код мови для '%1%' не є корректним кодом мови ISO639-2 і буде проігнорований.\n"
 
-#: src/mmg/tabs/input.cpp:1376
+#: src/mmg/tabs/input.cpp:1382
 #, c-format, boost-format
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr "Опції затримки для доріжки номер %s файлу '%s' є некорректними."
@@ -7121,7 +7121,7 @@ msgstr "Файл '%1%' має непідтримуваний тип (%2%).\n"
 msgid "The file '%s' does not exist."
 msgstr "Файл '%s' не існує."
 
-#: src/mmg/tabs/input.cpp:718
+#: src/mmg/tabs/input.cpp:721
 #, c-format, boost-format
 msgid "The file '%s' is already processed in combination with the file '%s'. It cannot be added a second time."
 msgstr "Файл '%s' вже оброблений у поєднанні з файлом '%s'. Він не може бути приєднаний вдруге."
@@ -7167,7 +7167,7 @@ msgstr "Заголовок файлу не був правильно прочи�
 msgid "The file headers could not be parsed, e.g. because they're incomplete, invalid or damaged."
 msgstr "Заголовки файлу не можуть бути проаналізовані, наприклад через те, що вони неповні, некоректні або пошкоджені."
 
-#: src/mmg/tabs/input.cpp:556
+#: src/mmg/tabs/input.cpp:559
 #, c-format, boost-format
 msgid "The file is an unsupported container format (%s)."
 msgstr "Файл є непідтримуваним форматом контейнера (%s)."
@@ -7251,7 +7251,11 @@ msgstr "Перший режим витягує деякі доріжки до з
 msgid "The first word tells mkvextract what to extract. The second must be the source file. There are few global options that can be used with all modes. All other options depend on the mode."
 msgstr "Перший параметр повідомляє mkvextract, що необхідно витягти. Другий параметр - вхідний файл. Є декілька глобальних опцій, які можуть бути використані для всіх режимів. Всі інші параметри залежать від режиму."
 
-#: src/mmg/tabs/additional_parts_dlg.cpp:57
+#: src/mmg/tabs/additional_parts_dlg.cpp:60
+msgid "The following list shows the files that make up this playlist."
+msgstr ""
+
+#: src/mmg/tabs/additional_parts_dlg.cpp:65
 msgid "The following parts are read after the primary file as if they were all part of one big file."
 msgstr "Вказані частини зчитуються після основного файла так, ніби вони були частиною одного великого файла."
 
@@ -7289,12 +7293,12 @@ msgstr "Даний масштабний коефіцієнт тайм-коду �
 msgid "The height of the two tracks is different: %1% and %2%"
 msgstr "Висота кадру двох доріжок є різною: %1% i %2%"
 
-#: src/mmg/tabs/input.cpp:742
+#: src/mmg/tabs/input.cpp:745
 #, c-format, boost-format
 msgid "The input file '%s' does not contain any tracks."
 msgstr "Вхідний файл '%s' не містить ніяких доріжок."
 
-#: src/mmg/tabs/input.cpp:1293
+#: src/mmg/tabs/input.cpp:1299
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -7310,7 +7314,7 @@ msgstr ""
 "\n"
 "(Проблема виникла в tab_input::load(), #1)"
 
-#: src/mmg/tabs/input.cpp:1300
+#: src/mmg/tabs/input.cpp:1306
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -7326,7 +7330,7 @@ msgstr ""
 "\n"
 "(Проблема виникла в tab_input::load(), #2)"
 
-#: src/mmg/tabs/input.cpp:1313
+#: src/mmg/tabs/input.cpp:1319
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -7590,7 +7594,7 @@ msgstr "Розмір вкладення '%1%' є 0.\n"
 msgid "The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n"
 msgstr "Вхідний файл '%1%' не може бути відкритий успішно, або отримання його розміру шляхом переміщення до кінця не працює.\n"
 
-#: src/mmg/tabs/input.cpp:1387
+#: src/mmg/tabs/input.cpp:1393
 #, c-format, boost-format
 msgid "The stretch setting for track nr. %s in file '%s' is invalid."
 msgstr "Опції розтягнення для доріжки номер %s файлу '%s' є некорректними."
@@ -7897,6 +7901,10 @@ msgstr "Ця назва буде збережена у вихідному фай
 msgid "This is the title that players may show as the 'main title' for this movie."
 msgstr "Цей заголовок плеєр має відображати як 'main title' для даного фільму."
 
+#: src/mmg/tabs/additional_parts_dlg.cpp:62
+msgid "This list is for informational purposes only and cannot be changed."
+msgstr ""
+
 #: src/mmg/mmg_dialog.cpp:1971
 msgid "This message will only shown to you once."
 msgstr "Дане повідомлення буде показане вам лише одного разу."
@@ -7942,7 +7950,7 @@ msgstr "Цього не повинно було статися. Будь лас�
 msgid "This track contains SBR AAC/HE-AAC/AAC+ data. Only needed for AAC input files, because SBR AAC cannot be detected automatically for these files. Not needed for AAC tracks read from MP4 or Matroska files."
 msgstr "Вибрати, якщо дана доріжка містить SBR AAC/HE-AAC/AAC+ дані. Це необхідно тільки для вхідних файлів AAC, тому що SBR в AAC не може бути виявлений автоматично для цих файлів. Не є необхідним при зчитуванні доріжок AAC з файлів MP4 або Matroska."
 
-#: src/mmg/tabs/input.cpp:1010
+#: src/mmg/tabs/input.cpp:1016
 msgid "This track is not compatible with the WebM mode and cannot be enabled."
 msgstr "Ця доріжка несумісна з режимом WebM і не може бути ввімкнена."
 
@@ -8182,7 +8190,7 @@ msgstr "Тип:"
 msgid "Type: %1% (%2%)"
 msgstr "Тип: %1% (%2%)"
 
-#: src/mmg/tabs/additional_parts_dlg.cpp:59
+#: src/mmg/tabs/additional_parts_dlg.cpp:67
 msgid "Typical use cases include reading VOBs from a DVD (e.g. VTS_01_1.VOB, VTS_01_2.VOB, VTS_01_3.VOB)."
 msgstr "Типові випадки використання включають зчитування VOBів з DVD (наприклад, VTS_01_1.VOB, VTS_01_2.VOB, VTS_01_3.VOB)."
 
@@ -8289,7 +8297,7 @@ msgstr "Беззнаковое ціле число"
 msgid "Unsupported MPEG mpeg_version: 0x%|1$02x| in packet %2% for timecode %3%, assuming MPEG2. No further warnings will be printed for this track.\n"
 msgstr "Непідтримуваний MPEG mpeg_version: 0x%|1$02x| в пакеті %2% для тайм-коду %3%, можливо що MPEG2. Жодні подальші попередження не будуть відображатися для цієї доріжки.\n"
 
-#: src/mmg/tabs/input.cpp:559
+#: src/mmg/tabs/input.cpp:562
 msgid "Unsupported format"
 msgstr "Непідтримуваний формат"
 
@@ -8449,6 +8457,12 @@ msgstr "Відеодоріжка"
 #, c-format, boost-format
 msgid "Video track %u"
 msgstr "Відеодоріжка %u"
+
+#: src/mmg/tabs/additional_parts_dlg.cpp:42
+#: src/mmg/tabs/additional_parts_dlg.cpp:54
+#, fuzzy
+msgid "View files in playlist"
+msgstr "Одиниці відображення відео"
 
 #: src/mmg/jobs.cpp:519
 msgid "View the output that mkvmerge generated during the muxing process for the selected job(s)"
@@ -9194,12 +9208,12 @@ msgstr "mkvmerge GUI готовий"
 msgid "mkvmerge GUI settings (*.mmg)|*.mmg|%s"
 msgstr "налаштування mkvmerge GUI (*.mmg)|*.mmg|%s"
 
-#: src/mmg/tabs/input.cpp:1351
-#: src/mmg/tabs/input.cpp:1377
-#: src/mmg/tabs/input.cpp:1388
-#: src/mmg/tabs/input.cpp:1398
-#: src/mmg/tabs/input.cpp:1410
-#: src/mmg/tabs/input.cpp:1452
+#: src/mmg/tabs/input.cpp:1357
+#: src/mmg/tabs/input.cpp:1383
+#: src/mmg/tabs/input.cpp:1394
+#: src/mmg/tabs/input.cpp:1404
+#: src/mmg/tabs/input.cpp:1416
+#: src/mmg/tabs/input.cpp:1458
 msgid "mkvmerge GUI: error"
 msgstr "mkvmerge GUI: помилка"
 
@@ -9589,7 +9603,7 @@ msgstr "und (Невизначено)"
 #: src/input/r_matroska.cpp:2217
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/mmg.cpp:68
-#: src/mmg/tabs/input.cpp:549
+#: src/mmg/tabs/input.cpp:552
 #: src/mmg/tabs/scanning_for_playlists_dlg.cpp:187
 msgid "unknown"
 msgstr "невідомий"
