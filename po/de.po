@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: mkvtoolnix 6.6.0\n"
 "Report-Msgid-Bugs-To: moritz@bunkus.org\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2013-12-31 15:02+0100\n"
+"PO-Revision-Date: 2013-12-31 22:26+0100\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "Language: de\n"
@@ -3375,9 +3375,8 @@ msgid "Dolby TrueHD"
 msgstr "Dolby TrueHD"
 
 #: src/merge/mkvmerge.cpp:2412
-#, fuzzy
 msgid "Done scanning playlists.\n"
-msgstr "niemals nach Abspiellisten scannen"
+msgstr "Fertig mit der Überprüfung der Abspiellisten.\n"
 
 #: src/propedit/propedit.cpp:123
 msgid "Done.\n"
@@ -6078,8 +6077,8 @@ msgstr "Durchsuchte Dateien"
 #, boost-format
 msgid "Scanning %1% files in %2% playlist.\n"
 msgid_plural "Scanning %1% files in %2% playlists.\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Überprüfe %1% Dateien in %2% Abspielliste.\n"
+msgstr[1] "Überprüfe %1% Dateien in %2% Abspiellisten.\n"
 
 #: src/mmg/tabs/scanning_for_playlists_dlg.cpp:30
 msgid "Scanning directory"
@@ -9683,4 +9682,3 @@ msgstr "ja"
 
 #~ msgid "VP8"
 #~ msgstr "VP8"
-
