@@ -74,11 +74,16 @@ struct packetizer_t {
   int64_t file, orig_file;
   bool deferred;
 
-  packetizer_t():
-    status(FILE_STATUS_MOREDATA), old_status(FILE_STATUS_MOREDATA),
-    packetizer(nullptr), orig_packetizer(nullptr),
-    file(0), orig_file(0),
-    deferred(false) { }
+  packetizer_t()
+    : status{FILE_STATUS_MOREDATA}
+    , old_status{FILE_STATUS_MOREDATA}
+    , packetizer{}
+    , orig_packetizer{}
+    , file{}
+    , orig_file{}
+    , deferred{}
+  {
+  }
 };
 
 struct deferred_connection_t {
@@ -104,12 +109,19 @@ struct filelist_t {
   std::vector<deferred_connection_t> deferred_connections;
   int64_t deferred_max_timecode_seen;
 
-  filelist_t():
-    size(0), type(FILE_TYPE_IS_UNKNOWN),
-    reader(nullptr),
-    ti(nullptr), appending(false), appended_to(false), done(false),
-    num_unfinished_packetizers(0), old_num_unfinished_packetizers(0),
-    deferred_max_timecode_seen(-1) {}
+  filelist_t()
+    : size{}
+    , type{FILE_TYPE_IS_UNKNOWN}
+    , reader{}
+    , ti{}
+    , appending{}
+    , appended_to{}
+    , done{}
+    , num_unfinished_packetizers{}
+    , old_num_unfinished_packetizers{}
+    , deferred_max_timecode_seen{-1}
+  {
+  }
 };
 
 struct attachment_t {
