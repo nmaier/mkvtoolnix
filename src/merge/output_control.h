@@ -23,7 +23,6 @@
 #include "common/bitvalue.h"
 #include "common/file_types.h"
 #include "common/segmentinfo.h"
-#include "merge/mkvmerge.h"
 #include "merge/pr_generic.h"
 
 namespace libmatroska {

@@ -474,6 +474,9 @@ protected:
 
   bool m_has_been_flushed;
 
+protected:                      // static
+  static int ms_track_number;
+
 public:
   track_info_c m_ti;
   generic_reader_c *m_reader;
@@ -639,6 +642,8 @@ public:
   virtual bool display_dimensions_or_aspect_ratio_set();
 
   virtual bool is_compatible_with(output_compatibility_e compatibility);
+
+  int64_t create_track_number();
 
 protected:
   virtual void flush_impl() {

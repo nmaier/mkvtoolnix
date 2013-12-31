@@ -61,7 +61,6 @@
 #include "common/xml/ebml_segmentinfo_converter.h"
 #include "common/xml/ebml_tags_converter.h"
 #include "merge/cluster_helper.h"
-#include "merge/mkvmerge.h"
 #include "merge/output_control.h"
 
 using namespace libmatroska;
@@ -294,50 +293,6 @@ print_capabilities() {
 #if defined(HAVE_FLAC_FORMAT_H)
   mxinfo("FLAC\n");
 #endif
-}
-
-int64_t
-create_track_number(generic_reader_c *reader,
-                    int64_t tid) {
-  // Specs say that track numbers should start at 1.
-  static int s_track_number = 1;
-
-  bool found   = false;
-  int file_num = -1;
-  size_t i;
-  for (i = 0; i < g_files.size(); i++)
-    if (g_files[i].reader == reader) {
-      found = true;
-      file_num = i;
-      break;
-    }
-
-  if (!found)
-    mxerror(boost::format(Y("create_track_number: file_num not found. %1%\n")) % BUGMSG);
-
-  int64_t tnum = -1;
-  found        = false;
-  for (i = 0; i < g_track_order.size(); i++)
-    if ((g_track_order[i].file_id == file_num) &&
-        (g_track_order[i].track_id == tid)) {
-      found = true;
-      tnum = i + 1;
-      break;
-    }
-  if (found) {
-    found = false;
-    for (i = 0; i < g_packetizers.size(); i++)
-      if (g_packetizers[i].packetizer && (g_packetizers[i].packetizer->get_track_num() == tnum)) {
-        tnum = s_track_number;
-        break;
-      }
-  } else
-    tnum = s_track_number;
-
-  if (tnum >= s_track_number)
-    s_track_number = tnum + 1;
-
-  return tnum;
 }
 
 static std::string
