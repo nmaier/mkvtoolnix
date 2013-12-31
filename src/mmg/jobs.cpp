@@ -48,6 +48,7 @@ job_run_dialog::job_run_dialog(wxWindow *,
   , jobs_to_start(n_jobs_to_start)
   , current_job(-1)
   , m_progress(0)
+  , m_scanning_playlists{}
 #if defined(SYS_WINDOWS)
   , m_taskbar_progress(nullptr)
 #endif
@@ -243,7 +244,22 @@ job_run_dialog::process_input() {
 
     if (got_char && ((c == '\n') || (c == '\r') || out->Eof())) {
       wxString wx_line = wxU(line);
-      if (wx_line.Find(Z("Progress")) == 0) {
+
+      if (wx_line.Find(wxT("#GUI#begin_scanning_playlists")) == 0)
+        m_scanning_playlists = true;
+
+      else if (wx_line.Find(wxT("#GUI#end_scanning_playlists")) == 0) {
+        m_scanning_playlists         = false;
+
+        m_start_time                 = get_current_time_millis();
+        m_next_remaining_time_update = m_start_time + 8000;
+
+        if (!current_job) {
+          m_start_time_total                 = m_start_time;
+          m_next_remaining_time_update_total = m_next_remaining_time_update;
+        }
+
+      } else if (wx_line.Find(Z("Progress")) == 0) {
         int percent_pos = wx_line.Find(wxT("%"));
         if (0 < percent_pos) {
           wx_line.Remove(percent_pos);
@@ -269,7 +285,7 @@ job_run_dialog::process_input() {
 
 void
 job_run_dialog::set_progress_value(long value) {
-  m_progress = current_job * 100 + value;
+  m_progress = current_job * 100 + (m_scanning_playlists ? 0 : value);
   g_progress->SetValue(value);
   g_jobs->SetValue(m_progress);
 
@@ -281,7 +297,7 @@ job_run_dialog::set_progress_value(long value) {
 
 void
 job_run_dialog::update_remaining_time() {
-  if (0 == m_progress)
+  if (m_scanning_playlists || !m_progress)
     return;
 
   int64_t now = get_current_time_millis();
