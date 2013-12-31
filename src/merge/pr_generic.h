@@ -420,7 +420,7 @@ protected:
 
   virtual std::string id_escape_string(const std::string &s);
 
-  virtual mm_multi_file_io_c *get_underlying_input_as_multi_file_io() const;
+  virtual mm_io_c *get_underlying_input() const;
 };
 
 void id_result_container_unsupported(const std::string &filename, const std::string &info);

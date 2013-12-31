@@ -1519,13 +1519,13 @@ generic_reader_c::get_progress() {
   return 100 * m_in->getFilePointer() / m_size;
 }
 
-mm_multi_file_io_c *
-generic_reader_c::get_underlying_input_as_multi_file_io()
+mm_io_c *
+generic_reader_c::get_underlying_input()
   const {
   mm_io_c *actual_in = m_in.get();
   while (dynamic_cast<mm_proxy_io_c *>(actual_in))
     actual_in = static_cast<mm_proxy_io_c *>(actual_in)->get_proxied();
-  return dynamic_cast<mm_multi_file_io_c *>(actual_in);
+  return actual_in;
 }
 
 //
