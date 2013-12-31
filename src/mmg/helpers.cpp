@@ -262,7 +262,7 @@ format_date_time(time_t date_time) {
   return wxDateTime(date_time).Format(wxT("%Y-%m-%d %H:%M:%S"));
 }
 
-#if defined(SYS_WINDOWS)
+#if defined(SYS_WINDOWS) && !wxCHECK_VERSION(3, 0, 0)
 wxString
 format_tooltip(const wxString &s) {
   return format_paragraph(static_cast<const wchar_t *>(s.wc_str()), 0, L"", L"", 80);
