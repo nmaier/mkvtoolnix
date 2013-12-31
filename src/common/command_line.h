@@ -17,6 +17,7 @@
 #include "common/common_pch.h"
 
 extern std::string usage_text, version_info;
+extern bool g_gui_mode;
 
 void usage(int exit_code = 0);
 bool handle_common_cli_args(std::vector<std::string> &args, const std::string &redirect_output_short);
