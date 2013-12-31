@@ -36,11 +36,12 @@ class additional_parts_dialog: public wxDialog {
 protected:
   wxListView *m_lv_files;
   wxButton *m_b_add, *m_b_remove, *m_b_up, *m_b_down, *m_b_sort, *m_b_close;
+  mmg_file_t const *m_file;
   wxFileName m_primary_file_name;
   std::vector<wxFileName> m_files;
 
 public:
-  additional_parts_dialog(wxWindow *parent, wxFileName const &primary_file_name, std::vector<wxFileName> const &files);
+  additional_parts_dialog(wxWindow *parent, mmg_file_t const &file);
 
   void on_add(wxCommandEvent &evt);
   void on_remove(wxCommandEvent &evt);

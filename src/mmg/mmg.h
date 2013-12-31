@@ -161,7 +161,7 @@ struct mmg_file_t {
   int container;
   std::vector<mmg_track_cptr> tracks;
   std::vector<mmg_attached_file_cptr> attached_files;
-  bool appending;
+  bool appending, is_playlist;
   std::vector<wxFileName> other_files, playlist_files;
 
   mmg_file_t()
