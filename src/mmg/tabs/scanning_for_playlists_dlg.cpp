@@ -38,7 +38,7 @@ scanning_for_playlists_dlg::scanning_for_playlists_dlg(wxWindow *parent,
   , m_start_time{}
   , m_next_remaining_time_update{}
 {
-	m_st_progress           = new wxStaticText(this, wxID_ANY,    wxU(boost::format(Y("%1% of %2% file(s) processed")) % 0 % other_file_names.size()));
+	m_st_progress           = new wxStaticText(this, wxID_ANY,    wxU(boost::format(NY("%1% of %2% file processed", "%1% of %2% files processed", other_file_names.size())) % 0 % other_file_names.size()));
 	m_g_progress            = new wxGauge(     this, wxID_ANY,    m_max_progress);
   auto st_remaining_label = new wxStaticText(this, wxID_ANY,    Z("Remaining time:"));
 	m_st_remaining_time     = new wxStaticText(this, wxID_ANY,    Z("is being estimated"));
@@ -145,7 +145,7 @@ void
 scanning_for_playlists_dlg::update_gauge(size_t progress) {
   m_progress = progress;
   m_g_progress->SetValue(m_progress);
-  m_st_progress->SetLabel(wxU(boost::format(Y("%1% of %2% file(s) processed")) % m_progress % m_max_progress));
+  m_st_progress->SetLabel(wxU(boost::format(NY("%1% of %2% file processed", "%1% of %2% files processed", m_max_progress)) % m_progress % m_max_progress));
 #if defined(SYS_WINDOWS)
   if (m_taskbar_progress)
     m_taskbar_progress->set_value(m_progress, m_max_progress);

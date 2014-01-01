@@ -478,28 +478,28 @@ job_dialog::job_dialog(wxWindow *parent)
 
   wxBoxSizer *siz_b_right = new wxBoxSizer(wxVERTICAL);
   b_up = new wxButton(this, ID_JOBS_B_UP, Z("&Up"));
-  b_up->SetToolTip(TIP("Move the selected job(s) up"));
+  b_up->SetToolTip(TIP("Move the selected jobs up"));
   siz_b_right->Add(b_up, 0, wxGROW | wxLEFT | wxBOTTOM, 10);
   b_down = new wxButton(this, ID_JOBS_B_DOWN, Z("&Down"));
-  b_down->SetToolTip(TIP("Move the selected job(s) down"));
+  b_down->SetToolTip(TIP("Move the selected jobs down"));
   siz_b_right->Add(b_down, 0, wxGROW | wxLEFT | wxBOTTOM, 10);
   siz_b_right->AddSpacer(15);
 
   b_reenable = new wxButton(this, ID_JOBS_B_REENABLE, Z("&Re-enable"));
-  b_reenable->SetToolTip(TIP("Re-enable the selected job(s)"));
+  b_reenable->SetToolTip(TIP("Re-enable the selected jobs"));
   siz_b_right->Add(b_reenable, 0, wxGROW | wxLEFT | wxBOTTOM, 10);
   b_disable = new wxButton(this, ID_JOBS_B_DISABLE, Z("&Disable"));
-  b_disable->SetToolTip(TIP("Disable the selected job(s) and sets their status to 'done'"));
+  b_disable->SetToolTip(TIP("Disable the selected jobs and set their status to 'done'"));
   siz_b_right->Add(b_disable, 0, wxGROW | wxLEFT | wxBOTTOM, 10);
   siz_b_right->AddSpacer(15);
 
   b_delete = new wxButton(this, ID_JOBS_B_DELETE, Z("D&elete"));
-  b_delete->SetToolTip(TIP("Delete the selected job(s) from the job queue"));
+  b_delete->SetToolTip(TIP("Delete the selected jobs from the job queue"));
   siz_b_right->Add(b_delete, 0, wxGROW | wxLEFT | wxBOTTOM, 10);
   siz_b_right->AddSpacer(15);
 
   b_view_log = new wxButton(this, ID_JOBS_B_VIEW_LOG, Z("&View log"));
-  b_view_log->SetToolTip(TIP("View the output that mkvmerge generated during the muxing process for the selected job(s)"));
+  b_view_log->SetToolTip(TIP("View the output that mkvmerge generated during the muxing process for the selected jobs"));
   siz_b_right->Add(b_view_log, 0, wxGROW | wxLEFT, 10);
   siz_line->Add(siz_b_right, 0, 0, 0);
   siz_all->Add(siz_line, 1, wxGROW | wxLEFT | wxRIGHT, 10);
@@ -517,7 +517,7 @@ job_dialog::job_dialog(wxWindow *parent)
   siz_b_bottom->Add(b_start, 0, wxGROW | wxRIGHT, 10);
   siz_b_bottom->Add(10, 0, 0, 0, 0);
   b_start_selected = new wxButton(this, ID_JOBS_B_START_SELECTED, Z("S&tart selected"));
-  b_start_selected->SetToolTip(TIP("Start the selected job(s) regardless of their status"));
+  b_start_selected->SetToolTip(TIP("Start the selected jobs regardless of their status"));
   siz_b_bottom->Add(b_start_selected, 0, wxGROW | wxLEFT, 10);
   siz_all->Add(siz_b_bottom, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 10);
   siz_all->SetSizeHints(this);

@@ -2125,35 +2125,35 @@ parse_args(std::vector<std::string> args) {
 
     else if ((this_arg == "-a") || (this_arg == "--atracks") || (this_arg == "--audio-tracks")) {
       if (no_next_arg)
-        mxerror(boost::format(Y("'%1%' lacks the track number(s).\n")) % this_arg);
+        mxerror(boost::format(Y("'%1%' lacks the track numbers.\n")) % this_arg);
 
       parse_arg_tracks(next_arg, ti->m_atracks, this_arg);
       sit++;
 
     } else if ((this_arg == "-d") || (this_arg == "--vtracks") || (this_arg == "--video-tracks")) {
       if (no_next_arg)
-        mxerror(boost::format(Y("'%1%' lacks the track number(s).\n")) % this_arg);
+        mxerror(boost::format(Y("'%1%' lacks the track numbers.\n")) % this_arg);
 
       parse_arg_tracks(next_arg, ti->m_vtracks, this_arg);
       sit++;
 
     } else if ((this_arg == "-s") || (this_arg == "--stracks") || (this_arg == "--sub-tracks") || (this_arg == "--subtitle-tracks")) {
       if (no_next_arg)
-        mxerror(boost::format(Y("'%1%' lacks the track number(s).\n")) % this_arg);
+        mxerror(boost::format(Y("'%1%' lacks the track numbers.\n")) % this_arg);
 
       parse_arg_tracks(next_arg, ti->m_stracks, this_arg);
       sit++;
 
     } else if ((this_arg == "-b") || (this_arg == "--btracks") || (this_arg == "--button-tracks")) {
       if (no_next_arg)
-        mxerror(boost::format(Y("'%1%' lacks the track number(s).\n")) % this_arg);
+        mxerror(boost::format(Y("'%1%' lacks the track numbers.\n")) % this_arg);
 
       parse_arg_tracks(next_arg, ti->m_btracks, this_arg);
       sit++;
 
     } else if ((this_arg == "--track-tags")) {
       if (no_next_arg)
-        mxerror(boost::format(Y("'%1%' lacks the track number(s).\n")) % this_arg);
+        mxerror(boost::format(Y("'%1%' lacks the track numbers.\n")) % this_arg);
 
       parse_arg_tracks(next_arg, ti->m_track_tags, this_arg);
       sit++;
