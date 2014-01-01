@@ -39,6 +39,9 @@ protected:
 
   window_geometry_saver_c m_geometry_saver;
 
+  size_t m_sorted_by_column;
+  bool m_sorted_ascending;
+
 public:
   select_scanned_file_dlg(wxWindow *parent, std::vector<playlist_file_cptr> const &playlists, wxString const &orig_file_name);
   ~select_scanned_file_dlg();
@@ -47,8 +50,11 @@ public:
   void on_cancel(wxCommandEvent &evt);
   void on_file_selected(wxListEvent &evt);
   void on_file_activated(wxListEvent &evt);
+  void on_column_clicked(wxListEvent &evt);
 
   void update_info();
+
+  void sort_by(size_t column, bool ascending);
 
   int get_selected_playlist_idx() const;
 };
