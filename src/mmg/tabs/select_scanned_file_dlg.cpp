@@ -20,6 +20,8 @@
 #include "common/strings/formatting.h"
 #include "common/wx.h"
 #include "mmg/tabs/select_scanned_file_dlg.h"
+#include "share/icons/16x16/sort_ascending.h"
+#include "share/icons/16x16/sort_descending.h"
 
 struct compare_playlist_file_info_t {
   std::vector<playlist_file_cptr> const *playlists;
@@ -110,6 +112,10 @@ select_scanned_file_dlg::select_scanned_file_dlg(wxWindow *parent,
   m_lc_items->InsertColumn(0, item);
   item.SetText(Z("Directory"));
   m_lc_items->InsertColumn(1, item);
+
+  m_sort_arrows.Add(wx_get_png(sort_ascending));
+  m_sort_arrows.Add(wx_get_png(sort_descending));
+  m_lc_files->SetImageList(&m_sort_arrows, wxIMAGE_LIST_SMALL);
 
   // fill "files" with data
   m_lc_files->Hide();
@@ -275,9 +281,21 @@ select_scanned_file_dlg::sort_by(size_t column,
   info.ascending = ascending;
 
   m_lc_files->SortItems(compare_playlist_file_cptrs, reinterpret_cast<long>(&info));
+  if (m_sorted_by_column != column)
+    set_column_image(m_sorted_by_column, -1);
+  set_column_image(column, ascending ? 0 : 1);
 
   m_sorted_by_column = column;
   m_sorted_ascending = ascending;
+}
+
+void
+select_scanned_file_dlg::set_column_image(size_t column,
+                                          int image) {
+  auto item = wxListItem{};
+  item.SetMask(wxLIST_MASK_IMAGE);
+  item.SetImage(image);
+  m_lc_files->SetColumn(column, item);
 }
 
 IMPLEMENT_CLASS(select_scanned_file_dlg, wxDialog);

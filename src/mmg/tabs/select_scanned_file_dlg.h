@@ -16,6 +16,7 @@
 
 #include "common/common_pch.h"
 
+#include <wx/imaglist.h>
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/listctrl.h>
@@ -33,6 +34,7 @@ class select_scanned_file_dlg : public wxDialog {
 protected:
   wxStaticText* m_st_duration,  *m_st_size, *m_st_chapters;
   wxListCtrl *m_lc_files, *m_lc_tracks, *m_lc_items;
+  wxImageList m_sort_arrows;
 
   std::vector<playlist_file_cptr> m_playlists;
   int m_selected_playlist_idx;
@@ -55,6 +57,7 @@ public:
   void update_info();
 
   void sort_by(size_t column, bool ascending);
+  void set_column_image(size_t column, int image);
 
   int get_selected_playlist_idx() const;
 };
