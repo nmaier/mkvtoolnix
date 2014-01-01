@@ -92,26 +92,16 @@ select_scanned_file_dlg::select_scanned_file_dlg(wxWindow *parent,
 	b_add->SetDefault();
 
   // list controls
-  wxListItem item;
+  m_lc_files->InsertColumn(0, Z("File name"));
+  m_lc_files->InsertColumn(1, Z("Duration"), wxLIST_FORMAT_RIGHT);
+  m_lc_files->InsertColumn(2, Z("Size"), wxLIST_FORMAT_RIGHT);
 
-  item.SetText(Z("File name"));
-  m_lc_files->InsertColumn(0, item);
-  item.SetText(Z("Duration"));
-  m_lc_files->InsertColumn(1, item);
-  item.SetText(Z("Size"));
-  m_lc_files->InsertColumn(2, item);
+  m_lc_tracks->InsertColumn(0, Z("Type"));
+  m_lc_tracks->InsertColumn(1, Z("Codec"));
+  m_lc_tracks->InsertColumn(2, Z("Language"));
 
-  item.SetText(Z("Type"));
-  m_lc_tracks->InsertColumn(0, item);
-  item.SetText(Z("Codec"));
-  m_lc_tracks->InsertColumn(1, item);
-  item.SetText(Z("Language"));
-  m_lc_tracks->InsertColumn(2, item);
-
-  item.SetText(Z("File name"));
-  m_lc_items->InsertColumn(0, item);
-  item.SetText(Z("Directory"));
-  m_lc_items->InsertColumn(1, item);
+  m_lc_items->InsertColumn(0, Z("File name"));
+  m_lc_items->InsertColumn(1, Z("Directory"));
 
   m_sort_arrows.Add(wx_get_png(sort_ascending));
   m_sort_arrows.Add(wx_get_png(sort_descending));
