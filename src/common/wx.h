@@ -136,6 +136,15 @@ operator <<(std::ostream &out,
 
 // PNG or icon loading
 
+#define wx_get_png(X) wx_get_bitmap_from_memory_impl(X ## _png_bin, sizeof(X ## _png_bin))
+
+inline wxBitmap
+wx_get_bitmap_from_memory_impl(void const *data,
+                               size_t length) {
+  wxMemoryInputStream is(data, length);
+  return wxBitmap{ wxImage{is, wxBITMAP_TYPE_ANY, -1}, -1 };
+}
+
 #if defined(SYS_WINDOWS)
 
 # define wx_get_png_or_icon(X) wxIcon(wxT(#X))
@@ -147,9 +156,8 @@ operator <<(std::ostream &out,
 inline wxIcon
 wx_get_icon_from_memory_impl(unsigned char const *data,
                              unsigned int length) {
-  wxMemoryInputStream is(data, length);
   wxIcon icon;
-  icon.CopyFromBitmap(wxBitmap(wxImage(is, wxBITMAP_TYPE_ANY, -1), -1));
+  icon.CopyFromBitmap(wx_get_bitmap_from_memory_impl(data, length));
   return icon;
 }
 

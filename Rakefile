@@ -200,7 +200,8 @@ rule '.o' => '.rc' do |t|
 end
 
 rule '.h' => '.png' do |t|
-  runq "   BIN2H #{t.source}", "#{c(:top_srcdir)}/rake.d/bin/bin2h.rb #{t.source} #{t.name}"
+  puts "   BIN2H #{t.source}" if !ENV['V'].to_bool
+  bin2h t.source, t.name
 end
 
 # Resources depend on the manifest.xml file for Windows builds.
@@ -547,6 +548,7 @@ task :clean do
   patterns = %w{
     src/**/*.o lib/**/*.o src/**/*.a lib/**/*.a src/**/*.gch
     src/**/*.exe src/**/*.dll src/**/*.dll.a
+    share/icons/*x*/*.h
     src/info/ui/*.h src/mkvtoolnix-gui/forms/*.h src/**/*.moc src/**/*.moco src/mkvtoolnix-gui/qt_resources.cpp
     tests/unit/**/*.o tests/unit/**/*.a tests/unit/all
     po/*.mo doc/guide/**/*.hhk
@@ -726,6 +728,8 @@ if c?(:USE_WXWIDGETS)
     sources("src/mmg", "src/mmg/header_editor", "src/mmg/options", "src/mmg/tabs", :type => :dir).
     sources("src/mmg/resources.o", :if => c?(:MINGW)).
     png_icon("share/icons/64x64/mkvmergeGUI.png").
+    png_icon("share/icons/16x16/sort_ascending.png").
+    png_icon("share/icons/16x16/sort_descending.png").
     libraries($common_libs, :wxwidgets).
     libraries(:ole32, :shell32, "-mwindows", :if => c?(:MINGW)).
     create
