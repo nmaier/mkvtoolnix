@@ -1,5 +1,8 @@
 2014-01-01  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mkvmerge: bug fix: Fixed reading uncompressed PCM audio tracks
+        from QuickTime/MP4 files in certain situations. Fixes #950.
+
         * mmg: enhancement: Made the »scanned files« list box sortable by
         all columns. Fixes #954.
 
