@@ -112,9 +112,19 @@ select_scanned_file_dlg::select_scanned_file_dlg(wxWindow *parent,
   long idx = 0;
   for (auto &playlist : m_playlists) {
     auto id = m_lc_files->InsertItem(idx, wxFileName{playlist->file_name}.GetFullName());
-    m_lc_files->SetItem(id, 1, wxU(format_timecode(playlist->duration, 0)));
-    m_lc_files->SetItem(id, 2, wxU(format_file_size(playlist->size)));
     m_lc_files->SetItemData(id, idx);
+
+    auto item = wxListItem{};
+    item.SetId(id);
+    item.SetColumn(1);
+    item.SetText(wxU(format_timecode(playlist->duration, 0)));
+    item.SetAlign(wxLIST_FORMAT_RIGHT);
+    item.SetMask(wxLIST_MASK_TEXT | wxLIST_MASK_FORMAT);
+    m_lc_files->SetItem(item);
+
+    item.SetColumn(2);
+    item.SetText(wxU(format_file_size(playlist->size)));
+    m_lc_files->SetItem(item);
 
     if (orig_file_name == playlist->file_name) {
       m_lc_files->SetItemState(id, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
