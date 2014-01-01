@@ -29,7 +29,7 @@ struct compare_playlist_file_info_t {
   bool ascending;
 };
 
-int
+int wxCALLBACK
 compare_playlist_file_cptrs(wxIntPtr a_idx,
                             wxIntPtr b_idx,
                             wxIntPtr sort_data) {
@@ -275,10 +275,7 @@ select_scanned_file_dlg::on_column_clicked(wxListEvent &evt) {
 void
 select_scanned_file_dlg::sort_by(size_t column,
                                  bool ascending) {
-  auto info      = compare_playlist_file_info_t{};
-  info.playlists = &m_playlists;
-  info.column    = column;
-  info.ascending = ascending;
+  auto info = compare_playlist_file_info_t{ &m_playlists, column, ascending };
 
   m_lc_files->SortItems(compare_playlist_file_cptrs, reinterpret_cast<long>(&info));
   if (m_sorted_by_column != column)
