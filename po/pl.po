@@ -846,9 +846,12 @@ msgstr[2] "%1% minut"
 
 #: src/mmg/tabs/scanning_for_playlists_dlg.cpp:41
 #: src/mmg/tabs/scanning_for_playlists_dlg.cpp:148
-#, boost-format
-msgid "%1% of %2% file(s) processed"
-msgstr "%1% z %2% plików wykonano"
+#, fuzzy, boost-format
+msgid "%1% of %2% file processed"
+msgid_plural "%1% of %2% files processed"
+msgstr[0] "%1% z %2% plików wykonano"
+msgstr[1] "%1% z %2% plików wykonano"
+msgstr[2] "%1% z %2% plików wykonano"
 
 #: src/common/strings/formatting.cpp:249
 #, boost-format
@@ -1023,7 +1026,7 @@ msgstr "&Kopiuj do schowka"
 msgid "&Disable"
 msgstr "&Rezygnuj"
 
-#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:46
+#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:50
 msgid "&Don't scan, just add the file"
 msgstr "&Nie skanuj, tylko dodaj plik"
 
@@ -1150,7 +1153,7 @@ msgstr "&Zapisz info do pliku\tCtrl-S"
 msgid "&Save settings\tCtrl-S"
 msgstr "&Zapisz ustawienia\tCtrl-S"
 
-#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:45
+#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:49
 msgid "&Scan for other playlists"
 msgstr "&Skanuj folder aby odnaleźć inne listy odtwarzania"
 
@@ -1365,8 +1368,8 @@ msgstr "\"%1%\" nie posiada ID ścieżki.\n"
 #: src/merge/mkvmerge.cpp:2142
 #: src/merge/mkvmerge.cpp:2149
 #: src/merge/mkvmerge.cpp:2156
-#, boost-format
-msgid "'%1%' lacks the track number(s).\n"
+#, fuzzy, boost-format
+msgid "'%1%' lacks the track numbers.\n"
 msgstr "\"%1%\" nie posiada numeru ścieżki(ek).\n"
 
 #: src/common/output.cpp:157
@@ -3232,7 +3235,8 @@ msgid "Delete one or more attachments"
 msgstr "Usuń jeden lub więcej załączników"
 
 #: src/mmg/jobs.cpp:497
-msgid "Delete the selected job(s) from the job queue"
+#, fuzzy
+msgid "Delete the selected jobs from the job queue"
 msgstr "Usuń zaznaczone zadanie/a z kolejki"
 
 #: src/mmg/jobs.cpp:451
@@ -3269,7 +3273,8 @@ msgid "Directory:"
 msgstr "Ścieżka:"
 
 #: src/mmg/jobs.cpp:492
-msgid "Disable the selected job(s) and sets their status to 'done'"
+#, fuzzy
+msgid "Disable the selected jobs and set their status to 'done'"
 msgstr "Zrezygnuj z zaznaczonych zadań i ustaw ich status jako \"zrobione\""
 
 #: src/mmg/cli_options_dlg.cpp:141
@@ -5026,11 +5031,13 @@ msgid "More than one track with the track number %1% found.\n"
 msgstr "Więcej niż jedna ścieżka została wykryta z numerem ścieżki %1%.\n"
 
 #: src/mmg/jobs.cpp:484
-msgid "Move the selected job(s) down"
+#, fuzzy
+msgid "Move the selected jobs down"
 msgstr "Przesuń zaznaczone zadanie/a w dół"
 
 #: src/mmg/jobs.cpp:481
-msgid "Move the selected job(s) up"
+#, fuzzy
+msgid "Move the selected jobs up"
 msgstr "Przesuń zaznaczone zadanie/a do góry"
 
 #: src/info/mkvinfo.cpp:493
@@ -5472,13 +5479,14 @@ msgstr "Wyjściowa częstotliwość próbkowania: %1%"
 msgid "Output:"
 msgstr "Wyjście:"
 
-#: src/mmg/mmg_dialog.cpp:575
-msgid "Overwrite existing file(s)?"
-msgstr "Nadpisać istniejący plik/i?"
-
 #: src/mmg/mmg_dialog.cpp:556
 #: src/mmg/mmg_dialog.cpp:1433
 msgid "Overwrite existing file?"
+msgstr "Nadpisać istniejący plik?"
+
+#: src/mmg/mmg_dialog.cpp:575
+#, fuzzy
+msgid "Overwrite existing files?"
 msgstr "Nadpisać istniejący plik?"
 
 #: src/output/p_pcm.h:46
@@ -5811,7 +5819,8 @@ msgid "RSA"
 msgstr ""
 
 #: src/mmg/jobs.cpp:489
-msgid "Re-enable the selected job(s)"
+#, fuzzy
+msgid "Re-enable the selected jobs"
 msgstr "Wykonaj ponownie zaznaczone zadanie/a"
 
 #: src/merge/output_control.cpp:964
@@ -6535,7 +6544,8 @@ msgid "Start the jobs whose status is 'pending'"
 msgstr "Rozpocznij zadanie/a, o statusie \"przygotowane\""
 
 #: src/mmg/jobs.cpp:520
-msgid "Start the selected job(s) regardless of their status"
+#, fuzzy
+msgid "Start the selected jobs regardless of their status"
 msgstr "Rozpocznij zaznaczone zadanie/a niezależnie od statusu"
 
 #: src/mmg/mmg_dialog.cpp:288
@@ -6982,6 +6992,14 @@ msgstr ""
 msgid "The difference between tags associated with a track and global tags is explained in mkvmerge's documentation. In short: global tags apply to the complete file while the tags you can add on the 'input' tab apply to only one track."
 msgstr "Różnica pomiędzy tagami dla ścieżki a tagami globalnymi jest wyjaśniona w dokumentacji mkvmerge. W skrócie: tagi globalne służą opisaniu pliku jako całości, podczas gdy tagi na zakładce \"wejście\" służą opisaniu tylko jednej ścieżki."
 
+#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:30
+#, boost-format
+msgid "The directory it is located in contains %1% other file with the same extension."
+msgid_plural "The directory it is located in contains %1% other files with the same extension."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
 #: src/merge/connection_checks.h:49
 msgid "The display height of the two tracks is different: %1% and %2%"
 msgstr "Ścieżki różnią się wysokością wyświetlania: %1% oraz %2%"
@@ -7192,9 +7210,9 @@ msgid "The file you tried to save to is a Matroska file. For this to work you ha
 msgstr "Plik, do którego próbujesz zapisać jest plikiem Matroski. Aby poprawnie wykonać operację, musisz użyć \"Zapisz do pliku Matroski\" z menu."
 
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:29
-#, boost-format
-msgid "The file you've added is a playlist. The directory it is located in contains %1% other file(s) with the same extension. mmg can scan these files, present the results including duration and number of tracks of each playlist found and let you chose which one to add."
-msgstr "Plik który dodałeś jest listą odtwarzania. Folder w którym się ona znajduje zawiera %1% innych plików z takim samym rozszerzeniem. Mmg może te pliki zeskanować, pokazać wynik skanowania włączając w to czas trwania i liczbę ścieżek każdej listy odtwarzania oraz pozwolić Ci na to którą wybrać."
+#, fuzzy
+msgid "The file you've added is a playlist."
+msgstr "Nagłówek pliku jest zbyt krótki.\n"
 
 #: src/common/kax_file.cpp:48
 #, boost-format
@@ -8402,7 +8420,8 @@ msgid "Video track %u"
 msgstr "Ścieżka wideo %u"
 
 #: src/mmg/jobs.cpp:502
-msgid "View the output that mkvmerge generated during the muxing process for the selected job(s)"
+#, fuzzy
+msgid "View the output that mkvmerge generated during the muxing process for the selected jobs"
 msgstr "Zobacz dziennik zdarzeń jaki generuje mkvmerge podczas procesu muksowania zaznaczonych zadań"
 
 #: src/input/r_vobbtn.h:36
@@ -8472,7 +8491,7 @@ msgstr "Ostrzeżenia:"
 msgid "WebM audio/video files"
 msgstr "WebM - pliki audio/wideo"
 
-#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:34
+#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:38
 msgid "What to do in the future:"
 msgstr "Co robić w przyszłości:"
 
@@ -8620,13 +8639,13 @@ msgstr "zawsze"
 
 #: src/mmg/options/mmg.cpp:127
 #: src/mmg/options/mmg.cpp:131
-#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:37
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:41
+#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:45
 msgid "always ask the user"
 msgstr "pytaj zawsze użytkownika"
 
 #: src/mmg/options/mmg.cpp:128
-#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:38
+#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:42
 msgid "always scan for other playlists"
 msgstr "zawsze skanuj w poszukiwaniu innych list odtwarzania"
 
@@ -9242,6 +9261,11 @@ msgstr "mm_text_io_c: UTF32_* nie jest w tej chwili obsługiwany.\n"
 msgid "mmg"
 msgstr "Mmg"
 
+#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:34
+#, fuzzy
+msgid "mmg can scan these files, present the results including duration and number of tracks of each playlist found and let you chose which one to add."
+msgstr "Plik który dodałeś jest listą odtwarzania. Folder w którym się ona znajduje zawiera %1% innych plików z takim samym rozszerzeniem. Mmg może te pliki zeskanować, pokazać wynik skanowania włączając w to czas trwania i liczbę ścieżek każdej listy odtwarzania oraz pozwolić Ci na to którą wybrać."
+
 #: src/mmg/mmg_dialog.cpp:286
 msgid "mmg debug output"
 msgstr "wyjście debugowania mmg"
@@ -9269,7 +9293,7 @@ msgid "mpeg_ps_reader: Should not have happened #2. %1%"
 msgstr "mpeg_ps_reader: To nie powinno było się zdarzyć #2. %1%"
 
 #: src/mmg/options/mmg.cpp:129
-#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:39
+#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:43
 msgid "never scan for other playlists"
 msgstr "nigdy nie skanuj w poszukiwaniu innych list odtwarzania"
 
@@ -9628,6 +9652,9 @@ msgstr "tak"
 
 #~ msgid "Muxing took 1 second.\n"
 #~ msgstr "Muksowanie trwało 1 sekundę.\n"
+
+#~ msgid "Overwrite existing file(s)?"
+#~ msgstr "Nadpisać istniejący plik/i?"
 
 #~ msgid "Sets the priority that mkvmerge will run with."
 #~ msgstr "Ustaw priorytet dla procesu mkvmerge."

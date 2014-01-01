@@ -853,9 +853,10 @@ msgstr[0] "%1%分"
 
 #: src/mmg/tabs/scanning_for_playlists_dlg.cpp:41
 #: src/mmg/tabs/scanning_for_playlists_dlg.cpp:148
-#, boost-format
-msgid "%1% of %2% file(s) processed"
-msgstr "%2%個のファイル中%1%個が処理されました"
+#, fuzzy, boost-format
+msgid "%1% of %2% file processed"
+msgid_plural "%1% of %2% files processed"
+msgstr[0] "%2%個のファイル中%1%個が処理されました"
 
 #: src/common/strings/formatting.cpp:249
 #, boost-format
@@ -1028,7 +1029,7 @@ msgstr "クリップボードにコピー(&C)"
 msgid "&Disable"
 msgstr "無効化(&D)"
 
-#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:46
+#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:50
 msgid "&Don't scan, just add the file"
 msgstr "スキャンせず、ファイルの追加のみ行う(&D)"
 
@@ -1155,7 +1156,7 @@ msgstr "情報をテキストとして保存(&S)\tCtrl-S"
 msgid "&Save settings\tCtrl-S"
 msgstr "設定を保存(&S)\tCtrl-S"
 
-#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:45
+#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:49
 msgid "&Scan for other playlists"
 msgstr "他のプレイリストがないかスキャンします(&S)"
 
@@ -1370,8 +1371,8 @@ msgstr "'%1%'にトラックIDが指定されていません。\n"
 #: src/merge/mkvmerge.cpp:2142
 #: src/merge/mkvmerge.cpp:2149
 #: src/merge/mkvmerge.cpp:2156
-#, boost-format
-msgid "'%1%' lacks the track number(s).\n"
+#, fuzzy, boost-format
+msgid "'%1%' lacks the track numbers.\n"
 msgstr "'%1%'にトラック番号が指定されていません。\n"
 
 #: src/common/output.cpp:157
@@ -3230,7 +3231,8 @@ msgid "Delete one or more attachments"
 msgstr "1つまたは複数の添付ファイルを削除します。"
 
 #: src/mmg/jobs.cpp:497
-msgid "Delete the selected job(s) from the job queue"
+#, fuzzy
+msgid "Delete the selected jobs from the job queue"
 msgstr "ジョブキューから選択したジョブを削除します"
 
 #: src/mmg/jobs.cpp:451
@@ -3267,7 +3269,8 @@ msgid "Directory:"
 msgstr "ディレクトリ"
 
 #: src/mmg/jobs.cpp:492
-msgid "Disable the selected job(s) and sets their status to 'done'"
+#, fuzzy
+msgid "Disable the selected jobs and set their status to 'done'"
 msgstr "選択したジョブを無効化し、そのステータスを'終了'にします。"
 
 #: src/mmg/cli_options_dlg.cpp:141
@@ -5028,11 +5031,13 @@ msgid "More than one track with the track number %1% found.\n"
 msgstr "トラック番号%1%のトラックが複数見つかりました。\n"
 
 #: src/mmg/jobs.cpp:484
-msgid "Move the selected job(s) down"
+#, fuzzy
+msgid "Move the selected jobs down"
 msgstr "選択したジョブを下に移動します"
 
 #: src/mmg/jobs.cpp:481
-msgid "Move the selected job(s) up"
+#, fuzzy
+msgid "Move the selected jobs up"
 msgstr "選択したジョブを上に移動します"
 
 #: src/info/mkvinfo.cpp:493
@@ -5474,13 +5479,14 @@ msgstr "出力サンプル周波数：%1%"
 msgid "Output:"
 msgstr "出力："
 
-#: src/mmg/mmg_dialog.cpp:575
-msgid "Overwrite existing file(s)?"
-msgstr "既存のファイルに上書きしますか？"
-
 #: src/mmg/mmg_dialog.cpp:556
 #: src/mmg/mmg_dialog.cpp:1433
 msgid "Overwrite existing file?"
+msgstr "既存のファイルに上書きしますか？"
+
+#: src/mmg/mmg_dialog.cpp:575
+#, fuzzy
+msgid "Overwrite existing files?"
 msgstr "既存のファイルに上書きしますか？"
 
 #: src/output/p_pcm.h:46
@@ -5813,7 +5819,8 @@ msgid "RSA"
 msgstr "RSA"
 
 #: src/mmg/jobs.cpp:489
-msgid "Re-enable the selected job(s)"
+#, fuzzy
+msgid "Re-enable the selected jobs"
 msgstr "選択したジョブを再有効化します"
 
 #: src/merge/output_control.cpp:964
@@ -6538,7 +6545,8 @@ msgid "Start the jobs whose status is 'pending'"
 msgstr "ステータスが'未処理'のジョブを開始します"
 
 #: src/mmg/jobs.cpp:520
-msgid "Start the selected job(s) regardless of their status"
+#, fuzzy
+msgid "Start the selected jobs regardless of their status"
 msgstr "ステータスが何であろうと関係なく選択したジョブを開始します"
 
 #: src/mmg/mmg_dialog.cpp:288
@@ -6986,6 +6994,12 @@ msgstr ""
 msgid "The difference between tags associated with a track and global tags is explained in mkvmerge's documentation. In short: global tags apply to the complete file while the tags you can add on the 'input' tab apply to only one track."
 msgstr "トラックのタグとグローバルタグの違いはmkvmergeのドキュメントで説明されています。手短に説明すると、'入力'タブで追加できるタグは1つのトラックのみに適用されるのに対し、グローバルタグはファイル全体に適用されます。"
 
+#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:30
+#, boost-format
+msgid "The directory it is located in contains %1% other file with the same extension."
+msgid_plural "The directory it is located in contains %1% other files with the same extension."
+msgstr[0] ""
+
 #: src/merge/connection_checks.h:49
 msgid "The display height of the two tracks is different: %1% and %2%"
 msgstr "2つのトラック間で縦解像度が異なっています：%1%と%2%"
@@ -7197,9 +7211,9 @@ msgid "The file you tried to save to is a Matroska file. For this to work you ha
 msgstr "チャプタを保存しようとしたファイルはMatroskaファイルです。このファイルに保存するには'Matroskaファイルに保存'メニューオプションを使用してください。"
 
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:29
-#, boost-format
-msgid "The file you've added is a playlist. The directory it is located in contains %1% other file(s) with the same extension. mmg can scan these files, present the results including duration and number of tracks of each playlist found and let you chose which one to add."
-msgstr "追加されたファイルはプレイリストです。このファイルがあるディレクトリには、同じ拡張子のファイルが他に%1%個あります。mmgはこれらのファイルをスキャンして、見つかった各プレイリストの継続時間とトラック数の結果を表示し、どれを追加するのか選択できるようにすることができます。"
+#, fuzzy
+msgid "The file you've added is a playlist."
+msgstr "ファイルヘッダが短かすぎます。\n"
 
 #: src/common/kax_file.cpp:48
 #, boost-format
@@ -8400,7 +8414,8 @@ msgid "Video track %u"
 msgstr "ビデオトラック%u"
 
 #: src/mmg/jobs.cpp:502
-msgid "View the output that mkvmerge generated during the muxing process for the selected job(s)"
+#, fuzzy
+msgid "View the output that mkvmerge generated during the muxing process for the selected jobs"
 msgstr "選択したジョブをMUX処理中のmkvmergeの出力を見ます"
 
 #: src/input/r_vobbtn.h:36
@@ -8470,7 +8485,7 @@ msgstr "警告： "
 msgid "WebM audio/video files"
 msgstr "WebMオーディオ/ビデオファイル"
 
-#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:34
+#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:38
 msgid "What to do in the future:"
 msgstr "今後はどうしますか："
 
@@ -8617,13 +8632,13 @@ msgstr "いつでも"
 
 #: src/mmg/options/mmg.cpp:127
 #: src/mmg/options/mmg.cpp:131
-#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:37
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:41
+#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:45
 msgid "always ask the user"
 msgstr "常にユーザーに尋ねる"
 
 #: src/mmg/options/mmg.cpp:128
-#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:38
+#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:42
 msgid "always scan for other playlists"
 msgstr "常に他のプレイリストがないかスキャンする"
 
@@ -9241,6 +9256,11 @@ msgstr "mm_text_io_c：UTF32_*は現在サポートされていません。\n"
 msgid "mmg"
 msgstr "mmg"
 
+#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:34
+#, fuzzy
+msgid "mmg can scan these files, present the results including duration and number of tracks of each playlist found and let you chose which one to add."
+msgstr "追加されたファイルはプレイリストです。このファイルがあるディレクトリには、同じ拡張子のファイルが他に%1%個あります。mmgはこれらのファイルをスキャンして、見つかった各プレイリストの継続時間とトラック数の結果を表示し、どれを追加するのか選択できるようにすることができます。"
+
 #: src/mmg/mmg_dialog.cpp:286
 msgid "mmg debug output"
 msgstr "mmgデバッグ出力"
@@ -9268,7 +9288,7 @@ msgid "mpeg_ps_reader: Should not have happened #2. %1%"
 msgstr "mpeg_ps_reader：発生するべきではありません #2。%1%"
 
 #: src/mmg/options/mmg.cpp:129
-#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:39
+#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:43
 msgid "never scan for other playlists"
 msgstr "常に他のプレイリストがないかスキャンしない"
 
@@ -9811,6 +9831,9 @@ msgstr "はい"
 
 #~ msgid "Note"
 #~ msgstr "注意"
+
+#~ msgid "Overwrite existing file(s)?"
+#~ msgstr "既存のファイルに上書きしますか？"
 
 #~ msgid "Quicktime/MP4 audio and video"
 #~ msgstr "Quicktime/MP4オーディオとビデオ"

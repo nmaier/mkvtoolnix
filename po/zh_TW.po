@@ -838,9 +838,11 @@ msgstr[1] "%1% 分鐘"
 
 #: src/mmg/tabs/scanning_for_playlists_dlg.cpp:41
 #: src/mmg/tabs/scanning_for_playlists_dlg.cpp:148
-#, boost-format
-msgid "%1% of %2% file(s) processed"
-msgstr "總共 %2% 個檔案，已處理 %1% 個"
+#, fuzzy, boost-format
+msgid "%1% of %2% file processed"
+msgid_plural "%1% of %2% files processed"
+msgstr[0] "總共 %2% 個檔案，已處理 %1% 個"
+msgstr[1] "總共 %2% 個檔案，已處理 %1% 個"
 
 #: src/common/strings/formatting.cpp:249
 #, boost-format
@@ -1014,7 +1016,7 @@ msgstr "複製命令列(&C)"
 msgid "&Disable"
 msgstr "停用(&D)"
 
-#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:46
+#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:50
 msgid "&Don't scan, just add the file"
 msgstr "不掃描直接加入此檔案(&D)"
 
@@ -1141,7 +1143,7 @@ msgstr "另存資訊為純文字檔(&S)\tCtrl-S"
 msgid "&Save settings\tCtrl-S"
 msgstr "儲存設定檔(&S)\tCtrl-S"
 
-#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:45
+#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:49
 msgid "&Scan for other playlists"
 msgstr "掃描其他播放清單(&S)"
 
@@ -1356,8 +1358,8 @@ msgstr "「%1%」缺少軌道 ID。\n"
 #: src/merge/mkvmerge.cpp:2142
 #: src/merge/mkvmerge.cpp:2149
 #: src/merge/mkvmerge.cpp:2156
-#, boost-format
-msgid "'%1%' lacks the track number(s).\n"
+#, fuzzy, boost-format
+msgid "'%1%' lacks the track numbers.\n"
 msgstr "「%1%」缺少軌道編號。\n"
 
 #: src/common/output.cpp:157
@@ -3218,7 +3220,8 @@ msgid "Delete one or more attachments"
 msgstr "刪除一個或多個附件"
 
 #: src/mmg/jobs.cpp:497
-msgid "Delete the selected job(s) from the job queue"
+#, fuzzy
+msgid "Delete the selected jobs from the job queue"
 msgstr "從任務佇列中刪除所選任務"
 
 #: src/mmg/jobs.cpp:451
@@ -3255,7 +3258,8 @@ msgid "Directory:"
 msgstr "目錄:"
 
 #: src/mmg/jobs.cpp:492
-msgid "Disable the selected job(s) and sets their status to 'done'"
+#, fuzzy
+msgid "Disable the selected jobs and set their status to 'done'"
 msgstr "停用選中的任務並設定其狀態為“完成”"
 
 #: src/mmg/cli_options_dlg.cpp:141
@@ -5014,11 +5018,13 @@ msgid "More than one track with the track number %1% found.\n"
 msgstr "軌道編號為 %1% 的軌道多於一條。\n"
 
 #: src/mmg/jobs.cpp:484
-msgid "Move the selected job(s) down"
+#, fuzzy
+msgid "Move the selected jobs down"
 msgstr "將所選任務下移"
 
 #: src/mmg/jobs.cpp:481
-msgid "Move the selected job(s) up"
+#, fuzzy
+msgid "Move the selected jobs up"
 msgstr "將所選任務上移"
 
 #: src/info/mkvinfo.cpp:493
@@ -5460,13 +5466,14 @@ msgstr "輸出取樣頻率: %1%"
 msgid "Output:"
 msgstr "輸出:"
 
-#: src/mmg/mmg_dialog.cpp:575
-msgid "Overwrite existing file(s)?"
-msgstr "覆寫已存在的檔案?"
-
 #: src/mmg/mmg_dialog.cpp:556
 #: src/mmg/mmg_dialog.cpp:1433
 msgid "Overwrite existing file?"
+msgstr "覆寫已存在的檔案?"
+
+#: src/mmg/mmg_dialog.cpp:575
+#, fuzzy
+msgid "Overwrite existing files?"
 msgstr "覆寫已存在的檔案?"
 
 #: src/output/p_pcm.h:46
@@ -5799,7 +5806,8 @@ msgid "RSA"
 msgstr "RSA"
 
 #: src/mmg/jobs.cpp:489
-msgid "Re-enable the selected job(s)"
+#, fuzzy
+msgid "Re-enable the selected jobs"
 msgstr "重新啟用所選任務"
 
 #: src/merge/output_control.cpp:964
@@ -6523,7 +6531,8 @@ msgid "Start the jobs whose status is 'pending'"
 msgstr "啟動狀態為“掛起”的任務"
 
 #: src/mmg/jobs.cpp:520
-msgid "Start the selected job(s) regardless of their status"
+#, fuzzy
+msgid "Start the selected jobs regardless of their status"
 msgstr "啟動選擇的任務（不論其狀態如何）"
 
 #: src/mmg/mmg_dialog.cpp:288
@@ -6971,6 +6980,13 @@ msgstr ""
 msgid "The difference between tags associated with a track and global tags is explained in mkvmerge's documentation. In short: global tags apply to the complete file while the tags you can add on the 'input' tab apply to only one track."
 msgstr "關於關聯至軌道的標籤與整體標籤的區別已在 mkvmerge 文件檔中作出解釋。簡而言之: 整體標籤應用於整個檔案，而您能在「輸入」選項分頁中添加的標籤僅能應用於單個軌道。"
 
+#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:30
+#, boost-format
+msgid "The directory it is located in contains %1% other file with the same extension."
+msgid_plural "The directory it is located in contains %1% other files with the same extension."
+msgstr[0] ""
+msgstr[1] ""
+
 #: src/merge/connection_checks.h:49
 msgid "The display height of the two tracks is different: %1% and %2%"
 msgstr "兩軌的顯示高度不同: %1% 與 %2%"
@@ -7181,9 +7197,9 @@ msgid "The file you tried to save to is a Matroska file. For this to work you ha
 msgstr "您試著儲存至的檔案是個 Matroska 檔。要這樣做的話，您應該使用“儲存至 Matroska 檔”功能表項目。"
 
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:29
-#, boost-format
-msgid "The file you've added is a playlist. The directory it is located in contains %1% other file(s) with the same extension. mmg can scan these files, present the results including duration and number of tracks of each playlist found and let you chose which one to add."
-msgstr "你加入的檔案為播放清單。該檔案放置的目錄含有 %1% 其他相同副檔名的檔案。mmg 可以掃描這些檔案，現在結果包含找到的播放清單軌道編號和時間長度並讓你選擇其中一項加入。"
+#, fuzzy
+msgid "The file you've added is a playlist."
+msgstr "檔頭太短。\n"
 
 #: src/common/kax_file.cpp:48
 #, boost-format
@@ -8387,7 +8403,8 @@ msgid "Video track %u"
 msgstr "視訊軌 %u"
 
 #: src/mmg/jobs.cpp:502
-msgid "View the output that mkvmerge generated during the muxing process for the selected job(s)"
+#, fuzzy
+msgid "View the output that mkvmerge generated during the muxing process for the selected jobs"
 msgstr "查看 mkvmerge 處理選中任務時的輸出資訊"
 
 #: src/input/r_vobbtn.h:36
@@ -8457,7 +8474,7 @@ msgstr "警告:"
 msgid "WebM audio/video files"
 msgstr "WebM 音訊/視訊檔"
 
-#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:34
+#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:38
 msgid "What to do in the future:"
 msgstr "接下來要做什麼:"
 
@@ -8604,13 +8621,13 @@ msgstr "永遠"
 
 #: src/mmg/options/mmg.cpp:127
 #: src/mmg/options/mmg.cpp:131
-#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:37
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:41
+#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:45
 msgid "always ask the user"
 msgstr "總是詢問使用者"
 
 #: src/mmg/options/mmg.cpp:128
-#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:38
+#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:42
 msgid "always scan for other playlists"
 msgstr "總是掃描其他播放清單"
 
@@ -9226,6 +9243,11 @@ msgstr "mm_text_io_c: 目前尚不支援 UTF32_*。\n"
 msgid "mmg"
 msgstr "mmg"
 
+#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:34
+#, fuzzy
+msgid "mmg can scan these files, present the results including duration and number of tracks of each playlist found and let you chose which one to add."
+msgstr "你加入的檔案為播放清單。該檔案放置的目錄含有 %1% 其他相同副檔名的檔案。mmg 可以掃描這些檔案，現在結果包含找到的播放清單軌道編號和時間長度並讓你選擇其中一項加入。"
+
 #: src/mmg/mmg_dialog.cpp:286
 msgid "mmg debug output"
 msgstr "mmg 除錯輸出"
@@ -9253,7 +9275,7 @@ msgid "mpeg_ps_reader: Should not have happened #2. %1%"
 msgstr "mpeg_ps_reader: 不該發生 #2。 %1%"
 
 #: src/mmg/options/mmg.cpp:129
-#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:39
+#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:43
 msgid "never scan for other playlists"
 msgstr "不掃描其他播放清單"
 
@@ -9901,6 +9923,9 @@ msgstr "是"
 
 #~ msgid "Other global options"
 #~ msgstr "其他整體選項"
+
+#~ msgid "Overwrite existing file(s)?"
+#~ msgstr "覆寫已存在的檔案?"
 
 #~ msgid "Quicktime/MP4 audio and video"
 #~ msgstr "Quicktime/MP4 音訊和視訊"
