@@ -896,6 +896,11 @@ qtmp4_reader_c::handle_stsc_atom(qtmp4_demuxer_cptr &new_dmx,
   }
 
   mxdebug_if(m_debug_headers, boost::format("%1%Sample to chunk/chunkmap table: %2% entries\n") % space(level * 2 + 1) % count);
+  if (m_debug_tables) {
+    i = 0;
+    for (auto const &chunkmap : new_dmx->chunkmap_table)
+      mxdebug(boost::format("%1%%2%: first_chunk %3% samples_per_chunk %4% sample_description_id %5%\n") % space((level + 1) * 2 + 1) % i++ % chunkmap.first_chunk % chunkmap.samples_per_chunk % chunkmap.sample_description_id);
+  }
 }
 
 void
@@ -969,6 +974,11 @@ qtmp4_reader_c::handle_stsz_atom(qtmp4_demuxer_cptr &new_dmx,
     }
 
     mxdebug_if(m_debug_headers, boost::format("%1%Sample size table: %2% entries\n") % space(level * 2 + 1) % count);
+    if (m_debug_tables) {
+      auto i = 0u;
+      for (auto const &sample : new_dmx->sample_table)
+        mxdebug(boost::format("%1%%2%: size %3%\n") % space((level + 1) * 2 + 1) % i++ % sample.size);
+    }
 
   } else {
     new_dmx->sample_size = sample_size;
@@ -993,6 +1003,11 @@ qtmp4_reader_c::handle_sttd_atom(qtmp4_demuxer_cptr &new_dmx,
   }
 
   mxdebug_if(m_debug_headers, boost::format("%1%Sample duration table: %2% entries\n") % space(level * 2 + 1) % count);
+  if (m_debug_tables) {
+    i = 0;
+    for (auto const &durmap : new_dmx->durmap_table)
+      mxdebug(boost::format("%1%%2%: number %3% duration %4%\n") % space((level + 1) * 2 + 1) % i++ % durmap.number % durmap.duration);
+  }
 }
 
 void
@@ -1012,6 +1027,11 @@ qtmp4_reader_c::handle_stts_atom(qtmp4_demuxer_cptr &new_dmx,
   }
 
   mxdebug_if(m_debug_headers, boost::format("%1%Sample duration table: %2% entries\n") % space(level * 2 + 1) % count);
+  if (m_debug_tables) {
+    i = 0;
+    for (auto const &durmap : new_dmx->durmap_table)
+      mxdebug(boost::format("%1%%2%: number %3% duration %4%\n") % space((level + 1) * 2 + 1) % i++ % durmap.number % durmap.duration);
+  }
 }
 
 void
@@ -1953,7 +1973,6 @@ qtmp4_demuxer_c::build_index() {
 
 void
 qtmp4_demuxer_c::build_index_constant_sample_size_mode() {
-  mxinfo(boost::format("CONST mode\n"));
   size_t keyframe_table_idx  = 0;
   size_t keyframe_table_size = keyframe_table.size();
 
