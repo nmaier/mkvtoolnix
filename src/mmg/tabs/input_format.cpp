@@ -24,7 +24,6 @@
 #include "common/extern_data.h"
 #include "common/iso639.h"
 #include "common/stereo_mode.h"
-#include "merge/mkvmerge.h"
 #include "mmg/mmg.h"
 #include "mmg/mmg_dialog.h"
 #include "mmg/tabs/input.h"

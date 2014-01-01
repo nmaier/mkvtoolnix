@@ -425,6 +425,9 @@ tab_input::parse_container_line(mmg_file_cptr file,
 
     else if ((pair.size() == 2) && (pair[0] == wxT("previous_segment_uid")))
       previous_segment_uid = unescape(to_utf8(pair[1]));
+
+    else if ((pair.size() == 2) && (pair[0] == wxT("playlist")))
+      file->is_playlist = pair[1] == wxT("1");
   }
 
   if (   (!next_segment_uid.empty() || !previous_segment_uid.empty())
@@ -513,7 +516,7 @@ tab_input::run_mkvmerge_identification(wxString const &file_name,
     const unsigned char utf8_bom[3] = {0xef, 0xbb, 0xbf};
     wxFile opt_file{opt_file_name, wxFile::write};
     opt_file.Write(utf8_bom, 3);
-    opt_file.Write(wxT("--output-charset\nUTF-8\n--identify-for-mmg\n"));
+    opt_file.Write(wxT("--output-charset\nUTF-8\n--identify-for-mmg\n--gui-mode\n"));
     auto arg_utf8 = escape(wxMB(file_name));
     opt_file.Write(arg_utf8.c_str(), arg_utf8.length());
     opt_file.Write(wxT("\n"));
@@ -873,8 +876,11 @@ tab_input::on_additional_parts(wxCommandEvent &) {
   if (0 > selected_file)
     return;
 
-  additional_parts_dialog dlg{this, wxFileName{ files[selected_file]->file_name }, files[selected_file]->other_files};
-  files[selected_file]->other_files = dlg.get_file_names();
+  auto &file = files[selected_file];
+
+  additional_parts_dialog dlg{this, *file};
+  if (!file->is_playlist)
+    file->other_files = dlg.get_file_names();
 }
 
 void

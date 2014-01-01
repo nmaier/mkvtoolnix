@@ -420,7 +420,7 @@ protected:
 
   virtual std::string id_escape_string(const std::string &s);
 
-  virtual mm_multi_file_io_c *get_underlying_input_as_multi_file_io() const;
+  virtual mm_io_c *get_underlying_input() const;
 };
 
 void id_result_container_unsupported(const std::string &filename, const std::string &info);
@@ -473,6 +473,9 @@ protected:
   int64_t m_last_cue_timecode;
 
   bool m_has_been_flushed;
+
+protected:                      // static
+  static int ms_track_number;
 
 public:
   track_info_c m_ti;
@@ -639,6 +642,8 @@ public:
   virtual bool display_dimensions_or_aspect_ratio_set();
 
   virtual bool is_compatible_with(output_compatibility_e compatibility);
+
+  int64_t create_track_number();
 
 protected:
   virtual void flush_impl() {

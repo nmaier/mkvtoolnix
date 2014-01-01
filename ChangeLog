@@ -1,5 +1,15 @@
 2013-12-31  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mmg: enhancement: The »additional parts« dialog will now show
+        the files that make up an MPLS playlist. This is for informational
+        purposes only and doesn't allow changing the playlist itself.
+
+        * mkvmerge: bug fix: Reading from an MPLS playlist file is now
+        done as if the second and following files referenced in that
+        playlist had been appended to the first file from that
+        playlist. Before they were treated as if they were additional
+        parts. Fixes #934.
+
         * mmg: enhancement: a couple of fixes to tooltips: 1. Content
         correction for »splitting by chapters«; 2. no ugly re-formatting
         with wxWidgets 3.0.0 on Windows.

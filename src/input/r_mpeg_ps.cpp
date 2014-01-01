@@ -166,7 +166,7 @@ mpeg_ps_reader_c::read_headers() {
 
   if (verbose) {
     show_demuxer_info();
-    auto multi_in = get_underlying_input_as_multi_file_io();
+    auto multi_in = dynamic_cast<mm_multi_file_io_c *>(get_underlying_input());
     if (multi_in)
       multi_in->display_other_file_info();
   }
@@ -1304,7 +1304,7 @@ void
 mpeg_ps_reader_c::identify() {
   std::vector<std::string> verbose_info;
 
-  auto multi_in = get_underlying_input_as_multi_file_io();
+  auto multi_in = dynamic_cast<mm_multi_file_io_c *>(get_underlying_input());
   if (multi_in)
     multi_in->create_verbose_identification_info(verbose_info);
 

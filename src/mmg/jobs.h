@@ -88,6 +88,7 @@ protected:
 
   int m_progress;
   int64_t m_next_remaining_time_update, m_next_remaining_time_update_total, m_start_time, m_start_time_total;
+  bool m_scanning_playlists;
 
 #if defined(SYS_WINDOWS)
   taskbar_progress_c *m_taskbar_progress;

@@ -61,7 +61,6 @@
 #include "common/xml/ebml_segmentinfo_converter.h"
 #include "common/xml/ebml_tags_converter.h"
 #include "merge/cluster_helper.h"
-#include "merge/mkvmerge.h"
 #include "merge/output_control.h"
 
 using namespace libmatroska;
@@ -294,50 +293,6 @@ print_capabilities() {
 #if defined(HAVE_FLAC_FORMAT_H)
   mxinfo("FLAC\n");
 #endif
-}
-
-int64_t
-create_track_number(generic_reader_c *reader,
-                    int64_t tid) {
-  // Specs say that track numbers should start at 1.
-  static int s_track_number = 1;
-
-  bool found   = false;
-  int file_num = -1;
-  size_t i;
-  for (i = 0; i < g_files.size(); i++)
-    if (g_files[i].reader == reader) {
-      found = true;
-      file_num = i;
-      break;
-    }
-
-  if (!found)
-    mxerror(boost::format(Y("create_track_number: file_num not found. %1%\n")) % BUGMSG);
-
-  int64_t tnum = -1;
-  found        = false;
-  for (i = 0; i < g_track_order.size(); i++)
-    if ((g_track_order[i].file_id == file_num) &&
-        (g_track_order[i].track_id == tid)) {
-      found = true;
-      tnum = i + 1;
-      break;
-    }
-  if (found) {
-    found = false;
-    for (i = 0; i < g_packetizers.size(); i++)
-      if (g_packetizers[i].packetizer && (g_packetizers[i].packetizer->get_track_num() == tnum)) {
-        tnum = s_track_number;
-        break;
-      }
-  } else
-    tnum = s_track_number;
-
-  if (tnum >= s_track_number)
-    s_track_number = tnum + 1;
-
-  return tnum;
 }
 
 static std::string
@@ -1321,11 +1276,7 @@ parse_arg_append_to(const std::string &s) {
         || !parse_number(parts[0], mapping.src_file_id)
         || !parse_number(parts[1], mapping.src_track_id)
         || !parse_number(parts[2], mapping.dst_file_id)
-        || !parse_number(parts[3], mapping.dst_track_id)
-        || (0 > mapping.src_file_id)
-        || (0 > mapping.src_track_id)
-        || (0 > mapping.dst_file_id)
-        || (0 > mapping.dst_track_id))
+        || !parse_number(parts[3], mapping.dst_track_id))
       mxerror(boost::format(Y("'%1%' is not a valid mapping of file and track IDs in '--append-to %2%'.\n")) % entry % s);
 
     g_append_mapping.push_back(mapping);
@@ -1741,6 +1692,7 @@ handle_file_name_arg(const std::string &this_arg,
   filelist_t file;
   file.all_names = file_names;
   file.name      = file_names[0];
+  file.id        = g_files.size();
 
   if (file_names.size() == 1) {
     if ('+' == this_arg[0]) {
@@ -1768,6 +1720,11 @@ handle_file_name_arg(const std::string &this_arg,
   if (FILE_TYPE_IS_UNKNOWN == file.type)
     mxerror(boost::format(Y("The file '%1%' has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and "
                             "contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n")) % file.name);
+
+  if (file.is_playlist) {
+    file.name   = file.playlist_mpls_in->get_file_name();
+    ti->m_fname = file.name;
+  }
 
   if (FILE_TYPE_CHAPTERS != file.type) {
     file.ti = ti;
@@ -2356,6 +2313,125 @@ parse_args(std::vector<std::string> args) {
     mxerror(Y("No input files were given. No output will be created.\n"));
 }
 
+static void
+display_playlist_scan_progress(size_t num_scanned,
+                               size_t total_num_to_scan) {
+  static auto s_no_progress = debugging_option_c{"no_progress"};
+
+  if (s_no_progress)
+    return;
+
+  auto current_percentage = (num_scanned * 1000 + 5) / total_num_to_scan / 10;
+  mxinfo(boost::format(Y("Progress: %1%%%%2%")) % current_percentage % "\r");
+}
+
+static filelist_t
+create_filelist_for_playlist(bfs::path const &file_name,
+                             size_t previous_filelist_id,
+                             size_t current_filelist_id,
+                             size_t idx,
+                             track_info_c const &src_ti) {
+  auto new_filelist                          = filelist_t{};
+  new_filelist.name                          = file_name.string();
+  new_filelist.all_names                     = std::vector<std::string>{ new_filelist.name };
+  new_filelist.size                          = bfs::file_size(file_name);
+  new_filelist.id                            = current_filelist_id;
+  new_filelist.appending                     = true;
+  new_filelist.is_playlist                   = true;
+  new_filelist.playlist_index                = idx;
+  new_filelist.playlist_previous_filelist_id = previous_filelist_id;
+
+  get_file_type(new_filelist);
+
+  if (FILE_TYPE_IS_UNKNOWN == new_filelist.type)
+    mxerror(boost::format(Y("The file '%1%' has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and "
+                            "contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n")) % new_filelist.name);
+
+  new_filelist.ti                       = new track_info_c;
+  new_filelist.ti->m_fname              = new_filelist.name;
+  new_filelist.ti->m_disable_multi_file = true;
+  new_filelist.ti->m_no_chapters        = true;
+  new_filelist.ti->m_no_global_tags     = true;
+  new_filelist.ti->m_atracks            = src_ti.m_atracks;
+  new_filelist.ti->m_vtracks            = src_ti.m_vtracks;
+  new_filelist.ti->m_stracks            = src_ti.m_stracks;
+  new_filelist.ti->m_btracks            = src_ti.m_btracks;
+  new_filelist.ti->m_track_tags         = src_ti.m_track_tags;
+
+  return new_filelist;
+}
+
+static void
+add_filelists_for_playlists() {
+  auto num_playlists = 0u, num_files_in_playlists = 0u;
+
+  for (auto const &filelist : g_files) {
+    if (!filelist.is_playlist)
+      continue;
+
+    num_playlists          += 1;
+    num_files_in_playlists += filelist.playlist_mpls_in->get_file_names().size();
+  }
+
+  if (num_playlists == num_files_in_playlists)
+    return;
+
+  if (g_gui_mode)
+    mxinfo(boost::format("#GUI#begin_scanning_playlists#num_playlists=%1%#num_files_in_playlists=%2%\n") % num_playlists % num_files_in_playlists);
+  mxinfo(boost::format(NY("Scanning %1% files in %2% playlist.\n", "Scanning %1% files in %2% playlists.\n", num_playlists)) % num_files_in_playlists % num_playlists);
+
+  std::vector<filelist_t> new_filelists;
+  auto num_scanned_playlists = 0u;
+
+  display_playlist_scan_progress(0, num_files_in_playlists);
+
+  for (auto filelist = g_files.begin(), filelist_end = g_files.end(); filelist != filelist_end; ++filelist) {
+    if (!filelist->is_playlist)
+      continue;
+
+    auto &file_names          = filelist->playlist_mpls_in->get_file_names();
+    auto previous_filelist_id = filelist->id;
+
+    for (size_t idx = 1, idx_end = file_names.size(); idx < idx_end; ++idx) {
+      auto current_filelist_id = g_files.size() + new_filelists.size();
+      auto new_filelist        = create_filelist_for_playlist(file_names[idx], previous_filelist_id, current_filelist_id, idx, *filelist->ti);
+      new_filelists.push_back(new_filelist);
+
+      previous_filelist_id = new_filelist.id;
+
+      display_playlist_scan_progress(++num_scanned_playlists, num_files_in_playlists);
+    }
+  }
+
+  brng::copy(new_filelists, std::back_inserter(g_files));
+
+  display_playlist_scan_progress(num_files_in_playlists, num_files_in_playlists);
+
+  if (g_gui_mode)
+    mxinfo("#GUI#end_scanning_playlists\n");
+  mxinfo(boost::format(Y("Done scanning playlists.\n")));
+}
+
+static void
+create_append_mappings_for_playlists() {
+  for (auto &src_file : g_files) {
+    if (!src_file.is_playlist || !src_file.playlist_index)
+      continue;
+
+    // Default mapping.
+    for (auto track_id : src_file.reader->m_used_track_ids) {
+      append_spec_t new_amap;
+
+      new_amap.src_file_id  = src_file.id;
+      new_amap.src_track_id = track_id;
+      new_amap.dst_file_id  = src_file.playlist_previous_filelist_id;
+      new_amap.dst_track_id = track_id;
+
+      g_append_mapping.push_back(new_amap);
+    }
+  }
+}
+
 /** \brief Global program initialization
 
    Both platform dependant and independant initialization is done here.
@@ -2397,10 +2473,26 @@ main(int argc,
 
   int64_t start = get_current_time_millis();
 
+  add_filelists_for_playlists();
   create_readers();
 
-  if (g_packetizers.empty() && !g_files.empty())
-    mxerror(Y("No streams to output were found. Aborting.\n"));
+  if (!g_identifying) {
+    create_packetizers();
+    if (g_packetizers.empty() && !g_files.empty())
+      mxerror(Y("No streams to output were found. Aborting.\n"));
+
+    check_track_id_validity();
+    create_append_mappings_for_playlists();
+    check_append_mapping();
+    calc_attachment_sizes();
+    calc_max_chapter_size();
+  }
+
+  // Finally parse the chapter splitting argument.
+  if (!g_splitting_by_chapters_arg.empty())
+    parse_arg_split_chapters(g_splitting_by_chapters_arg);
+
+  g_cluster_helper->dump_split_points();
 
   create_next_output_file();
   main_loop();

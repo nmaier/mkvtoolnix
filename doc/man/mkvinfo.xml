@@ -169,24 +169,38 @@
     </listitem>
    </varlistentry>
 
-    <varlistentry id="mkvinfo.description.debug">
-     <term><option>--debug</option> <parameter>topic</parameter></term>
-     <listitem>
-      <para>
-       Turn on debugging for a specific feature. This option is only useful for developers.
-      </para>
-     </listitem>
-    </varlistentry>
+   <varlistentry id="mkvinfo.description.debug">
+    <term><option>--debug</option> <parameter>topic</parameter></term>
+    <listitem>
+     <para>
+      Turn on debugging for a specific feature. This option is only useful for developers.
+     </para>
+    </listitem>
+   </varlistentry>
 
-    <varlistentry id="mkvinfo.description.engage">
-     <term><option>--engage</option> <parameter>feature</parameter></term>
-     <listitem>
-      <para>
-       Turn on experimental features. A list of available features can be requested with <command>mkvinfo --engage list</command>. These
-       features are not meant to be used in normal situations.
-      </para>
-     </listitem>
-    </varlistentry>
+   <varlistentry id="mkvinfo.description.engage">
+    <term><option>--engage</option> <parameter>feature</parameter></term>
+    <listitem>
+     <para>
+      Turn on experimental features. A list of available features can be requested with <command>mkvinfo --engage list</command>. These
+      features are not meant to be used in normal situations.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvinfo.description.gui_mode">
+    <term><option>--gui-mode</option></term>
+    <listitem>
+     <para>
+      Turns on GUI mode. In this mode specially-formatted lines may be output that can tell a controlling GUI what's happening. These
+      messages follow the format '<literal>#GUI#message</literal>'. The message may be followed by key/value pairs as in
+      '<literal>#GUI#message#key1=value1#key2=value2…</literal>'. Neither the messages nor the keys are ever translated and always output
+      in English.
+     </para>
+
+     <para>This switch has nothing to do with the <option>--gui</option> parameter which causes mkvinfo to display its own GUI.</para>
+    </listitem>
+   </varlistentry>
 
    <varlistentry id="mkvinfo.description.verbose">
     <term><option>-v</option>, <option>--verbose</option></term>

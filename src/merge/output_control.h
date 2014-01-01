@@ -22,8 +22,8 @@
 
 #include "common/bitvalue.h"
 #include "common/file_types.h"
+#include "common/mm_mpls_multi_file_io.h"
 #include "common/segmentinfo.h"
-#include "merge/mkvmerge.h"
 #include "merge/pr_generic.h"
 
 namespace libmatroska {
@@ -46,10 +46,7 @@ class generic_packetizer_c;
 class generic_reader_c;
 
 struct append_spec_t {
-  int64_t src_file_id;
-  int64_t src_track_id;
-  int64_t dst_file_id;
-  int64_t dst_track_id;
+  size_t src_file_id, src_track_id, dst_file_id, dst_track_id;
 };
 
 inline
@@ -67,6 +64,13 @@ bool operator !=(const append_spec_t &a1,
   return !(a1 == a2);
 }
 
+inline std::ostream &
+operator<<(std::ostream &str,
+           append_spec_t const &spec) {
+  str << spec.src_file_id << ":" << spec.src_track_id << ":" << spec.dst_file_id << ":" << spec.dst_track_id;
+  return str;
+}
+
 struct packetizer_t {
   file_status_e status, old_status;
   packet_cptr pack;
@@ -74,11 +78,16 @@ struct packetizer_t {
   int64_t file, orig_file;
   bool deferred;
 
-  packetizer_t():
-    status(FILE_STATUS_MOREDATA), old_status(FILE_STATUS_MOREDATA),
-    packetizer(nullptr), orig_packetizer(nullptr),
-    file(0), orig_file(0),
-    deferred(false) { }
+  packetizer_t()
+    : status{FILE_STATUS_MOREDATA}
+    , old_status{FILE_STATUS_MOREDATA}
+    , packetizer{}
+    , orig_packetizer{}
+    , file{}
+    , orig_file{}
+    , deferred{}
+  {
+  }
 };
 
 struct deferred_connection_t {
@@ -90,6 +99,7 @@ struct filelist_t {
   std::string name;
   std::vector<std::string> all_names;
   int64_t size;
+  size_t id;
 
   file_type_e type;
 
@@ -104,12 +114,28 @@ struct filelist_t {
   std::vector<deferred_connection_t> deferred_connections;
   int64_t deferred_max_timecode_seen;
 
-  filelist_t():
-    size(0), type(FILE_TYPE_IS_UNKNOWN),
-    reader(nullptr),
-    ti(nullptr), appending(false), appended_to(false), done(false),
-    num_unfinished_packetizers(0), old_num_unfinished_packetizers(0),
-    deferred_max_timecode_seen(-1) {}
+  bool is_playlist;
+  std::vector<generic_reader_c *> playlist_readers;
+  size_t playlist_index, playlist_previous_filelist_id;
+  mm_mpls_multi_file_io_cptr playlist_mpls_in;
+
+  filelist_t()
+    : size{}
+    , id{}
+    , type{FILE_TYPE_IS_UNKNOWN}
+    , reader{}
+    , ti{}
+    , appending{}
+    , appended_to{}
+    , done{}
+    , num_unfinished_packetizers{}
+    , old_num_unfinished_packetizers{}
+    , deferred_max_timecode_seen{-1}
+    , is_playlist{}
+    , playlist_index{}
+    , playlist_previous_filelist_id{}
+  {
+  }
 };
 
 struct attachment_t {
@@ -219,7 +245,13 @@ extern append_mode_e g_append_mode;
 extern bool g_stereo_mode_used;
 
 void get_file_type(filelist_t &file);
+
 void create_readers();
+void create_packetizers();
+void calc_attachment_sizes();
+void calc_max_chapter_size();
+void check_track_id_validity();
+void check_append_mapping();
 
 void cleanup();
 void main_loop();
