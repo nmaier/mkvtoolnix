@@ -200,7 +200,8 @@ rule '.o' => '.rc' do |t|
 end
 
 rule '.h' => '.png' do |t|
-  runq "   BIN2H #{t.source}", "#{c(:top_srcdir)}/rake.d/bin/bin2h.rb #{t.source} #{t.name}"
+  puts "   BIN2H #{t.source}" if !ENV['V'].to_bool
+  bin2h t.source, t.name
 end
 
 # Resources depend on the manifest.xml file for Windows builds.
