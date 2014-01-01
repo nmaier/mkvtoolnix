@@ -1817,7 +1817,7 @@ qtmp4_demuxer_c::update_tables(int64_t global_m_time_scale) {
 
   // workaround for fixed-size video frames (dv and uncompressed), but
   // also for audio with constant sample size
-  if (sample_table.empty() && sample_size) {
+  if (sample_table.empty() && (sample_size > 1)) {
     for (i = 0; i < s; ++i) {
       qt_sample_t sample;
 

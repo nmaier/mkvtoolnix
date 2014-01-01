@@ -1,3 +1,8 @@
+2014-01-01  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: bug fix: Fixed reading uncompressed PCM audio tracks
+        from QuickTime/MP4 files in certain situations. Fixes #950.
+
 2013-12-31  Moritz Bunkus  <moritz@bunkus.org>
 
         * mmg: enhancement: The »additional parts« dialog will now show
