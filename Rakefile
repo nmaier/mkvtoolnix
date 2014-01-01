@@ -688,7 +688,7 @@ Application.new("src/mkvinfo").
   end_if.
   only_if(!c?(:USE_QT) && c?(:USE_WXWIDGETS)).
   sources("src/info/wxwidgets_ui.cpp").
-  png_icon("share/icons/64x64/mkvinfo.png").
+  png_icon("share/icons/64x64/mkvinfo.png", "src/info/wxwidgets_ui.cpp").
   libraries(:wxwidgets).
   end_if.
   create
@@ -727,9 +727,9 @@ if c?(:USE_WXWIDGETS)
     aliases(:mmg).
     sources("src/mmg", "src/mmg/header_editor", "src/mmg/options", "src/mmg/tabs", :type => :dir).
     sources("src/mmg/resources.o", :if => c?(:MINGW)).
-    png_icon("share/icons/64x64/mkvmergeGUI.png").
-    png_icon("share/icons/16x16/sort_ascending.png").
-    png_icon("share/icons/16x16/sort_descending.png").
+    png_icon("share/icons/64x64/mkvmergeGUI.png", "src/mmg/mmg_dialog.cpp", "src/mmg/header_editor/frame.cpp").
+    png_icon("share/icons/16x16/sort_ascending.png", "src/mmg/tabs/select_scanned_file_dlg.cpp").
+    png_icon("share/icons/16x16/sort_descending.png", "src/mmg/tabs/select_scanned_file_dlg.cpp").
     libraries($common_libs, :wxwidgets).
     libraries(:ole32, :shell32, "-mwindows", :if => c?(:MINGW)).
     create
