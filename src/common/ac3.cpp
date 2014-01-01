@@ -41,6 +41,7 @@ ac3::frame_c::init() {
   m_garbage_size    = 0;
   m_valid           = false;
   m_data.reset();
+  m_dependent_frames.clear();
 }
 
 bool
@@ -165,7 +166,7 @@ ac3::frame_c::decode_header_type_ac3(bit_reader_c &bc) {
     return false;
 
   uint8_t frmsizecod = bc.get_bits(6);
-  if (38 < frmsizecod)
+  if (38 <= frmsizecod)
     return false;
 
   bc.skip_bits(5 + 3);          // bsid, bsmod
