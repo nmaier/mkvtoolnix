@@ -255,6 +255,9 @@ qtmp4_reader_c::parse_headers() {
     if (m_chapter_track_ids[dmx->container_id])
       dmx->type = 'C';
 
+    else if (!demuxing_requested(dmx->type, dmx->id))
+      continue;
+
     else if (dmx->is_audio() && !dmx->verify_audio_parameters())
       continue;
 
