@@ -411,9 +411,11 @@ qtmp4_reader_c::handle_ctts_atom(qtmp4_demuxer_cptr &new_dmx,
     frame_offset.count  = m_in->read_uint32_be();
     frame_offset.offset = m_in->read_uint32_be();
     new_dmx->raw_frame_offset_table.push_back(frame_offset);
-
-    mxdebug_if(m_debug_tables, boost::format("%1%%2%: count %3% offset %4%\n") % space((level + 1) * 2 + 1) % i % frame_offset.count % frame_offset.offset);
   }
+
+  if (m_debug_tables)
+    for (auto const &frame_offset : new_dmx->raw_frame_offset_table)
+      mxdebug(boost::format("%1%%2%: count %3% offset %4%\n") % space((level + 1) * 2 + 1) % i % frame_offset.count % frame_offset.offset);
 }
 
 void
@@ -843,8 +845,11 @@ qtmp4_reader_c::handle_stco_atom(qtmp4_demuxer_cptr &new_dmx,
 
     chunk.pos = m_in->read_uint32_be();
     new_dmx->chunk_table.push_back(chunk);
-    mxdebug_if(m_debug_tables, boost::format("%1%  %2%\n") % space(level * 2 + 1) % chunk.pos);
   }
+
+  if (m_debug_tables)
+    for (auto const &chunk : new_dmx->chunk_table)
+      mxdebug(boost::format("%1%  %2%\n") % space(level * 2 + 1) % chunk.pos);
 }
 
 void
@@ -862,8 +867,11 @@ qtmp4_reader_c::handle_co64_atom(qtmp4_demuxer_cptr &new_dmx,
 
     chunk.pos = m_in->read_uint64_be();
     new_dmx->chunk_table.push_back(chunk);
-    mxdebug_if(m_debug_tables, boost::format("%1%  %2%\n") % space(level * 2 + 1) % chunk.pos);
   }
+
+  if (m_debug_tables)
+    for (auto const &chunk : new_dmx->chunk_table)
+      mxdebug(boost::format("%1%  %2%\n") % space(level * 2 + 1) % chunk.pos);
 }
 
 void
@@ -927,8 +935,9 @@ qtmp4_reader_c::handle_stss_atom(qtmp4_demuxer_cptr &new_dmx,
   std::sort(new_dmx->keyframe_table.begin(), new_dmx->keyframe_table.end());
 
   mxdebug_if(m_debug_headers, boost::format("%1%Sync/keyframe table: %2% entries\n") % space(level * 2 + 1) % count);
-  for (i = 0; i < count; ++i)
-    mxdebug_if(m_debug_tables, boost::format("%1%keyframe at %2%\n") % space((level + 1) * 2 + 1) % new_dmx->keyframe_table[i]);
+  if (m_debug_tables)
+    for (auto const &keyframe : new_dmx->keyframe_table)
+      mxdebug(boost::format("%1%keyframe at %2%\n") % space((level + 1) * 2 + 1) % keyframe);
 }
 
 void
@@ -1040,13 +1049,16 @@ qtmp4_reader_c::handle_elst_atom(qtmp4_demuxer_cptr &new_dmx,
   }
 
   mxdebug_if(m_debug_headers, boost::format("%1%Edit list table: %2% entries\n") % space(level * 2 + 1) % count);
-  for (i = 0; i < count; ++i)
-    mxdebug_if(m_debug_tables, boost::format("%1%%2%: duration %3% pos %4% speed %5%\n")
-               % space((level + 1) * 2 + 1)
-               % i
-               % new_dmx->editlist_table[i].duration
-               % new_dmx->editlist_table[i].pos
-               % new_dmx->editlist_table[i].speed);
+  if (m_debug_tables) {
+    auto i = 0u;
+    for (auto const &editlist : new_dmx->editlist_table)
+      mxdebug_if(m_debug_tables, boost::format("%1%%2%: duration %3% pos %4% speed %5%\n")
+                 % space((level + 1) * 2 + 1)
+                 % i++
+                 % editlist.duration
+                 % editlist.pos
+                 % editlist.speed);
+  }
 }
 
 void
@@ -1833,11 +1845,12 @@ qtmp4_demuxer_c::update_tables(int64_t global_m_time_scale) {
       frame_offset_table.push_back(raw_frame_offset_table[j].offset);
   }
 
-  mxdebug_if(m_debug_tables, boost::format(" Frame offset table: %1% entries\n")    % frame_offset_table.size());
-  mxdebug_if(m_debug_tables, boost::format(" Sample table contents: %1% entries\n") % sample_table.size());
-  for (i = 0; i < sample_table.size(); ++i) {
-    qt_sample_t &sample = sample_table[i];
-    mxdebug_if(m_debug_tables, boost::format("   %1%: pts %2% size %3% pos %4%\n") % i % sample.pts % sample.size % sample.pos);
+  if (m_debug_tables) {
+    mxdebug(boost::format(" Frame offset table: %1% entries\n")    % frame_offset_table.size());
+    mxdebug(boost::format(" Sample table contents: %1% entries\n") % sample_table.size());
+    auto i = 0u;
+    for (auto const &sample : sample_table)
+      mxdebug(boost::format("   %1%: pts %2% size %3% pos %4%\n") % i++ % sample.pts % sample.size % sample.pos);
   }
 
   update_editlist_table(global_m_time_scale);
