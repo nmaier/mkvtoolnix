@@ -1,6 +1,6 @@
 !define PRODUCT_NAME "MKVToolNix"
 !define PRODUCT_VERSION "6.6.0"
-!define PRODUCT_VERSION_BUILD ""  # Intentionally left empty for releases
+!define PRODUCT_VERSION_BUILD " [20140102-565]"
 !define PRODUCT_PUBLISHER "Moritz Bunkus"
 !define PRODUCT_WEB_SITE "http://www.bunkus.org/videotools/mkvtoolnix/"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\mmg.exe"
@@ -96,7 +96,7 @@ Page custom showExternalLinks
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}${PRODUCT_VERSION_BUILD}"
 BrandingText "${PRODUCT_NAME} ${PRODUCT_VERSION}${PRODUCT_VERSION_BUILD} by ${PRODUCT_PUBLISHER}"
-OutFile "mkvtoolnix-unicode-${PRODUCT_VERSION}-setup.exe"
+OutFile "mkvtoolnix-unicode${MINGW_PROCESSOR_ARCH}-${PRODUCT_VERSION}-setup.exe"
 InstallDir "$PROGRAMFILES\${PRODUCT_NAME}"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
