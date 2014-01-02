@@ -1,8 +1,17 @@
 mkvinfo ICON  "../../share/icons/windows/mkvinfo.ico"
 
-#ifndef NOWXWIDGETS
 #define wxUSE_NO_MANIFEST 1
-#include "wx/msw/wx.rc"
+#ifndef NOWXWIDGETS
+# include "wx/msw/wx.rc"
+#endif
+
+#if defined(MINGW_PROCESSOR_ARCH_AMD64)
+1 RT_MANIFEST "manifest-amd64.xml"
+
+#else
+# error boom
+1 RT_MANIFEST "manifest-x86.xml"
+
 #endif
 
 1 VERSIONINFO
@@ -30,5 +39,3 @@ BEGIN
     VALUE "Translation", 0x0409, 1252 // Englisch (USA)
   END
 END
-
-1 RT_MANIFEST "manifest.xml"

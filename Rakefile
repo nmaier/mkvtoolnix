@@ -101,7 +101,7 @@ def setup_globals
     :cxxflags              => "#{cflags_common} #{c(:STD_CXX11)} -Wnon-virtual-dtor -Woverloaded-virtual -Wextra #{c(:WXWIDGETS_CFLAGS)} #{c(:QT_CFLAGS)} #{c(:BOOST_CPPFLAGS)} #{c(:CURL_CFLAGS)} #{c(:USER_CXXFLAGS)}",
     :cppflags              => "#{c(:USER_CPPFLAGS)}",
     :ldflags               => "#{c(:EBML_LDFLAGS)} #{c(:MATROSKA_LDFLAGS)} #{c(:EXTRA_LDFLAGS)} #{c(:PROFILING_LIBS)} #{c(:USER_LDFLAGS)} #{c(:LDFLAGS_RPATHS)} #{c(:BOOST_LDFLAGS)}",
-    :windres               => c?(:USE_WXWIDGETS) ? c(:WXWIDGETS_INCLUDES) : '-DNOWXWIDGETS',
+    :windres               => (c(:MINGW_PROCESSOR_ARCH) == 'amd64' ? '-DMINGW_PROCESSOR_ARCH_AMD64=1 ' : '') + (c?(:USE_WXWIDGETS) ? c(:WXWIDGETS_INCLUDES) : '-DNOWXWIDGETS'),
   }
 
   $build_system_modules.values.each { |bsm| bsm[:setup].call if bsm[:setup] }
@@ -209,7 +209,7 @@ if c?(:MINGW)
   $programs.each do |program|
     path = program.gsub(/^mkv/, '')
     icon = program == 'mkvinfo' ? 'share/icons/windows/mkvinfo.ico' : 'share/icons/windows/mkvmergeGUI.ico'
-    file "src/#{path}/resources.o" => [ "src/#{path}/manifest.xml", "src/#{path}/resources.rc", icon ]
+    file "src/#{path}/resources.o" => [ "src/#{path}/manifest-#{c(:MINGW_PROCESSOR_ARCH)}.xml", "src/#{path}/resources.rc", icon ]
   end
 end
 

@@ -1,5 +1,10 @@
 2014-01-02  Moritz Bunkus  <moritz@bunkus.org>
 
+        * build system: bug fix for 64bit builds on Windows
+        (x86_64-w64-mingw32): use the correct processor architecture via
+        separate Windows manifest files. Fixes mmg and mkvinfo not
+        starting due to »error 0x0000007b«.
+
         * mkvmerge: bug fix: Fixed a potential endless loop due to an
         integer overflow in the code removing AVC/h.264 filler NALUs.
 
