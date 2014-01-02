@@ -223,9 +223,9 @@ mpeg4_p10_video_packetizer_c::remove_filler_nalus(memory_c &data)
   auto idx        = 0u;
 
   while ((idx + m_nalu_size_len_dst) < total_size) {
-    auto nalu_size = (4 == m_nalu_size_len_dst) ? get_uint32_be(&ptr[idx])
-                   : (3 == m_nalu_size_len_dst) ? get_uint24_be(&ptr[idx])
-                   :                              get_uint16_be(&ptr[idx]);
+    uint64_t nalu_size = (4 == m_nalu_size_len_dst) ? get_uint32_be(&ptr[idx])
+                       : (3 == m_nalu_size_len_dst) ? get_uint24_be(&ptr[idx])
+                       :                              get_uint16_be(&ptr[idx]);
 
     nalu_size     += m_nalu_size_len_dst;
 

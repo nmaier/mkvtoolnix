@@ -1,3 +1,8 @@
+2014-01-02  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: bug fix: Fixed a potential endless loop due to an
+        integer overflow in the code removing AVC/h.264 filler NALUs.
+
 2014-01-01  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: bug fix: Fixed reading uncompressed PCM audio tracks
