@@ -3,7 +3,6 @@ mkvextract ICON  "../../share/icons/windows/mkvextract.ico"
 #if defined(MINGW_PROCESSOR_ARCH_AMD64)
 1 RT_MANIFEST "manifest-amd64.xml"
 #else
-# error boom
 1 RT_MANIFEST "manifest-x86.xml"
 #endif
 
