@@ -96,7 +96,7 @@ Page custom showExternalLinks
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}${PRODUCT_VERSION_BUILD}"
 BrandingText "${PRODUCT_NAME} ${PRODUCT_VERSION}${PRODUCT_VERSION_BUILD} by ${PRODUCT_PUBLISHER}"
-OutFile "mkvtoolnix-unicode${MINGW_PROCESSOR_ARCH}-${PRODUCT_VERSION}-setup.exe"
+OutFile "mkvtoolnix${MINGW_PROCESSOR_ARCH}-${PRODUCT_VERSION}-setup.exe"
 InstallDir "$PROGRAMFILES\${PRODUCT_NAME}"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
