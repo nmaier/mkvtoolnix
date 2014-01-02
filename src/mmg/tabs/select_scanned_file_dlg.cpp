@@ -33,7 +33,7 @@ int wxCALLBACK
 compare_playlist_file_cptrs(wxIntPtr a_idx,
                             wxIntPtr b_idx,
                             wxIntPtr sort_data) {
-  auto &info = *reinterpret_cast<compare_playlist_file_info_t *>(sort_data);
+  auto &info = *static_cast<compare_playlist_file_info_t *>(wxUIntToPtr(sort_data));
   auto &a    = *(*info.playlists)[a_idx];
   auto &b    = *(*info.playlists)[b_idx];
   auto mult  = info.ascending ? 1 : -1;
@@ -277,7 +277,7 @@ select_scanned_file_dlg::sort_by(size_t column,
                                  bool ascending) {
   auto info = compare_playlist_file_info_t{ &m_playlists, column, ascending };
 
-  m_lc_files->SortItems(compare_playlist_file_cptrs, reinterpret_cast<long>(&info));
+  m_lc_files->SortItems(compare_playlist_file_cptrs, wxPtrToUInt(&info));
   if (m_sorted_by_column != column)
     set_column_image(m_sorted_by_column, -1);
   set_column_image(column, ascending ? 0 : 1);
