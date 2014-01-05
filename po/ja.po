@@ -820,11 +820,6 @@ msgstr "### 開発者向けハック ###"
 msgid "### Global output control ###"
 msgstr "### グローバル出力コントロール ###"
 
-#: src/common/version.cpp:143
-#, boost-format
-msgid "%1% built on %2% %3%"
-msgstr "%1% ビルド日時 %2% %3%"
-
 #: src/common/strings/formatting.cpp:261
 #, boost-format
 msgid "%1% bytes"
@@ -975,7 +970,7 @@ msgid "&About\tF1"
 msgstr "mkvinfoについて(&A)\tF1"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:47
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:52
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:90
 msgid "&Add"
 msgstr "追加(&A)"
 
@@ -988,7 +983,7 @@ msgstr "ジョブキューに追加(&A)"
 msgid "&Attachments\tAlt-2"
 msgstr "添付ファイル(&A)\tAlt-2"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:53
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:91
 msgid "&Cancel"
 msgstr "キャンセル(&C)"
 
@@ -2737,7 +2732,7 @@ msgstr "前クラスタサイズ：%1%"
 msgid "Cluster timecode: %|1$.3f|s"
 msgstr "クラスタのタイムコード：%|1$.3f|s"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:68
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:100
 msgid "Codec"
 msgstr "コーデック"
 
@@ -3249,7 +3244,7 @@ msgstr "説明は既に存在します"
 msgid "Description:"
 msgstr "説明："
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:38
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:76
 msgid "Details"
 msgstr "詳細"
 
@@ -3260,7 +3255,7 @@ msgid "Dirac"
 msgstr "Dirac"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:84
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:75
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:104
 msgid "Directory"
 msgstr "ディレクトリ"
 
@@ -3355,12 +3350,12 @@ msgstr "完了。\n"
 msgid "Download URL:"
 msgstr "ダウンロードURL："
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:61
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:96
 msgid "Duration"
 msgstr "継続時間"
 
 #: src/mmg/tabs/global.cpp:212
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:40
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:78
 msgid "Duration:"
 msgstr "継続時間："
 
@@ -3776,8 +3771,8 @@ msgid "File modified"
 msgstr "ファイルは修正されました"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:82
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:59
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:73
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:95
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:103
 msgid "File name"
 msgstr "ファイル名"
 
@@ -4665,7 +4660,7 @@ msgstr "Lacing flag: %1%"
 
 #: src/common/property_element.cpp:128
 #: src/mmg/header_editor/frame.cpp:414
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:70
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:101
 msgid "Language"
 msgstr "言語"
 
@@ -5124,11 +5119,11 @@ msgstr "次のセグメントの固有ID"
 msgid "No %1% specified in '--%2% %3%'.\n"
 msgstr "'--%2% %3%'で%1%が指定されていません。\n"
 
-#: src/input/r_qtmp4.cpp:1211
+#: src/input/r_qtmp4.cpp:1248
 msgid "No AC3 header found in first frame; track will be skipped.\n"
 msgstr "AC3ヘッダが最初のフレームで見つかりませんでした：トラックはスキップされます。\n"
 
-#: src/input/r_qtmp4.cpp:1238
+#: src/input/r_qtmp4.cpp:1275
 #, fuzzy
 msgid "No DTS header found in first frames; track will be skipped.\n"
 msgstr "AC3ヘッダが最初のフレームで見つかりませんでした：トラックはスキップされます。\n"
@@ -5307,7 +5302,7 @@ msgstr "何もすることがありません。\n"
 msgid "Notice"
 msgstr "通知"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:44
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:82
 msgid "Number of chapters:"
 msgstr "チャプタの数："
 
@@ -5576,7 +5571,7 @@ msgstr "ピクセル高さ：%1%"
 msgid "Pixel width: %1%"
 msgstr "ピクセル幅：%1%"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:48
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:86
 msgid "Playlist items:"
 msgstr "プレイリストアイテム："
 
@@ -5687,37 +5682,37 @@ msgstr "QuickTime オーディオ/ビデオファイル"
 msgid "QuickTime/MP4"
 msgstr "QuickTime/MP4"
 
-#: src/input/r_qtmp4.cpp:316
+#: src/input/r_qtmp4.cpp:319
 #, boost-format
 msgid "Quicktime/MP4 reader: '%1%' atom is too small. Expected size: >= %2%. Actual size: %3%.\n"
 msgstr "Quicktime/MP4リーダ：'%1%' atomが小さすぎます。期待されるサイズ：%2%以上。実際のサイズ：%3%。\n"
 
-#: src/input/r_qtmp4.cpp:1799
+#: src/input/r_qtmp4.cpp:1836
 msgid "Quicktime/MP4 reader: Constant samplesize & variable duration not yet supported. Contact the author if you have such a sample file.\n"
 msgstr "Quicktime/MP4リーダ：一定サンプルサイズかつ可変フレーム持続期間はまだサポートされていません。そのようなサンプルを持っているなら作者に連絡してください。\n"
 
-#: src/input/r_qtmp4.cpp:1168
+#: src/input/r_qtmp4.cpp:1205
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read chunk number %1%/%2% with size %3% from position %4%. Aborting.\n"
 msgstr "Quicktime/MP4リーダ：位置%4%のサイズ%3%のチャンク番号%1%/%2%を読み込むことができませんでした。中断します。\n"
 
-#: src/input/r_qtmp4.cpp:2105
-#: src/input/r_qtmp4.cpp:2119
+#: src/input/r_qtmp4.cpp:2142
+#: src/input/r_qtmp4.cpp:2156
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the extended sound description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4リーダ：トラックID %1%の拡張サウンド説明atomを読み込むことができませんでした。\n"
 
-#: src/input/r_qtmp4.cpp:2076
+#: src/input/r_qtmp4.cpp:2113
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the sound description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4リーダ：トラックID %1%のサウンド説明atomを読み込むことができませんでした。\n"
 
-#: src/input/r_qtmp4.cpp:908
+#: src/input/r_qtmp4.cpp:926
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the stream description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4リーダ：トラックID %1%のストリーム説明atomを読み込むことができませんでした。\n"
 
-#: src/input/r_qtmp4.cpp:2151
+#: src/input/r_qtmp4.cpp:2188
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the video description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4リーダ：トラックID %1%のビデオ説明atomを読み込むことができませんでした。\n"
@@ -5735,75 +5730,75 @@ msgstr "Quicktime/MP4リーダ：'mdat'atomが見つかりませんでした。�
 msgid "Quicktime/MP4 reader: Invalid chunk size %1% at %2%.\n"
 msgstr "Quicktime/MP4リーダ：位置%2%に無効なチャンクサイズ%1%があります。\n"
 
-#: src/input/r_qtmp4.cpp:2502
+#: src/input/r_qtmp4.cpp:2539
 #, boost-format
 msgid "Quicktime/MP4 reader: MPEG4 part 10/AVC track %1% is missing its decoder config. Skipping this track.\n"
 msgstr "Quicktime/MP4リーダ：MPEG4 part 10/AVCトラック%1%にはデコーダ設定がありません。このトラックをスキップします。\n"
 
-#: src/input/r_qtmp4.cpp:2518
+#: src/input/r_qtmp4.cpp:2555
 #, boost-format
 msgid "Quicktime/MP4 reader: MPEG4 track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr "Quicktime/MP4リーダ：MPEG4トラック%1%にはesds atom/デコーダ設定がありません。このトラックをスキップします。\n"
 
-#: src/input/r_qtmp4.cpp:485
+#: src/input/r_qtmp4.cpp:492
 #, boost-format
 msgid "Quicktime/MP4 reader: The 'media header' atom ('mdhd') uses the unsupported version %1%.\n"
 msgstr "Quicktime/MP4リーダ：'media header' atom（'mdhd'）がサポートされていないバージョン%1%を使用しています。\n"
 
-#: src/input/r_qtmp4.cpp:901
+#: src/input/r_qtmp4.cpp:919
 #, boost-format
 msgid "Quicktime/MP4 reader: The 'size' field is too small in the stream description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4リーダ：トラックID%1%のストリーム説明atomの'size'のフィールドが小さすぎます。\n"
 
-#: src/input/r_qtmp4.cpp:490
+#: src/input/r_qtmp4.cpp:497
 msgid "Quicktime/MP4 reader: The 'time scale' parameter was 0. This is not supported.\n"
 msgstr "Quicktime/MP4リーダ：タイムスケールのパラメータが0です。これはサポートされていません。\n"
 
-#: src/input/r_qtmp4.cpp:2476
+#: src/input/r_qtmp4.cpp:2513
 #, boost-format
 msgid "Quicktime/MP4 reader: The AAC track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr "Quicktime/MP4リーダ：AACトラック%1%にはesds atom/デコーダ設定がありません。このトラックをスキップします。\n"
 
-#: src/input/r_qtmp4.cpp:2471
+#: src/input/r_qtmp4.cpp:2508
 #, boost-format
 msgid "Quicktime/MP4 reader: The audio track %1% is using an unsupported 'object type id' of %2% in the 'esds' atom. Skipping this track.\n"
 msgstr "Quicktime/MP4リーダ：オーディオトラック%1%はesds atomでサポートされていない'object type id'である%2%を使用しています。このトラックをスキップします。\n"
 
-#: src/input/r_qtmp4.cpp:2512
+#: src/input/r_qtmp4.cpp:2549
 #, boost-format
 msgid "Quicktime/MP4 reader: The video track %1% is missing the ESDS atom. Skipping this track.\n"
 msgstr "Quicktime/MP4リーダ：ビデオトラック%1%はESDS atomがありません。このトラックをスキップします。\n"
 
-#: src/input/r_qtmp4.cpp:348
+#: src/input/r_qtmp4.cpp:351
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers with an unknown or unsupported compression algorithm '%1%'. Aborting.\n"
 msgstr "Quicktime/MP4リーダ：このファイルは未知もしくはサポートされていない圧縮アルゴリズム'%1%'で圧縮されたヘッダを使用しています。中断します。\n"
 
-#: src/input/r_qtmp4.cpp:381
+#: src/input/r_qtmp4.cpp:384
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but the expected uncompressed size (%1%) was not what is available after uncompressing (%2%).\n"
 msgstr "Quicktime/MP4リーダ：このファイルは圧縮ヘッダを使用していますが、予測される展開後のサイズ（%1%）は展開後に利用可能なサイズ（%2%）ではありません。\n"
 
-#: src/input/r_qtmp4.cpp:372
+#: src/input/r_qtmp4.cpp:375
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but the zlib library could not be initialized. Error code from zlib: %1%. Aborting.\n"
 msgstr "Quicktime/MP4リーダ：このファイルは圧縮ヘッダを使用していますが、zlibライブラリを初期化できませんでした。zlibのエラーコード：%1%。中断します。\n"
 
-#: src/input/r_qtmp4.cpp:377
+#: src/input/r_qtmp4.cpp:380
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but they could not be uncompressed. Error code from zlib: %1%. Aborting.\n"
 msgstr "Quicktime/MP4リーダ：このファイルは圧縮ヘッダを使用していますが、展開することができませんでした。zlibのエラーコード：%1%。中断します。\n"
 
-#: src/input/r_qtmp4.cpp:2445
-#: src/input/r_qtmp4.cpp:2460
-#: src/input/r_qtmp4.cpp:2486
-#: src/input/r_qtmp4.cpp:2536
+#: src/input/r_qtmp4.cpp:2482
+#: src/input/r_qtmp4.cpp:2497
+#: src/input/r_qtmp4.cpp:2523
+#: src/input/r_qtmp4.cpp:2573
 #, boost-format
 msgid "Quicktime/MP4 reader: Track %1% is missing some data. Broken header atoms?\n"
 msgstr "Quicktime/MP4リーダ：トラック%1%にはいくつかのデータがありません。ヘッダatomが壊れているのかもしれません。\n"
 
-#: src/input/r_qtmp4.cpp:2084
-#: src/input/r_qtmp4.cpp:2158
+#: src/input/r_qtmp4.cpp:2121
+#: src/input/r_qtmp4.cpp:2195
 #, boost-format
 msgid "Quicktime/MP4 reader: Track ID %1% has more than one FourCC. Only using the first one (%|2$.4s|) and not this one (%|3$.4s|).\n"
 msgstr "Quicktime/MP4リーダ：トラックID %1%は複数のFourCCを持っています。最初のFourCC（%|2$.4s|）が使用され、このFourCC（%|3$.4s|）は使用されません。\n"
@@ -6046,7 +6041,7 @@ msgstr "他のプレイリストがないかディレクトリをスキャンし
 msgid "Scan directory for other playlists:"
 msgstr "他のプレイリストがないかディレクトリをスキャン："
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:33
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:71
 msgid "Scanned files"
 msgstr "スキャンされたファイル"
 
@@ -6171,7 +6166,7 @@ msgstr "セグメント、不明なサイズ"
 msgid "Select Matroska file"
 msgstr "Matroskaファイルを選択してください"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:27
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:63
 msgid "Select file to add"
 msgstr "追加するファイルを選択してください"
 
@@ -6453,13 +6448,13 @@ msgstr "シンプルブロック (%1%トラック番号 %2%、%3% フレーム�
 msgid "Single field frame before GOP header detected. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "GOPヘッダの前に片フィールドのフレームが検出されました。MUXしようとする前にこのMPEG2ビデオストリームを修復してください。\n"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:63
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:97
 msgid "Size"
 msgstr "サイズ"
 
 #: src/mmg/tabs/global.cpp:195
 #: src/mmg/tabs/global.cpp:198
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:42
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:80
 msgid "Size:"
 msgstr "サイズ："
 
@@ -6730,7 +6725,7 @@ msgstr ".idxファイルが言語を示す'id: ...'の行を含んでいませ�
 msgid "The AAC profiles are different: %1% and %2%"
 msgstr "AACプロファイルが異なっています：%1%と%2%"
 
-#: src/input/r_qtmp4.cpp:1278
+#: src/input/r_qtmp4.cpp:1315
 msgid "The AVC video track is missing the 'CTTS' atom for frame timecode offsets. However, AVC/h.264 allows frames to have more than the traditional one (for P frames) or two (for B frames) references to other frames. The timecodes for such frames will be out-of-order, and the 'CTTS' atom is needed for getting the timecodes right. As it is missing the timecodes for this track might be wrong. You should watch the resulting file and make sure that it looks like you expected it to.\n"
 msgstr "このAVCビデオトラックにはフレームタイムコードを補正する'CTTS' atomがありません。しかし、AVC/h.264では伝統的な1つ（Pフレームの場合）もしくは2つ（Bフレームの場合）より多く他のフレームを参照することが許されています。そのようなフレームのタイムコードは順番通りでないことがあり、'CTTS' atomはタイムコードを補正するために必要です。それが無いため、このトラックのタイムコードは正しくないかもしれません。出力されたファイルを見て期待通りに見えることを確認してください。\n"
 
@@ -6782,7 +6777,7 @@ msgstr "ファイル'%1%'を開いて書き込んでいます。\n"
 msgid "The Kate identification header could not be parsed (%1%).\n"
 msgstr "カラオケ・テキスト判別ヘッダを解析できませんでした（%1%）。\n"
 
-#: src/input/r_qtmp4.cpp:790
+#: src/input/r_qtmp4.cpp:797
 #, boost-format
 msgid "The MP4 file '%1%' contains chapters whose format was not recognized. This is often the case if the chapters are not encoded in UTF-8. Use the '--chapter-charset' option in order to specify the charset to use.\n"
 msgstr "MP4ファイル '%1%' は、認識できないフォーマットのチャプタを含んでいます。これは大抵チャプタがUTF-8でエンコードされていないということです。'--chapter-charset' オプションを使用して、使用する文字セットを指定してください。\n"
@@ -8029,7 +8024,7 @@ msgstr "コーデックID '%2%'のトラック%1%は\"default duration\"要素�
 msgid "Track %1%: %2%, codec ID: %3%%4%%5%%6%\n"
 msgstr "トラック %1%：%2%、コーデックID： %3%%4%%5%%6%\n"
 
-#: src/input/r_qtmp4.cpp:2233
+#: src/input/r_qtmp4.cpp:2270
 #, boost-format
 msgid "Track %1%: AAC found, but decoder config data has length %2%.\n"
 msgstr "トラック%1%：AACが見つかりましたが、デコーダ設定データの長さが%2%です。\n"
@@ -8049,7 +8044,7 @@ msgstr "トラック%1%：NALが大きすぎます。ヘッダフィールドに
 msgid "Track %1%: Subtitle entry number %2% is missing its duration. Assuming a duration of 1s.\n"
 msgstr "トラック%1%：字幕エントリ番号%2%には持続時間がありません。1秒と仮定します。\n"
 
-#: src/input/r_qtmp4.cpp:2236
+#: src/input/r_qtmp4.cpp:2273
 #, boost-format
 msgid "Track %1%: The AAC information could not be parsed.\n"
 msgstr "トラック%1%：AAC情報を解析することができませんでした。\n"
@@ -8122,7 +8117,7 @@ msgstr "サポートされていない方式（圧縮や暗号化）でエンコ
 msgid "Tracks, chapters and tags:"
 msgstr "トラック、チャプタ、タグ："
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:46
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:84
 msgid "Tracks:"
 msgstr "トラック："
 
@@ -8144,7 +8139,7 @@ msgstr "TrueHDオーディオには2つのフレームタイプがあります�
 msgid "Two VobSub tracks can only be extracted into the same file if their CodecPrivate data matches. This is not the case for the tracks %1% and %2%.\n"
 msgstr "2つのVobSubトラックを同じファイルに抽出できるのは、CodecPrivateデータが一致するときだけです。トラック%1%と%2%はそうではありません。\n"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:66
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:99
 msgid "Type"
 msgstr "タイプ"
 
@@ -8700,6 +8695,11 @@ msgstr "フィールドシーケンシャル方式（レフトファースト）
 #: src/common/stereo_mode.cpp:62
 msgid "both eyes laced in one block (right first)"
 msgstr "フィールドシーケンシャル方式（ライトファースト）"
+
+#: src/common/version.cpp:148
+#, fuzzy, boost-format
+msgid "built on %1% %2%"
+msgstr "%1% ビルド日時 %2% %3%"
 
 #: src/info/mkvinfo.cpp:943
 #: src/input/r_matroska.cpp:98

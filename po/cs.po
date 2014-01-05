@@ -818,11 +818,6 @@ msgstr "### Vychytávky vývojářů ###"
 msgid "### Global output control ###"
 msgstr "### Všeobecné ovládání výstupu ###"
 
-#: src/common/version.cpp:143
-#, boost-format
-msgid "%1% built on %2% %3%"
-msgstr "%1% sestaveno %2% %3%"
-
 #: src/common/strings/formatting.cpp:261
 #, fuzzy, boost-format
 msgid "%1% bytes"
@@ -979,7 +974,7 @@ msgid "&About\tF1"
 msgstr "&O aplikaci\tF1"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:47
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:52
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:90
 msgid "&Add"
 msgstr "&Přidat"
 
@@ -992,7 +987,7 @@ msgstr "&Přidat do fronty úloh"
 msgid "&Attachments\tAlt-2"
 msgstr "&Přílohy\tAlt-2"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:53
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:91
 msgid "&Cancel"
 msgstr ""
 
@@ -2755,7 +2750,7 @@ msgstr "Předchozí velikost clusteru: %1%"
 msgid "Cluster timecode: %|1$.3f|s"
 msgstr "Časový kód clusteru: %|1$.3f|s"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:68
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:100
 #, fuzzy
 msgid "Codec"
 msgstr "ID kodeku"
@@ -3268,7 +3263,7 @@ msgstr "Popis již existuje"
 msgid "Description:"
 msgstr "Popis:"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:38
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:76
 msgid "Details"
 msgstr ""
 
@@ -3279,7 +3274,7 @@ msgid "Dirac"
 msgstr "Dirac"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:84
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:75
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:104
 msgid "Directory"
 msgstr "Adresář"
 
@@ -3373,13 +3368,13 @@ msgstr "Hotovo.\n"
 msgid "Download URL:"
 msgstr "Adresa stažení:"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:61
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:96
 #, fuzzy
 msgid "Duration"
 msgstr "Popis:"
 
 #: src/mmg/tabs/global.cpp:212
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:40
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:78
 #, fuzzy
 msgid "Duration:"
 msgstr "Popis:"
@@ -3795,8 +3790,8 @@ msgid "File modified"
 msgstr "Soubor byl změněn"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:82
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:59
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:73
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:95
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:103
 msgid "File name"
 msgstr "Název souboru"
 
@@ -4684,7 +4679,7 @@ msgstr ""
 
 #: src/common/property_element.cpp:128
 #: src/mmg/header_editor/frame.cpp:414
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:70
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:101
 msgid "Language"
 msgstr "Jazyk"
 
@@ -5145,11 +5140,11 @@ msgstr "Jedinečné ID dalšího úseku"
 msgid "No %1% specified in '--%2% %3%'.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:1211
+#: src/input/r_qtmp4.cpp:1248
 msgid "No AC3 header found in first frame; track will be skipped.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:1238
+#: src/input/r_qtmp4.cpp:1275
 msgid "No DTS header found in first frames; track will be skipped.\n"
 msgstr ""
 
@@ -5328,7 +5323,7 @@ msgstr "Není co dělat.\n"
 msgid "Notice"
 msgstr ""
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:44
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:82
 #, fuzzy
 msgid "Number of chapters:"
 msgstr "&Nové kapitoly"
@@ -5600,7 +5595,7 @@ msgstr "Výška pixelu: %1%"
 msgid "Pixel width: %1%"
 msgstr "Šířka pixelu: %1%"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:48
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:86
 msgid "Playlist items:"
 msgstr ""
 
@@ -5707,37 +5702,37 @@ msgstr "Audio/video soubory QuickTime"
 msgid "QuickTime/MP4"
 msgstr "QuickTime/MP4"
 
-#: src/input/r_qtmp4.cpp:316
+#: src/input/r_qtmp4.cpp:319
 #, boost-format
 msgid "Quicktime/MP4 reader: '%1%' atom is too small. Expected size: >= %2%. Actual size: %3%.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:1799
+#: src/input/r_qtmp4.cpp:1836
 msgid "Quicktime/MP4 reader: Constant samplesize & variable duration not yet supported. Contact the author if you have such a sample file.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:1168
+#: src/input/r_qtmp4.cpp:1205
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read chunk number %1%/%2% with size %3% from position %4%. Aborting.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:2105
-#: src/input/r_qtmp4.cpp:2119
+#: src/input/r_qtmp4.cpp:2142
+#: src/input/r_qtmp4.cpp:2156
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the extended sound description atom for track ID %1%.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:2076
+#: src/input/r_qtmp4.cpp:2113
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the sound description atom for track ID %1%.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:908
+#: src/input/r_qtmp4.cpp:926
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the stream description atom for track ID %1%.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:2151
+#: src/input/r_qtmp4.cpp:2188
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the video description atom for track ID %1%.\n"
 msgstr ""
@@ -5755,75 +5750,75 @@ msgstr ""
 msgid "Quicktime/MP4 reader: Invalid chunk size %1% at %2%.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:2502
+#: src/input/r_qtmp4.cpp:2539
 #, boost-format
 msgid "Quicktime/MP4 reader: MPEG4 part 10/AVC track %1% is missing its decoder config. Skipping this track.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:2518
+#: src/input/r_qtmp4.cpp:2555
 #, boost-format
 msgid "Quicktime/MP4 reader: MPEG4 track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:485
+#: src/input/r_qtmp4.cpp:492
 #, boost-format
 msgid "Quicktime/MP4 reader: The 'media header' atom ('mdhd') uses the unsupported version %1%.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:901
+#: src/input/r_qtmp4.cpp:919
 #, boost-format
 msgid "Quicktime/MP4 reader: The 'size' field is too small in the stream description atom for track ID %1%.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:490
+#: src/input/r_qtmp4.cpp:497
 msgid "Quicktime/MP4 reader: The 'time scale' parameter was 0. This is not supported.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:2476
+#: src/input/r_qtmp4.cpp:2513
 #, boost-format
 msgid "Quicktime/MP4 reader: The AAC track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:2471
+#: src/input/r_qtmp4.cpp:2508
 #, boost-format
 msgid "Quicktime/MP4 reader: The audio track %1% is using an unsupported 'object type id' of %2% in the 'esds' atom. Skipping this track.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:2512
+#: src/input/r_qtmp4.cpp:2549
 #, boost-format
 msgid "Quicktime/MP4 reader: The video track %1% is missing the ESDS atom. Skipping this track.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:348
+#: src/input/r_qtmp4.cpp:351
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers with an unknown or unsupported compression algorithm '%1%'. Aborting.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:381
+#: src/input/r_qtmp4.cpp:384
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but the expected uncompressed size (%1%) was not what is available after uncompressing (%2%).\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:372
+#: src/input/r_qtmp4.cpp:375
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but the zlib library could not be initialized. Error code from zlib: %1%. Aborting.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:377
+#: src/input/r_qtmp4.cpp:380
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but they could not be uncompressed. Error code from zlib: %1%. Aborting.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:2445
-#: src/input/r_qtmp4.cpp:2460
-#: src/input/r_qtmp4.cpp:2486
-#: src/input/r_qtmp4.cpp:2536
+#: src/input/r_qtmp4.cpp:2482
+#: src/input/r_qtmp4.cpp:2497
+#: src/input/r_qtmp4.cpp:2523
+#: src/input/r_qtmp4.cpp:2573
 #, boost-format
 msgid "Quicktime/MP4 reader: Track %1% is missing some data. Broken header atoms?\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:2084
-#: src/input/r_qtmp4.cpp:2158
+#: src/input/r_qtmp4.cpp:2121
+#: src/input/r_qtmp4.cpp:2195
 #, boost-format
 msgid "Quicktime/MP4 reader: Track ID %1% has more than one FourCC. Only using the first one (%|2$.4s|) and not this one (%|3$.4s|).\n"
 msgstr ""
@@ -6066,7 +6061,7 @@ msgstr ""
 msgid "Scan directory for other playlists:"
 msgstr ""
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:33
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:71
 #, fuzzy
 msgid "Scanned files"
 msgstr "Přiložené soubory"
@@ -6194,7 +6189,7 @@ msgstr "Úsek, neznámá velikost"
 msgid "Select Matroska file"
 msgstr "Vyberte soubor Matroska"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:27
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:63
 #, fuzzy
 msgid "Select file to add"
 msgstr "Vyberte hodnoty, které mají být použity"
@@ -6470,13 +6465,13 @@ msgstr ""
 msgid "Single field frame before GOP header detected. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr ""
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:63
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:97
 msgid "Size"
 msgstr ""
 
 #: src/mmg/tabs/global.cpp:195
 #: src/mmg/tabs/global.cpp:198
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:42
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:80
 msgid "Size:"
 msgstr ""
 
@@ -6745,7 +6740,7 @@ msgstr ""
 msgid "The AAC profiles are different: %1% and %2%"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:1278
+#: src/input/r_qtmp4.cpp:1315
 msgid "The AVC video track is missing the 'CTTS' atom for frame timecode offsets. However, AVC/h.264 allows frames to have more than the traditional one (for P frames) or two (for B frames) references to other frames. The timecodes for such frames will be out-of-order, and the 'CTTS' atom is needed for getting the timecodes right. As it is missing the timecodes for this track might be wrong. You should watch the resulting file and make sure that it looks like you expected it to.\n"
 msgstr "Stopě AVC videa chybí prvek 'CTTS' pro vyrovnání časových kódů snímků. AVC/h.264 bohužel umožňuje snímkům, aby měly více než obvyklý jeden (pro P snímky) nebo dva (pro B snímky) odkazy na jiné snímky. Časové kódy pro takové snímky budou mimo pořadí a prvek 'CTTS' je potřebný pro získání správných časových kódů. Protože chybí, časové kódy pro tuto stopu můžou být špatné. Měli byste zhlédnout výsledný soubor a ujistit se, že vypadá tak, jak má.\n"
 
@@ -6797,7 +6792,7 @@ msgstr "Soubor '%1%' byl otevřen pro zápis.\n"
 msgid "The Kate identification header could not be parsed (%1%).\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:790
+#: src/input/r_qtmp4.cpp:797
 #, boost-format
 msgid "The MP4 file '%1%' contains chapters whose format was not recognized. This is often the case if the chapters are not encoded in UTF-8. Use the '--chapter-charset' option in order to specify the charset to use.\n"
 msgstr ""
@@ -8012,7 +8007,7 @@ msgstr ""
 msgid "Track %1%: %2%, codec ID: %3%%4%%5%%6%\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:2233
+#: src/input/r_qtmp4.cpp:2270
 #, boost-format
 msgid "Track %1%: AAC found, but decoder config data has length %2%.\n"
 msgstr ""
@@ -8032,7 +8027,7 @@ msgstr ""
 msgid "Track %1%: Subtitle entry number %2% is missing its duration. Assuming a duration of 1s.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:2236
+#: src/input/r_qtmp4.cpp:2273
 #, boost-format
 msgid "Track %1%: The AAC information could not be parsed.\n"
 msgstr ""
@@ -8105,7 +8100,7 @@ msgstr ""
 msgid "Tracks, chapters and tags:"
 msgstr "Stopy, kapitoly a štítky:"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:46
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:84
 #, fuzzy
 msgid "Tracks:"
 msgstr "Název stopy:"
@@ -8128,7 +8123,7 @@ msgstr ""
 msgid "Two VobSub tracks can only be extracted into the same file if their CodecPrivate data matches. This is not the case for the tracks %1% and %2%.\n"
 msgstr ""
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:66
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:99
 #, fuzzy
 msgid "Type"
 msgstr "Typ:"
@@ -8675,6 +8670,11 @@ msgstr ""
 #: src/common/stereo_mode.cpp:62
 msgid "both eyes laced in one block (right first)"
 msgstr ""
+
+#: src/common/version.cpp:148
+#, fuzzy, boost-format
+msgid "built on %1% %2%"
+msgstr "%1% sestaveno %2% %3%"
 
 #: src/info/mkvinfo.cpp:943
 #: src/input/r_matroska.cpp:98

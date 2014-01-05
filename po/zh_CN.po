@@ -803,11 +803,6 @@ msgstr "### 开发中 hack ###"
 msgid "### Global output control ###"
 msgstr "### 全局输出控制 ###"
 
-#: src/common/version.cpp:143
-#, boost-format
-msgid "%1% built on %2% %3%"
-msgstr "%1% 编译于 %2% %3%"
-
 #: src/common/strings/formatting.cpp:261
 #, boost-format
 msgid "%1% bytes"
@@ -958,7 +953,7 @@ msgid "&About\tF1"
 msgstr "关于(&A)\tF1"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:47
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:52
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:90
 msgid "&Add"
 msgstr "添加(&A)"
 
@@ -971,7 +966,7 @@ msgstr "添加到任务队列(&A)"
 msgid "&Attachments\tAlt-2"
 msgstr "附件选项(&A)\tAlt-2"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:53
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:91
 msgid "&Cancel"
 msgstr "取消(&C)"
 
@@ -2722,7 +2717,7 @@ msgstr "前簇长: %1%"
 msgid "Cluster timecode: %|1$.3f|s"
 msgstr "簇时间码: %|1$.3f|s"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:68
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:100
 msgid "Codec"
 msgstr "编解码器"
 
@@ -3234,7 +3229,7 @@ msgstr "描述已存在"
 msgid "Description:"
 msgstr "描述:"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:38
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:76
 msgid "Details"
 msgstr "详细信息"
 
@@ -3245,7 +3240,7 @@ msgid "Dirac"
 msgstr "Dirac"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:84
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:75
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:104
 msgid "Directory"
 msgstr "目录"
 
@@ -3340,12 +3335,12 @@ msgstr "完成。\n"
 msgid "Download URL:"
 msgstr "下载 URL:"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:61
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:96
 msgid "Duration"
 msgstr "时长"
 
 #: src/mmg/tabs/global.cpp:212
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:40
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:78
 msgid "Duration:"
 msgstr "时长:"
 
@@ -3761,8 +3756,8 @@ msgid "File modified"
 msgstr "文件已修改"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:82
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:59
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:73
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:95
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:103
 msgid "File name"
 msgstr "文件名"
 
@@ -4648,7 +4643,7 @@ msgstr "“紧缩”标记: %1%"
 
 #: src/common/property_element.cpp:128
 #: src/mmg/header_editor/frame.cpp:414
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:70
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:101
 msgid "Language"
 msgstr "语言"
 
@@ -5107,11 +5102,11 @@ msgstr "下段唯一 ID"
 msgid "No %1% specified in '--%2% %3%'.\n"
 msgstr "未指定 %1%，在 '--%2% %3%'。\n"
 
-#: src/input/r_qtmp4.cpp:1211
+#: src/input/r_qtmp4.cpp:1248
 msgid "No AC3 header found in first frame; track will be skipped.\n"
 msgstr "首帧未发现 AC3 头; 此轨将被跳过。\n"
 
-#: src/input/r_qtmp4.cpp:1238
+#: src/input/r_qtmp4.cpp:1275
 #, fuzzy
 msgid "No DTS header found in first frames; track will be skipped.\n"
 msgstr "首帧未发现 AC3 头; 此轨将被跳过。\n"
@@ -5290,7 +5285,7 @@ msgstr "无事可做。\n"
 msgid "Notice"
 msgstr "通告"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:44
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:82
 msgid "Number of chapters:"
 msgstr "章节数:"
 
@@ -5559,7 +5554,7 @@ msgstr "像素高度: %1%"
 msgid "Pixel width: %1%"
 msgstr "像素宽度: %1%"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:48
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:86
 msgid "Playlist items:"
 msgstr "播放列表项:"
 
@@ -5670,37 +5665,37 @@ msgstr "QuickTime 音/视频文件"
 msgid "QuickTime/MP4"
 msgstr "QuickTime/MP4"
 
-#: src/input/r_qtmp4.cpp:316
+#: src/input/r_qtmp4.cpp:319
 #, boost-format
 msgid "Quicktime/MP4 reader: '%1%' atom is too small. Expected size: >= %2%. Actual size: %3%.\n"
 msgstr "Quicktime/MP4 读取器: '%1%' 单元过小。预期尺寸: >= %2%。实际尺寸: %3%。\n"
 
-#: src/input/r_qtmp4.cpp:1799
+#: src/input/r_qtmp4.cpp:1836
 msgid "Quicktime/MP4 reader: Constant samplesize & variable duration not yet supported. Contact the author if you have such a sample file.\n"
 msgstr "Quicktime/MP4 读取器: 尚不支持恒定采样尺寸与可变时长。如果您有这样的文件样本，请联系作者。\n"
 
-#: src/input/r_qtmp4.cpp:1168
+#: src/input/r_qtmp4.cpp:1205
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read chunk number %1%/%2% with size %3% from position %4%. Aborting.\n"
 msgstr "Quicktime/MP4 读取器: 无法读取块号 %1%/%2% 尺寸 %3% 位置 %4%。正在中止。\n"
 
-#: src/input/r_qtmp4.cpp:2105
-#: src/input/r_qtmp4.cpp:2119
+#: src/input/r_qtmp4.cpp:2142
+#: src/input/r_qtmp4.cpp:2156
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the extended sound description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 读取器: 无法读取轨道 %1% 的扩展音频描述单元。\n"
 
-#: src/input/r_qtmp4.cpp:2076
+#: src/input/r_qtmp4.cpp:2113
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the sound description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 读取器: 无法读取轨道 %1% 的音频描述单元。\n"
 
-#: src/input/r_qtmp4.cpp:908
+#: src/input/r_qtmp4.cpp:926
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the stream description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 读取器: 无法读取轨道 %1% 的流描述单元。\n"
 
-#: src/input/r_qtmp4.cpp:2151
+#: src/input/r_qtmp4.cpp:2188
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the video description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 读取器: 无法读取轨道 %1% 的视频描述单元。\n"
@@ -5718,75 +5713,75 @@ msgstr "Quicktime/MP4 读取器: 未发现 'mdat' 单元。找不到影片数据
 msgid "Quicktime/MP4 reader: Invalid chunk size %1% at %2%.\n"
 msgstr "Quicktime/MP4 读取器: 无效的块尺寸 %1% 于 %2%。\n"
 
-#: src/input/r_qtmp4.cpp:2502
+#: src/input/r_qtmp4.cpp:2539
 #, boost-format
 msgid "Quicktime/MP4 reader: MPEG4 part 10/AVC track %1% is missing its decoder config. Skipping this track.\n"
 msgstr "Quicktime/MP4 读取器: MPEG4 part 10/AVC 轨道 %1% 缺解码器配置信息。正在跳过该轨。\n"
 
-#: src/input/r_qtmp4.cpp:2518
+#: src/input/r_qtmp4.cpp:2555
 #, boost-format
 msgid "Quicktime/MP4 reader: MPEG4 track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr "Quicktime/MP4 读取器: MPEG4 轨 %1% 缺 esds 单元/解码器配置信息。正在跳过该轨。\n"
 
-#: src/input/r_qtmp4.cpp:485
+#: src/input/r_qtmp4.cpp:492
 #, boost-format
 msgid "Quicktime/MP4 reader: The 'media header' atom ('mdhd') uses the unsupported version %1%.\n"
 msgstr "Quicktime/MP4 读取器: 'media header' 媒体头单元 ('mdhd') 使用了不受支持的版本 %1%。\n"
 
-#: src/input/r_qtmp4.cpp:901
+#: src/input/r_qtmp4.cpp:919
 #, boost-format
 msgid "Quicktime/MP4 reader: The 'size' field is too small in the stream description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 读取器: 轨道 %1% 的流描述单元的 'size' 字段过小。\n"
 
-#: src/input/r_qtmp4.cpp:490
+#: src/input/r_qtmp4.cpp:497
 msgid "Quicktime/MP4 reader: The 'time scale' parameter was 0. This is not supported.\n"
 msgstr "Quicktime/MP4 读取器: 'time scale' 时间缩放参数为 0。这是不支持的。\n"
 
-#: src/input/r_qtmp4.cpp:2476
+#: src/input/r_qtmp4.cpp:2513
 #, boost-format
 msgid "Quicktime/MP4 reader: The AAC track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr "Quicktime/MP4 读取器: 该 AAC 轨道 %1% 缺 esds 单元/解码器配置信息。正在跳过该轨。\n"
 
-#: src/input/r_qtmp4.cpp:2471
+#: src/input/r_qtmp4.cpp:2508
 #, boost-format
 msgid "Quicktime/MP4 reader: The audio track %1% is using an unsupported 'object type id' of %2% in the 'esds' atom. Skipping this track.\n"
 msgstr "Quicktime/MP4 读取器: 音频轨 %1% 的 'esds' 单元使用了不支持的 'object type id' 对象类别号 %2%。正在跳过该轨。\n"
 
-#: src/input/r_qtmp4.cpp:2512
+#: src/input/r_qtmp4.cpp:2549
 #, boost-format
 msgid "Quicktime/MP4 reader: The video track %1% is missing the ESDS atom. Skipping this track.\n"
 msgstr "Quicktime/MP4 读取器: 视频轨 %1% 缺 ESDS 单元。正在跳过此轨。\n"
 
-#: src/input/r_qtmp4.cpp:348
+#: src/input/r_qtmp4.cpp:351
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers with an unknown or unsupported compression algorithm '%1%'. Aborting.\n"
 msgstr "Quicktime/MP4 读取器: 此文件的头部经未知或不支持的压缩算法 '%1%' 压缩。正在中止。\n"
 
-#: src/input/r_qtmp4.cpp:381
+#: src/input/r_qtmp4.cpp:384
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but the expected uncompressed size (%1%) was not what is available after uncompressing (%2%).\n"
 msgstr "Quicktime/MP4 读取器: 此文件头部经压缩，但预期的解压后尺寸 (%1%) 与解压得到的尺寸不符 (%2%)。\n"
 
-#: src/input/r_qtmp4.cpp:372
+#: src/input/r_qtmp4.cpp:375
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but the zlib library could not be initialized. Error code from zlib: %1%. Aborting.\n"
 msgstr "Quicktime/MP4 读取器: 此文件头部经压缩，但无法初始化 zlib 库。zlib 错误代码: %1%。正在中止。\n"
 
-#: src/input/r_qtmp4.cpp:377
+#: src/input/r_qtmp4.cpp:380
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but they could not be uncompressed. Error code from zlib: %1%. Aborting.\n"
 msgstr "Quicktime/MP4 读取器: 此文件头部经压缩，但无法解压。zlib 错误代码: %1%。正在中止。\n"
 
-#: src/input/r_qtmp4.cpp:2445
-#: src/input/r_qtmp4.cpp:2460
-#: src/input/r_qtmp4.cpp:2486
-#: src/input/r_qtmp4.cpp:2536
+#: src/input/r_qtmp4.cpp:2482
+#: src/input/r_qtmp4.cpp:2497
+#: src/input/r_qtmp4.cpp:2523
+#: src/input/r_qtmp4.cpp:2573
 #, boost-format
 msgid "Quicktime/MP4 reader: Track %1% is missing some data. Broken header atoms?\n"
 msgstr "Quicktime/MP4 读取器: 轨道 %1% 缺一些数据。头部单元损坏?\n"
 
-#: src/input/r_qtmp4.cpp:2084
-#: src/input/r_qtmp4.cpp:2158
+#: src/input/r_qtmp4.cpp:2121
+#: src/input/r_qtmp4.cpp:2195
 #, boost-format
 msgid "Quicktime/MP4 reader: Track ID %1% has more than one FourCC. Only using the first one (%|2$.4s|) and not this one (%|3$.4s|).\n"
 msgstr "Quicktime/MP4 读取器: 轨道 ID %1% 有多于一个 FourCC。只使用了第一个 (%|2$.4s|) 而非 (%|3$.4s|)。\n"
@@ -6029,7 +6024,7 @@ msgstr "扫描目录中的其他播放列表"
 msgid "Scan directory for other playlists:"
 msgstr "扫描目录中的其他播放列表:"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:33
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:71
 msgid "Scanned files"
 msgstr "已扫描文件"
 
@@ -6154,7 +6149,7 @@ msgstr "剪辑, 尺寸未知"
 msgid "Select Matroska file"
 msgstr "选择 Matroska 文件"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:27
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:63
 msgid "Select file to add"
 msgstr "选择要添加的文件"
 
@@ -6433,13 +6428,13 @@ msgstr "简单块 (%1%轨道号 %2%, %3% 帧, 时间码 %|4$.3f|s = %5%)"
 msgid "Single field frame before GOP header detected. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "在 GOP 画面组头前侦测到单场帧。尝试混流前请先修复 MPEG2 视频流。\n"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:63
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:97
 msgid "Size"
 msgstr "尺寸"
 
 #: src/mmg/tabs/global.cpp:195
 #: src/mmg/tabs/global.cpp:198
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:42
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:80
 msgid "Size:"
 msgstr "尺寸:"
 
@@ -6710,7 +6705,7 @@ msgstr "此 .idx 文件不包含指明语言的 'id: ...' 行。\n"
 msgid "The AAC profiles are different: %1% and %2%"
 msgstr "AAC profile 不同: %1% 与 %2%"
 
-#: src/input/r_qtmp4.cpp:1278
+#: src/input/r_qtmp4.cpp:1315
 msgid "The AVC video track is missing the 'CTTS' atom for frame timecode offsets. However, AVC/h.264 allows frames to have more than the traditional one (for P frames) or two (for B frames) references to other frames. The timecodes for such frames will be out-of-order, and the 'CTTS' atom is needed for getting the timecodes right. As it is missing the timecodes for this track might be wrong. You should watch the resulting file and make sure that it looks like you expected it to.\n"
 msgstr "此 AVC 视频轨缺 'CTTS' 帧时间码偏移单元。然而，AVC/h.264 允许帧有超过通常的一次 (对于 P 帧) 或两次 (对于 B 帧) 帧参考。此类帧的时间码会变得无序，需要 'CTTS' 单元来修正。由于缺时间码，此轨可能出错。请查看生成的文件，确认它是不是您预期的样子。\n"
 
@@ -6762,7 +6757,7 @@ msgstr "文件 '%1%' 已以写入模式打开。\n"
 msgid "The Kate identification header could not be parsed (%1%).\n"
 msgstr "无法解析 Kate 识别头 (%1%)。\n"
 
-#: src/input/r_qtmp4.cpp:790
+#: src/input/r_qtmp4.cpp:797
 #, boost-format
 msgid "The MP4 file '%1%' contains chapters whose format was not recognized. This is often the case if the chapters are not encoded in UTF-8. Use the '--chapter-charset' option in order to specify the charset to use.\n"
 msgstr "MP4 文件 '%1%' 包含的章节格式未能识别。通常是由于章节未以 UTF-8 编码。请使用 '--chapter-charset' 选项来指定要使用的字符集。\n"
@@ -8011,7 +8006,7 @@ msgstr "轨道 %1%（CodecID 为 '%2%'）缺 \"default duration\" 默认时长�
 msgid "Track %1%: %2%, codec ID: %3%%4%%5%%6%\n"
 msgstr "轨道 %1%: %2%, 编解码器 ID: %3%%4%%5%%6%\n"
 
-#: src/input/r_qtmp4.cpp:2233
+#: src/input/r_qtmp4.cpp:2270
 #, boost-format
 msgid "Track %1%: AAC found, but decoder config data has length %2%.\n"
 msgstr "轨道 %1%: 已发现 AAC, 但解码器配置数据长为 %2%。\n"
@@ -8031,7 +8026,7 @@ msgstr "轨道 %1%: NAL 太大。头部字段给出的尺寸: %2%，包中可用
 msgid "Track %1%: Subtitle entry number %2% is missing its duration. Assuming a duration of 1s.\n"
 msgstr "轨道 %1%: 字幕号 %2% 缺时长。假定为 1 秒。\n"
 
-#: src/input/r_qtmp4.cpp:2236
+#: src/input/r_qtmp4.cpp:2273
 #, boost-format
 msgid "Track %1%: The AAC information could not be parsed.\n"
 msgstr "轨道 %1%: AAC 信息无法解析。\n"
@@ -8104,7 +8099,7 @@ msgstr "使用不支持的内容编码（压缩或加密）方案的轨道不能
 msgid "Tracks, chapters and tags:"
 msgstr "轨道、章节与标签:"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:46
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:84
 msgid "Tracks:"
 msgstr "轨道列表:"
 
@@ -8126,7 +8121,7 @@ msgstr "TrueHD 音频流支持两种帧类：同步帧和非同步帧。启用�
 msgid "Two VobSub tracks can only be extracted into the same file if their CodecPrivate data matches. This is not the case for the tracks %1% and %2%.\n"
 msgstr "两个 VobSub 轨道只能提取到同一个文件中，如果 CodecPrivate 数据相匹配的话。此问题只出在轨道 %1% 与 %2%。\n"
 
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:66
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:99
 msgid "Type"
 msgstr "类别"
 
@@ -8682,6 +8677,11 @@ msgstr "双眼同块 (左先)"
 #: src/common/stereo_mode.cpp:62
 msgid "both eyes laced in one block (right first)"
 msgstr "双眼同块 (右先)"
+
+#: src/common/version.cpp:148
+#, fuzzy, boost-format
+msgid "built on %1% %2%"
+msgstr "%1% 编译于 %2% %3%"
 
 #: src/info/mkvinfo.cpp:943
 #: src/input/r_matroska.cpp:98
