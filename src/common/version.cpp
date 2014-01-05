@@ -127,21 +127,29 @@ mtx_release_version_t::mtx_release_version_t()
 std::string
 get_version_info(const std::string &program,
                  version_info_flags_e flags) {
-  std::string short_version_info;
+  std::vector<std::string> info;
+
   if (!program.empty())
-    short_version_info += program + " ";
-  short_version_info += (boost::format("v%1% ('%2%')") % VERSION % VERSIONNAME).str();
-#if !defined(HAVE_BUILD_TIMESTAMP)
-  return short_version_info;
-#else  // !defined(HAVE_BUILD_TIMESTAMP)
-  if (!(flags & vif_full))
-    return short_version_info;
+    info.push_back(program);
+  info.push_back((boost::format("v%1% ('%2%')") % VERSION % VERSIONNAME).str());
 
-  if (flags & vif_untranslated)
-    return (boost::format("%1% built on %2% %3%") % short_version_info % __DATE__ % __TIME__).str();
+  if (flags & vif_architecture)
+#if defined(ARCH_64BIT)
+    info.push_back("64bit");
+#else
+    info.push_back("32bit");
+#endif
 
-  return (boost::format(Y("%1% built on %2% %3%")) % short_version_info % __DATE__ % __TIME__).str();
+#if defined(HAVE_BUILD_TIMESTAMP)
+  if (flags & vif_timestamp) {
+    if (flags & vif_untranslated)
+      info.push_back((boost::format("built on %1% %2%") % __DATE__ % __TIME__).str());
+    else
+      info.push_back((boost::format(Y("built on %1% %2%")) % __DATE__ % __TIME__).str());
+  }
 #endif  // !defined(HAVE_BUILD_TIMESTAMP)
+
+  return join(" ", info);
 }
 
 int
