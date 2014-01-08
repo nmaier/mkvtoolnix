@@ -97,7 +97,7 @@
 
         * mkvmerge: bug fix: Fixed the mapping of the Opus element »seek
         pre-roll« and »pre-skip« to the Matroska elements »track seek
-        pre-roll« and »codec delay«. Remuxing Matroska files without Opus
+        pre-roll« and »codec delay«. Remuxing Matroska files with Opus
         created with earlier versions of MKVToolNix is enough to fix such
         a file.
 
