@@ -1,5 +1,11 @@
 #!/usr/bin/env ruby
 
+version = RUBY_VERSION.gsub(/[^0-9\.]+/, "").split(/\./).collect(&:to_i)
+version << 0 while version.size < 3
+if (version[0] < 2) && (version[1] < 9)
+  fail "Ruby 1.9.x or newer is required for building"
+end
+
 # Change to base directory before doing anything
 if FileUtils.pwd != File.dirname(__FILE__)
   new_dir = File.absolute_path(File.dirname(__FILE__))
@@ -13,22 +19,8 @@ if Rake.application.options.respond_to?(:threads) && [nil, 0, 1].include?(Rake.a
   Rake.application.options.threads = ENV['DRAKETHREADS'].to_i
 end
 
-# Ruby 1.9.x introduce "require_relative" for local requires. 1.9.2
-# removes "." from $: and forces us to use "require_relative". 1.8.x
-# does not know "require_relative" yet though.
-begin
-  require_relative()
-rescue NoMethodError
-  def require_relative *args
-    require *args
-  end
-rescue Exception
-end
-
 require "pp"
 
-# Extensions have to be loaded before certain functions that don't
-# exist in Ruby 1.8.x are used, e.g. Dir.exists?
 require_relative "rake.d/extensions"
 require_relative "rake.d/config"
 

@@ -41,11 +41,3 @@ class Array
     return Hash[ *elements.flatten ]
   end
 end
-
-if !Dir.respond_to?(:exists?)
-  class Dir
-    def self.exists? name
-      File.directory? name
-    end
-  end
-end
