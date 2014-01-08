@@ -25,7 +25,7 @@
 #include "common/strings/parsing.h"
 #include "common/version.h"
 
-#define VERSIONNAME "The Edge Of The In Between"
+#define VERSIONNAME "Back to the Ground"
 
 version_number_t::version_number_t()
   : valid(false)
