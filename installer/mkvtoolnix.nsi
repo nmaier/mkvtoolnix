@@ -94,13 +94,15 @@ Page custom showExternalLinks
 !include "WinVer.nsh"
 !include "LogicLib.nsh"
 
-Name "${PRODUCT_NAME} ${PRODUCT_VERSION}${PRODUCT_VERSION_BUILD}"
-BrandingText "${PRODUCT_NAME} ${PRODUCT_VERSION}${PRODUCT_VERSION_BUILD} by ${PRODUCT_PUBLISHER}"
 
 !if ${MINGW_PROCESSOR_ARCH} == "amd64"
+  Name "${PRODUCT_NAME} ${PRODUCT_VERSION} (64bit)${PRODUCT_VERSION_BUILD}"
+  BrandingText "${PRODUCT_NAME} ${PRODUCT_VERSION} (64bit)${PRODUCT_VERSION_BUILD} by ${PRODUCT_PUBLISHER}"
   OutFile "mkvtoolnix-amd64-${PRODUCT_VERSION}-setup.exe"
   InstallDir "$PROGRAMFILES64\${PRODUCT_NAME}"
 !else
+  Name "${PRODUCT_NAME} ${PRODUCT_VERSION} (32bit)${PRODUCT_VERSION_BUILD}"
+  BrandingText "${PRODUCT_NAME} ${PRODUCT_VERSION} (32bit)${PRODUCT_VERSION_BUILD} by ${PRODUCT_PUBLISHER}"
   OutFile "mkvtoolnix-${PRODUCT_VERSION}-setup.exe"
   InstallDir "$PROGRAMFILES\${PRODUCT_NAME}"
 !endif

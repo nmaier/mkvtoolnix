@@ -1,5 +1,8 @@
 2014-01-09  Moritz Bunkus  <moritz@bunkus.org>
 
+        * installer: enhancement: the architecture (32bit vs 64bit) is
+        mentioned in the interface.
+
         * installer: bug fix: the installation directory for 64bit builds
         will default to the proper directory (»C:\Program Files« instead
         of »C:\Program Files (x86)«). Fixes #956.
