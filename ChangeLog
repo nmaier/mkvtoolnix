@@ -1,3 +1,9 @@
+2014-01-09  Moritz Bunkus  <moritz@bunkus.org>
+
+        * installer: bug fix: the installation directory for 64bit builds
+        will default to the proper directory (»C:\Program Files« instead
+        of »C:\Program Files (x86)«). Fixes #956.
+
 2014-01-08  Moritz Bunkus  <moritz@bunkus.org>
 
         * Released v6.7.0.

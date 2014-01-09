@@ -96,8 +96,15 @@ Page custom showExternalLinks
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}${PRODUCT_VERSION_BUILD}"
 BrandingText "${PRODUCT_NAME} ${PRODUCT_VERSION}${PRODUCT_VERSION_BUILD} by ${PRODUCT_PUBLISHER}"
-OutFile "mkvtoolnix${MINGW_PROCESSOR_ARCH}-${PRODUCT_VERSION}-setup.exe"
-InstallDir "$PROGRAMFILES\${PRODUCT_NAME}"
+
+!if ${MINGW_PROCESSOR_ARCH} == "amd64"
+  OutFile "mkvtoolnix-amd64-${PRODUCT_VERSION}-setup.exe"
+  InstallDir "$PROGRAMFILES64\${PRODUCT_NAME}"
+!else
+  OutFile "mkvtoolnix-${PRODUCT_VERSION}-setup.exe"
+  InstallDir "$PROGRAMFILES\${PRODUCT_NAME}"
+!endif
+
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
 ShowUnInstDetails show
