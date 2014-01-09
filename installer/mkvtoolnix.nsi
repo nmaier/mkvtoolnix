@@ -1,6 +1,6 @@
 !define PRODUCT_NAME "MKVToolNix"
 !define PRODUCT_VERSION "6.7.0"
-!define PRODUCT_VERSION_BUILD " [20140102-565]"
+!define PRODUCT_VERSION_BUILD ""  # Intentionally left empty for releases
 !define PRODUCT_PUBLISHER "Moritz Bunkus"
 !define PRODUCT_WEB_SITE "http://www.bunkus.org/videotools/mkvtoolnix/"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\mmg.exe"
