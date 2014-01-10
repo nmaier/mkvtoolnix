@@ -1,5 +1,8 @@
 2014-01-10  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mkvmerge: bug fix: fixed an invalid memory access in the MPEG4
+        part 2 handling code in 64bit builds on Windows. Fixes #957.
+
         * mmg: bug fix: mkvmerge's file identification is written to a
         temporary file with --redirect-output and from there into mmg
         instead of directly from mkvmerge. This prevents from character
