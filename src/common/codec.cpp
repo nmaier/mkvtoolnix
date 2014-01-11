@@ -48,6 +48,12 @@ codec_c::initialize() {
   ms_codecs.emplace_back("TrueHD",                  CT_A_TRUEHD,    "trhd|A_TRUEHD");
   ms_codecs.emplace_back("TrueAudio",               CT_A_TTA,       "tta1|A_TTA1?");
   ms_codecs.emplace_back("WavPack4",                CT_A_WAVPACK4,  "wvpk|A_WAVPACK4");
+  ms_codecs.emplace_back("G2/Cook",                 CT_A_COOK,      "cook|A_REAL/COOK");
+  ms_codecs.emplace_back("Sipro/ACELP-NET",         CT_A_ACELP_NET, "sipr|A_REAL/SIPR");
+  ms_codecs.emplace_back("ATRAC3",                  CT_A_ATRAC3,    "atrc|A_REAL/ATRC");
+  ms_codecs.emplace_back("RealAudio-Lossless",      CT_A_RALF,      "ralf|A_REAL/RALF");
+  ms_codecs.emplace_back("VSELP",                   CT_A_VSELP,     "lpcj|14_4|A_REAL/LPCJ|A_REAL/14_4");
+  ms_codecs.emplace_back("LD-CELP",                 CT_A_LD_CELP,   "28_8|A_REAL/28_8");
 
   ms_codecs.emplace_back("SubRip/SRT",              CT_S_SRT,       "S_TEXT/(?:UTF8|ASCII)");
   ms_codecs.emplace_back("SubStationAlpha",         CT_S_SSA_ASS,   "ssa\\s|ass\\s|S_TEXT/(?:SSA|ASS)");

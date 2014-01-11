@@ -110,6 +110,12 @@ enum codec_type_e {
   , CT_A_TRUEHD
   , CT_A_TTA
   , CT_A_WAVPACK4
+  , CT_A_COOK
+  , CT_A_ACELP_NET
+  , CT_A_ATRAC3
+  , CT_A_RALF
+  , CT_A_VSELP
+  , CT_A_LD_CELP
 
   , CT_S_SRT = 0x3000
   , CT_S_SSA_ASS
