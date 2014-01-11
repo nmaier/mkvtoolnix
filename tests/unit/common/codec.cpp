@@ -32,6 +32,7 @@ TEST(Codec, LookUpStringAudio) {
   EXPECT_TRUE(codec_c::look_up("a52b").is(CT_A_AC3));
   EXPECT_TRUE(codec_c::look_up("ac-3").is(CT_A_AC3));
   EXPECT_TRUE(codec_c::look_up("sac3").is(CT_A_AC3));
+  EXPECT_TRUE(codec_c::look_up("dnet").is(CT_A_AC3));
 
   EXPECT_TRUE(codec_c::look_up(MKV_A_ALAC).is(CT_A_ALAC));
   EXPECT_TRUE(codec_c::look_up("ALAC").is(CT_A_ALAC));
@@ -85,6 +86,26 @@ TEST(Codec, LookUpStringAudio) {
 
   EXPECT_TRUE(codec_c::look_up(MKV_A_WAVPACK4).is(CT_A_WAVPACK4));
   EXPECT_TRUE(codec_c::look_up("wvpk").is(CT_A_WAVPACK4));
+
+  EXPECT_TRUE(codec_c::look_up("A_REAL/COOK").is(CT_A_COOK));
+  EXPECT_TRUE(codec_c::look_up("cook").is(CT_A_COOK));
+
+  EXPECT_TRUE(codec_c::look_up("A_REAL/SIPR").is(CT_A_ACELP_NET));
+  EXPECT_TRUE(codec_c::look_up("sipr").is(CT_A_ACELP_NET));
+
+  EXPECT_TRUE(codec_c::look_up("A_REAL/ATRC").is(CT_A_ATRAC3));
+  EXPECT_TRUE(codec_c::look_up("atrc").is(CT_A_ATRAC3));
+
+  EXPECT_TRUE(codec_c::look_up("A_REAL/RALF").is(CT_A_RALF));
+  EXPECT_TRUE(codec_c::look_up("ralf").is(CT_A_RALF));
+
+  EXPECT_TRUE(codec_c::look_up("A_REAL/14_4").is(CT_A_VSELP));
+  EXPECT_TRUE(codec_c::look_up("A_REAL/LPCJ").is(CT_A_VSELP));
+  EXPECT_TRUE(codec_c::look_up("14_4").is(CT_A_VSELP));
+  EXPECT_TRUE(codec_c::look_up("lpcJ").is(CT_A_VSELP));
+
+  EXPECT_TRUE(codec_c::look_up("A_REAL/28_8").is(CT_A_LD_CELP));
+  EXPECT_TRUE(codec_c::look_up("28_8").is(CT_A_LD_CELP));
 }
 
 TEST(Codec, LookUpStringVideo) {
