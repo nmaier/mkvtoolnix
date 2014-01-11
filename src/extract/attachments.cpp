@@ -42,7 +42,7 @@ struct attachment_t {
 
   attachment_t()
     : size(-1)
-    , id(-1)
+    , id{}
     , fdata(nullptr)
     , valid(false)
   {
@@ -79,7 +79,7 @@ attachment_t::parse(KaxAttached &att) {
     }
   }
 
-  valid = (-1 != id) && (-1 != size) && !type.empty();
+  valid = (-1 != size) && !type.empty();
 
   return *this;
 }

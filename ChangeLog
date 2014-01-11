@@ -1,8 +1,9 @@
 2014-01-11  Moritz Bunkus  <moritz@bunkus.org>
 
-        * mkvmerge: enhancement: attachments in Matroska files with a
-        missing FileUID element are not ignored as violating the specs
-        anymore. A new FileUID is generated instead.
+        * mkvmerge & mkvextract: enhancement: attachments in Matroska
+        files with a missing FileUID element are not ignored anymore even
+        though they violate the specs. mkvmerge generates a new FileUID
+        instead.
 
 2014-01-10  Moritz Bunkus  <moritz@bunkus.org>
 
