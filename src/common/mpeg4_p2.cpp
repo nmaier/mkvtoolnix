@@ -46,7 +46,7 @@ static bool
 mpeg4::p2::find_vol_header(bit_reader_c &bits) {
   uint32_t marker;
 
-  while (bits.get_remaining_bits() >= 32) {
+  while (!bits.eof()) {
     marker = bits.peek_bits(32);
 
     if ((marker & 0xffffff00) != 0x00000100) {
