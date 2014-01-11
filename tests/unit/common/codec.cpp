@@ -32,6 +32,7 @@ TEST(Codec, LookUpStringAudio) {
   EXPECT_TRUE(codec_c::look_up("a52b").is(CT_A_AC3));
   EXPECT_TRUE(codec_c::look_up("ac-3").is(CT_A_AC3));
   EXPECT_TRUE(codec_c::look_up("sac3").is(CT_A_AC3));
+  EXPECT_TRUE(codec_c::look_up("dnet").is(CT_A_AC3));
 
   EXPECT_TRUE(codec_c::look_up(MKV_A_ALAC).is(CT_A_ALAC));
   EXPECT_TRUE(codec_c::look_up("ALAC").is(CT_A_ALAC));

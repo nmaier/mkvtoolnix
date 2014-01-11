@@ -34,7 +34,7 @@ codec_c::initialize() {
   ms_codecs.emplace_back("VC1",                     CT_V_VC1,       "wvc1|vc-1");
 
   ms_codecs.emplace_back("AAC",                     CT_A_AAC,       "mp4a|aac.|raac|racp|A_AAC.*",           std::vector<uint16_t>{ 0x00ffu, 0x706du });
-  ms_codecs.emplace_back("AC3/EAC3",                CT_A_AC3,       "ac3.|ac-3|sac3|eac3|a52[\\sb]|A_E?AC3", 0x2000u);
+  ms_codecs.emplace_back("AC3/EAC3",                CT_A_AC3,       "ac3.|ac-3|sac3|eac3|a52[\\sb]|dnet|A_E?AC3", 0x2000u);
   ms_codecs.emplace_back("ALAC",                    CT_A_ALAC,      "alac|A_ALAC");
   ms_codecs.emplace_back("DTS",                     CT_A_DTS,       "dts[\\sbcehl]|A_DTS",                   0x2001u);
   ms_codecs.emplace_back("MP2",                     CT_A_MP2,       "mp2.|\\.mp[12]|mp2a|A_MPEG/L2",         0x0050);
