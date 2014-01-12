@@ -92,7 +92,8 @@ enum codec_type_e {
   , CT_V_DIRAC
   , CT_V_VP8
   , CT_V_VP9
-  , CT_V_SVQ
+  , CT_V_SVQ1
+  , CT_V_SVQ3
   , CT_V_VC1
 
   , CT_A_AAC = 0x2000

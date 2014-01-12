@@ -156,10 +156,11 @@ TEST(Codec, LookUpStringVideo) {
   EXPECT_TRUE(codec_c::look_up(MKV_V_VP9).is(CT_V_VP9));
   EXPECT_TRUE(codec_c::look_up("vp90").is(CT_V_VP9));
 
-  EXPECT_TRUE(codec_c::look_up("svq1").is(CT_V_SVQ));
-  EXPECT_TRUE(codec_c::look_up("svq1").is(CT_V_SVQ));
-  EXPECT_TRUE(codec_c::look_up("svqi").is(CT_V_SVQ));
-  EXPECT_TRUE(codec_c::look_up("svq3").is(CT_V_SVQ));
+  EXPECT_TRUE(codec_c::look_up("svq1").is(CT_V_SVQ1));
+  EXPECT_TRUE(codec_c::look_up("svq1").is(CT_V_SVQ1));
+  EXPECT_TRUE(codec_c::look_up("svqi").is(CT_V_SVQ1));
+
+  EXPECT_TRUE(codec_c::look_up("svq3").is(CT_V_SVQ3));
 
   EXPECT_TRUE(codec_c::look_up("vc-1").is(CT_V_VC1));
   EXPECT_TRUE(codec_c::look_up("wvc1").is(CT_V_VC1));

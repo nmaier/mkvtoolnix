@@ -1481,7 +1481,7 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
     else if (dmx->codec.is(CT_V_MPEG4_P10))
       create_video_packetizer_mpeg4_p10(dmx);
 
-    else if (dmx->codec.is(CT_V_SVQ))
+    else if (dmx->codec.is(CT_V_SVQ1))
       create_video_packetizer_svq1(dmx);
 
     else

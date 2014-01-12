@@ -30,7 +30,8 @@ codec_c::initialize() {
   ms_codecs.emplace_back("Dirac",                   CT_V_DIRAC,     "drac|V_DIRAC");
   ms_codecs.emplace_back("VP8",                     CT_V_VP8,       "vp8\\d|V_VP8");
   ms_codecs.emplace_back("VP9",                     CT_V_VP9,       "vp9\\d|V_VP9");
-  ms_codecs.emplace_back("Sorenson",                CT_V_SVQ,       "svq[i0-9]");
+  ms_codecs.emplace_back("Sorenson v1",             CT_V_SVQ1,      "svq[i1]");
+  ms_codecs.emplace_back("Sorenson v3",             CT_V_SVQ3,      "svq3");
   ms_codecs.emplace_back("VC1",                     CT_V_VC1,       "wvc1|vc-1");
 
   ms_codecs.emplace_back("AAC",                     CT_A_AAC,       "mp4a|aac.|raac|racp|A_AAC.*",           std::vector<uint16_t>{ 0x00ffu, 0x706du });
