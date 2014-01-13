@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: Israel Lucas Torrijos <lukillas.ole@gmail.com>\n"
 "POT-Creation-Date: 2010-06-08 10:00+0200\n"
-"PO-Revision-Date: 2013-12-28 23:35+0100\n"
+"PO-Revision-Date: 2014-01-13 01:44+0100\n"
 "Last-Translator: Israel Lucas Torrijos aka Overdrive80 <lukillas.ole@gmail."
 "com>\n"
 "Language-Team: Spanish <moritz@bunkus.org>\n"
@@ -979,11 +979,11 @@ msgstr[1] "%1% minutos"
 
 #: src/mmg/tabs/scanning_for_playlists_dlg.cpp:41
 #: src/mmg/tabs/scanning_for_playlists_dlg.cpp:148
-#, fuzzy, boost-format
+#, boost-format
 msgid "%1% of %2% file processed"
 msgid_plural "%1% of %2% files processed"
-msgstr[0] "%1% de %2% archivo(s) procesado(s)"
-msgstr[1] "%1% de %2% archivo(s) procesado(s)"
+msgstr[0] "%1% de %2% archivo procesado"
+msgstr[1] "%1% de %2% archivos procesados"
 
 #: src/common/strings/formatting.cpp:249
 #, boost-format
@@ -1533,9 +1533,9 @@ msgstr "'%1%' carece del ID de pista.\n"
 #: src/merge/mkvmerge.cpp:2085 src/merge/mkvmerge.cpp:2092
 #: src/merge/mkvmerge.cpp:2099 src/merge/mkvmerge.cpp:2106
 #: src/merge/mkvmerge.cpp:2113
-#, fuzzy, boost-format
+#, boost-format
 msgid "'%1%' lacks the track numbers.\n"
-msgstr "'%1%' carece de el/los número/s de pista.\n"
+msgstr "'%1%' carece de los números de pista.\n"
 
 #: src/common/output.cpp:157 src/common/output.cpp:170
 #: src/common/output.cpp:183 src/common/output.cpp:204
@@ -3640,9 +3640,8 @@ msgid "Delete one or more attachments"
 msgstr "Eliminar uno o más adjuntos"
 
 #: src/mmg/jobs.cpp:514
-#, fuzzy
 msgid "Delete the selected jobs from the job queue"
-msgstr "Eliminar el/los trabajo/s seleccionado/s desde la lista de tareas"
+msgstr "Eliminar los trabajos seleccionados de la lista de tareas"
 
 #: src/mmg/jobs.cpp:468
 msgid "Description"
@@ -3675,11 +3674,9 @@ msgid "Directory:"
 msgstr "Directorio:"
 
 #: src/mmg/jobs.cpp:509
-#, fuzzy
 msgid "Disable the selected jobs and set their status to 'done'"
 msgstr ""
-"Deshabilitar el/los trabajo/s seleccionado/s y establecer su estado como "
-"«hecho»"
+"Deshabilitar los trabajos seleccionados y establecer su estado a 'hecho'"
 
 #: src/mmg/cli_options_dlg.cpp:141
 msgid "Disable the use of SimpleBlocks instead of BlockGroups."
@@ -3759,9 +3756,8 @@ msgid "Dolby TrueHD"
 msgstr "Dolby TrueHD"
 
 #: src/merge/mkvmerge.cpp:2412
-#, fuzzy
 msgid "Done scanning playlists.\n"
-msgstr "nunca buscar otros playlists"
+msgstr "Realiza análisis de playlists.\n"
 
 #: src/propedit/propedit.cpp:123
 msgid "Done.\n"
@@ -3875,14 +3871,13 @@ msgid "EditionEntry %u"
 msgstr "Edición de entrada %u"
 
 #: src/mmg/tabs/global.cpp:278
-#, fuzzy
 msgid ""
 "Either the word 'all' which selects all chapters or a comma-separated list "
 "of chapter numbers before which to split."
 msgstr ""
 "O bien usa la palabra 'all' que selecciona todos los capítulos o una lista "
-"separada por comas, de los números de los capitulos después de los cuales se "
-"realizará la división."
+"separada por comas de los números de los capitulos antes de realizar la "
+"división."
 
 #: src/propedit/propedit.cpp:70
 #, boost-format
@@ -5882,14 +5877,12 @@ msgid "More than one track with the track number %1% found.\n"
 msgstr "Se encontró mas de una pista con el número de pista %1%.\n"
 
 #: src/mmg/jobs.cpp:501
-#, fuzzy
 msgid "Move the selected jobs down"
-msgstr "Bajar el/los trabajo/s seleccionado/s"
+msgstr "Bajar los trabajos seleccionados"
 
 #: src/mmg/jobs.cpp:498
-#, fuzzy
 msgid "Move the selected jobs up"
-msgstr "Subir el/los trabajo/s seleccionado/s"
+msgstr "Subir los trabajos seleccionados"
 
 #: src/info/mkvinfo.cpp:493
 #, boost-format
@@ -6413,9 +6406,8 @@ msgid "Overwrite existing file?"
 msgstr "¿Sobreescribir el archivo existente?"
 
 #: src/mmg/mmg_dialog.cpp:574
-#, fuzzy
 msgid "Overwrite existing files?"
-msgstr "¿Sobreescribir el archivo existente?"
+msgstr "¿Sobreescribir los archivos existentes?"
 
 #: src/output/p_pcm.h:46
 msgid "PCM"
@@ -6839,9 +6831,8 @@ msgid "RSA"
 msgstr "RSA"
 
 #: src/mmg/jobs.cpp:506
-#, fuzzy
 msgid "Re-enable the selected jobs"
-msgstr "Rehabilitar el/los trabajo/s seleccionado/s"
+msgstr "Reactivar los trabajos seleccionados"
 
 #: src/merge/output_control.cpp:974
 #, boost-format
@@ -7084,8 +7075,8 @@ msgstr "Archivos analizados"
 #, boost-format
 msgid "Scanning %1% files in %2% playlist.\n"
 msgid_plural "Scanning %1% files in %2% playlists.\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Analizando %1% archivos en %2% playlist.\n"
+msgstr[1] "Analizando %1% archivos en %2% playlists.\n"
 
 #: src/mmg/tabs/scanning_for_playlists_dlg.cpp:30
 msgid "Scanning directory"
@@ -7211,7 +7202,7 @@ msgid ""
 "of language drop down boxes."
 msgstr ""
 "Selecciona los idiomas que deseas que se muestren en la parte superior\n"
-"de la lista desplegable del idioma"
+"de la lista desplegable del idioma."
 
 #: src/mmg/tabs/chapters.cpp:85
 msgid "Select values to be applied"
@@ -7709,10 +7700,8 @@ msgid "Start the jobs whose status is 'pending'"
 msgstr "Iniciar los trabajos cuyo estado es «pendiente»"
 
 #: src/mmg/jobs.cpp:537
-#, fuzzy
 msgid "Start the selected jobs regardless of their status"
-msgstr ""
-"Iniciar el/los trabajo/s seleccionado/s independientemente de su estado"
+msgstr "Iniciar los trabajos seleccionados independientemente de su estado"
 
 #: src/mmg/mmg_dialog.cpp:287
 msgid "Start with empty settings"
@@ -8356,7 +8345,11 @@ msgid_plural ""
 "The directory it is located in contains %1% other files with the same "
 "extension."
 msgstr[0] ""
+"El directorio en el que se encuentra contiene %1% otro archivo con la misma "
+"extensión."
 msgstr[1] ""
+"El directorio en el que se encuentra contiene %1% otros archivos con la "
+"misma extensión."
 
 #: src/merge/connection_checks.h:49
 msgid "The display height of the two tracks is different: %1% and %2%"
@@ -8648,9 +8641,8 @@ msgstr ""
 "trabajo tienes que usar la opción del menu Guardar a archivo Matroska."
 
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:29
-#, fuzzy
 msgid "The file you've added is a playlist."
-msgstr "El encabezado del archivo es demasiado corto.\n"
+msgstr "El archivo añadido es un playlist."
 
 #: src/common/kax_file.cpp:48
 #, boost-format
@@ -8680,7 +8672,7 @@ msgstr ""
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:60
 msgid "The following list shows the files that make up this playlist."
-msgstr ""
+msgstr "La siguiente lista muestra los archivos que conforma esta playlist."
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:65
 msgid ""
@@ -9647,6 +9639,7 @@ msgstr ""
 #: src/mmg/tabs/additional_parts_dlg.cpp:62
 msgid "This list is for informational purposes only and cannot be changed."
 msgstr ""
+"Esta lista sólo es para proporcionarle información y no puede ser modificada."
 
 #: src/mmg/mmg_dialog.cpp:1971
 msgid "This message will only shown to you once."
@@ -10333,18 +10326,16 @@ msgstr "Pista de video %u"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:42
 #: src/mmg/tabs/additional_parts_dlg.cpp:54
-#, fuzzy
 msgid "View files in playlist"
-msgstr "Unidad de visualización del video"
+msgstr "Ver archivos del playlist"
 
 #: src/mmg/jobs.cpp:519
-#, fuzzy
 msgid ""
 "View the output that mkvmerge generated during the muxing process for the "
 "selected jobs"
 msgstr ""
-"Ve el archivo de salida que mkvmerge ha creado durante el proceso de "
-"multiplexado para el/los trabajo/s seleccionado/s"
+"Ver el archivo de salida que mkvmerge ha creado durante el proceso de "
+"multiplexado para los trabajos seleccionados"
 
 #: src/input/r_vobbtn.h:36 src/output/p_vobbtn.h:36
 msgid "VobBtn"
@@ -10588,11 +10579,11 @@ msgstr "Siempre"
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:41
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:45
 msgid "always ask the user"
-msgstr "simpre preguntar al usuario"
+msgstr "Siempre preguntar al usuario"
 
 #: src/mmg/options/mmg.cpp:128 src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:42
 msgid "always scan for other playlists"
-msgstr "siempre buscar otros playlists"
+msgstr "Siempre buscar otros playlists"
 
 #: src/common/stereo_mode.cpp:58
 msgid "anaglyph (cyan/red)"
@@ -10625,9 +10616,9 @@ msgid "both eyes laced in one block (right first)"
 msgstr "Ambos ojos mezclados en un bloque (el derecho primero)"
 
 #: src/common/version.cpp:148
-#, fuzzy, boost-format
+#, boost-format
 msgid "built on %1% %2%"
-msgstr "%1% creado el %2% %3%"
+msgstr "Basado en %1% %2%"
 
 #: src/info/mkvinfo.cpp:943 src/input/r_matroska.cpp:98
 msgid "buttons"
@@ -11322,15 +11313,13 @@ msgid "mmg"
 msgstr "mmg"
 
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:34
-#, fuzzy
 msgid ""
 "mmg can scan these files, present the results including duration and number "
 "of tracks of each playlist found and let you chose which one to add."
 msgstr ""
-"El archivo que añadiste es un playlist. El directorio donde se encuentra "
-"contiene %1% otro(s) archivo(s) con la misma extensión. Mmg puede analizar "
-"estos archivos, y mostrar los resultados incluyendo la duración y el número "
-"de pistas de cada playlist encontrado, y permitirte elegir cual añadir."
+"Mmg puede analizar estos archivos, y mostrar los resultados incluyendo la "
+"duración y el número de pistas de cada playlist encontrado, y permitirle "
+"elegir cuál añadir."
 
 #: src/mmg/mmg_dialog.cpp:285
 msgid "mmg debug output"
@@ -11343,7 +11332,7 @@ msgstr "Opciones de mmg"
 #: src/mmg/options/languages.cpp:81
 msgid "mmg will reset to the default list if no entry is selected."
 msgstr ""
-"mmg reiniciará la lista a predeterminada si ninguna entrada se  selecciona."
+"Mmg reiniciará la lista a predeterminada si ninguna entrada se  selecciona."
 
 #: src/common/stereo_mode.cpp:48
 msgid "mono"
@@ -11420,7 +11409,7 @@ msgstr "Sólo para fotogramas I"
 
 #: src/mmg/options/mmg.cpp:64
 msgid "only if the run was successfull"
-msgstr "sólo si la ejecución ha sido correcta."
+msgstr "Sólo si la ejecución ha sido correcta."
 
 #: src/mmg/tabs/chapters.cpp:365
 msgid "ordered"
