@@ -118,7 +118,7 @@ if test x"$enable_qt" = "xyes" -a \
   fi
 
   if test $ok = 1; then
-    PKG_CHECK_EXISTS([QtCore,QtGui,QtWidgets],,[ok=0])
+    PKG_CHECK_EXISTS([Qt5Core,Qt5Gui,Qt5Widgets],,[ok=0])
   fi
 
   if test $ok = 1; then
