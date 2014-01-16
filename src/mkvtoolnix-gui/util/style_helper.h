@@ -22,7 +22,7 @@
 #define MTX_MKVTOOLNIX_GUI_UTIL_STYLE_HELPER_H
 
 #include <QtGui/QColor>
-#include <QtGui/QStyle>
+#include <QtWidgets/QStyle>
 
 class QPalette;
 class QPainter;

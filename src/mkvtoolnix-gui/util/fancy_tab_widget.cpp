@@ -25,19 +25,18 @@
 
 #include <QtCore/QDebug>
 
-#include <QtGui/QColorDialog>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QWindowsStyle>
-#include <QtGui/QPainter>
-#include <QtGui/QSplitter>
-#include <QtGui/QStackedLayout>
-// #include <QtGui/QStatusBar>
-#include <QtGui/QToolButton>
-#include <QtGui/QToolTip>
 #include <QtCore/QAnimationGroup>
 #include <QtCore/QPropertyAnimation>
+#include <QtGui/QMouseEvent>
+#include <QtGui/QPainter>
+#include <QtWidgets/QColorDialog>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QSplitter>
+#include <QtWidgets/QStackedLayout>
+#include <QtWidgets/QStyleFactory>
+#include <QtWidgets/QToolButton>
+#include <QtWidgets/QToolTip>
+#include <QtWidgets/QVBoxLayout>
 
 const int FancyTabBar::m_rounding = 22;
 const int FancyTabBar::m_textPadding = 4;
@@ -70,7 +69,7 @@ FancyTabBar::FancyTabBar(QWidget *parent)
     m_hoverIndex = -1;
     m_currentIndex = -1;
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-    setStyle(new QWindowsStyle);
+    setStyle(QStyleFactory::create("windows"));
     setMinimumWidth(qMax(2 * m_rounding, 40));
     setAttribute(Qt::WA_Hover, true);
     setFocusPolicy(Qt::NoFocus);

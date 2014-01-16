@@ -26,8 +26,9 @@ TrackModel::~TrackModel() {
 
 void
 TrackModel::setTracks(QList<Track *> &tracks) {
+  beginResetModel();
   m_tracks = &tracks;
-  reset();
+  endResetModel();
 }
 
 QModelIndex

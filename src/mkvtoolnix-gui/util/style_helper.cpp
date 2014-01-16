@@ -20,14 +20,14 @@
 
 #include "mkvtoolnix-gui/util/style_helper.h"
 
-#include <QtGui/QPixmapCache>
-#include <QtGui/QWidget>
+#include <QtCore/QObject>
 #include <QtCore/QRect>
 #include <QtGui/QPainter>
-#include <QtGui/QApplication>
 #include <QtGui/QPalette>
-#include <QtGui/QStyleOption>
-#include <QtCore/QObject>
+#include <QtGui/QPixmapCache>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QStyleOption>
+#include <QtWidgets/QWidget>
 
 // Note, this is exported but in a private header as qtopengl depends on it.
 // We should consider adding this as a public helper function.
