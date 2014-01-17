@@ -72,7 +72,7 @@ mmg_track_t::create_label() {
 
 bool
 mmg_track_t::is_webm_compatible() {
-  static wxRegEx re_valid_webm_codecs(wxT("VP8|Vorbis"), wxRE_ICASE);
+  static wxRegEx re_valid_webm_codecs(wxT("VP8|Vorbis|Opus"), wxRE_ICASE);
 
   return (is_audio() || is_video()) && re_valid_webm_codecs.Matches(ctype);
 }
