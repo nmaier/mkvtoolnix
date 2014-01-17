@@ -11,8 +11,11 @@ debugging_option_c mm_mpls_multi_file_io_c::ms_debug{"mpls|mpls_multi_io"};
 mm_mpls_multi_file_io_c::mm_mpls_multi_file_io_c(std::vector<bfs::path> const &file_names,
                                                  std::string const &display_file_name,
                                                  mtx::mpls::parser_cptr const &mpls_parser)
-  : mm_multi_file_io_c{file_names, display_file_name}
+  : mm_file_io_c{file_names[0].string()}
+  , m_files{file_names}
+  , m_display_file_name{display_file_name}
   , m_mpls_parser{mpls_parser}
+  , m_total_size{ boost::accumulate(m_files, 0ull, [](uint64_t accu, bfs::path const &file) { return accu + bfs::file_size(file); }) }
 {
 }
 
@@ -92,18 +95,15 @@ mm_mpls_multi_file_io_c::open_multi(mm_io_c *in) {
   if (file_names.empty())
     return mm_io_cptr{};
 
-  return mm_io_cptr{new mm_mpls_multi_file_io_c{file_names, in->get_file_name(), mpls_parser}};
+  return mm_io_cptr{new mm_mpls_multi_file_io_c{file_names, file_names[0].string(), mpls_parser}};
 }
 
 void
 mm_mpls_multi_file_io_c::create_verbose_identification_info(std::vector<std::string> &verbose_info) {
-  boost::system::error_code ec;
-  auto total_size = boost::accumulate(m_files, 0ull, [&ec](unsigned long long accu, file_t const &file) { return accu + file.m_size; });
-
   verbose_info.push_back("playlist:1");
   verbose_info.push_back((boost::format("playlist_duration:%1%") % m_mpls_parser->get_playlist().duration.to_ns()).str());
-  verbose_info.push_back((boost::format("playlist_size:%1%")     % total_size)                                    .str());
+  verbose_info.push_back((boost::format("playlist_size:%1%")     % m_total_size)                                  .str());
   verbose_info.push_back((boost::format("playlist_chapters:%1%") % m_mpls_parser->get_chapters().size())          .str());
   for (auto &file : m_files)
-    verbose_info.push_back((boost::format("playlist_file:%1%") % escape(file.m_file_name.string())).str());
+    verbose_info.push_back((boost::format("playlist_file:%1%") % escape(file.string())).str());
 }

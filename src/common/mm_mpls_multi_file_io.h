@@ -19,16 +19,27 @@
 #include "common/mm_multi_file_io.h"
 #include "common/mpls.h"
 
-class mm_mpls_multi_file_io_c: public mm_multi_file_io_c {
+class mm_mpls_multi_file_io_c: public mm_file_io_c {
 protected:
+  std::vector<bfs::path> m_files;
+  std::string m_display_file_name;
   mtx::mpls::parser_cptr m_mpls_parser;
+  uint64_t m_total_size;
 
 protected:
   static debugging_option_c ms_debug;
 
 public:
-  mm_mpls_multi_file_io_c(const std::vector<bfs::path> &file_names, std::string const &display_file_name, mtx::mpls::parser_cptr const &mpls_parser);
+  mm_mpls_multi_file_io_c(std::vector<bfs::path> const &file_names, std::string const &display_file_name, mtx::mpls::parser_cptr const &mpls_parser);
   virtual ~mm_mpls_multi_file_io_c();
+
+  virtual std::string get_file_name() const {
+    return m_display_file_name;
+  }
+
+  std::vector<bfs::path> const &get_file_names() const {
+    return m_files;
+  }
 
   std::vector<timecode_c> const &get_chapters() const;
   virtual void create_verbose_identification_info(std::vector<std::string> &verbose_info);

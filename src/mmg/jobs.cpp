@@ -48,6 +48,7 @@ job_run_dialog::job_run_dialog(wxWindow *,
   , jobs_to_start(n_jobs_to_start)
   , current_job(-1)
   , m_progress(0)
+  , m_scanning_playlists{}
 #if defined(SYS_WINDOWS)
   , m_taskbar_progress(nullptr)
 #endif
@@ -191,6 +192,7 @@ job_run_dialog::start_next_job() {
 
   static const unsigned char utf8_bom[3] = {0xef, 0xbb, 0xbf};
   opt_file->Write(utf8_bom, 3);
+  opt_file->Write(wxT("--gui-mode\n"));
 
   mdlg->update_command_line();
   wxArrayString *arg_list = &mdlg->get_command_line_args();
@@ -242,7 +244,22 @@ job_run_dialog::process_input() {
 
     if (got_char && ((c == '\n') || (c == '\r') || out->Eof())) {
       wxString wx_line = wxU(line);
-      if (wx_line.Find(Z("Progress")) == 0) {
+
+      if (wx_line.Find(wxT("#GUI#begin_scanning_playlists")) == 0)
+        m_scanning_playlists = true;
+
+      else if (wx_line.Find(wxT("#GUI#end_scanning_playlists")) == 0) {
+        m_scanning_playlists         = false;
+
+        m_start_time                 = get_current_time_millis();
+        m_next_remaining_time_update = m_start_time + 8000;
+
+        if (!current_job) {
+          m_start_time_total                 = m_start_time;
+          m_next_remaining_time_update_total = m_next_remaining_time_update;
+        }
+
+      } else if (wx_line.Find(Z("Progress")) == 0) {
         int percent_pos = wx_line.Find(wxT("%"));
         if (0 < percent_pos) {
           wx_line.Remove(percent_pos);
@@ -268,7 +285,7 @@ job_run_dialog::process_input() {
 
 void
 job_run_dialog::set_progress_value(long value) {
-  m_progress = current_job * 100 + value;
+  m_progress = current_job * 100 + (m_scanning_playlists ? 0 : value);
   g_progress->SetValue(value);
   g_jobs->SetValue(m_progress);
 
@@ -280,7 +297,7 @@ job_run_dialog::set_progress_value(long value) {
 
 void
 job_run_dialog::update_remaining_time() {
-  if (0 == m_progress)
+  if (m_scanning_playlists || !m_progress)
     return;
 
   int64_t now = get_current_time_millis();
@@ -478,28 +495,28 @@ job_dialog::job_dialog(wxWindow *parent)
 
   wxBoxSizer *siz_b_right = new wxBoxSizer(wxVERTICAL);
   b_up = new wxButton(this, ID_JOBS_B_UP, Z("&Up"));
-  b_up->SetToolTip(TIP("Move the selected job(s) up"));
+  b_up->SetToolTip(TIP("Move the selected jobs up"));
   siz_b_right->Add(b_up, 0, wxGROW | wxLEFT | wxBOTTOM, 10);
   b_down = new wxButton(this, ID_JOBS_B_DOWN, Z("&Down"));
-  b_down->SetToolTip(TIP("Move the selected job(s) down"));
+  b_down->SetToolTip(TIP("Move the selected jobs down"));
   siz_b_right->Add(b_down, 0, wxGROW | wxLEFT | wxBOTTOM, 10);
   siz_b_right->AddSpacer(15);
 
   b_reenable = new wxButton(this, ID_JOBS_B_REENABLE, Z("&Re-enable"));
-  b_reenable->SetToolTip(TIP("Re-enable the selected job(s)"));
+  b_reenable->SetToolTip(TIP("Re-enable the selected jobs"));
   siz_b_right->Add(b_reenable, 0, wxGROW | wxLEFT | wxBOTTOM, 10);
   b_disable = new wxButton(this, ID_JOBS_B_DISABLE, Z("&Disable"));
-  b_disable->SetToolTip(TIP("Disable the selected job(s) and sets their status to 'done'"));
+  b_disable->SetToolTip(TIP("Disable the selected jobs and set their status to 'done'"));
   siz_b_right->Add(b_disable, 0, wxGROW | wxLEFT | wxBOTTOM, 10);
   siz_b_right->AddSpacer(15);
 
   b_delete = new wxButton(this, ID_JOBS_B_DELETE, Z("D&elete"));
-  b_delete->SetToolTip(TIP("Delete the selected job(s) from the job queue"));
+  b_delete->SetToolTip(TIP("Delete the selected jobs from the job queue"));
   siz_b_right->Add(b_delete, 0, wxGROW | wxLEFT | wxBOTTOM, 10);
   siz_b_right->AddSpacer(15);
 
   b_view_log = new wxButton(this, ID_JOBS_B_VIEW_LOG, Z("&View log"));
-  b_view_log->SetToolTip(TIP("View the output that mkvmerge generated during the muxing process for the selected job(s)"));
+  b_view_log->SetToolTip(TIP("View the output that mkvmerge generated during the muxing process for the selected jobs"));
   siz_b_right->Add(b_view_log, 0, wxGROW | wxLEFT, 10);
   siz_line->Add(siz_b_right, 0, 0, 0);
   siz_all->Add(siz_line, 1, wxGROW | wxLEFT | wxRIGHT, 10);
@@ -517,7 +534,7 @@ job_dialog::job_dialog(wxWindow *parent)
   siz_b_bottom->Add(b_start, 0, wxGROW | wxRIGHT, 10);
   siz_b_bottom->Add(10, 0, 0, 0, 0);
   b_start_selected = new wxButton(this, ID_JOBS_B_START_SELECTED, Z("S&tart selected"));
-  b_start_selected->SetToolTip(TIP("Start the selected job(s) regardless of their status"));
+  b_start_selected->SetToolTip(TIP("Start the selected jobs regardless of their status"));
   siz_b_bottom->Add(b_start_selected, 0, wxGROW | wxLEFT, 10);
   siz_all->Add(siz_b_bottom, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 10);
   siz_all->SetSizeHints(this);

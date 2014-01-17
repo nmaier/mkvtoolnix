@@ -232,7 +232,7 @@ decode_mp3_header(const unsigned char *buf,
   else
     h->framesize = (12000 * h->bitrate / h->sampling_frequency + h->padding) * 4;
 
-  return true;
+  return h->framesize != 0;
 }
 
 int

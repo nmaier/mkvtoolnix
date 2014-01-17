@@ -16,6 +16,10 @@ AC_CACHE_CHECK([if being compiled with mingw32],
     export MINGW=1
     MINGW_GUIAPP=-mwindows
     EXEEXT=.exe
+    case $host in
+      *x86_64*mingw*) MINGW_PROCESSOR_ARCH=amd64 ;;
+      *)              MINGW_PROCESSOR_ARCH=x86   ;;
+    esac
 
     AC_CHECK_TOOL(WINDRES, windres, :)
   fi
@@ -23,4 +27,5 @@ AC_CACHE_CHECK([if being compiled with mingw32],
 AC_SUBST(MINGW)
 AC_SUBST(MINGW_LIBS)
 AC_SUBST(MINGW_GUIAPP)
+AC_SUBST(MINGW_PROCESSOR_ARCH)
 AC_SUBST(EXEEXT)

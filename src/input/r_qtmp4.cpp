@@ -255,6 +255,9 @@ qtmp4_reader_c::parse_headers() {
     if (m_chapter_track_ids[dmx->container_id])
       dmx->type = 'C';
 
+    else if (!demuxing_requested(dmx->type, dmx->id))
+      continue;
+
     else if (dmx->is_audio() && !dmx->verify_audio_parameters())
       continue;
 
@@ -411,8 +414,12 @@ qtmp4_reader_c::handle_ctts_atom(qtmp4_demuxer_cptr &new_dmx,
     frame_offset.count  = m_in->read_uint32_be();
     frame_offset.offset = m_in->read_uint32_be();
     new_dmx->raw_frame_offset_table.push_back(frame_offset);
+  }
 
-    mxdebug_if(m_debug_tables, boost::format("%1%%2%: count %3% offset %4%\n") % space((level + 1) * 2 + 1) % i % frame_offset.count % frame_offset.offset);
+  if (m_debug_tables) {
+    i = 0;
+    for (auto const &frame_offset : new_dmx->raw_frame_offset_table)
+      mxdebug(boost::format("%1%%2%: count %3% offset %4%\n") % space((level + 1) * 2 + 1) % i++ % frame_offset.count % frame_offset.offset);
   }
 }
 
@@ -843,8 +850,11 @@ qtmp4_reader_c::handle_stco_atom(qtmp4_demuxer_cptr &new_dmx,
 
     chunk.pos = m_in->read_uint32_be();
     new_dmx->chunk_table.push_back(chunk);
-    mxdebug_if(m_debug_tables, boost::format("%1%  %2%\n") % space(level * 2 + 1) % chunk.pos);
   }
+
+  if (m_debug_tables)
+    for (auto const &chunk : new_dmx->chunk_table)
+      mxdebug(boost::format("%1%  %2%\n") % space(level * 2 + 1) % chunk.pos);
 }
 
 void
@@ -862,8 +872,11 @@ qtmp4_reader_c::handle_co64_atom(qtmp4_demuxer_cptr &new_dmx,
 
     chunk.pos = m_in->read_uint64_be();
     new_dmx->chunk_table.push_back(chunk);
-    mxdebug_if(m_debug_tables, boost::format("%1%  %2%\n") % space(level * 2 + 1) % chunk.pos);
   }
+
+  if (m_debug_tables)
+    for (auto const &chunk : new_dmx->chunk_table)
+      mxdebug(boost::format("%1%  %2%\n") % space(level * 2 + 1) % chunk.pos);
 }
 
 void
@@ -883,6 +896,11 @@ qtmp4_reader_c::handle_stsc_atom(qtmp4_demuxer_cptr &new_dmx,
   }
 
   mxdebug_if(m_debug_headers, boost::format("%1%Sample to chunk/chunkmap table: %2% entries\n") % space(level * 2 + 1) % count);
+  if (m_debug_tables) {
+    i = 0;
+    for (auto const &chunkmap : new_dmx->chunkmap_table)
+      mxdebug(boost::format("%1%%2%: first_chunk %3% samples_per_chunk %4% sample_description_id %5%\n") % space((level + 1) * 2 + 1) % i++ % chunkmap.first_chunk % chunkmap.samples_per_chunk % chunkmap.sample_description_id);
+  }
 }
 
 void
@@ -927,8 +945,9 @@ qtmp4_reader_c::handle_stss_atom(qtmp4_demuxer_cptr &new_dmx,
   std::sort(new_dmx->keyframe_table.begin(), new_dmx->keyframe_table.end());
 
   mxdebug_if(m_debug_headers, boost::format("%1%Sync/keyframe table: %2% entries\n") % space(level * 2 + 1) % count);
-  for (i = 0; i < count; ++i)
-    mxdebug_if(m_debug_tables, boost::format("%1%keyframe at %2%\n") % space((level + 1) * 2 + 1) % new_dmx->keyframe_table[i]);
+  if (m_debug_tables)
+    for (auto const &keyframe : new_dmx->keyframe_table)
+      mxdebug(boost::format("%1%keyframe at %2%\n") % space((level + 1) * 2 + 1) % keyframe);
 }
 
 void
@@ -955,6 +974,11 @@ qtmp4_reader_c::handle_stsz_atom(qtmp4_demuxer_cptr &new_dmx,
     }
 
     mxdebug_if(m_debug_headers, boost::format("%1%Sample size table: %2% entries\n") % space(level * 2 + 1) % count);
+    if (m_debug_tables) {
+      auto i = 0u;
+      for (auto const &sample : new_dmx->sample_table)
+        mxdebug(boost::format("%1%%2%: size %3%\n") % space((level + 1) * 2 + 1) % i++ % sample.size);
+    }
 
   } else {
     new_dmx->sample_size = sample_size;
@@ -979,6 +1003,11 @@ qtmp4_reader_c::handle_sttd_atom(qtmp4_demuxer_cptr &new_dmx,
   }
 
   mxdebug_if(m_debug_headers, boost::format("%1%Sample duration table: %2% entries\n") % space(level * 2 + 1) % count);
+  if (m_debug_tables) {
+    i = 0;
+    for (auto const &durmap : new_dmx->durmap_table)
+      mxdebug(boost::format("%1%%2%: number %3% duration %4%\n") % space((level + 1) * 2 + 1) % i++ % durmap.number % durmap.duration);
+  }
 }
 
 void
@@ -998,6 +1027,11 @@ qtmp4_reader_c::handle_stts_atom(qtmp4_demuxer_cptr &new_dmx,
   }
 
   mxdebug_if(m_debug_headers, boost::format("%1%Sample duration table: %2% entries\n") % space(level * 2 + 1) % count);
+  if (m_debug_tables) {
+    i = 0;
+    for (auto const &durmap : new_dmx->durmap_table)
+      mxdebug(boost::format("%1%%2%: number %3% duration %4%\n") % space((level + 1) * 2 + 1) % i++ % durmap.number % durmap.duration);
+  }
 }
 
 void
@@ -1040,13 +1074,16 @@ qtmp4_reader_c::handle_elst_atom(qtmp4_demuxer_cptr &new_dmx,
   }
 
   mxdebug_if(m_debug_headers, boost::format("%1%Edit list table: %2% entries\n") % space(level * 2 + 1) % count);
-  for (i = 0; i < count; ++i)
-    mxdebug_if(m_debug_tables, boost::format("%1%%2%: duration %3% pos %4% speed %5%\n")
-               % space((level + 1) * 2 + 1)
-               % i
-               % new_dmx->editlist_table[i].duration
-               % new_dmx->editlist_table[i].pos
-               % new_dmx->editlist_table[i].speed);
+  if (m_debug_tables) {
+    i = 0;
+    for (auto const &editlist : new_dmx->editlist_table)
+      mxdebug_if(m_debug_tables, boost::format("%1%%2%: duration %3% pos %4% speed %5%\n")
+                 % space((level + 1) * 2 + 1)
+                 % i++
+                 % editlist.duration
+                 % editlist.pos
+                 % editlist.speed);
+  }
 }
 
 void
@@ -1444,7 +1481,7 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
     else if (dmx->codec.is(CT_V_MPEG4_P10))
       create_video_packetizer_mpeg4_p10(dmx);
 
-    else if (dmx->codec.is(CT_V_SVQ))
+    else if (dmx->codec.is(CT_V_SVQ1))
       create_video_packetizer_svq1(dmx);
 
     else
@@ -1780,7 +1817,7 @@ qtmp4_demuxer_c::update_tables(int64_t global_m_time_scale) {
 
   // workaround for fixed-size video frames (dv and uncompressed), but
   // also for audio with constant sample size
-  if (sample_table.empty() && sample_size) {
+  if (sample_table.empty() && (sample_size > 1)) {
     for (i = 0; i < s; ++i) {
       qt_sample_t sample;
 
@@ -1833,11 +1870,12 @@ qtmp4_demuxer_c::update_tables(int64_t global_m_time_scale) {
       frame_offset_table.push_back(raw_frame_offset_table[j].offset);
   }
 
-  mxdebug_if(m_debug_tables, boost::format(" Frame offset table: %1% entries\n")    % frame_offset_table.size());
-  mxdebug_if(m_debug_tables, boost::format(" Sample table contents: %1% entries\n") % sample_table.size());
-  for (i = 0; i < sample_table.size(); ++i) {
-    qt_sample_t &sample = sample_table[i];
-    mxdebug_if(m_debug_tables, boost::format("   %1%: pts %2% size %3% pos %4%\n") % i % sample.pts % sample.size % sample.pos);
+  if (m_debug_tables) {
+    mxdebug(boost::format(" Frame offset table: %1% entries\n")    % frame_offset_table.size());
+    mxdebug(boost::format(" Sample table contents: %1% entries\n") % sample_table.size());
+    i = 0;
+    for (auto const &sample : sample_table)
+      mxdebug(boost::format("   %1%: pts %2% size %3% pos %4%\n") % i++ % sample.pts % sample.size % sample.pos);
   }
 
   update_editlist_table(global_m_time_scale);
@@ -1935,7 +1973,6 @@ qtmp4_demuxer_c::build_index() {
 
 void
 qtmp4_demuxer_c::build_index_constant_sample_size_mode() {
-  mxinfo(boost::format("CONST mode\n"));
   size_t keyframe_table_idx  = 0;
   size_t keyframe_table_size = keyframe_table.size();
 

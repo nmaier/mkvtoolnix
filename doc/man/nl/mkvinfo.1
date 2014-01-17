@@ -2,12 +2,12 @@
 .\"     Title: mkvinfo
 .\"    Author: Moritz Bunkus <moritz@bunkus.org>
 .\" Generator: DocBook XSL Stylesheets v1.78.1 <http://docbook.sf.net/>
-.\"      Date: 2013-12-01
+.\"      Date: 2014-01-08
 .\"    Manual: Gebruiker commando\*(Aqs
-.\"    Source: MKVToolNix 6.6.0
+.\"    Source: MKVToolNix 6.7.0
 .\"  Language: Dutch
 .\"
-.TH "MKVINFO" "1" "2013\-12\-01" "MKVToolNix 6\&.6\&.0" "Gebruiker commando\*(Aqs"
+.TH "MKVINFO" "1" "2014\-01\-08" "MKVToolNix 6\&.7\&.0" "Gebruiker commando\*(Aqs"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -123,6 +123,15 @@ Zet debuggen aan voor een specifieke mogelijkheid\&. Dit is alleen zinvol voor o
 .RS 4
 Zet experimentele mogelijkheden aan\&. Een lijst van beschikbare mogelijkheden kan worden opgevraagd met
 \fBmkvinfo \-\-engage list\fR\&. Deze mogelijkheden zijn niet bedoeld in normale situaties\&.
+.RE
+.PP
+\fB\-\-gui\-mode\fR
+.RS 4
+Turns on GUI mode\&. In this mode specially\-formatted lines may be output that can tell a controlling GUI what\*(Aqs happening\&. These messages follow the format \*(Aq#GUI#message\*(Aq\&. The message may be followed by key/value pairs as in \*(Aq#GUI#message#key1=value1#key2=value2\&...\*(Aq\&. Neither the messages nor the keys are ever translated and always output in English\&.
+.sp
+This switch has nothing to do with the
+\fB\-\-gui\fR
+parameter which causes mkvinfo to display its own GUI\&.
 .RE
 .PP
 \fB\-v\fR, \fB\-\-verbose\fR

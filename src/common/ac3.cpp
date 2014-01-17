@@ -41,6 +41,7 @@ ac3::frame_c::init() {
   m_garbage_size    = 0;
   m_valid           = false;
   m_data.reset();
+  m_dependent_frames.clear();
 }
 
 bool
@@ -93,6 +94,9 @@ ac3::frame_c::decode_header_type_eac3(bit_reader_c &bc) {
 
   m_sub_stream_id = bc.get_bits(3);
   m_bytes         = (bc.get_bits(11) + 1) << 1;
+
+  if (!m_bytes)
+    return false;
 
   uint8_t fscod   = bc.get_bits(2);
   uint8_t fscod2  = bc.get_bits(2);
@@ -162,7 +166,7 @@ ac3::frame_c::decode_header_type_ac3(bit_reader_c &bc) {
     return false;
 
   uint8_t frmsizecod = bc.get_bits(6);
-  if (38 < frmsizecod)
+  if (38 <= frmsizecod)
     return false;
 
   bc.skip_bits(5 + 3);          // bsid, bsmod
@@ -185,7 +189,7 @@ ac3::frame_c::decode_header_type_ac3(bit_reader_c &bc) {
   m_samples          = 1536;
   m_frame_type       = EAC3_FRAME_TYPE_INDEPENDENT;
 
-  return true;
+  return m_bytes != 0;
 }
 
 int

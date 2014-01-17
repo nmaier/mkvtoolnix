@@ -46,9 +46,13 @@ struct mtx_release_version_t {
 };
 
 enum version_info_flags_e {
-  vif_default      = 0,
-  vif_full         = 1,
-  vif_untranslated = 2,
+  vif_timestamp    = 0x0001,
+  vif_untranslated = 0x0002,
+  vif_architecture = 0x0004,
+
+  vif_none         = 0x0000,
+  vif_default      = vif_architecture,
+  vif_full         = (0xffff & ~vif_untranslated),
 };
 
 std::string get_version_info(const std::string &program, version_info_flags_e flags = vif_default);

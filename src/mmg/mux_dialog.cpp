@@ -39,6 +39,7 @@ mux_dialog::mux_dialog(wxWindow *parent)
   , m_taskbar_progress(nullptr)
 #endif  // SYS_WINDOWS
   , m_abort_button_changed(false)
+  , m_scanning_playlists{}
   , m_exit_code(0)
   , m_progress(0)
   , m_geometry_saver{this, "mux_dialog"}
@@ -103,6 +104,7 @@ mux_dialog::run() {
     const unsigned char utf8_bom[3] = {0xef, 0xbb, 0xbf};
     wxFile opt_file{opt_file_name, wxFile::write};
     opt_file.Write(utf8_bom, 3);
+    opt_file.Write(wxT("--gui-mode\n"));
 
     for (size_t i = 1; i < arg_list.Count(); i++) {
       if (arg_list[i].IsEmpty())
@@ -182,6 +184,9 @@ mux_dialog::update_gauge(long value) {
 
 void
 mux_dialog::update_remaining_time() {
+  if (m_scanning_playlists)
+    return;
+
   int64_t now = get_current_time_millis();
 
   if ((0 == m_progress) || (now < m_next_remaining_time_update))
@@ -278,7 +283,16 @@ mux_dialog::on_output_available(wxCommandEvent &evt) {
   else if (line.Find(Z("Error:")) == 0)
     tc_errors->AppendText(line + wxT("\n"));
 
-  else if (line.Find(Z("Progress")) == 0) {
+  else if (line.Find(wxT("#GUI#begin_scanning_playlists")) == 0)
+    m_scanning_playlists = true;
+
+  else if (line.Find(wxT("#GUI#end_scanning_playlists")) == 0) {
+    m_scanning_playlists         = false;
+
+    m_start_time                 = get_current_time_millis();
+    m_next_remaining_time_update = m_start_time + 8000;
+
+  } else if (line.Find(Z("Progress")) == 0) {
     if (line.Find(wxT("%")) != 0) {
       line.Remove(line.Find(wxT("%")));
       auto tmp   = line.AfterLast(wxT(' '));

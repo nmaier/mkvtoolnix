@@ -40,7 +40,6 @@
 #include "common/translation.h"
 #include "common/version.h"
 #include "common/wx.h"
-#include "merge/mkvmerge.h"
 #include "mmg/cli_options_dlg.h"
 #include "mmg/header_editor/frame.h"
 #include "mmg/jobs.h"
@@ -572,7 +571,7 @@ mmg_dialog::check_before_overwriting() {
         ext = wxU(".") + ext;
       if (wxMessageBox(wxString::Format(Z("Splitting is active, and at least one of the potential output files '%s%s*%s' already exists. Do you want to overwrite them?"),
                                         dir.c_str(), name.c_str(), ext.c_str()),
-                       Z("Overwrite existing file(s)?"), wxYES_NO) != wxYES)
+                       Z("Overwrite existing files?"), wxYES_NO) != wxYES)
         return false;
       return true;
     }

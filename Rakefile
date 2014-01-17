@@ -1,5 +1,11 @@
 #!/usr/bin/env ruby
 
+version = RUBY_VERSION.gsub(/[^0-9\.]+/, "").split(/\./).collect(&:to_i)
+version << 0 while version.size < 3
+if (version[0] < 2) && (version[1] < 9)
+  fail "Ruby 1.9.x or newer is required for building"
+end
+
 # Change to base directory before doing anything
 if FileUtils.pwd != File.dirname(__FILE__)
   new_dir = File.absolute_path(File.dirname(__FILE__))
@@ -13,22 +19,8 @@ if Rake.application.options.respond_to?(:threads) && [nil, 0, 1].include?(Rake.a
   Rake.application.options.threads = ENV['DRAKETHREADS'].to_i
 end
 
-# Ruby 1.9.x introduce "require_relative" for local requires. 1.9.2
-# removes "." from $: and forces us to use "require_relative". 1.8.x
-# does not know "require_relative" yet though.
-begin
-  require_relative()
-rescue NoMethodError
-  def require_relative *args
-    require *args
-  end
-rescue Exception
-end
-
 require "pp"
 
-# Extensions have to be loaded before certain functions that don't
-# exist in Ruby 1.8.x are used, e.g. Dir.exists?
 require_relative "rake.d/extensions"
 require_relative "rake.d/config"
 
@@ -101,7 +93,7 @@ def setup_globals
     :cxxflags              => "#{cflags_common} #{c(:STD_CXX11)} -Wnon-virtual-dtor -Woverloaded-virtual -Wextra #{c(:WXWIDGETS_CFLAGS)} #{c(:QT_CFLAGS)} #{c(:BOOST_CPPFLAGS)} #{c(:CURL_CFLAGS)} #{c(:USER_CXXFLAGS)}",
     :cppflags              => "#{c(:USER_CPPFLAGS)}",
     :ldflags               => "#{c(:EBML_LDFLAGS)} #{c(:MATROSKA_LDFLAGS)} #{c(:EXTRA_LDFLAGS)} #{c(:PROFILING_LIBS)} #{c(:USER_LDFLAGS)} #{c(:LDFLAGS_RPATHS)} #{c(:BOOST_LDFLAGS)}",
-    :windres               => c?(:USE_WXWIDGETS) ? c(:WXWIDGETS_INCLUDES) : '-DNOWXWIDGETS',
+    :windres               => (c(:MINGW_PROCESSOR_ARCH) == 'amd64' ? '-DMINGW_PROCESSOR_ARCH_AMD64=1 ' : '') + (c?(:USE_WXWIDGETS) ? c(:WXWIDGETS_INCLUDES) : '-DNOWXWIDGETS'),
   }
 
   $build_system_modules.values.each { |bsm| bsm[:setup].call if bsm[:setup] }
@@ -200,7 +192,8 @@ rule '.o' => '.rc' do |t|
 end
 
 rule '.h' => '.png' do |t|
-  runq "   BIN2H #{t.source}", "#{c(:top_srcdir)}/rake.d/bin/bin2h.rb #{t.source} #{t.name}"
+  puts "   BIN2H #{t.source}" if !ENV['V'].to_bool
+  bin2h t.source, t.name
 end
 
 # Resources depend on the manifest.xml file for Windows builds.
@@ -208,7 +201,7 @@ if c?(:MINGW)
   $programs.each do |program|
     path = program.gsub(/^mkv/, '')
     icon = program == 'mkvinfo' ? 'share/icons/windows/mkvinfo.ico' : 'share/icons/windows/mkvmergeGUI.ico'
-    file "src/#{path}/resources.o" => [ "src/#{path}/manifest.xml", "src/#{path}/resources.rc", icon ]
+    file "src/#{path}/resources.o" => [ "src/#{path}/manifest-#{c(:MINGW_PROCESSOR_ARCH)}.xml", "src/#{path}/resources.rc", icon ]
   end
 end
 
@@ -547,6 +540,7 @@ task :clean do
   patterns = %w{
     src/**/*.o lib/**/*.o src/**/*.a lib/**/*.a src/**/*.gch
     src/**/*.exe src/**/*.dll src/**/*.dll.a
+    share/icons/*x*/*.h
     src/info/ui/*.h src/mkvtoolnix-gui/forms/*.h src/**/*.moc src/**/*.moco src/mkvtoolnix-gui/qt_resources.cpp
     tests/unit/**/*.o tests/unit/**/*.a tests/unit/all
     po/*.mo doc/guide/**/*.hhk
@@ -686,7 +680,7 @@ Application.new("src/mkvinfo").
   end_if.
   only_if(!c?(:USE_QT) && c?(:USE_WXWIDGETS)).
   sources("src/info/wxwidgets_ui.cpp").
-  png_icon("share/icons/64x64/mkvinfo.png").
+  png_icon("share/icons/64x64/mkvinfo.png", "src/info/wxwidgets_ui.cpp").
   libraries(:wxwidgets).
   end_if.
   create
@@ -725,7 +719,9 @@ if c?(:USE_WXWIDGETS)
     aliases(:mmg).
     sources("src/mmg", "src/mmg/header_editor", "src/mmg/options", "src/mmg/tabs", :type => :dir).
     sources("src/mmg/resources.o", :if => c?(:MINGW)).
-    png_icon("share/icons/64x64/mkvmergeGUI.png").
+    png_icon("share/icons/64x64/mkvmergeGUI.png", "src/mmg/mmg_dialog.cpp", "src/mmg/header_editor/frame.cpp").
+    png_icon("share/icons/16x16/sort_ascending.png", "src/mmg/tabs/select_scanned_file_dlg.cpp").
+    png_icon("share/icons/16x16/sort_descending.png", "src/mmg/tabs/select_scanned_file_dlg.cpp").
     libraries($common_libs, :wxwidgets).
     libraries(:ole32, :shell32, "-mwindows", :if => c?(:MINGW)).
     create

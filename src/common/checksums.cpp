@@ -32,14 +32,10 @@
 uint32_t
 calc_adler32(const unsigned char *buffer,
              int size) {
-  register uint32_t sum2, check;
-  register int k;
-
-  check = 1;
-  k = size;
-
-  sum2 = (check >> 16) & 0xffffL;
-  check &= 0xffffL;
+  int k          = size;
+  uint32_t check = 1;
+  uint32_t sum2  = (check >> 16) & 0xffffL;
+  check         &= 0xffffL;
   while (k >= 64) {
     A6;
     k -= 64;
@@ -198,12 +194,10 @@ static const uint32_t crc_mpeg2_table[256] = {
 uint32_t
 crc_calc_mpeg2(unsigned char *data,
                int len) {
-  register int i;
   uint32_t crc = 0xffffffff;
 
-  for (i = 0; i < len; i++)
+  for (auto i = 0; i < len; i++)
     crc = (crc << 8) ^ crc_mpeg2_table[((crc >> 24) ^ *data++) & 0xff];
 
   return crc;
 }
-

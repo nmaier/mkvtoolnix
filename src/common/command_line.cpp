@@ -27,6 +27,8 @@
 #include "common/translation.h"
 #include "common/version.h"
 
+bool g_gui_mode = false;
+
 /** \brief Reads command line arguments from a file
 
    Each line contains exactly one command line argument or a
@@ -198,6 +200,10 @@ handle_common_cli_args(std::vector<std::string> &args,
 
       engage_hacks(args[i + 1]);
       args.erase(args.begin() + i, args.begin() + i + 2);
+
+    } else if (args[i] == "--gui-mode") {
+      g_gui_mode = true;
+      args.erase(args.begin() + i, args.begin() + i + 1);
 
     } else
       ++i;

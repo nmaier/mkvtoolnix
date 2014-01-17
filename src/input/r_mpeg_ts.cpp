@@ -335,8 +335,8 @@ mpeg_ts_track_c::handle_timecode_wrap(timecode_c &pts,
 bool
 mpeg_ts_reader_c::probe_file(mm_io_c *in,
                              uint64_t) {
-  auto mpls_in   = mm_mpls_multi_file_io_c::open_multi(in);
-  auto in_to_use = mpls_in ? mpls_in.get() : in;
+  auto mpls_in   = dynamic_cast<mm_mpls_multi_file_io_c *>(in);
+  auto in_to_use = mpls_in ? static_cast<mm_io_c *>(mpls_in) : in;
   bool result    = -1 != detect_packet_size(in_to_use, in_to_use->get_size());
 
   return result;
@@ -399,13 +399,9 @@ mpeg_ts_reader_c::mpeg_ts_reader_c(const track_info_c &ti,
   , m_debug_clpi{             "clpi"}
   , m_detected_packet_size{}
 {
-  auto mpls_in = mm_mpls_multi_file_io_c::open_multi(m_in.get());
-  if (!mpls_in)
-    return;
-
-  m_in                = mpls_in;
-  m_size              = m_in->get_size();
-  m_chapter_timecodes = std::static_pointer_cast<mm_mpls_multi_file_io_c>(mpls_in)->get_chapters();
+  auto mpls_in = dynamic_cast<mm_mpls_multi_file_io_c *>(get_underlying_input());
+  if (mpls_in)
+    m_chapter_timecodes = mpls_in->get_chapters();
 }
 
 void
@@ -499,7 +495,7 @@ mpeg_ts_reader_c::~mpeg_ts_reader_c() {
 void
 mpeg_ts_reader_c::identify() {
   std::vector<std::string> verbose_info;
-  auto mpls_in = dynamic_cast<mm_mpls_multi_file_io_c *>(get_underlying_input_as_multi_file_io());
+  auto mpls_in = dynamic_cast<mm_mpls_multi_file_io_c *>(get_underlying_input());
   if (mpls_in)
     mpls_in->create_verbose_identification_info(verbose_info);
 
@@ -1236,7 +1232,7 @@ mpeg_ts_reader_c::read(generic_packetizer_c *requested_ptzr,
 
 bfs::path
 mpeg_ts_reader_c::find_clip_info_file() {
-  auto mpls_multi_in = dynamic_cast<mm_mpls_multi_file_io_c *>(get_underlying_input_as_multi_file_io());
+  auto mpls_multi_in = dynamic_cast<mm_mpls_multi_file_io_c *>(get_underlying_input());
   auto clpi_file     = mpls_multi_in ? mpls_multi_in->get_file_names()[0] : bfs::path{m_ti.m_fname};
 
   clpi_file.replace_extension(".clpi");

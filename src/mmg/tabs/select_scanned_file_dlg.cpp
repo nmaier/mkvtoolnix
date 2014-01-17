@@ -20,6 +20,42 @@
 #include "common/strings/formatting.h"
 #include "common/wx.h"
 #include "mmg/tabs/select_scanned_file_dlg.h"
+#include "share/icons/16x16/sort_ascending.h"
+#include "share/icons/16x16/sort_descending.h"
+
+struct compare_playlist_file_info_t {
+  std::vector<playlist_file_cptr> const *playlists;
+  size_t column;
+  bool ascending;
+};
+
+int wxCALLBACK
+compare_playlist_file_cptrs(wxIntPtr a_idx,
+                            wxIntPtr b_idx,
+                            wxIntPtr sort_data) {
+  auto &info = *static_cast<compare_playlist_file_info_t *>(wxUIntToPtr(sort_data));
+  auto &a    = *(*info.playlists)[a_idx];
+  auto &b    = *(*info.playlists)[b_idx];
+  auto mult  = info.ascending ? 1 : -1;
+
+  if (info.column == 0)
+    // File name
+    return a.file_name.CmpNoCase(b.file_name) * mult;
+
+  else if (info.column == 1)
+    // Duration
+    return (  a.duration < b.duration ? -1
+            : a.duration > b.duration ? +1
+            :                            0)
+           * mult;
+
+  else
+    // Size
+    return (  a.size < b.size ? -1
+            : a.size > b.size ? +1
+            :                    0)
+           * mult;
+}
 
 select_scanned_file_dlg::select_scanned_file_dlg(wxWindow *parent,
                                                  std::vector<playlist_file_cptr> const &playlists,
@@ -28,6 +64,8 @@ select_scanned_file_dlg::select_scanned_file_dlg(wxWindow *parent,
   , m_playlists{playlists}
   , m_selected_playlist_idx{0}
   , m_geometry_saver{this, "select_scanned_file_dlg"}
+  , m_sorted_by_column{}
+  , m_sorted_ascending{}
 {
   // controls left column
 	auto st_scanned_files = new wxStaticText(this, wxID_ANY, Z("Scanned files"));
@@ -54,35 +92,39 @@ select_scanned_file_dlg::select_scanned_file_dlg(wxWindow *parent,
 	b_add->SetDefault();
 
   // list controls
-  wxListItem item;
+  m_lc_files->InsertColumn(0, Z("File name"));
+  m_lc_files->InsertColumn(1, Z("Duration"), wxLIST_FORMAT_RIGHT);
+  m_lc_files->InsertColumn(2, Z("Size"), wxLIST_FORMAT_RIGHT);
 
-  item.SetText(Z("File name"));
-  m_lc_files->InsertColumn(0, item);
-  item.SetText(Z("Duration"));
-  m_lc_files->InsertColumn(1, item);
-  item.SetText(Z("Size"));
-  m_lc_files->InsertColumn(2, item);
+  m_lc_tracks->InsertColumn(0, Z("Type"));
+  m_lc_tracks->InsertColumn(1, Z("Codec"));
+  m_lc_tracks->InsertColumn(2, Z("Language"));
 
-  item.SetText(Z("Type"));
-  m_lc_tracks->InsertColumn(0, item);
-  item.SetText(Z("Codec"));
-  m_lc_tracks->InsertColumn(1, item);
-  item.SetText(Z("Language"));
-  m_lc_tracks->InsertColumn(2, item);
+  m_lc_items->InsertColumn(0, Z("File name"));
+  m_lc_items->InsertColumn(1, Z("Directory"));
 
-  item.SetText(Z("File name"));
-  m_lc_items->InsertColumn(0, item);
-  item.SetText(Z("Directory"));
-  m_lc_items->InsertColumn(1, item);
+  m_sort_arrows.Add(wx_get_png(sort_ascending));
+  m_sort_arrows.Add(wx_get_png(sort_descending));
+  m_lc_files->SetImageList(&m_sort_arrows, wxIMAGE_LIST_SMALL);
 
   // fill "files" with data
   m_lc_files->Hide();
   long idx = 0;
   for (auto &playlist : m_playlists) {
     auto id = m_lc_files->InsertItem(idx, wxFileName{playlist->file_name}.GetFullName());
-    m_lc_files->SetItem(id, 1, wxU(format_timecode(playlist->duration, 0)));
-    m_lc_files->SetItem(id, 2, wxU(format_file_size(playlist->size)));
     m_lc_files->SetItemData(id, idx);
+
+    auto item = wxListItem{};
+    item.SetId(id);
+    item.SetColumn(1);
+    item.SetText(wxU(format_timecode(playlist->duration, 0)));
+    item.SetAlign(wxLIST_FORMAT_RIGHT);
+    item.SetMask(wxLIST_MASK_TEXT | wxLIST_MASK_FORMAT);
+    m_lc_files->SetItem(item);
+
+    item.SetColumn(2);
+    item.SetText(wxU(format_file_size(playlist->size)));
+    m_lc_files->SetItem(item);
 
     if (orig_file_name == playlist->file_name) {
       m_lc_files->SetItemState(id, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
@@ -91,6 +133,8 @@ select_scanned_file_dlg::select_scanned_file_dlg(wxWindow *parent,
 
     ++idx;
   }
+
+  sort_by(0, true);
 
   m_lc_files->SetColumnWidth(0, wxLIST_AUTOSIZE);
   m_lc_files->SetColumnWidth(1, wxLIST_AUTOSIZE);
@@ -222,10 +266,40 @@ select_scanned_file_dlg::update_info() {
   m_lc_items->Show();
 }
 
+void
+select_scanned_file_dlg::on_column_clicked(wxListEvent &evt) {
+  size_t column = evt.GetColumn();
+  sort_by(column, column == m_sorted_by_column ? !m_sorted_ascending : m_sorted_ascending);
+}
+
+void
+select_scanned_file_dlg::sort_by(size_t column,
+                                 bool ascending) {
+  auto info = compare_playlist_file_info_t{ &m_playlists, column, ascending };
+
+  m_lc_files->SortItems(compare_playlist_file_cptrs, wxPtrToUInt(&info));
+  if (m_sorted_by_column != column)
+    set_column_image(m_sorted_by_column, -1);
+  set_column_image(column, ascending ? 0 : 1);
+
+  m_sorted_by_column = column;
+  m_sorted_ascending = ascending;
+}
+
+void
+select_scanned_file_dlg::set_column_image(size_t column,
+                                          int image) {
+  auto item = wxListItem{};
+  item.SetMask(wxLIST_MASK_IMAGE);
+  item.SetImage(image);
+  m_lc_files->SetColumn(column, item);
+}
+
 IMPLEMENT_CLASS(select_scanned_file_dlg, wxDialog);
 BEGIN_EVENT_TABLE(select_scanned_file_dlg, wxDialog)
   EVT_BUTTON(wxID_OK,     select_scanned_file_dlg::on_ok)
   EVT_BUTTON(wxID_CANCEL, select_scanned_file_dlg::on_cancel)
   EVT_LIST_ITEM_SELECTED( ID_LC_PLAYLIST_FILE, select_scanned_file_dlg::on_file_selected)
   EVT_LIST_ITEM_ACTIVATED(ID_LC_PLAYLIST_FILE, select_scanned_file_dlg::on_file_activated)
+  EVT_LIST_COL_CLICK(ID_LC_PLAYLIST_FILE,      select_scanned_file_dlg::on_column_clicked)
 END_EVENT_TABLE();

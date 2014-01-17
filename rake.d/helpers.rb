@@ -70,6 +70,33 @@ def runq(msg, cmdline, options = {})
   run cmdline, options.clone.merge(:dont_echo => !verbose)
 end
 
+def bin2h bin_file_name, h_file_name
+  bin_name = File.basename(bin_file_name).gsub(/[^a-z\d]/i, '_').gsub(/_+/, '_') + '_bin'
+
+  File.open(h_file_name, "w") do |file|
+    file.puts <<EOT
+// Automatically generated. Do not modify.
+#ifndef BIN2H__#{bin_name.upcase}_INCLUDED
+#define BIN2H__#{bin_name.upcase}_INCLUDED
+
+static unsigned char #{bin_name}[] = {
+EOT
+
+    data = IO.binread(bin_file_name).unpack("C*")
+    data.each_with_index do |byte, idx|
+      file.write sprintf("0x%02x", byte)
+      file.write(((idx + 1) % 13) != 0 ? ", " : ",\n") unless (idx == data.size - 1)
+    end
+
+    file.puts <<EOT
+
+};
+
+#endif // BIN2H__#{bin_name.upcase}_INCLUDED
+EOT
+  end
+end
+
 def create_dependency_dirs
   [ $dependency_dir, $dependency_tmp_dir ].each do |dir|
     File.unlink(dir) if  FileTest.exist?(dir) && !FileTest.directory?(dir)

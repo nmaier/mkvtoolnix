@@ -72,7 +72,7 @@ mmg_track_t::create_label() {
 
 bool
 mmg_track_t::is_webm_compatible() {
-  static wxRegEx re_valid_webm_codecs(wxT("VP8|Vorbis"), wxRE_ICASE);
+  static wxRegEx re_valid_webm_codecs(wxT("VP8|Vorbis|Opus"), wxRE_ICASE);
 
   return (is_audio() || is_video()) && re_valid_webm_codecs.Matches(ctype);
 }
@@ -115,11 +115,11 @@ mmg_app::init_ui_locale() {
     std::string installation_path = get_installation_path();
     if (!installation_path.empty())
       wxLocale::AddCatalogLookupPathPrefix(wxU(installation_path + "/locale"));
-  }
 
-  const wxLanguageInfo *lang_info = wxLocale::FindLanguageInfo(wxU(m_ui_locale));
-  if (s_first_init) {
-    if (lang_info && m_locale.Init(lang_info->Language)) {
+    auto lang_info = !m_ui_locale.empty() ? wxLocale::FindLanguageInfo(wxU(m_ui_locale)) : nullptr;
+    auto language  = lang_info            ? lang_info->Language                          : wxLANGUAGE_ENGLISH;
+
+    if (lang_info && m_locale.Init(language)) {
       m_locale.AddCatalog(wxU("wxstd"));
 #ifdef SYS_WINDOWS
       m_locale.AddCatalog(wxU("wxmsw"));

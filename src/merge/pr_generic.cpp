@@ -33,7 +33,6 @@
 #include "common/strings/formatting.h"
 #include "common/unique_numbers.h"
 #include "common/xml/ebml_tags_converter.h"
-#include "merge/mkvmerge.h"
 #include "merge/output_control.h"
 #include "merge/pr_generic.h"
 #include "merge/webm.h"
@@ -52,6 +51,9 @@
 
 static std::unordered_map<std::string, bool> s_experimental_status_warning_shown;
 std::vector<generic_packetizer_c *> ptzrs_in_header_order;
+
+// Specs say that track numbers should start at 1.
+int generic_packetizer_c::ms_track_number = 1;
 
 generic_packetizer_c::generic_packetizer_c(generic_reader_c *reader,
                                            track_info_c &ti)
@@ -236,7 +238,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *reader,
 
   // Set default header values to 'unset'.
   if (!m_reader->m_appending) {
-    m_hserialno                             = create_track_number(m_reader, m_ti.m_id);
+    m_hserialno                             = create_track_number();
     g_packetizers_by_track_num[m_hserialno] = this;
   }
 
@@ -1162,6 +1164,46 @@ generic_packetizer_c::show_experimental_status_version(std::string const &codec_
          % get_format_name().get_translated() % codec_id);
 }
 
+int64_t
+generic_packetizer_c::create_track_number() {
+  bool found   = false;
+  int file_num = -1;
+  size_t i;
+  for (i = 0; i < g_files.size(); i++)
+    if (g_files[i].reader == this->m_reader) {
+      found = true;
+      file_num = i;
+      break;
+    }
+
+  if (!found)
+    mxerror(boost::format(Y("create_track_number: file_num not found. %1%\n")) % BUGMSG);
+
+  int64_t tnum = -1;
+  found        = false;
+  for (i = 0; i < g_track_order.size(); i++)
+    if ((g_track_order[i].file_id == file_num) &&
+        (g_track_order[i].track_id == m_ti.m_id)) {
+      found = true;
+      tnum = i + 1;
+      break;
+    }
+  if (found) {
+    found = false;
+    for (i = 0; i < g_packetizers.size(); i++)
+      if (g_packetizers[i].packetizer && (g_packetizers[i].packetizer->get_track_num() == tnum)) {
+        tnum = ms_track_number;
+        break;
+      }
+  } else
+    tnum = ms_track_number;
+
+  if (tnum >= ms_track_number)
+    ms_track_number = tnum + 1;
+
+  return tnum;
+}
+
 //--------------------------------------------------------------------
 
 #define add_all_requested_track_ids(type, container)                                                       \
@@ -1519,13 +1561,13 @@ generic_reader_c::get_progress() {
   return 100 * m_in->getFilePointer() / m_size;
 }
 
-mm_multi_file_io_c *
-generic_reader_c::get_underlying_input_as_multi_file_io()
+mm_io_c *
+generic_reader_c::get_underlying_input()
   const {
   mm_io_c *actual_in = m_in.get();
   while (dynamic_cast<mm_proxy_io_c *>(actual_in))
     actual_in = static_cast<mm_proxy_io_c *>(actual_in)->get_proxied();
-  return dynamic_cast<mm_multi_file_io_c *>(actual_in);
+  return actual_in;
 }
 
 //

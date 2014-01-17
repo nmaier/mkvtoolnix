@@ -1,10 +1,10 @@
 !define LANG "Czech"
-!insertmacro LANG_STRING STRING_SHORTCUT_ON_DESKTOP "Um√≠stit z√°stupce na plochu?"
-!insertmacro LANG_STRING STRING_UNINSTALLED_OK "$(^Name) byl √∫spƒõ≈°nƒõ odinstalov√°n."
-!insertmacro LANG_STRING STRING_REMOVE_PROGRAM_QUESTION "Opravdu chcete odebrat $(^Name) a v≈°echny jeho souƒç√°sti?"
-!insertmacro LANG_STRING STRING_REMOVE_JOB_FILES_QUESTION "Odstranit tak√© soubory √∫loh vytvo≈ôen√© u≈æivatelsk√Ωm rozhran√≠m?"
+!insertmacro LANG_STRING STRING_SHORTCUT_ON_DESKTOP "UmÌstit z·stupce na plochu?"
+!insertmacro LANG_STRING STRING_UNINSTALLED_OK "$(^Name) byl ˙spÏönÏ odinstalov·n."
+!insertmacro LANG_STRING STRING_REMOVE_PROGRAM_QUESTION "Opravdu chcete odebrat $(^Name) a vöechny jeho souË·sti?"
+!insertmacro LANG_STRING STRING_REMOVE_JOB_FILES_QUESTION "Odstranit takÈ soubory ˙loh vytvo¯enÈ uûivatelsk˝m rozhranÌm?"
 
 # Local Variables:
 # mode: nsi
-# coding: windows-1250
+# coding: windows-1250-unix
 # End:

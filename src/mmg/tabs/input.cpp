@@ -425,6 +425,9 @@ tab_input::parse_container_line(mmg_file_cptr file,
 
     else if ((pair.size() == 2) && (pair[0] == wxT("previous_segment_uid")))
       previous_segment_uid = unescape(to_utf8(pair[1]));
+
+    else if ((pair.size() == 2) && (pair[0] == wxT("playlist")))
+      file->is_playlist = pair[1] == wxT("1");
   }
 
   if (   (!next_segment_uid.empty() || !previous_segment_uid.empty())
@@ -508,15 +511,35 @@ bool
 tab_input::run_mkvmerge_identification(wxString const &file_name,
                                        wxArrayString &output) {
   auto opt_file_name = wxString::Format(wxT("%smmg-mkvmerge-options-%d-%d"), get_temp_dir().c_str(), (int)wxGetProcessId(), (int)wxGetUTCTime());
+  auto out_file_name = opt_file_name + wxT("-output");
+  wxArrayString errors;
+  long result;
 
   try {
     const unsigned char utf8_bom[3] = {0xef, 0xbb, 0xbf};
     wxFile opt_file{opt_file_name, wxFile::write};
     opt_file.Write(utf8_bom, 3);
-    opt_file.Write(wxT("--output-charset\nUTF-8\n--identify-for-mmg\n"));
-    auto arg_utf8 = escape(wxMB(file_name));
+    opt_file.Write(wxT("--output-charset\nUTF-8\n--identify-for-mmg\n--gui-mode\n--redirect-output\n"));
+    auto arg_utf8 = escape(to_utf8(out_file_name));
     opt_file.Write(arg_utf8.c_str(), arg_utf8.length());
     opt_file.Write(wxT("\n"));
+    arg_utf8 = escape(to_utf8(file_name));
+    opt_file.Write(arg_utf8.c_str(), arg_utf8.length());
+    opt_file.Write(wxT("\n"));
+    opt_file.Close();
+
+    wxString command = wxT("\"") + mdlg->options.mkvmerge_exe() + wxT("\" \"@") + opt_file_name + wxT("\"");
+
+    wxLogMessage(wxT("identify 1: command: ``%s''"), command.c_str());
+
+    result = wxExecute(command, output, errors);
+
+    output.Empty();
+
+    auto in   = mm_text_io_c{new mm_file_io_c{to_utf8(out_file_name), MODE_READ}};
+    auto line = std::string{};
+    while (in.getline2(line))
+      output.Add(wxU(line));
 
   } catch (mtx::mm_io::exception &ex) {
     wxString error;
@@ -525,13 +548,6 @@ tab_input::run_mkvmerge_identification(wxString const &file_name,
     return false;
   }
 
-  wxString command = wxT("\"") + mdlg->options.mkvmerge_exe() + wxT("\" \"@") + opt_file_name + wxT("\"");
-
-  wxLogMessage(wxT("identify 1: command: ``%s''"), command.c_str());
-
-  wxArrayString errors;
-  auto result = wxExecute(command, output, errors);
-
   wxLogMessage(wxT("identify 1: result: %d"), static_cast<int>(result));
   for (size_t i = 0; i < output.Count(); i++)
     wxLogMessage(wxT("identify 1: output[%d]: ``%s''"), static_cast<int>(i), output[i].c_str());
@@ -539,6 +555,7 @@ tab_input::run_mkvmerge_identification(wxString const &file_name,
     wxLogMessage(wxT("identify 1: errors[%d]: ``%s''"), static_cast<int>(i), errors[i].c_str());
 
   wxRemoveFile(opt_file_name);
+  wxRemoveFile(out_file_name);
 
   if ((0 == result) || (1 == result))
     return true;
@@ -873,8 +890,11 @@ tab_input::on_additional_parts(wxCommandEvent &) {
   if (0 > selected_file)
     return;
 
-  additional_parts_dialog dlg{this, wxFileName{ files[selected_file]->file_name }, files[selected_file]->other_files};
-  files[selected_file]->other_files = dlg.get_file_names();
+  auto &file = files[selected_file];
+
+  additional_parts_dialog dlg{this, *file};
+  if (!file->is_playlist)
+    file->other_files = dlg.get_file_names();
 }
 
 void

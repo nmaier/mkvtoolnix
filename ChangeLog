@@ -1,3 +1,92 @@
+2014-01-17  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mmg: bug fix: fixed the check for WebM-compatible track types
+        for Opus.
+
+2014-01-12  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: bug fix: fixed muxing Sorenson v3 (SVQ3) video from
+        QuickTime files.
+
+2014-01-11  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge, mkvextract, mkvpropedit: enhancement: attachments in
+        Matroska files with a missing FileUID element are not ignored
+        anymore even though they violate the specs. mkvmerge generates a
+        new FileUID instead.
+
+2014-01-10  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: re-built with the 64bit build for Windows with a newer
+        compiler version in order to fix #957. It was due to a bug in gcc:
+        http://gcc.gnu.org/bugzilla/show_bug.cgi?id=56742
+
+        * mmg: bug fix: mkvmerge's file identification is written to a
+        temporary file with --redirect-output and from there into mmg
+        instead of directly from mkvmerge. This prevents from character
+        re-coding done by wxWidgets 3.0.0 on Windows. Fixes #959.
+
+2014-01-09  Moritz Bunkus  <moritz@bunkus.org>
+
+        * installer: enhancement: the architecture (32bit vs 64bit) is
+        mentioned in the interface.
+
+        * installer: bug fix: the installation directory for 64bit builds
+        will default to the proper directory (»C:\Program Files« instead
+        of »C:\Program Files (x86)«). Fixes #956.
+
+2014-01-08  Moritz Bunkus  <moritz@bunkus.org>
+
+        * Released v6.7.0.
+
+        * build system: Ruby 1.9.x is now required.
+
+2014-01-05  Moritz Bunkus  <moritz@bunkus.org>
+
+        * all: enhancement: The architecture (32bit/64bit) is mentioned in
+        the version information of all programs.
+
+2014-01-02  Moritz Bunkus  <moritz@bunkus.org>
+
+        * build system: bug fix for 64bit builds on Windows
+        (x86_64-w64-mingw32): use the correct processor architecture via
+        separate Windows manifest files. Fixes mmg and mkvinfo not
+        starting due to »error 0x0000007b«.
+
+        * mkvmerge: bug fix: Fixed a potential endless loop due to an
+        integer overflow in the code removing AVC/h.264 filler NALUs.
+
+2014-01-01  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: bug fix: Fixed reading uncompressed PCM audio tracks
+        from QuickTime/MP4 files in certain situations. Fixes #950.
+
+        * mmg: enhancement: Made the »scanned files« list box sortable by
+        all columns. Fixes #954.
+
+2013-12-31  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mmg: enhancement: The »additional parts« dialog will now show
+        the files that make up an MPLS playlist. This is for informational
+        purposes only and doesn't allow changing the playlist itself.
+
+        * mkvmerge: bug fix: Reading from an MPLS playlist file is now
+        done as if the second and following files referenced in that
+        playlist had been appended to the first file from that
+        playlist. Before they were treated as if they were additional
+        parts. Fixes #934.
+
+        * mmg: enhancement: a couple of fixes to tooltips: 1. Content
+        correction for »splitting by chapters«; 2. no ugly re-formatting
+        with wxWidgets 3.0.0 on Windows.
+
+2013-12-30  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: bug fix: Improved the AAC, AC3 and MP3 header decoding
+        error handling so that the corresponding parsing routines won't
+        get stuck in endless loops when encountering certain garbage data
+        patterns.
+
 2013-12-29  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: enhancement: unified codec names output by mkvmerge's
@@ -45,7 +134,7 @@
 
         * mkvmerge: bug fix: Fixed the mapping of the Opus element »seek
         pre-roll« and »pre-skip« to the Matroska elements »track seek
-        pre-roll« and »codec delay«. Remuxing Matroska files without Opus
+        pre-roll« and »codec delay«. Remuxing Matroska files with Opus
         created with earlier versions of MKVToolNix is enough to fix such
         a file.
 

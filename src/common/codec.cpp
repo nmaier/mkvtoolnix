@@ -30,12 +30,12 @@ codec_c::initialize() {
   ms_codecs.emplace_back("Dirac",                   CT_V_DIRAC,     "drac|V_DIRAC");
   ms_codecs.emplace_back("VP8",                     CT_V_VP8,       "vp8\\d|V_VP8");
   ms_codecs.emplace_back("VP9",                     CT_V_VP9,       "vp9\\d|V_VP9");
-  ms_codecs.emplace_back("VP9",                     CT_V_VP9,       "vp9\\d|V_VP9");
-  ms_codecs.emplace_back("Sorenson",                CT_V_SVQ,       "svq[i0-9]");
+  ms_codecs.emplace_back("Sorenson v1",             CT_V_SVQ1,      "svq[i1]");
+  ms_codecs.emplace_back("Sorenson v3",             CT_V_SVQ3,      "svq3");
   ms_codecs.emplace_back("VC1",                     CT_V_VC1,       "wvc1|vc-1");
 
   ms_codecs.emplace_back("AAC",                     CT_A_AAC,       "mp4a|aac.|raac|racp|A_AAC.*",           std::vector<uint16_t>{ 0x00ffu, 0x706du });
-  ms_codecs.emplace_back("AC3/EAC3",                CT_A_AC3,       "ac3.|ac-3|sac3|eac3|a52[\\sb]|A_E?AC3", 0x2000u);
+  ms_codecs.emplace_back("AC3/EAC3",                CT_A_AC3,       "ac3.|ac-3|sac3|eac3|a52[\\sb]|dnet|A_E?AC3", 0x2000u);
   ms_codecs.emplace_back("ALAC",                    CT_A_ALAC,      "alac|A_ALAC");
   ms_codecs.emplace_back("DTS",                     CT_A_DTS,       "dts[\\sbcehl]|A_DTS",                   0x2001u);
   ms_codecs.emplace_back("MP2",                     CT_A_MP2,       "mp2.|\\.mp[12]|mp2a|A_MPEG/L2",         0x0050);
@@ -49,6 +49,12 @@ codec_c::initialize() {
   ms_codecs.emplace_back("TrueHD",                  CT_A_TRUEHD,    "trhd|A_TRUEHD");
   ms_codecs.emplace_back("TrueAudio",               CT_A_TTA,       "tta1|A_TTA1?");
   ms_codecs.emplace_back("WavPack4",                CT_A_WAVPACK4,  "wvpk|A_WAVPACK4");
+  ms_codecs.emplace_back("G2/Cook",                 CT_A_COOK,      "cook|A_REAL/COOK");
+  ms_codecs.emplace_back("Sipro/ACELP-NET",         CT_A_ACELP_NET, "sipr|A_REAL/SIPR");
+  ms_codecs.emplace_back("ATRAC3",                  CT_A_ATRAC3,    "atrc|A_REAL/ATRC");
+  ms_codecs.emplace_back("RealAudio-Lossless",      CT_A_RALF,      "ralf|A_REAL/RALF");
+  ms_codecs.emplace_back("VSELP",                   CT_A_VSELP,     "lpcj|14_4|A_REAL/LPCJ|A_REAL/14_4");
+  ms_codecs.emplace_back("LD-CELP",                 CT_A_LD_CELP,   "28_8|A_REAL/28_8");
 
   ms_codecs.emplace_back("SubRip/SRT",              CT_S_SRT,       "S_TEXT/(?:UTF8|ASCII)");
   ms_codecs.emplace_back("SubStationAlpha",         CT_S_SSA_ASS,   "ssa\\s|ass\\s|S_TEXT/(?:SSA|ASS)");

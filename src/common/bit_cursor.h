@@ -36,7 +36,7 @@ public:
     m_end_of_data   = data + len;
     m_byte_position = data;
     m_start_of_data = data;
-    m_bits_valid    = 8;
+    m_bits_valid    = len ? 8 : 0;
     m_out_of_data   = m_byte_position >= m_end_of_data;
   }
 

@@ -33,12 +33,14 @@ to_wide(wxFileName const &source) {
 }
 
 additional_parts_dialog::additional_parts_dialog(wxWindow *parent,
-                                                 wxFileName const &primary_file_name,
-                                                 std::vector<wxFileName> const &files)
-  : wxDialog(parent, -1, Z("Additional source file parts"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
-  , m_primary_file_name(primary_file_name)
-  , m_files(files)
+                                                 mmg_file_t const &file)
+  : wxDialog(parent, -1, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
+  , m_file{&file}
+  , m_primary_file_name{m_file->file_name}
+  , m_files{ m_file->is_playlist ? m_file->playlist_files : m_file->other_files }
 {
+  SetTitle(m_file->is_playlist ? Z("View files in playlist") : Z("Additional source file parts"));
+
   // Create controls
   m_lv_files                 = new wxListView(this, ID_ADDPARTS_LV_FILES, wxDefaultPosition, wxDefaultSize, wxLC_REPORT | wxSUNKEN_BORDER);
 
@@ -49,14 +51,22 @@ additional_parts_dialog::additional_parts_dialog(wxWindow *parent,
   m_b_sort                   = new wxButton(this, ID_ADDPARTS_B_SORT,   Z("&Sort"));
   m_b_close                  = new wxButton(this, ID_ADDPARTS_B_CLOSE,  Z("&Close"));
 
-  auto *st_title             = new wxStaticText(this, wxID_ANY, Z("Edit additional source file parts"));
+  auto *st_title             = new wxStaticText(this, wxID_ANY, m_file->is_playlist ? Z("View files in playlist") : Z("Edit additional source file parts"));
   auto *st_primary_file_name = new wxStaticText(this, wxID_ANY, Z("Primary file name:"));
   auto *st_directory         = new wxStaticText(this, wxID_ANY, Z("Directory:"));
 
-  wxString text =
-      wxString( Z("The following parts are read after the primary file as if they were all part of one big file.") )
-    + wxT(" ")
-    + Z("Typical use cases include reading VOBs from a DVD (e.g. VTS_01_1.VOB, VTS_01_2.VOB, VTS_01_3.VOB).");
+  wxString text;
+  if (m_file->is_playlist) {
+    text = wxString( Z("The following list shows the files that make up this playlist.") )
+         + wxT(" ")
+         + Z("This list is for informational purposes only and cannot be changed.");
+
+  } else {
+    text = wxString( Z("The following parts are read after the primary file as if they were all part of one big file.") )
+         + wxT(" ")
+         + Z("Typical use cases include reading VOBs from a DVD (e.g. VTS_01_1.VOB, VTS_01_2.VOB, VTS_01_3.VOB).");
+  }
+
   auto *st_additional_parts  = new wxStaticText(this, wxID_ANY, wxString{ format_paragraph(to_wide(text), 0, L"", L"", 80) }.Strip());
 
   auto *sl_title             = new wxStaticLine(this);
@@ -276,10 +286,11 @@ void
 additional_parts_dialog::enable_buttons() {
   bool some_selected = 0 < m_lv_files->GetSelectedItemCount();
 
-  m_b_remove->Enable(some_selected);
-  m_b_up->Enable(some_selected);
-  m_b_down->Enable(some_selected);
-  m_b_sort->Enable(!m_files.empty());
+  m_b_add->Enable(   !m_file->is_playlist);
+  m_b_remove->Enable(!m_file->is_playlist && some_selected);
+  m_b_up->Enable(    !m_file->is_playlist && some_selected);
+  m_b_down->Enable(  !m_file->is_playlist && some_selected);
+  m_b_sort->Enable(  !m_file->is_playlist && !m_files.empty());
 }
 
 std::vector<wxFileName> const &

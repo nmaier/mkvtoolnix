@@ -70,6 +70,12 @@
 # endif
 #endif
 
+#if (defined(SYS_WINDOWS) && defined(_WIN64)) || (!defined(SYS_WINDOWS) && (defined(__x86_64__) || defined(__ppc64__)))
+# define ARCH_64BIT
+#else
+# define ARCH_32BIT
+#endif
+
 #if defined(COMP_MSC)
 
 #if !defined(HAVE_COREC_H)

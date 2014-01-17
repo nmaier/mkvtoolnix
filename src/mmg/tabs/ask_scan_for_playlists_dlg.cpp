@@ -25,10 +25,14 @@ ask_scan_for_playlists_dlg::ask_scan_for_playlists_dlg(wxWindow *parent,
 {
 	SetSize(500, 150);
 
-	auto st_question = new wxStaticText(this, wxID_ANY,
-                                      wxU(boost::format(Y("The file you've added is a playlist. The directory it is located in contains %1% other file(s) with the same extension. "
-                                                          "mmg can scan these files, present the results including duration and number of tracks of each playlist found and let you chose which one to add."))
-                                          % num_other_files));
+  auto text = wxU(boost::format("%1% %2% %3%")
+                  % Y("The file you've added is a playlist.")
+                  % (boost::format(NY("The directory it is located in contains %1% other file with the same extension.",
+                                      "The directory it is located in contains %1% other files with the same extension.",
+                                      num_other_files))
+                     % num_other_files)
+                  % Y("mmg can scan these files, present the results including duration and number of tracks of each playlist found and let you chose which one to add."));
+	auto st_question = new wxStaticText(this, wxID_ANY, text);
 	st_question->Wrap(480);
 
 	auto st_in_the_future = new wxStaticText(this, wxID_ANY, Z("What to do in the future:"), wxDefaultPosition, wxDefaultSize, 0);

@@ -636,8 +636,7 @@ kax_reader_c::handle_attachments(mm_io_c *io,
 
     ++m_attachment_id;
     attach_mode_e attach_mode;
-    if (   !matt.id
-        || !matt.data->get_size()
+    if (   !matt.data->get_size()
         || matt.mime_type.empty()
         || matt.name.empty()
         || ((attach_mode = attachment_requested(m_attachment_id)) == ATTACH_MODE_SKIP))

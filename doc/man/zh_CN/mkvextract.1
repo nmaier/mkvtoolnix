@@ -2,12 +2,12 @@
 .\"     Title: mkvextract
 .\"    Author: Moritz Bunkus <moritz@bunkus.org>
 .\" Generator: DocBook XSL Stylesheets v1.78.1 <http://docbook.sf.net/>
-.\"      Date: 2013-12-01
+.\"      Date: 2014-01-08
 .\"    Manual: 用户命令
-.\"    Source: MKVToolNix 6.6.0
+.\"    Source: MKVToolNix 6.7.0
 .\"  Language: Chinese
 .\"
-.TH "MKVEXTRACT" "1" "2013\-12\-01" "MKVToolNix 6\&.6\&.0" "用户命令"
+.TH "MKVEXTRACT" "1" "2014\-01\-08" "MKVToolNix 6\&.7\&.0" "用户命令"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -95,6 +95,11 @@ Matroska(TM)
 开启实验性功能。可用功能列表可通过
 \fBmkvextract \-\-engage list\fR
 得到。这些功能在正常情况下不应该使用。
+.RE
+.PP
+\fB\-\-gui\-mode\fR
+.RS 4
+Turns on GUI mode\&. In this mode specially\-formatted lines may be output that can tell a controlling GUI what\*(Aqs happening\&. These messages follow the format \*(Aq#GUI#message\*(Aq\&. The message may be followed by key/value pairs as in \*(Aq#GUI#message#key1=value1#key2=value2\&...\*(Aq\&. Neither the messages nor the keys are ever translated and always output in English\&.
 .RE
 .PP
 \fB\-v\fR, \fB\-\-verbose\fR
