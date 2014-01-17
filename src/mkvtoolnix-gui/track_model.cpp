@@ -20,7 +20,7 @@ TrackModel::TrackModel(QObject *parent)
   , m_debug{"track_model"}
 {
   auto labels = QStringList{};
-  labels << QY("Codec") << QY("Mux this") << QY("Language") << QY("Source file") << QY("Type") << QY("Name") << QY("ID");
+  labels << QY("Codec") << QY("Type") << QY("Mux this") << QY("Language") << QY("Source file") << QY("Name") << QY("ID");
   setHorizontalHeaderLabels(labels);
   horizontalHeaderItem(6)->setTextAlignment(Qt::AlignRight);
 }
