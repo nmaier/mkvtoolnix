@@ -19,8 +19,9 @@ AttachmentModel::~AttachmentModel() {
 
 void
 AttachmentModel::setAttachments(QList<AttachmentPtr> &attachments) {
+  beginResetModel();
   m_attachments = &attachments;
-  reset();
+  endResetModel();
 }
 
 

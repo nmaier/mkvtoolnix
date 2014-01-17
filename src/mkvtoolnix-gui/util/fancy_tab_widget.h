@@ -22,7 +22,7 @@
 #define MTX_MKVTOOLNIX_GUI_UTIL_FANCY_TAB_WIDGET_H
 
 #include <QtGui/QIcon>
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 
 #include <QtCore/QTimer>
 #include <QtCore/QPropertyAnimation>

@@ -32,8 +32,9 @@ SourceFileModel::setTracksModel(TrackModel *tracksModel) {
 
 void
 SourceFileModel::setSourceFiles(QList<SourceFilePtr> &sourceFiles) {
+  beginResetModel();
   m_sourceFiles = &sourceFiles;
-  reset();
+  endResetModel();
 }
 
 QList<QStandardItem *>

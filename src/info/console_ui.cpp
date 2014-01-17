@@ -49,13 +49,13 @@ ui_show_error(const std::string &error) {
 }
 
 void
-ui_show_progress(int percentage,
-                 const std::string &text) {
+ui_show_progress(int /* percentage */,
+                 const std::string &/* text */) {
 }
 
 int
-ui_run(int argc,
-       char **argv) {
+ui_run(int /* argc */,
+       char **/* argv */) {
   return 0;
 }
 
