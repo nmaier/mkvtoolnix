@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>898</width>
-    <height>519</height>
+    <height>533</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -118,7 +118,10 @@
               </size>
              </property>
              <property name="frameShape">
-              <enum>QFrame::NoFrame</enum>
+              <enum>QFrame::Box</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Plain</enum>
              </property>
              <property name="verticalScrollBarPolicy">
               <enum>Qt::ScrollBarAsNeeded</enum>
@@ -134,8 +137,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>434</width>
-                <height>789</height>
+                <width>460</width>
+                <height>812</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_9">
