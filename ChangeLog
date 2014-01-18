@@ -1,3 +1,10 @@
+2014-01-18  Moritz Bunkus  <moritz@bunkus.org>
+
+        * extract: bug fix: using names of non-existing files in
+        »attachments«, »chapters«, »cuesheet« or »tags« mode caused
+        mkvextract to crash instead of emitting a proper error
+        message. Fixes #964.
+
 2014-01-17  Moritz Bunkus  <moritz@bunkus.org>
 
         * mmg: bug fix: fixed the check for WebM-compatible track types
