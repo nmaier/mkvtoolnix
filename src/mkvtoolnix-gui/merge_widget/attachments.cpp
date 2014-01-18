@@ -28,8 +28,8 @@ MergeWidget::setupAttachmentsControls() {
 
   // Signals & slots
   connect(ui->attachments->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)), this, SLOT(onAttachmentSelectionChanged()));
-  connect(m_addAttachmentsAction,            SIGNAL(activated()),                                                      this, SLOT(onAddAttachments()));
-  connect(m_removeAttachmentsAction,         SIGNAL(activated()),                                                      this, SLOT(onRemoveAttachments()));
+  connect(m_addAttachmentsAction,            SIGNAL(triggered()),                                                      this, SLOT(onAddAttachments()));
+  connect(m_removeAttachmentsAction,         SIGNAL(triggered()),                                                      this, SLOT(onRemoveAttachments()));
 
   onAttachmentSelectionChanged();
 }
