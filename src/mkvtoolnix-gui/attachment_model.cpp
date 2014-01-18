@@ -168,7 +168,7 @@ bool
 AttachmentModel::removeRows(int row,
                             int count,
                             QModelIndex const &parent) {
-  if ((0 > row) || (0 >= count) || ((row + count) >= m_attachments->size()))
+  if ((0 > row) || (0 >= count) || ((row + count) > m_attachments->size()))
     return false;
 
   beginRemoveRows(parent, row, row + count);
