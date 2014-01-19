@@ -20,12 +20,16 @@ protected:
   bool m_started;
 
 public:
+  static int const RowNotFound = -1;
+
+public:
   JobModel(QObject *parent);
   virtual ~JobModel();
 
-  QList<Job *> selectedJobs(QAbstractItemView *view);
-  Job *getJobById(uint64_t id);
-  Job *fromIndex(QModelIndex const &index);
+  QList<Job *> selectedJobs(QAbstractItemView *view) const;
+  Job *fromId(uint64_t id) const;
+  Job *fromIndex(QModelIndex const &index) const;
+  int rowFromId(uint64_t id) const;
   bool hasJobs() const;
 
   void removeJobsIf(std::function<bool(Job const &)> predicate);
@@ -33,6 +37,10 @@ public:
 
   void start();
   void stop();
+
+public slots:
+  void onStatusChanged(uint64_t id, Job::Status status);
+  void onProgressChanged(uint64_t id, unsigned int progress);
 
 protected:
   QList<QStandardItem *> createRow(Job const &job) const;

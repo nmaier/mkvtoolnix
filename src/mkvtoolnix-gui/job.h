@@ -51,7 +51,7 @@ public slots:
   void setProgress(unsigned int progress);
 
 signals:
-  void statusChanged(uint64_t id, Status status);
+  void statusChanged(uint64_t id, Job::Status status);
   void progressChanged(uint64_t id, unsigned int progress);
 };
 typedef std::shared_ptr<Job> JobPtr;

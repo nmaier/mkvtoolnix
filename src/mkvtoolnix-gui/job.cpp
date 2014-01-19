@@ -8,7 +8,7 @@ uint64_t Job::ms_next_id = 0;
 Job::Job(Status status)
   : m_id{ms_next_id++}
   , m_status{status}
-  , m_progress{std::numeric_limits<unsigned int>::max()}
+  , m_progress{}
   , m_exitCode{std::numeric_limits<unsigned int>::max()}
 {
 }
@@ -26,8 +26,15 @@ Job::action(std::function<void()> code) {
 void
 Job::setStatus(Status status) {
   action([this,status]() {
-      if (status == m_status) {
+      if (status != m_status) {
         m_status = status;
+
+        if (Running == status)
+          m_dateStarted = QDateTime::currentDateTime();
+
+        else if ((DoneOk == status) || (DoneWarnings == status) || (Failed == status) || (Aborted == status))
+          m_dateFinished = QDateTime::currentDateTime();
+
         emit statusChanged(m_id, m_status);
       }
     });
@@ -36,7 +43,7 @@ Job::setStatus(Status status) {
 void
 Job::setProgress(unsigned int progress) {
   action([this,progress]() {
-      if (progress == m_progress) {
+      if (progress != m_progress) {
         m_progress = progress;
         emit progressChanged(m_id, m_progress);
       }

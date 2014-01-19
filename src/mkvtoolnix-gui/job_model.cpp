@@ -2,6 +2,7 @@
 
 #include <QAbstractItemView>
 
+#include "common/at_scope_exit.h"
 #include "common/qt.h"
 #include "mkvtoolnix-gui/job_model.h"
 #include "mkvtoolnix-gui/util/util.h"
@@ -11,17 +12,20 @@ JobModel::JobModel(QObject *parent)
   , m_started{}
 {
   auto labels = QStringList{};
-  labels << QY("Description") << QY("Type") << QY("Status") << QY("Date added") << QY("Date started") << QY("Date finished");
+  labels << QY("Description") << QY("Type") << QY("Status") << QY("Progress") << QY("Date added") << QY("Date started") << QY("Date finished");
   setHorizontalHeaderLabels(labels);
   horizontalHeaderItem(3)->setTextAlignment(Qt::AlignRight);
   horizontalHeaderItem(4)->setTextAlignment(Qt::AlignRight);
+  horizontalHeaderItem(5)->setTextAlignment(Qt::AlignRight);
+  horizontalHeaderItem(6)->setTextAlignment(Qt::AlignRight);
 }
 
 JobModel::~JobModel() {
 }
 
 QList<Job *>
-JobModel::selectedJobs(QAbstractItemView *view) {
+JobModel::selectedJobs(QAbstractItemView *view)
+  const {
   auto selectedIds = QMap<uint64_t, bool>{};
   Util::withSelectedIndexes(view, [&](QModelIndex const &idx) {
       if (!idx.column())
@@ -38,15 +42,28 @@ JobModel::selectedJobs(QAbstractItemView *view) {
   return jobs;
 }
 
+int
+JobModel::rowFromId(uint64_t id)
+  const {
+  auto jobItr = brng::find_if(m_jobs, [id](JobPtr const &job) { return job->m_id == id; });
+  return jobItr != m_jobs.end() ? std::distance(m_jobs.begin(), jobItr) : RowNotFound;
+}
+
 Job *
-JobModel::getJobById(uint64_t id) {
+JobModel::fromId(uint64_t id)
+  const {
   auto jobItr = brng::find_if(m_jobs, [id](JobPtr const &job) { return job->m_id == id; });
   return jobItr != m_jobs.end() ? jobItr->get() : nullptr;
 }
 
 Job *
-JobModel::fromIndex(QModelIndex const &index) {
-  return index.isValid() ? getJobById(index.data(Util::JobIdRole).value<uint64_t>()) : nullptr;
+JobModel::fromIndex(QModelIndex const &index)
+  const {
+  if (!index.isValid() || (index.row() >= m_jobs.size()))
+    return nullptr;
+
+  auto const &job = m_jobs[index.row()];
+  return job->m_id == item(index.row())->data(Util::JobIdRole).value<uint64_t>() ? job.get() : nullptr;
 }
 
 bool
@@ -82,14 +99,17 @@ JobModel::displayableDate(QDateTime const &date) {
 QList<QStandardItem *>
 JobModel::createRow(Job const &job)
   const {
-  auto items = QList<QStandardItem *>{};
+  auto items    = QList<QStandardItem *>{};
+  auto progress = to_qs(boost::format("%1%%%") % job.m_progress);
 
-  items << (new QStandardItem{job.m_description})                << (new QStandardItem{displayableJobType(job)})            << (new QStandardItem{displayableJobStatus(job)})
+  items << (new QStandardItem{job.m_description})                << (new QStandardItem{displayableJobType(job)})            << (new QStandardItem{displayableJobStatus(job)}) << (new QStandardItem{progress})
         << (new QStandardItem{displayableDate(job.m_dateAdded)}) << (new QStandardItem{displayableDate(job.m_dateStarted)}) << (new QStandardItem{displayableDate(job.m_dateFinished)});
 
   items[0]->setData(QVariant::fromValue(job.m_id), Util::JobIdRole);
   items[3]->setTextAlignment(Qt::AlignRight);
   items[4]->setTextAlignment(Qt::AlignRight);
+  items[5]->setTextAlignment(Qt::AlignRight);
+  items[6]->setTextAlignment(Qt::AlignRight);
 
   return items;
 }
@@ -110,7 +130,45 @@ JobModel::removeJobsIf(std::function<bool(Job const &)> predicate) {
 void
 JobModel::add(JobPtr const &job) {
   m_mutex.lock();
-  invisibleRootItem()->appendRow(createRow(*job));
+
   m_jobs << job;
+  invisibleRootItem()->appendRow(createRow(*job));
+
+  connect(job.get(), SIGNAL(progressChanged(uint64_t,unsigned int)), this, SLOT(onProgressChanged(uint64_t,unsigned int)));
+  connect(job.get(), SIGNAL(statusChanged(uint64_t,Job::Status)),    this, SLOT(onStatusChanged(uint64_t,Job::Status)));
+
   m_mutex.unlock();
+}
+
+void
+JobModel::onStatusChanged(uint64_t id,
+                          Job::Status status) {
+  m_mutex.lock();
+  auto unlocker = at_scope_exit_c{[&]() { m_mutex.unlock(); }};
+
+  auto row = rowFromId(id);
+  if (row == RowNotFound)
+    return;
+
+  auto const &job = *m_jobs[row];
+
+  // labels << QY("Description") << QY("Type") << QY("Status") << QY("Date added") << QY("Date started") << QY("Date finished");
+  item(row, 2)->setText(displayableJobStatus(job));
+
+  if (Job::Running == status)
+    item(row, 4)->setText(displayableDate(job.m_dateStarted));
+
+  else if ((Job::DoneOk == status) || (Job::DoneWarnings == status) || (Job::Failed == status) || (Job::Aborted == status))
+    item(row, 5)->setText(displayableDate(job.m_dateFinished));
+}
+
+void
+JobModel::onProgressChanged(uint64_t id,
+                            unsigned int progress) {
+  m_mutex.lock();
+  auto unlocker = at_scope_exit_c{[&]() { m_mutex.unlock(); }};
+
+  auto row = rowFromId(id);
+  if (row < m_jobs.size())
+    item(row, 2)->setText(to_qs(boost::format("%1%%%") % progress));
 }
