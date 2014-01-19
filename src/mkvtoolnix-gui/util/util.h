@@ -3,20 +3,28 @@
 
 #include "common/common_pch.h"
 
-#include <QComboBox>
-#include <QIcon>
 #include <QList>
-#include <QString>
+
+class QAbstractItemView;
+class QComboBox;
+class QIcon;
+class QModelIndex;
+class QTreeView;
+class QString;
+class QVariant;
 
 namespace Util {
 
 enum MtxGuiRoles {
   SourceFileRole = Qt::UserRole + 1,
-  TrackRole
+  TrackRole,
+  JobIdRole,
 };
 
 QIcon loadIcon(QString const &name, QList<int> const &sizes);
 bool setComboBoxIndexIf(QComboBox *comboBox, std::function<bool(QString const &, QVariant const &)> test);
+void resizeViewColumnsToContents(QTreeView *view);
+void withSelectedIndexes(QAbstractItemView *view, std::function<void(QModelIndex const &)> worker);
 
 };
 

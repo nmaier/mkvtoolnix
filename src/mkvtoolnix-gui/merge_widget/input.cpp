@@ -531,13 +531,13 @@ MergeWidget::reinitFilesTracksControls() {
 void
 MergeWidget::resizeFilesColumnsToContents()
   const {
-  resizeViewColumnsToContents(ui->files);
+  Util::resizeViewColumnsToContents(ui->files);
 }
 
 void
 MergeWidget::resizeTracksColumnsToContents()
   const {
-  resizeViewColumnsToContents(ui->tracks);
+  Util::resizeViewColumnsToContents(ui->tracks);
 }
 
 void

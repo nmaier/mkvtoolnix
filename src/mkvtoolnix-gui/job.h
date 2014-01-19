@@ -3,6 +3,7 @@
 
 #include "common/common_pch.h"
 
+#include <QDateTime>
 #include <QObject>
 #include <QMutex>
 #include <QString>
@@ -32,6 +33,7 @@ public:
   QString m_description;
   QStringList m_output, m_warnings, m_errors;
   unsigned int m_progress, m_exitCode;
+  QDateTime m_dateAdded, m_dateStarted, m_dateFinished;
 
   QMutex m_mutex;
 

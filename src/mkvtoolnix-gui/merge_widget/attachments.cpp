@@ -1,13 +1,13 @@
 #include "common/common_pch.h"
 
+#include <QFileDialog>
+
 #include "common/extern_data.h"
 #include "common/qt.h"
 #include "mkvtoolnix-gui/merge_widget/merge_widget.h"
 #include "mkvtoolnix-gui/forms/merge_widget.h"
 #include "mkvtoolnix-gui/util/settings.h"
 #include "mkvtoolnix-gui/util/util.h"
-
-#include <QFileDialog>
 
 void
 MergeWidget::setupAttachmentsControls() {
@@ -123,7 +123,7 @@ MergeWidget::onRemoveAttachments() {
 void
 MergeWidget::resizeAttachmentsColumnsToContents()
   const {
-  resizeViewColumnsToContents(ui->attachments);
+  Util::resizeViewColumnsToContents(ui->attachments);
 }
 
 void

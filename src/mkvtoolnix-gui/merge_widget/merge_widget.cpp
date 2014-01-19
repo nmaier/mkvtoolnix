@@ -153,14 +153,6 @@ MergeWidget::getSaveFileName(QString const &title,
 }
 
 void
-MergeWidget::resizeViewColumnsToContents(QTreeView *view)
-  const {
-  auto columnCount = view->model()->columnCount(QModelIndex{});
-  for (auto column = 0; columnCount > column; ++column)
-    view->resizeColumnToContents(column);
-}
-
-void
 MergeWidget::setupMenu() {
   auto mwUi = MainWindow::get()->getUi();
 

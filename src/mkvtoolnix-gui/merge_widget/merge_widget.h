@@ -161,8 +161,6 @@ protected:
   virtual QString getOpenFileName(QString const &title, QString const &filter, QLineEdit *lineEdit);
   virtual QString getSaveFileName(QString const &title, QString const &filter, QLineEdit *lineEdit);
 
-  virtual void resizeViewColumnsToContents(QTreeView *view) const;
-
   virtual QModelIndex selectedSourceFile() const;
 };
 

@@ -29,6 +29,11 @@ to_qs(std::wstring const &source) {
   return QString::fromStdWString(source);
 }
 
+inline QString
+to_qs(boost::format const &source) {
+  return QString::fromUtf8(source.str().c_str());
+}
+
 inline std::string
 to_utf8(QString const &source) {
   return std::string{ source.toUtf8().data() };
