@@ -80,7 +80,6 @@ MergeWidget::onOpenConfig() {
 
   try {
     m_config.load(fileName);
-    m_config.save(fileName + "-resaved");
     MainWindow::get()->setStatusBarMessage(QY("The configuration has been loaded."));
 
   } catch (mtx::InvalidSettingsX &) {
