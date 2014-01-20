@@ -30,9 +30,19 @@ TrackModel::~TrackModel() {
 
 void
 TrackModel::setTracks(QList<Track *> &tracks) {
-  beginResetModel();
+  removeRows(0, rowCount());
+
   m_tracks = &tracks;
-  endResetModel();
+  auto row = 0u;
+
+  for (auto const &track : *m_tracks) {
+    invisibleRootItem()->appendRow(createRow(track));
+
+    for (auto const &appendedTrack : track->m_appendedTracks)
+      item(row)->appendRow(createRow(appendedTrack));
+
+    ++row;
+  }
 }
 
 QList<QStandardItem *>

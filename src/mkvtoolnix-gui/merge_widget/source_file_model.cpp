@@ -32,9 +32,22 @@ SourceFileModel::setTracksModel(TrackModel *tracksModel) {
 
 void
 SourceFileModel::setSourceFiles(QList<SourceFilePtr> &sourceFiles) {
-  beginResetModel();
+  removeRows(0, rowCount());
+
   m_sourceFiles = &sourceFiles;
-  endResetModel();
+  auto row      = 0u;
+
+  for (auto const &file : *m_sourceFiles) {
+    invisibleRootItem()->appendRow(createRow(file.get()));
+
+    for (auto const &additionalPart : file->m_additionalParts)
+      item(row)->appendRow(createRow(additionalPart.get()));
+
+    for (auto const &appendedFile : file->m_appendedFiles)
+      item(row)->appendRow(createRow(appendedFile.get()));
+
+    ++row;
+  }
 }
 
 QList<QStandardItem *>
