@@ -20,7 +20,16 @@ protected:
   bool m_started;
 
 public:
-  static int const RowNotFound = -1;
+  // labels << QY("Description") << QY("Type") << QY("Status") << QY("Progress") << QY("Date added") << QY("Date started") << QY("Date finished");
+  static int const DescriptionColumn  = 0;
+  static int const TypeColumn         = 1;
+  static int const StatusColumn       = 2;
+  static int const ProgressColumn     = 3;
+  static int const DateAddedColumn    = 4;
+  static int const DateStartedColumn  = 5;
+  static int const DateFinishedColumn = 6;
+
+  static int const RowNotFound        = -1;
 
 public:
   JobModel(QObject *parent);

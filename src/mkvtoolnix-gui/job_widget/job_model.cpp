@@ -16,11 +16,11 @@ JobModel::JobModel(QObject *parent)
   labels << QY("Description") << QY("Type") << QY("Status") << QY("Progress") << QY("Date added") << QY("Date started") << QY("Date finished");
   setHorizontalHeaderLabels(labels);
 
-  horizontalHeaderItem(0)->setTextAlignment(Qt::AlignLeft);
-  horizontalHeaderItem(3)->setTextAlignment(Qt::AlignRight);
-  horizontalHeaderItem(4)->setTextAlignment(Qt::AlignRight);
-  horizontalHeaderItem(5)->setTextAlignment(Qt::AlignRight);
-  horizontalHeaderItem(6)->setTextAlignment(Qt::AlignRight);
+  horizontalHeaderItem(DescriptionColumn) ->setTextAlignment(Qt::AlignLeft);
+  horizontalHeaderItem(ProgressColumn)    ->setTextAlignment(Qt::AlignRight);
+  horizontalHeaderItem(DateAddedColumn)   ->setTextAlignment(Qt::AlignRight);
+  horizontalHeaderItem(DateStartedColumn) ->setTextAlignment(Qt::AlignRight);
+  horizontalHeaderItem(DateFinishedColumn)->setTextAlignment(Qt::AlignRight);
 }
 
 JobModel::~JobModel() {
@@ -94,7 +94,7 @@ JobModel::displayableJobStatus(Job const &job) {
 
 QString
 JobModel::displayableDate(QDateTime const &date) {
-  return date.isValid() ? date.toString(Qt::ISODate) : QString{""};
+  return date.isValid() ? date.toString(QString{"yyyy-MM-dd hh:mm:ss"}) : QString{""};
 }
 
 QList<QStandardItem *>
@@ -106,11 +106,12 @@ JobModel::createRow(Job const &job)
   items << (new QStandardItem{job.m_description})                << (new QStandardItem{displayableJobType(job)})            << (new QStandardItem{displayableJobStatus(job)}) << (new QStandardItem{progress})
         << (new QStandardItem{displayableDate(job.m_dateAdded)}) << (new QStandardItem{displayableDate(job.m_dateStarted)}) << (new QStandardItem{displayableDate(job.m_dateFinished)});
 
-  items[0]->setData(QVariant::fromValue(job.m_id), Util::JobIdRole);
-  items[3]->setTextAlignment(Qt::AlignRight);
-  items[4]->setTextAlignment(Qt::AlignRight);
-  items[5]->setTextAlignment(Qt::AlignRight);
-  items[6]->setTextAlignment(Qt::AlignRight);
+  items[DescriptionColumn ]->setData(QVariant::fromValue(job.m_id), Util::JobIdRole);
+  items[DescriptionColumn ]->setTextAlignment(Qt::AlignLeft);
+  items[ProgressColumn    ]->setTextAlignment(Qt::AlignRight);
+  items[DateAddedColumn   ]->setTextAlignment(Qt::AlignRight);
+  items[DateStartedColumn ]->setTextAlignment(Qt::AlignRight);
+  items[DateFinishedColumn]->setTextAlignment(Qt::AlignRight);
 
   return items;
 }
@@ -150,14 +151,13 @@ JobModel::onStatusChanged(uint64_t id,
 
   auto const &job = *m_jobs[row];
 
-  // labels << QY("Description") << QY("Type") << QY("Status") << QY("Date added") << QY("Date started") << QY("Date finished");
-  item(row, 2)->setText(displayableJobStatus(job));
+  item(row, StatusColumn)->setText(displayableJobStatus(job));
 
   if (Job::Running == status)
-    item(row, 4)->setText(displayableDate(job.m_dateStarted));
+    item(row, DateStartedColumn)->setText(displayableDate(job.m_dateStarted));
 
   else if ((Job::DoneOk == status) || (Job::DoneWarnings == status) || (Job::Failed == status) || (Job::Aborted == status))
-    item(row, 5)->setText(displayableDate(job.m_dateFinished));
+    item(row, DateFinishedColumn)->setText(displayableDate(job.m_dateFinished));
 
   startNextAutoJob();
 }
@@ -169,7 +169,7 @@ JobModel::onProgressChanged(uint64_t id,
 
   auto row = rowFromId(id);
   if (row < m_jobs.size())
-    item(row, 3)->setText(to_qs(boost::format("%1%%%") % progress));
+    item(row, ProgressColumn)->setText(to_qs(boost::format("%1%%%") % progress));
 }
 
 void
