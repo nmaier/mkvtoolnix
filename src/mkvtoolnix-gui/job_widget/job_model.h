@@ -38,13 +38,14 @@ public:
   void start();
   void stop();
 
+  void startNextAutoJob();
+
 public slots:
   void onStatusChanged(uint64_t id, Job::Status status);
   void onProgressChanged(uint64_t id, unsigned int progress);
 
 protected:
   QList<QStandardItem *> createRow(Job const &job) const;
-  void startNextAutoJob();
 
 public:                         // static
   static QString displayableJobType(Job const &job);

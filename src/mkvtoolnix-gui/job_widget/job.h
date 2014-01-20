@@ -1,5 +1,5 @@
-#ifndef MTX_MKVTOOLNIX_GUI_APP_H
-#define MTX_MKVTOOLNIX_GUI_APP_H
+#ifndef MTX_MKVTOOLNIX_GUI_JOB_H
+#define MTX_MKVTOOLNIX_GUI_JOB_H
 
 #include "common/common_pch.h"
 
@@ -12,6 +12,8 @@
 
 class Job: public QObject {
   Q_OBJECT;
+  Q_ENUMS(Status);
+
 public:
   enum Status {
     PendingManual,
@@ -46,8 +48,10 @@ public:
   virtual void abort() = 0;
   virtual void start() = 0;
 
+  void setPendingAuto();
+
 public slots:
-  void setStatus(Status status);
+  void setStatus(Job::Status status);
   void setProgress(unsigned int progress);
 
 signals:
@@ -92,4 +96,4 @@ public slots:
   void threadFinished();
 };
 
-#endif  // MTX_MKVTOOLNIX_GUI_APP_H
+#endif  // MTX_MKVTOOLNIX_GUI_JOB_H

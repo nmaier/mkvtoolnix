@@ -13,6 +13,7 @@ JobWidget::JobWidget(QWidget *parent)
   : QWidget{parent}
   , ui{new Ui::JobWidget}
   , m_model{new JobModel{this}}
+  , m_startAction{new QAction{this}}
   , m_addAction{new QAction{this}}
   , m_removeAction{new QAction{this}}
   , m_removeDoneAction{new QAction{this}}
@@ -24,6 +25,8 @@ JobWidget::JobWidget(QWidget *parent)
 
   setupUiControls();
   retranslateUI();
+
+  m_model->start();
 }
 
 JobWidget::~JobWidget() {
@@ -34,6 +37,7 @@ void
 JobWidget::setupUiControls() {
   ui->jobs->setModel(m_model);
 
+  connect(m_startAction,        SIGNAL(triggered()), this, SLOT(onStart()));
   connect(m_addAction,          SIGNAL(triggered()), this, SLOT(onAdd()));
   connect(m_removeAction,       SIGNAL(triggered()), this, SLOT(onRemove()));
   connect(m_removeDoneAction,   SIGNAL(triggered()), this, SLOT(onRemoveDone()));
@@ -43,9 +47,11 @@ JobWidget::setupUiControls() {
 
 void
 JobWidget::onContextMenu(QPoint pos) {
-  bool hasJobs = m_model->hasJobs();
+  bool hasJobs      = m_model->hasJobs();
+  bool hasSelection = !m_model->selectedJobs(ui->jobs).isEmpty();
 
-  m_removeAction->setEnabled(!m_model->selectedJobs(ui->jobs).isEmpty());
+  m_startAction->setEnabled(hasSelection);
+  m_removeAction->setEnabled(hasSelection);
   m_removeDoneAction->setEnabled(hasJobs);
   m_removeDoneOkAction->setEnabled(hasJobs);
   m_removeAllAction->setEnabled(hasJobs);
@@ -53,12 +59,24 @@ JobWidget::onContextMenu(QPoint pos) {
   QMenu menu{this};
 
   menu.addAction(m_addAction);
+  menu.addSeparator();
+  menu.addAction(m_startAction);
+  menu.addSeparator();
   menu.addAction(m_removeAction);
   menu.addAction(m_removeDoneAction);
   menu.addAction(m_removeDoneOkAction);
   menu.addAction(m_removeAllAction);
 
   menu.exec(ui->jobs->viewport()->mapToGlobal(pos));
+}
+
+void
+JobWidget::onStart() {
+  auto jobs = m_model->selectedJobs(ui->jobs);
+  for (auto const &job : jobs)
+    job->setPendingAuto();
+
+  m_model->startNextAutoJob();
 }
 
 void
@@ -110,6 +128,7 @@ JobWidget::resizeColumnsToContents()
 
 void
 JobWidget::retranslateUI() {
+  m_startAction->setText(QY("&Start selected jobs automatically"));
   m_addAction->setText(QY("&Add random job"));
   m_removeAction->setText(QY("&Remove selected jobs"));
   m_removeDoneAction->setText(QY("Remove &completed jobs"));

@@ -9,11 +9,14 @@
 
 JobModel::JobModel(QObject *parent)
   : QStandardItemModel{parent}
+  , m_mutex{QMutex::Recursive}
   , m_started{}
 {
   auto labels = QStringList{};
   labels << QY("Description") << QY("Type") << QY("Status") << QY("Progress") << QY("Date added") << QY("Date started") << QY("Date finished");
   setHorizontalHeaderLabels(labels);
+
+  horizontalHeaderItem(0)->setTextAlignment(Qt::AlignLeft);
   horizontalHeaderItem(3)->setTextAlignment(Qt::AlignRight);
   horizontalHeaderItem(4)->setTextAlignment(Qt::AlignRight);
   horizontalHeaderItem(5)->setTextAlignment(Qt::AlignRight);
@@ -36,8 +39,6 @@ JobModel::selectedJobs(QAbstractItemView *view)
   for (auto const &job : m_jobs)
     if (selectedIds[job->m_id])
       jobs << job.get();
-
-  mxinfo(boost::format("selected: %1%\n") % jobs.size());
 
   return jobs;
 }
@@ -116,20 +117,18 @@ JobModel::createRow(Job const &job)
 
 void
 JobModel::removeJobsIf(std::function<bool(Job const &)> predicate) {
-  m_mutex.lock();
+  QMutexLocker locked{&m_mutex};
 
   for (int idx = m_jobs.size(); 0 < idx; --idx)
     if (predicate(*m_jobs[idx - 1]))
       removeRow(idx - 1);
 
   brng::remove_erase_if(m_jobs, [predicate](JobPtr const &job) { return predicate(*job); });
-
-  m_mutex.unlock();
 }
 
 void
 JobModel::add(JobPtr const &job) {
-  m_mutex.lock();
+  QMutexLocker locked{&m_mutex};
 
   m_jobs << job;
   invisibleRootItem()->appendRow(createRow(*job));
@@ -137,7 +136,7 @@ JobModel::add(JobPtr const &job) {
   connect(job.get(), SIGNAL(progressChanged(uint64_t,unsigned int)), this, SLOT(onProgressChanged(uint64_t,unsigned int)));
   connect(job.get(), SIGNAL(statusChanged(uint64_t,Job::Status)),    this, SLOT(onStatusChanged(uint64_t,Job::Status)));
 
-  m_mutex.unlock();
+  startNextAutoJob();
 }
 
 void
@@ -159,6 +158,8 @@ JobModel::onStatusChanged(uint64_t id,
 
   else if ((Job::DoneOk == status) || (Job::DoneWarnings == status) || (Job::Failed == status) || (Job::Aborted == status))
     item(row, 5)->setText(displayableDate(job.m_dateFinished));
+
+  startNextAutoJob();
 }
 
 void
@@ -168,16 +169,22 @@ JobModel::onProgressChanged(uint64_t id,
 
   auto row = rowFromId(id);
   if (row < m_jobs.size())
-    item(row, 2)->setText(to_qs(boost::format("%1%%%") % progress));
+    item(row, 3)->setText(to_qs(boost::format("%1%%%") % progress));
 }
 
 void
 JobModel::startNextAutoJob() {
   QMutexLocker locked{&m_mutex};
 
+  if (!m_started)
+    return;
+
+  for (auto const &job : m_jobs)
+    if (job->m_status == Job::Running)
+      return;
+
   for (auto const &job : m_jobs)
     if (job->m_status == Job::PendingAuto) {
-      job->setStatus(Job::Running);
       job->start();
       return;
     }

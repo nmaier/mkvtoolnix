@@ -10,6 +10,7 @@ Job::Job(Status status)
   , m_status{status}
   , m_progress{}
   , m_exitCode{std::numeric_limits<unsigned int>::max()}
+  , m_mutex{QMutex::Recursive}
 {
 }
 
@@ -17,37 +18,40 @@ Job::~Job() {
 }
 
 void
-Job::action(std::function<void()> code) {
-  m_mutex.lock();
-  code();
-  m_mutex.unlock();
-}
-
-void
 Job::setStatus(Status status) {
-  action([this,status]() {
-      if (status != m_status) {
-        m_status = status;
+  QMutexLocker locked{&m_mutex};
 
-        if (Running == status)
-          m_dateStarted = QDateTime::currentDateTime();
+  if (status == m_status)
+    return;
 
-        else if ((DoneOk == status) || (DoneWarnings == status) || (Failed == status) || (Aborted == status))
-          m_dateFinished = QDateTime::currentDateTime();
+  m_status = status;
 
-        emit statusChanged(m_id, m_status);
-      }
-    });
+  if (Running == status)
+    m_dateStarted = QDateTime::currentDateTime();
+
+  else if ((DoneOk == status) || (DoneWarnings == status) || (Failed == status) || (Aborted == status))
+    m_dateFinished = QDateTime::currentDateTime();
+
+  emit statusChanged(m_id, m_status);
 }
 
 void
 Job::setProgress(unsigned int progress) {
-  action([this,progress]() {
-      if (progress != m_progress) {
-        m_progress = progress;
-        emit progressChanged(m_id, m_progress);
-      }
-    });
+  QMutexLocker locked{&m_mutex};
+
+  if (progress == m_progress)
+    return;
+
+  m_progress = progress;
+  emit progressChanged(m_id, m_progress);
+}
+
+void
+Job::setPendingAuto() {
+  QMutexLocker locked{&m_mutex};
+
+  if ((PendingAuto != m_status) && (Running != m_status))
+    setStatus(PendingAuto);
 }
 
 // ------------------------------------------------------------
@@ -69,6 +73,9 @@ MuxJob::abort() {
 void
 MuxJob::start() {
   assert(!m_thread);
+
+  setStatus(Job::Running);
+
   m_thread = new MuxJobThread{this};
   m_thread->start();
 }
@@ -85,7 +92,7 @@ MuxJobThread::MuxJobThread(MuxJob *job)
   , m_aborted{false}
 {
   connect(this, SIGNAL(progressChanged(unsigned int)), job, SLOT(setProgress(unsigned int)));
-  connect(this, SIGNAL(statusChanged(unsigned int)),   job, SLOT(setStatus(unsigned int)));
+  connect(this, SIGNAL(statusChanged(Job::Status)),    job, SLOT(setStatus(Job::Status)));
   connect(this, SIGNAL(finished()),                    job, SLOT(threadFinished()));
 }
 
@@ -102,7 +109,7 @@ MuxJobThread::run() {
 
   // TODO: MuxJobThread::run
   for (int i = 0; i < 10; i++) {
-    msleep(500);
+    msleep(200);
     emit progressChanged(i * 10);
   }
 
