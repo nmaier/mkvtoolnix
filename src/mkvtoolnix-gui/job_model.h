@@ -44,6 +44,7 @@ public slots:
 
 protected:
   QList<QStandardItem *> createRow(Job const &job) const;
+  void startNextAutoJob();
 
 public:                         // static
   static QString displayableJobType(Job const &job);

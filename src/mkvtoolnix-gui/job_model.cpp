@@ -170,3 +170,26 @@ JobModel::onProgressChanged(uint64_t id,
   if (row < m_jobs.size())
     item(row, 2)->setText(to_qs(boost::format("%1%%%") % progress));
 }
+
+void
+JobModel::startNextAutoJob() {
+  ScopeLocker locked{m_mutex};
+
+  for (auto const &job : m_jobs)
+    if (job->m_status == Job::PendingAuto) {
+      job->setStatus(Job::Running);
+      job->start();
+      return;
+    }
+}
+
+void
+JobModel::start() {
+  m_started = true;
+  startNextAutoJob();
+}
+
+void
+JobModel::stop() {
+  m_started = false;
+}
