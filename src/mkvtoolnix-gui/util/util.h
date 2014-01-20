@@ -24,6 +24,7 @@ enum MtxGuiRoles {
 QIcon loadIcon(QString const &name, QList<int> const &sizes);
 bool setComboBoxIndexIf(QComboBox *comboBox, std::function<bool(QString const &, QVariant const &)> test);
 void resizeViewColumnsToContents(QTreeView *view);
+QList<QModelIndex> selectedIndexes(QAbstractItemView *view);
 void withSelectedIndexes(QAbstractItemView *view, std::function<void(QModelIndex const &)> worker);
 
 };
