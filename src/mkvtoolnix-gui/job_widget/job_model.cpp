@@ -1,10 +1,10 @@
 #include "common/common_pch.h"
 
 #include <QAbstractItemView>
+#include <QMutexLocker>
 
 #include "common/qt.h"
 #include "mkvtoolnix-gui/job_widget/job_model.h"
-#include "mkvtoolnix-gui/util/scope_locker.h"
 #include "mkvtoolnix-gui/util/util.h"
 
 JobModel::JobModel(QObject *parent)
@@ -143,7 +143,7 @@ JobModel::add(JobPtr const &job) {
 void
 JobModel::onStatusChanged(uint64_t id,
                           Job::Status status) {
-  ScopeLocker locked{m_mutex};
+  QMutexLocker locked{&m_mutex};
 
   auto row = rowFromId(id);
   if (row == RowNotFound)
@@ -164,7 +164,7 @@ JobModel::onStatusChanged(uint64_t id,
 void
 JobModel::onProgressChanged(uint64_t id,
                             unsigned int progress) {
-  ScopeLocker locked{m_mutex};
+  QMutexLocker locked{&m_mutex};
 
   auto row = rowFromId(id);
   if (row < m_jobs.size())
@@ -173,7 +173,7 @@ JobModel::onProgressChanged(uint64_t id,
 
 void
 JobModel::startNextAutoJob() {
-  ScopeLocker locked{m_mutex};
+  QMutexLocker locked{&m_mutex};
 
   for (auto const &job : m_jobs)
     if (job->m_status == Job::PendingAuto) {
