@@ -2,9 +2,9 @@
 
 #include <QAbstractItemView>
 
-#include "common/at_scope_exit.h"
 #include "common/qt.h"
 #include "mkvtoolnix-gui/job_model.h"
+#include "mkvtoolnix-gui/util/scope_locker.h"
 #include "mkvtoolnix-gui/util/util.h"
 
 JobModel::JobModel(QObject *parent)
@@ -143,8 +143,7 @@ JobModel::add(JobPtr const &job) {
 void
 JobModel::onStatusChanged(uint64_t id,
                           Job::Status status) {
-  m_mutex.lock();
-  auto unlocker = at_scope_exit_c{[&]() { m_mutex.unlock(); }};
+  ScopeLocker locked{m_mutex};
 
   auto row = rowFromId(id);
   if (row == RowNotFound)
@@ -165,8 +164,7 @@ JobModel::onStatusChanged(uint64_t id,
 void
 JobModel::onProgressChanged(uint64_t id,
                             unsigned int progress) {
-  m_mutex.lock();
-  auto unlocker = at_scope_exit_c{[&]() { m_mutex.unlock(); }};
+  ScopeLocker locked{m_mutex};
 
   auto row = rowFromId(id);
   if (row < m_jobs.size())
