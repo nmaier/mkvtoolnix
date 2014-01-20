@@ -7,7 +7,7 @@
 #include <QMenu>
 #include <QWidget>
 
-#include "mkvtoolnix-gui/job_model.h"
+#include "mkvtoolnix-gui/job_widget/job_model.h"
 
 namespace Ui {
 class JobWidget;

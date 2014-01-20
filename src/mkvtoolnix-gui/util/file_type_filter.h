@@ -1,5 +1,5 @@
-#ifndef MTX_MMGQT_FILE_TYPE_FILTER_H
-#define MTX_MMGQT_FILE_TYPE_FILTER_H
+#ifndef MTX_MKVTOOLNIX_GUI_FILE_TYPE_FILTER_H
+#define MTX_MKVTOOLNIX_GUI_FILE_TYPE_FILTER_H
 
 #include "common/common_pch.h"
 
@@ -13,4 +13,4 @@ public:
   static QStringList s_filter;
 };
 
-#endif // MTX_MMGQT_FILE_TYPE_FILTER_H
+#endif // MTX_MKVTOOLNIX_GUI_FILE_TYPE_FILTER_H

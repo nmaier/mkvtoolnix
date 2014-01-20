@@ -3,7 +3,7 @@
 #include <QAbstractItemView>
 
 #include "common/qt.h"
-#include "mkvtoolnix-gui/job_model.h"
+#include "mkvtoolnix-gui/job_widget/job_model.h"
 #include "mkvtoolnix-gui/util/scope_locker.h"
 #include "mkvtoolnix-gui/util/util.h"
 

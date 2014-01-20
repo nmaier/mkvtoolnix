@@ -1,9 +1,9 @@
 #include "common/common_pch.h"
 
 #include "common/iso639.h"
-#include "mkvtoolnix-gui/mux_config.h"
-#include "mkvtoolnix-gui/source_file.h"
-#include "mkvtoolnix-gui/track.h"
+#include "mkvtoolnix-gui/merge_widget/mux_config.h"
+#include "mkvtoolnix-gui/merge_widget/source_file.h"
+#include "mkvtoolnix-gui/merge_widget/track.h"
 #include "mkvtoolnix-gui/util/settings.h"
 
 #include <QVariant>

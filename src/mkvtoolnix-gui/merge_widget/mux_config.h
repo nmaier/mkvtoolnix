@@ -1,5 +1,5 @@
-#ifndef MTX_MMGQT_MUX_CONFIG_H
-#define MTX_MMGQT_MUX_CONFIG_H
+#ifndef MTX_MKVTOOLNIX_GUI_MUX_CONFIG_H
+#define MTX_MKVTOOLNIX_GUI_MUX_CONFIG_H
 
 #include "common/common_pch.h"
 
@@ -131,4 +131,4 @@ saveSettingsGroup(char const *group,
   settings.endGroup();
 }
 
-#endif  // MTX_MMGQT_MUX_CONFIG_H
+#endif  // MTX_MKVTOOLNIX_GUI_MUX_CONFIG_H

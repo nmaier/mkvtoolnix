@@ -1,5 +1,5 @@
-#ifndef MTX_MMGQT_UTIL_H
-#define MTX_MMGQT_UTIL_H
+#ifndef MTX_MKVTOOLNIX_GUI_UTIL_H
+#define MTX_MKVTOOLNIX_GUI_UTIL_H
 
 #include "common/common_pch.h"
 
@@ -28,4 +28,4 @@ void withSelectedIndexes(QAbstractItemView *view, std::function<void(QModelIndex
 
 };
 
-#endif  // MTX_MMGQT_UTIL_H
+#endif  // MTX_MKVTOOLNIX_GUI_UTIL_H

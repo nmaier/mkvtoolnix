@@ -1,9 +1,9 @@
-#ifndef MTX_MKVTOOLNIXGUI_SOURCE_FILE_MODEL_H
-#define MTX_MKVTOOLNIXGUI_SOURCE_FILE_MODEL_H
+#ifndef MTX_MKVTOOLNIX_GUI_SOURCE_FILE_MODEL_H
+#define MTX_MKVTOOLNIX_GUI_SOURCE_FILE_MODEL_H
 
 #include "common/common_pch.h"
 
-#include "mkvtoolnix-gui/source_file.h"
+#include "mkvtoolnix-gui/merge_widget/source_file.h"
 
 #include <QStandardItemModel>
 #include <QIcon>
@@ -44,4 +44,4 @@ public:                         // static
 
 Q_DECLARE_METATYPE(SourceFile *)
 
-#endif  // MTX_MKVTOOLNIXGUI_SOURCE_FILE_MODEL_H
+#endif  // MTX_MKVTOOLNIX_GUI_SOURCE_FILE_MODEL_H

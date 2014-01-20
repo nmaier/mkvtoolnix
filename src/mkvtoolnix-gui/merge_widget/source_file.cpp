@@ -1,8 +1,8 @@
 #include "common/common_pch.h"
 
 #include "common/qt.h"
-#include "mkvtoolnix-gui/mux_config.h"
-#include "mkvtoolnix-gui/source_file.h"
+#include "mkvtoolnix-gui/merge_widget/mux_config.h"
+#include "mkvtoolnix-gui/merge_widget/source_file.h"
 
 namespace {
 

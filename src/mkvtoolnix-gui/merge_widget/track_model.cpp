@@ -1,6 +1,6 @@
 #include "common/common_pch.h"
 
-#include "mkvtoolnix-gui/track_model.h"
+#include "mkvtoolnix-gui/merge_widget/track_model.h"
 #include "mkvtoolnix-gui/util/util.h"
 
 #include <QFileInfo>

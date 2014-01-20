@@ -4,7 +4,7 @@
 #include "common/common_pch.h"
 
 #include "common/qt.h"
-#include "mkvtoolnix-gui/mux_config.h"
+#include "mkvtoolnix-gui/merge_widget/mux_config.h"
 
 #include <QObject>
 #include <QSettings>

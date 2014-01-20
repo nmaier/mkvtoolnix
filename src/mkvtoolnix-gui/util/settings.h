@@ -1,5 +1,5 @@
-#ifndef MTX_MMGQT_SETTINGS_H
-#define MTX_MMGQT_SETTINGS_H
+#ifndef MTX_MKVTOOLNIX_GUI_SETTINGS_H
+#define MTX_MKVTOOLNIX_GUI_SETTINGS_H
 
 #include "common/common_pch.h"
 
@@ -34,4 +34,4 @@ public:
 
 // extern Settings g_settings;
 
-#endif  // MTX_MMGQT_SETTINGS_H
+#endif  // MTX_MKVTOOLNIX_GUI_SETTINGS_H

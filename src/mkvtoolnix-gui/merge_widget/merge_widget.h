@@ -3,10 +3,10 @@
 
 #include "common/common_pch.h"
 
-#include "mkvtoolnix-gui/attachment_model.h"
-#include "mkvtoolnix-gui/mux_config.h"
-#include "mkvtoolnix-gui/source_file_model.h"
-#include "mkvtoolnix-gui/track_model.h"
+#include "mkvtoolnix-gui/merge_widget/attachment_model.h"
+#include "mkvtoolnix-gui/merge_widget/mux_config.h"
+#include "mkvtoolnix-gui/merge_widget/source_file_model.h"
+#include "mkvtoolnix-gui/merge_widget/track_model.h"
 
 #include <QComboBox>
 #include <QList>

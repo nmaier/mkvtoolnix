@@ -1,9 +1,9 @@
-#ifndef MTX_MKVTOOLNIXGUI_JOB_MODEL_H
-#define MTX_MKVTOOLNIXGUI_JOB_MODEL_H
+#ifndef MTX_MKVTOOLNIX_GUI_JOB_MODEL_H
+#define MTX_MKVTOOLNIX_GUI_JOB_MODEL_H
 
 #include "common/common_pch.h"
 
-#include "mkvtoolnix-gui/job.h"
+#include "mkvtoolnix-gui/job_widget/job.h"
 
 #include <QStandardItemModel>
 #include <QList>
@@ -52,4 +52,4 @@ public:                         // static
   static QString displayableDate(QDateTime const &date);
 };
 
-#endif  // MTX_MKVTOOLNIXGUI_JOB_MODEL_H
+#endif  // MTX_MKVTOOLNIX_GUI_JOB_MODEL_H

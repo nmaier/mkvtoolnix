@@ -1,7 +1,7 @@
 #include "common/common_pch.h"
 
 #include "common/qt.h"
-#include "mkvtoolnix-gui/job.h"
+#include "mkvtoolnix-gui/job_widget/job.h"
 
 uint64_t Job::ms_next_id = 0;
 

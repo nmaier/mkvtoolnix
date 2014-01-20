@@ -1,6 +1,6 @@
 #include "common/common_pch.h"
 
-#include "mkvtoolnix-gui/attachment_model.h"
+#include "mkvtoolnix-gui/merge_widget/attachment_model.h"
 #include "mkvtoolnix-gui/util/util.h"
 
 #include <boost/range/adaptor/uniqued.hpp>

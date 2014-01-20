@@ -1,12 +1,12 @@
-#ifndef MTX_MMGQT_FILE_IDENTIFIER_H
-#define MTX_MMGQT_FILE_IDENTIFIER_H
+#ifndef MTX_MKVTOOLNIX_GUI_FILE_IDENTIFIER_H
+#define MTX_MKVTOOLNIX_GUI_FILE_IDENTIFIER_H
 
 #include "common/common_pch.h"
 
 #include <QStringList>
 #include <QWidget>
 
-#include "mkvtoolnix-gui/source_file.h"
+#include "mkvtoolnix-gui/merge_widget/source_file.h"
 
 class FileIdentifier: public QObject {
   Q_OBJECT;
@@ -41,4 +41,4 @@ public:
   virtual SourceFilePtr const &file() const;
 };
 
-#endif // MTX_MMGQT_FILE_IDENTIFIER_H
+#endif // MTX_MKVTOOLNIX_GUI_FILE_IDENTIFIER_H

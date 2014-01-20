@@ -1,9 +1,9 @@
-#ifndef MTX_MKVTOOLNIXGUI_ATTACHMENT_MODEL_H
-#define MTX_MKVTOOLNIXGUI_ATTACHMENT_MODEL_H
+#ifndef MTX_MKVTOOLNIX_GUI_ATTACHMENT_MODEL_H
+#define MTX_MKVTOOLNIX_GUI_ATTACHMENT_MODEL_H
 
 #include "common/common_pch.h"
 
-#include "mkvtoolnix-gui/attachment.h"
+#include "mkvtoolnix-gui/merge_widget/attachment.h"
 
 #include <QAbstractItemModel>
 #include <QItemSelection>
@@ -55,4 +55,4 @@ protected:
   QVariant dataDisplay(QModelIndex const &index, Attachment *attachment) const;
 };
 
-#endif  // MTX_MKVTOOLNIXGUI_ATTACHMENT_MODEL_H
+#endif  // MTX_MKVTOOLNIX_GUI_ATTACHMENT_MODEL_H

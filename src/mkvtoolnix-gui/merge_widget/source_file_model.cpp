@@ -1,8 +1,8 @@
 #include "common/common_pch.h"
 
 #include "common/sorting.h"
-#include "mkvtoolnix-gui/source_file_model.h"
-#include "mkvtoolnix-gui/track_model.h"
+#include "mkvtoolnix-gui/merge_widget/source_file_model.h"
+#include "mkvtoolnix-gui/merge_widget/track_model.h"
 #include "mkvtoolnix-gui/util/util.h"
 
 #include <QFileInfo>
