@@ -58,6 +58,7 @@ Job::setPendingAuto() {
 
 MuxJob::MuxJob(Status status)
   : Job{status}
+  , m_thread{}
 {
 }
 
