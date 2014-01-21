@@ -1,5 +1,10 @@
 2014-01-21  Moritz Bunkus  <moritz@bunkus.org>
 
+        * all: Windows: when redirecting the program's output with cmd.exe
+        (e.g. »mkvinfo file.mkv > info.txt«) the programs will no longer
+        write two line feed characters (\r) per carriage return character
+        (\n). Fixes #970.
+
         * all: Windows: the default charset for the files created with
         »--redirect-output« has been changed from the system's local
         charset to UTF-8. Just like before it can be changed with
