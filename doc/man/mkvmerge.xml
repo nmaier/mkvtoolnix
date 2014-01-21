@@ -1984,83 +1984,126 @@ Track ID 2: audio (A_MPEG/L3)</screen>
    </para>
   </note>
 
-  <para>
-   All text in a &matroska; file is encoded in UTF-8. This means that &mkvmerge; has to convert every text file it reads as well as every
-   text given on the command line from one character set into UTF-8. In return this also means that &mkvmerge;'s output has to be converted
-   back to that character set from UTF-8, e.g. if a non-English translation is used with <link
-   linkend="mkvmerge.description.ui_language"><option>--ui-language</option></link> or for text originating from a &matroska; file.
-  </para>
+  <refsect2 id="mkvmerge.text_files_and_charsets.introduction">
+   <title>Introduction</title>
+   <para>
+    All text in a &matroska; file is encoded in UTF-8. This means that &mkvmerge; has to convert every text file it reads as well as every
+    text given on the command line from one character set into UTF-8. In return this also means that &mkvmerge;'s output has to be converted
+    back to that character set from UTF-8, e.g. if a non-English translation is used with <link
+    linkend="mkvmerge.description.ui_language"><option>--ui-language</option></link> or for text originating from a &matroska; file.
+   </para>
 
-  <para>
-   &mkvmerge; does this conversion automatically based on the presence of a <foreignphrase>byte order marker</foreignphrase> (short:
-   <abbrev>BOM</abbrev>) or the system's current locale. How the character set is inferred from the locale depends on the operating system
-   that &mkvmerge; is run on.
-  </para>
+   <para>
+    &mkvmerge; does this conversion automatically based on the presence of a <foreignphrase>byte order marker</foreignphrase> (short:
+    <abbrev>BOM</abbrev>) or the system's current locale. How the character set is inferred from the locale depends on the operating system
+    that &mkvmerge; is run on.
+   </para>
+  </refsect2>
 
-  <para>
-   Text files that start with a BOM are already encoded in one representation of UTF. &mkvmerge; supports the following five modes: UTF-8,
-   UTF-16 Little and Big Endian, UTF-32 Little and Big Endian. Text files with a BOM are automatically converted to UTF-8. Any of the
-   parameters that would otherwise set the character set for such a file (e.g. <link
-   linkend="mkvmerge.description.sub_charset"><option>--sub-charset</option></link>) is silently ignored.
-  </para>
+  <refsect2 id="mkvmerge.text_files_and_charsets.byte_order_markers">
+   <title>Byte order markers (BOM)</title>
 
-  <para>
-   On Unix-like systems &mkvmerge; uses the <citerefentry><refentrytitle>setlocale</refentrytitle><manvolnum>3</manvolnum></citerefentry>
-   system call which in turn uses the environment variables <varname>LANG</varname>, <varname>LC_ALL</varname> and
-   <varname>LC_CYPE</varname>. The resulting character set is often one of UTF-8 or the ISO-8859-* family and is used for all text file
-   operations and for encoding strings on the command line and for output to the console.
-  </para>
+   <para>
+    Text files that start with a BOM are already encoded in one representation of UTF. &mkvmerge; supports the following five modes: UTF-8,
+    UTF-16 Little and Big Endian, UTF-32 Little and Big Endian. Text files with a BOM are automatically converted to UTF-8. Any of the
+    parameters that would otherwise set the character set for such a file (e.g. <link
+    linkend="mkvmerge.description.sub_charset"><option>--sub-charset</option></link>) is silently ignored.
+   </para>
+  </refsect2>
 
-  <para>
-   On Windows there are actually two different character sets that &mkvmerge; uses due to the way the Windows shell program
-   <command>cmd.exe</command> is implemented. The first character set is determined by a call to the <function>GetACP()</function> system
-   call. This character set is used as the default for text file conversions and for all elements displayed by the <abbrev>GUI</abbrev>
-   programs in the MKVToolNix package.
-  </para>
+  <refsect2 id="mkvmerge.text_files_and_charsets.unix">
+   <title>Linux and Unix-like systems including Mac OS</title>
 
-  <para>
-   Another charset may be used if <command>cmd.exe</command> is used. However, reading the command line is done with the
-   <function>GetCommandLineW()</function> function which already returns a Unicode string. Therefore the option
-   <option>--command-line-charset</option> is ignored on Windows.  Output to the console is done with the
-   <function>WriteConsoleW()</function> function. Therefore the option <option>--output-charset</option> is only used on Windows if the
-   output is redirected with <option>--redirect-output</option>.
-  </para>
+   <para>
+    On Unix-like systems &mkvmerge; uses the <citerefentry><refentrytitle>setlocale</refentrytitle><manvolnum>3</manvolnum></citerefentry>
+    system call which in turn uses the environment variables <varname>LANG</varname>, <varname>LC_ALL</varname> and
+    <varname>LC_CYPE</varname>. The resulting character set is often one of UTF-8 or the ISO-8859-* family and is used for all text file
+    operations and for encoding strings on the command line and for output to the console.
+   </para>
+  </refsect2>
 
-  <para>
-   The following options exist that allow specifying the character sets:
-  </para>
+  <refsect2 id="mkvmerge.text_files_and_charsets.windows">
+   <title>Windows</title>
 
-  <itemizedlist>
-   <listitem>
-    <para>
-     <link linkend="mkvmerge.description.sub_charset"><option>--sub-charset</option></link> for text subtitle files and for text subtitle
-     tracks stored in container formats for which the character set cannot be determined unambiguously (e.g. Ogg files),
-    </para>
-   </listitem>
+   <para>
+    On Windows the default character set used for converting text files is determined by a call to the <function>GetACP()</function> system
+    call.
+   </para>
 
-   <listitem>
-    <para>
-     <link linkend="mkvmerge.description.chapter_charset"><option>--chapter-charset</option></link> for chapter text files and for chapters
-     and file titles stored in container formats for which the character set cannot be determined unambiguously (e.g. Ogg files for chapter
-     information, track and file titles etc; MP4 files for chapter information),
-    </para>
-   </listitem>
+   <para>
+    Reading the command line is done with the <function>GetCommandLineW()</function> function which already returns a Unicode
+    string. Therefore the option <option>--command-line-charset</option> is ignored on Windows.
+   </para>
 
-   <listitem>
-    <para>
-     <link linkend="mkvmerge.description.command_line_charset"><option>--command-line-charset</option></link> for all strings on the command
-     line,
-    </para>
-   </listitem>
+   <para>
+    Output to the console consists of three scenarios:
+   </para>
 
-   <listitem>
-    <para>
-     <link linkend="mkvmerge.description.output_charset"><option>--output-charset</option></link> for all strings written to the console or
-     to a file if the output has been redirected with the <link
-     linkend="mkvmerge.description.redirect_output"><option>--redirect-output</option></link> option.
-    </para>
-   </listitem>
-  </itemizedlist>
+   <orderedlist>
+    <listitem>
+     <para>
+      If the output is redirected with the option <link
+      linkend="mkvmerge.description.redirect_output"><option>--redirect-output</option></link> then the default charset is UTF-8. This can
+      be changed with <link linkend="mkvmerge.description.output_charset"><option>--output-charset</option></link>.
+     </para>
+
+     <para>
+      If the output is redirected with <command>cmd.exe</command> itself, e.g. with <literal>mkvinfo file.mkv &gt; info.txt</literal>, then
+      the charset is always UTF-8 and cannot be changed.
+     </para>
+
+     <para>
+      Otherwise (when writing directly to the console) the Windows function <function>WriteConsoleW()</function> is used and the option
+      <link linkend="mkvmerge.description.output_charset"><option>--output-charset</option></link> is ignored. The console should be able to
+      output all Unicode characters for which the corresponding language support is installed (e.g. Chinese characters might not be
+      displayed on English Windows versions).
+     </para>
+    </listitem>
+   </orderedlist>
+  </refsect2>
+
+  <refsect2 id="mkvmerge.text_files_and_charsets.options">
+   <title>Command line options</title>
+
+   <para>
+    The following options exist that allow specifying the character sets:
+   </para>
+
+   <itemizedlist>
+    <listitem>
+     <para>
+      <link linkend="mkvmerge.description.sub_charset"><option>--sub-charset</option></link> for text subtitle files and for text subtitle
+      tracks stored in container formats for which the character set cannot be determined unambiguously (e.g. Ogg files),
+     </para>
+    </listitem>
+
+    <listitem>
+     <para>
+      <link linkend="mkvmerge.description.chapter_charset"><option>--chapter-charset</option></link> for chapter text files and for chapters
+      and file titles stored in container formats for which the character set cannot be determined unambiguously (e.g. Ogg files for chapter
+      information, track and file titles etc; MP4 files for chapter information),
+     </para>
+    </listitem>
+
+    <listitem>
+     <para>
+      <link linkend="mkvmerge.description.command_line_charset"><option>--command-line-charset</option></link> for all strings on the command
+      line,
+     </para>
+    </listitem>
+
+    <listitem>
+     <para>
+      <link linkend="mkvmerge.description.output_charset"><option>--output-charset</option></link> for all strings written to the console or
+      to a file if the output has been redirected with the <link
+      linkend="mkvmerge.description.redirect_output"><option>--redirect-output</option></link> option. On non-Windows systems the default for
+      the output charset is the system's current charset. On Windows it defaults to UTF-8 both for redirecting with <link
+      linkend="mkvmerge.description.redirect_output"><option>--redirect-output</option></link> and with <command>cmd.exe</command> itself,
+      e.g. <literal>mkvinfo file.mkv &gt; info.txt</literal>.
+     </para>
+    </listitem>
+   </itemizedlist>
+  </refsect2>
  </refsect1>
 
  <refsect1 id="mkvmerge.option_files">

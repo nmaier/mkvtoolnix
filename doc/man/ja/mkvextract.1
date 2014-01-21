@@ -285,6 +285,11 @@ $ mkvextract tags source\&.mkv \-\-redirect\-output tags\&.xml
 Windowsでは、\fB\-\-redirect\-output\fRオプションを使用するべきでしょう。\fBcmd\&.exe\fRは、特殊文字を出力ファイルに書き出す前に処理してしまい、出力が壊れる虞があります。
 .sp .5v
 .RE
+.SH "テキストファイルと文字コード変換"
+.PP
+For an in\-depth discussion about how all tools in the MKVToolNix suite handle character set conversions, input/output encoding, command line encoding and console encoding please see the identically\-named section in the
+\fBmkvmerge\fR(1)
+man page\&.
 .SH "出力ファイルフォーマット"
 .PP
 出力ファイルのフォーマットの決定は、トラックの種類によって決まり、出力ファイル名の拡張子は使用されません。現在、以下の種類のトラックがサポートされています。
