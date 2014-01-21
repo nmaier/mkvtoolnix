@@ -209,7 +209,11 @@ init_common_output(bool no_charset_detection) {
   if (no_charset_detection)
     set_cc_stdio("UTF-8");
   else
+#if defined(SYS_WINDOWS)
+    set_cc_stdio("UTF-8");
+#else
     set_cc_stdio(get_local_console_charset());
+#endif
   set_mxmsg_handler(MXMSG_INFO,    default_mxinfo);
   set_mxmsg_handler(MXMSG_WARNING, default_mxwarn);
   set_mxmsg_handler(MXMSG_ERROR,   default_mxerror);

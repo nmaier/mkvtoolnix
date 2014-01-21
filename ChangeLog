@@ -1,5 +1,10 @@
 2014-01-21  Moritz Bunkus  <moritz@bunkus.org>
 
+        * all: Windows: the default charset for the files created with
+        »--redirect-output« has been changed from the system's local
+        charset to UTF-8. Just like before it can be changed with
+        »--output-charset«. See #970.
+
         * all: bug fix: Windows: messages written to the console (cmd.exe)
         are not re-encoded to the local charset and back to UTF-16 before
         they're handed over to ConsoleWriteW(). This fixes outputting
