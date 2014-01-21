@@ -25,11 +25,15 @@ using namespace libebml;
 class mm_io_c;
 typedef std::shared_ptr<mm_io_c> mm_io_cptr;
 
+class charset_converter_c;
+typedef std::shared_ptr<charset_converter_c> charset_converter_cptr;
+
 class mm_io_c: public IOCallback {
 protected:
   bool m_dos_style_newlines;
   std::stack<int64_t> m_positions;
   int64_t m_current_position, m_cached_size;
+  charset_converter_cptr m_string_output_converter;
 
 public:
   mm_io_c()
@@ -69,9 +73,7 @@ public:
   virtual int write_double(double value);
   virtual void skip(int64 numbytes);
   virtual size_t write(const void *buffer, size_t size);
-  virtual size_t write(std::string const &buffer) {
-    return write(buffer.c_str(), buffer.length());
-  }
+  virtual size_t write(std::string const &buffer);
   virtual size_t write(const memory_cptr &buffer, size_t size = UINT_MAX, size_t offset = 0);
   virtual bool eof() = 0;
   virtual void flush() {
@@ -97,6 +99,10 @@ public:
   virtual int64_t get_size();
 
   virtual void close() = 0;
+
+  virtual void set_string_output_converter(charset_converter_cptr const &converter) {
+    m_string_output_converter = converter;
+  }
 
   virtual void use_dos_style_newlines(bool yes) {
     m_dos_style_newlines = yes;
@@ -295,6 +301,11 @@ public:
     return "";
   }
   virtual void flush();
+
+#if defined(SYS_WINDOWS)
+  virtual void set_string_output_converter(charset_converter_cptr const &) {
+  }
+#endif
 
 protected:
   virtual uint32 _read(void *buffer, size_t size);

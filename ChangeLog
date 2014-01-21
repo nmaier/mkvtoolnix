@@ -1,3 +1,11 @@
+2014-01-21  Moritz Bunkus  <moritz@bunkus.org>
+
+        * all: bug fix: Windows: messages written to the console (cmd.exe)
+        are not re-encoded to the local charset and back to UTF-16 before
+        they're handed over to ConsoleWriteW(). This fixes outputting
+        Unicode characters to the console that are not part of the local
+        charset. Fixes #971.
+
 2014-01-18  Moritz Bunkus  <moritz@bunkus.org>
 
         * extract: bug fix: using names of non-existing files in

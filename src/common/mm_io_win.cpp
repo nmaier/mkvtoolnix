@@ -220,7 +220,7 @@ mm_stdio_c::_write(const void *buffer,
   }
 
   if (is_console) {
-    const std::wstring &w = to_wide(g_cc_stdio->utf8(std::string(static_cast<const char *>(buffer), size)));
+    const std::wstring &w = to_wide(std::string(static_cast<const char *>(buffer), size));
     DWORD bytes_written   = 0;
 
     WriteConsoleW(h_stdout, w.c_str(), w.length(), &bytes_written, nullptr);

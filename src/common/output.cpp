@@ -37,6 +37,7 @@ void
 redirect_stdio(const mm_io_cptr &stdio) {
   g_mm_stdio            = stdio;
   s_mm_stdio_redirected = true;
+  g_mm_stdio->set_string_output_converter(g_cc_stdio);
 }
 
 bool
@@ -75,13 +76,13 @@ mxmsg(unsigned int level,
     if (s_saw_cr_after_nl)
       g_mm_stdio->puts("\n");
     if (!balg::starts_with(message, Y("Error:")))
-      g_mm_stdio->puts(g_cc_stdio->native(Y("Error: ")));
+      g_mm_stdio->puts(Y("Error: "));
 
   } else if (level == MXMSG_WARNING)
-    g_mm_stdio->puts(g_cc_stdio->native(Y("Warning: ")));
+    g_mm_stdio->puts(Y("Warning: "));
 
   else if (level == MXMSG_DEBUG)
-    g_mm_stdio->puts(g_cc_stdio->native(Y("Debug> ")));
+    g_mm_stdio->puts(Y("Debug> "));
 
   size_t idx_cr = message.rfind('\r');
   if (std::string::npos != idx_cr) {
@@ -90,8 +91,7 @@ mxmsg(unsigned int level,
       s_saw_cr_after_nl = true;
   }
 
-  std::string output = g_cc_stdio->native(message);
-  g_mm_stdio->puts(output);
+  g_mm_stdio->puts(message);
   g_mm_stdio->flush();
 }
 
@@ -219,6 +219,7 @@ void
 set_cc_stdio(const std::string &charset) {
   g_stdio_charset = charset;
   g_cc_stdio      = charset_converter_c::init(charset);
+  g_mm_stdio->set_string_output_converter(g_cc_stdio);
 }
 
 std::string
