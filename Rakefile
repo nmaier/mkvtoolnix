@@ -758,7 +758,7 @@ if $build_mkvtoolnix_gui
     description("Build the mkvtoolnix-gui executable").
     aliases("mkvtoolnix-gui").
     sources(qobject_h_files.collect { |h| h.ext 'moc' }).
-    sources(FileList["src/mkvtoolnix-gui/**/*.cpp"], ui_files, 'src/mkvtoolnix-gui/qt_resources.cpp').
+    sources(cpp_files, ui_files, 'src/mkvtoolnix-gui/qt_resources.cpp').
     sources("src/mkvtoolnix-gui/resources.o", :if => c?(:MINGW)).
     libraries($common_libs, :qt).
     png_icon("share/icons/64x64/mkvmergeGUI.png").
