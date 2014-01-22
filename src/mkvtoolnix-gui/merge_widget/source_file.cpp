@@ -161,12 +161,12 @@ SourceFile::fixAssociations(MuxConfig::Loader &l) {
   } else
     m_appendedTo = nullptr;
 
+  for (auto &track : m_tracks)
+    track->m_file = this;
+
   fixAssociationsFor("tracks",          m_tracks,          l);
   fixAssociationsFor("additionalParts", m_additionalParts, l);
   fixAssociationsFor("appendedFiles",   m_appendedFiles,   l);
-
-  for (auto &track : m_tracks)
-    track->m_file = this;
 }
 
 Track *

@@ -102,8 +102,14 @@ MuxConfig::load(QSettings &settings) {
   loadSettingsGroup<SourceFile>("files",       m_files,       l);
   loadSettingsGroup<Attachment>("attachments", m_attachments, l);
 
-  for (auto &file : m_files)
+  settings.beginGroup("files");
+  auto idx = 0u;
+  for (auto &file : m_files) {
+    settings.beginGroup(QString::number(idx++));
     file->fixAssociations(l);
+    settings.endGroup();
+  }
+  settings.endGroup();
 
   // Load track list.
   for (auto trackID : settings.value("trackOrder").toList()) {
