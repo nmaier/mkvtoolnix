@@ -80,7 +80,7 @@ mm_file_io_c::mm_file_io_c(const std::string &path,
     prepare_path(path);
 
   m_file = (void *)CreateFileUtf8(path.c_str(), access_mode, share_mode, nullptr, disposition, 0, nullptr);
-  if ((HANDLE)m_file == (HANDLE)0xFFFFFFFF)
+  if (static_cast<HANDLE>(m_file) == INVALID_HANDLE_VALUE)
     throw mtx::mm_io::open_x{mtx::mm_io::make_error_code()};
 
   m_dos_style_newlines = true;

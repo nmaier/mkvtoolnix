@@ -1,3 +1,8 @@
+2014-01-22  Moritz Bunkus  <moritz@bunkus.org>
+
+        * all: Windows 64bit: fixed return value checks for opening
+        files. Fixes #972.
+
 2014-01-21  Moritz Bunkus  <moritz@bunkus.org>
 
         * all: Windows: when redirecting the program's output with cmd.exe
