@@ -7,7 +7,6 @@ class Target
   def initialize(target)
     @target       = target
     @aliases      = []
-    @sources      = []
     @objects      = []
     @libraries    = []
     @dependencies = []
@@ -20,6 +19,11 @@ class Target
 
   def debug(category)
     @debug[category] = !@debug[category]
+    self
+  end
+
+  def debug_do
+    yield self
     self
   end
 
@@ -63,17 +67,18 @@ class Target
       '.moc' => '.moco',
     }
 
-    obj_re = /\.(?:moc)?o$/
+    obj_re          = /\.(?:moc)?o$/
+    no_file_deps_re = /\.(?:moc)?o$/
 
     list           = list.collect { |e| e.respond_to?(:to_a) ? e.to_a : e }.flatten
     file_mode      = (options[:type] || :file) == :file
     except         = !file_mode && options[:except].is_a?(Array) ? options[:except].collect { |file| list.collect { |dir| "#{dir}/#{file}" } }.flatten.to_hash_by : {}
     new_sources    = list.collect { |entry| file_mode ? (entry.respond_to?(:to_a) ? entry.to_a : entry) : FileList["#{entry}/*.c", "#{entry}/*.cpp", "#{entry}/*.cc"].to_a }.flatten.select { |file| !except[file] }
     new_deps       = new_sources.collect { |file| [ file.ext(ext_map[ file.pathmap('%x') ] || 'o'), file ] }
-    @sources       = ( @sources      + new_sources                                                          ).uniq
+    new_file_deps  = new_deps.reject { |src, tgt| no_file_deps_re.match src }
     @objects       = ( @objects      + new_deps.collect { |a| a.first }.select { |file| obj_re.match file } ).uniq
     @dependencies  = ( @dependencies + new_deps.collect { |a| a.first }                                     ).uniq
-    @file_deps     = ( @file_deps    + new_deps                                                             ).uniq
+    @file_deps     = ( @file_deps    + new_file_deps                                                        ).uniq
     self
   end
 
@@ -156,11 +161,6 @@ class Target
 
   def create
     definition = Proc.new do
-      @sources.select { |name| /\.moc\.cpp$/.match(name) }.each do |name|
-        target = name.ext.ext('h')
-        file name => target, &$moc_compiler
-      end
-
       @file_deps.each do |spec|
         file spec.first => spec.last unless spec.first == spec.last
       end

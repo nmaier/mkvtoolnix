@@ -733,23 +733,32 @@ end
 #
 
 if $build_mkvtoolnix_gui
-  ui_files = FileList["src/mkvtoolnix-gui/forms/**/*.ui"].to_a
-  ui_files.each do |ui|
-    file ui.gsub(/forms\/(.*)\.ui$/, '\1/\1.cpp') => ui.ext('h')
+  ui_files        = FileList["src/mkvtoolnix-gui/forms/**/*.ui"].to_a
+  ui_h_files      = ui_files.collect { |ui| ui.ext 'h' }
+  cpp_files       = FileList['src/mkvtoolnix-gui/**/*.cpp'].to_a
+  h_files         = FileList['src/mkvtoolnix-gui/**/*.h'].to_a - ui_h_files
+  cpp_content     = read_files cpp_files
+  h_content       = read_files h_files
+
+  qobject_h_files = h_files.select { |h| h_content[h].any? { |line| /\bQ_OBJECT\b/.match line } }
+
+  ui_h_res = ui_h_files.collect do |ui_h|
+    ui_h_include = Regexp.escape ui_h.gsub(/src\//, '')
+    [ ui_h, /\#\s*include \s+ \"#{ui_h_include}/x ]
   end
 
-  ui_static_deps = {
-    "main_window" => [ "merge_widget/merge_widget" ]
-  }
-  ui_static_deps.each do |ui_h, objects|
-    objects.each { |object| file "src/mkvtoolnix-gui/#{object}.o" => "src/mkvtoolnix-gui/forms/#{ui_h}.h" }
+  cpp_files.each do |cpp|
+    ui_h_res.
+      select { |ui_h_re| cpp_content[cpp].any? { |line| ui_h_re[1].match line } }.
+      collect(&:first).
+      each { |ui_h| file cpp.gsub(/cpp$/, 'o') => ui_h }
   end
 
   Application.new("src/mkvtoolnix-gui/mkvtoolnix-gui").
     description("Build the mkvtoolnix-gui executable").
     aliases("mkvtoolnix-gui").
+    sources(qobject_h_files.collect { |h| h.ext 'moc' }).
     sources(FileList["src/mkvtoolnix-gui/**/*.cpp"], ui_files, 'src/mkvtoolnix-gui/qt_resources.cpp').
-    sources((FileList["src/mkvtoolnix-gui/**/*.h"].to_a - ui_files.collect { |ui| ui.ext 'h' }).collect { |h| h.ext 'moc' }).
     sources("src/mkvtoolnix-gui/resources.o", :if => c?(:MINGW)).
     libraries($common_libs, :qt).
     png_icon("share/icons/64x64/mkvmergeGUI.png").
