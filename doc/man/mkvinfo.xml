@@ -315,7 +315,16 @@ info.txt</programlisting>
   </para>
  </refsect1>
 
- <refsect1>
+ <refsect1 id="mkvinfo.text_files_and_charsets">
+  <title>Text files and character set conversions</title>
+
+  <para>
+   For an in-depth discussion about how all tools in the MKVToolNix suite handle character set conversions, input/output encoding, command
+   line encoding and console encoding please see the identically-named section in the &mkvmerge; man page.
+  </para>
+ </refsect1>
+
+  <refsect1>
   <title>Exit codes</title>
 
   <para>

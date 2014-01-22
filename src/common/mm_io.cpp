@@ -251,16 +251,16 @@ mm_io_c::puts(const std::string &s) {
       continue;
 
     if (prev_pos < cur_pos)
-      num_written += write(&cs[prev_pos], cur_pos - prev_pos);
+      num_written += write(std::string{&cs[prev_pos], static_cast<std::string::size_type>(cur_pos - prev_pos)});
 
     if (insert_cr)
-      num_written += write("\r", 1);
+      num_written += write(std::string{"\r"});
 
     prev_pos = cur_pos + (keep_char ? 0 : 1);
   }
 
   if (prev_pos < cur_pos)
-    num_written += write(&cs[prev_pos], cur_pos - prev_pos);
+    num_written += write(std::string{&cs[prev_pos], static_cast<std::string::size_type>(cur_pos - prev_pos)});
 
   return num_written;
 }
@@ -490,6 +490,14 @@ mm_io_c::write_double(double value) {
   double_to_uint64_t d2ui;
   d2ui.d = value;
   return write_uint64_be(d2ui.i);
+}
+
+size_t
+mm_io_c::write(std::string const &buffer) {
+  if (!m_string_output_converter)
+    return write(buffer.c_str(), buffer.length());
+  auto native = m_string_output_converter->native(buffer);
+  return write(native.c_str(), native.length());
 }
 
 size_t

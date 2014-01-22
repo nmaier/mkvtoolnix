@@ -2112,6 +2112,7 @@ Deze sectie is van toepassing op alle programma\*(Aqs in MKVToolNix zelfs wannee
 genoemd wordt\&.
 .sp .5v
 .RE
+.SS "Introductie"
 .PP
 Alle teksten in
 Matroska(TM)
@@ -2131,11 +2132,13 @@ Byte Order Marker (byte volgorde markering)
 BOM) of op basis van het huidige besturingssysteem locatie\&. Hoe het karakter van de locatie wordt \*(Aqachterhaald\*(Aq hangt af van het besturingssysteem waarop
 \fBmkvmerge\fR(1)
 is opgestart\&.
+.SS "Byte order markers (BOM)"
 .PP
 Tekst bestanden die starten met BOM (byte volgorde markering) zijn al gecodeerd in de vertegenwoordiging van UTF\&.
 \fBmkvmerge\fR(1)
 ondersteund \('e\('en van de volgende vijf modes: UTF\-8, UTF\-16 Little en Big Endian, UTF\-32 Little en Big Endian\&. Tekst bestanden met een BOM (byte volgorde markering) worden automatisch geconverteerd naar UTF\-8\&. Elke van de parameters die gezet zouden zijn voor een dergelijk bestand (b\&.v\&.
 \fB\-\-sub\-charset\fR) worden stilletjes genegeerd\&.
+.SS "Linux and Unix\-like systems including Mac OS"
 .PP
 Op Unix\-achtige systemen gebruikt
 \fBmkvmerge\fR(1)
@@ -2146,29 +2149,45 @@ besturingssysteem oproep, welke beurtelings de omgevingsvariabelen gebruikt
 \fILC_ALL\fR
 en
 \fILC_CYPE\fR\&. Het resulterende karakter set is vaak \('e\('en van de UTF\-8 of de ISO\-8859\-* familie en wordt gebruikt voor alle tekst bestand operaties en voor het coderen van reeksen op de commandoregel voor een uitvoer naar de apparaat/houder\&.
+.SS "Windows"
 .PP
-Met Windows zijn er eigenlijk twee karakter sets welke
-\fBmkvmerge\fR(1)
-gebruikt, door de manier waarop het Windows commandoregel programma
-\fBcmd\&.exe\fR
-is ge\(:implementeerd\&. Het eerste karakter set wordt bepaald door een vraag met de
-\fBGetCP()\fR
-besturingssysteem oproep\&. Deze karakter set wordt standaard gebruikt voor tekst bestand conversie en voor alle elementen getoond met het
-GUI
-programma in het MKVToolNix pakket\&.
+On Windows the default character set used for converting text files is determined by a call to the
+\fBGetACP()\fR
+system call\&.
 .PP
-Een andere karakterset kan worden gebruikt als
-\fBcmd\&.exe\fR
-is gebruikt\&. Echter, is het lezen van de opdrachtregel gedaan met de
+Reading the command line is done with the
 \fBGetCommandLineW()\fR
-functie welke al een Unicode reeks retourneert\&. Daarom wordt de optie
+function which already returns a Unicode string\&. Therefore the option
 \fB\-\-command\-line\-charset\fR
-genegeerd door Windows\&. Uitvoer naar console wordt gedaan met de
+is ignored on Windows\&.
+.PP
+Output to the console consists of three scenarios:
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 1.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  1." 4.2
+.\}
+If the output is redirected with the option
+\fB\-\-redirect\-output\fR
+then the default charset is UTF\-8\&. This can be changed with
+\fB\-\-output\-charset\fR\&.
+.sp
+If the output is redirected with
+\fBcmd\&.exe\fR
+itself, e\&.g\&. with
+mkvinfo file\&.mkv > info\&.txt, then the charset is always UTF\-8 and cannot be changed\&.
+.sp
+Otherwise (when writing directly to the console) the Windows function
 \fBWriteConsoleW()\fR
-functie\&. Daarom de optie
+is used and the option
 \fB\-\-output\-charset\fR
-wordt alleen gebruikt in Windows als de uitvoer is geredigeerd met
-\fB\-\-redirect\-output\fR\&.
+is ignored\&. The console should be able to output all Unicode characters for which the corresponding language support is installed (e\&.g\&. Chinese characters might not be displayed on English Windows versions)\&.
+.RE
+.SS "Command line options"
 .PP
 Als de volgende optie aanwezig is dan is het toegestaan het karakter set te specificeren:
 .sp
@@ -2217,9 +2236,14 @@ voor alle ingaven op de commandoregel,
 .IP \(bu 2.3
 .\}
 \fB\-\-output\-charset\fR
-voor alle reeksen geschreven naar de apparaat/houder of naar een bestand wanneer de uitvoer is omgeleid met de
+for all strings written to the console or to a file if the output has been redirected with the
 \fB\-\-redirect\-output\fR
-optie\&.
+option\&. On non\-Windows systems the default for the output charset is the system\*(Aqs current charset\&. On Windows it defaults to UTF\-8 both for redirecting with
+\fB\-\-redirect\-output\fR
+and with
+\fBcmd\&.exe\fR
+itself, e\&.g\&.
+mkvinfo file\&.mkv > info\&.txt\&.
 .RE
 .SH "OPTIE BESTANDEN"
 .PP
