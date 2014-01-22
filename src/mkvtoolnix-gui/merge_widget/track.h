@@ -58,7 +58,7 @@ public:
   QString m_attachmentDescription;
 
 public:
-  explicit Track(SourceFile *file, Type = Audio);
+  explicit Track(SourceFile *file = nullptr, Type = Audio);
   virtual ~Track();
 
   virtual bool isType(Type type) const;

@@ -99,9 +99,7 @@ MuxConfig::load(QSettings &settings) {
   QHash<qlonglong, Track *> objectIDToTrack;
   Loader l{settings, objectIDToSourceFile, objectIDToTrack};
 
-  // Need to give different argument for last parameter even though
-  // it's the same as the default argument due to a bug in gcc 4.6.1.
-  loadSettingsGroup<SourceFile>("files",       m_files,       l, []() { return std::make_shared<SourceFile>(); });
+  loadSettingsGroup<SourceFile>("files",       m_files,       l);
   loadSettingsGroup<Attachment>("attachments", m_attachments, l);
 
   for (auto &file : m_files)
