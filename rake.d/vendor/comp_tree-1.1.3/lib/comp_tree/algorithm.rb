@@ -3,40 +3,36 @@ module CompTree
   module Algorithm
     module_function
 
-    def compute_parallel(root, num_threads)
+    def compute_parallel(root, max_threads)
+      workers = []
       from_workers = Queue.new
       to_workers = Queue.new
 
-      workers = (1..num_threads).map {
-        Thread.new {
-          worker_loop(from_workers, to_workers)
-        }
-      }
+      node = master_loop(root, max_threads, workers, from_workers, to_workers)
 
-      node = master_loop(root, num_threads, from_workers, to_workers)
-
-      num_threads.times { to_workers.push(nil) }
+      workers.size.times { to_workers.push(nil) }
       workers.each { |t| t.join }
       
       if node.computed.is_a? Exception
         raise node.computed
-      else
-        node.result
       end
+      node.result
     end
 
-    def worker_loop(from_workers, to_workers)
-      while node = to_workers.pop
-        node.compute
-        from_workers.push(node)
-      end
+    def new_worker(from_workers, to_workers)
+      Thread.new {
+        while node = to_workers.pop
+          node.compute
+          from_workers.push(node)
+        end
+      }
     end
 
-    def master_loop(root, num_threads, from_workers, to_workers)
+    def master_loop(root, max_threads, workers, from_workers, to_workers)
       num_working = 0
       node = nil
       while true
-        if num_working == num_threads or !(node = find_node(root))
+        if num_working == max_threads or !(node = find_node(root))
           #
           # maxed out or no nodes available -- wait for results
           #
@@ -44,12 +40,16 @@ module CompTree
           node.unlock
           num_working -= 1
           if node == root or node.computed.is_a? Exception
-            break node
+            return node
           end
         else
           #
-          # found a node
+          # not maxed out and found a node -- compute it
           #
+          if (!max_threads.nil? and workers.size < max_threads) or
+              (max_threads.nil? and num_working == workers.size)
+            workers << new_worker(from_workers, to_workers)
+          end
           num_working += 1
           node.lock
           to_workers.push(node)
@@ -63,7 +63,7 @@ module CompTree
         # already computed
         #
         nil
-      elsif not node.locked? and node.children_results
+      elsif node.free? and node.children_results
         #
         # Node is not computed, not locked, and its children are
         # computed; ready to compute.
@@ -73,10 +73,8 @@ module CompTree
         #
         # locked or children not computed; recurse to children
         #
-        node.each_child { |child|
-          if found = find_node(child)
-            return found
-          end
+        node.children.each { |child|
+          found = find_node(child) and return found
         }
         nil
       end

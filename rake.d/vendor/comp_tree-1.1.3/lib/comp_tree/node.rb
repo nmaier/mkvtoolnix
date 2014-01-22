@@ -11,8 +11,7 @@ module CompTree
       :children,
       :function,
       :result,
-      :computed,
-      :lock_level
+      :computed
     )
 
     #
@@ -40,28 +39,9 @@ module CompTree
     # Reset the computation for this node and all children.
     #
     def reset
-      each_downward { |node|
-        node.reset_self
-      }
-    end
-
-    def each_downward(&block)
-      block.call(self)
+      reset_self
       @children.each { |child|
-        child.each_downward(&block)
-      }
-    end
-
-    def each_upward(&block)
-      block.call(self)
-      @parents.each { |parent|
-        parent.each_upward(&block)
-      }
-    end
-
-    def each_child
-      @children.each { |child|
-        yield(child)
+        child.reset
       }
     end
 
@@ -89,14 +69,12 @@ module CompTree
     # otherwise return nil.
     #
     def children_results
-      @children_results or (
-        @children_results = @children.map { |child|
-          unless child.computed
-            return nil
-          end
-          child.result
-        }
-      )
+      @children_results ||= @children.map { |child|
+        unless child.computed
+          return nil
+        end
+        child.result
+      }
     end
 
     #
@@ -116,19 +94,21 @@ module CompTree
       @result
     end
 
-    def locked?
-      @lock_level != 0
+    def free?
+      @lock_level.zero?
     end
 
     def lock
-      each_upward { |node|
-        node.lock_level += 1
+      @lock_level = @lock_level.succ
+      @parents.each { |parent|
+        parent.lock
       }
     end
 
     def unlock
-      each_upward { |node|
-        node.lock_level -= 1
+      @lock_level -= 1  # Fixnum#pred not in 1.8.6
+      @parents.each { |parent|
+        parent.unlock
       }
     end
   end

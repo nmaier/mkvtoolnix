@@ -29,39 +29,33 @@ module CompTree
     # to the block.  The block returns the result of this node's
     # computation.
     #
-    # In this example, a computation node named +area+ is defined
-    # which depends on the nodes +width+ and +height+.
+    # In the following example, a computation node named +:area+ is
+    # defined which depends on the nodes named +:width+ and +:height+.
     #
-    #   driver.define(:area, :width, :height) { |width, height|
-    #     width*height
+    #   driver.define(:area, :width, :height) { |w, h|
+    #     w*h
     #   }
     #
     def define(name, *child_names, &block)
       #
-      # retrieve or create node and children
+      # retrieve or create node
       #
-
-      node = @nodes.fetch(name) {
-        @nodes[name] = @node_class.new(name)
-      }
-      if node.function
-        raise RedefinitionError.new(node.name)
-      end
+      node = @nodes[name] ||= @node_class.new(name)
+      raise RedefinitionError.new(node.name) if node.function
       node.function = block
-      
+
+      #
+      # retrieve or create children
+      #
       children = child_names.map { |child_name|
-        @nodes.fetch(child_name) {
-          @nodes[child_name] = @node_class.new(child_name)
-        }
+        @nodes[child_name] ||= @node_class.new(child_name)
       }
 
       #
       # link
       #
       node.children = children
-      children.each { |child|
-        child.parents << node
-      }
+      children.each { |child| child.parents << node }
       
       node
     end
@@ -98,7 +92,8 @@ module CompTree
     #
     # _name_ -- unique node identifier (for example a symbol).
     #
-    # _num_threads_ -- number of threads.
+    # _max_threads_ -- maximum number of threads, or +0+ to indicate
+    # no limit.
     #
     # Compute the tree below _name_ and return the result.
     #
@@ -108,24 +103,23 @@ module CompTree
     # It is your responsibility to call reset() before attempting the
     # computation again, otherwise the result will be undefined.
     #
-    def compute(name, num_threads)
+    def compute(name, max_threads)
       begin
-        num_threads = num_threads.to_int
+        max_threads = max_threads.to_int
       rescue NoMethodError
-        raise TypeError, "can't convert #{num_threads.class} into Integer"
+        raise TypeError, "can't convert #{max_threads.class} into Integer"
       end
-      unless num_threads > 0
-        raise RangeError, "number of threads must be greater than zero"
+      if max_threads < 0
+        raise RangeError, "max threads must be nonnegative"
       end
-      root = @nodes.fetch(name) {
-        raise NoNodeError.new(name)
-      }
+
+      root = @nodes[name] or raise NoNodeError.new(name)
       if root.computed
         root.result
-      elsif num_threads == 1
+      elsif max_threads == 1
         root.compute_now
       else
-        Algorithm.compute_parallel(root, num_threads)
+        Algorithm.compute_parallel(root, max_threads == 0 ? nil : max_threads)
       end
     end
   end

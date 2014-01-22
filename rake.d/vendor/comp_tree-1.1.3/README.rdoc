@@ -31,7 +31,7 @@ A simple framework for automatic parallelism.
       2
     }
     
-    # Compute the area using four parallel threads.
+    # Compute the area using up to four parallel threads.
     puts driver.compute(:area, 4)
     # => 63
 
@@ -44,14 +44,25 @@ A simple framework for automatic parallelism.
 
   % gem install comp_tree
 
-Or for the (non-gem) .tgz package,
-
-  % ruby install.rb [--uninstall]
+Or from inside an unpacked .tgz download, <code>rake install</code> /
+<code>rake uninstall</code>.
 
 == Description
 
 CompTree is a parallel computation tree structure based upon concepts
 from pure functional programming.
+
+CompTree has been tested on MRI versions 1.8.6, 1.8.7, 1.9.1, 1.9.2,
+and jruby versions 1.4, 1.5, 1.6.
+
+== Links
+
+* Home: http://quix.github.com/comp_tree
+* Feature Requests, Bug Reports: http://github.com/quix/comp_tree/issues
+* Manual Download: http://github.com/quix/comp_tree/archives/master
+* Repository: http://github.com/quix/comp_tree
+
+== Background
 
 The user should have a basic understanding of functional programming
 (see for example http://en.wikipedia.org/wiki/Functional_programming)
@@ -88,20 +99,13 @@ Note however it is OK affect a state as long as <em>no other function
 depends on that state</em>.  This is the principle under which
 CompTree parallelizes Rake tasks (http://drake.rubyforge.org).
 
-== Links
-
-* Documentation: http://comptree.rubyforge.org
-* Download: http://rubyforge.org/frs/?group_id=6917
-* Rubyforge home: http://rubyforge.org/projects/comptree
-* Repository: http://github.com/quix/comp_tree
-
 == Author
 
 * James M. Lawrence <quixoticsycophant@gmail.com>
 
 == License
   
-  Copyright (c) 2008, 2009 James M. Lawrence.  All rights reserved.
+  Copyright (c) 2008-2011 James M. Lawrence.  All rights reserved.
   
   Permission is hereby granted, free of charge, to any person
   obtaining a copy of this software and associated documentation files

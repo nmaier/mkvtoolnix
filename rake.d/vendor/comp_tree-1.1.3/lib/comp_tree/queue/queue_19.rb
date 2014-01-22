@@ -13,9 +13,7 @@ module CompTree
     def push(object)
       @mutex.synchronize {
         @queue.push object
-        if thread = @waiting.shift
-          thread.wakeup
-        end
+        thread = @waiting.shift and thread.wakeup
       }
     end
 

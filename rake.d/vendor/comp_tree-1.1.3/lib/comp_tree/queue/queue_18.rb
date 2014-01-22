@@ -14,9 +14,7 @@ module CompTree
     def push(object)
       Thread.critical = true
       @queue.push object
-      if thread = @waiting.shift
-        thread.wakeup
-      end
+      thread = @waiting.shift and thread.wakeup
     ensure
       Thread.critical = false
     end
