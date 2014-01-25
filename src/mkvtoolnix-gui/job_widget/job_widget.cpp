@@ -33,6 +33,12 @@ JobWidget::~JobWidget() {
   delete ui;
 }
 
+JobModel *
+JobWidget::getModel()
+  const {
+  return m_model;
+}
+
 void
 JobWidget::setupUiControls() {
   ui->jobs->setModel(m_model);

@@ -4,6 +4,7 @@
 #include "mkvtoolnix-gui/forms/main_window.h"
 #include "mkvtoolnix-gui/job_widget/job_widget.h"
 #include "mkvtoolnix-gui/main_window/main_window.h"
+#include "mkvtoolnix-gui/main_window/status_bar_progress_widget.h"
 #include "mkvtoolnix-gui/merge_widget/merge_widget.h"
 #include "mkvtoolnix-gui/util/settings.h"
 #include "mkvtoolnix-gui/util/util.h"
@@ -23,6 +24,9 @@ MainWindow::MainWindow(QWidget *parent)
 
   // Setup UI controls.
   ui->setupUi(this);
+
+  m_statusBarProgress = new StatusBarProgressWidget{this};
+  ui->statusBar->addPermanentWidget(m_statusBarProgress);
 
   setupToolSelector();
 
@@ -83,6 +87,8 @@ MainWindow::setupToolSelector() {
     ui->tool->setTabEnabled(i, true);
 
   ui->tool->setCurrentIndex(0);
+
+  connect(toolJobs->getModel(), SIGNAL(progressChanged(unsigned int,unsigned int)), m_statusBarProgress, SLOT(setProgress(unsigned int,unsigned int)));
 }
 
 MainWindow *

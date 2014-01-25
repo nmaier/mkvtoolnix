@@ -8,6 +8,7 @@
 #include <QStandardItemModel>
 #include <QList>
 #include <QMutex>
+#include <QSet>
 
 class QAbstractItemView;
 
@@ -15,6 +16,7 @@ class JobModel: public QStandardItemModel {
   Q_OBJECT;
 protected:
   QList<JobPtr> m_jobs;
+  QSet<Job const *> m_toBeProcessed;
   QMutex m_mutex;
 
   bool m_started;
@@ -49,12 +51,17 @@ public:
 
   void startNextAutoJob();
 
+signals:
+  void progressChanged(unsigned int progress, unsigned int totalProgress);
+
 public slots:
   void onStatusChanged(uint64_t id, Job::Status status);
   void onProgressChanged(uint64_t id, unsigned int progress);
 
 protected:
   QList<QStandardItem *> createRow(Job const &job) const;
+
+  void updateProgress();
 
 public:                         // static
   static QString displayableJobType(Job const &job);

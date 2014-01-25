@@ -35,6 +35,12 @@ Job::setStatus(Status status) {
   emit statusChanged(m_id, m_status);
 }
 
+bool
+Job::isToBeProcessed()
+  const {
+  return (Running == m_status) || (PendingAuto == m_status);
+}
+
 void
 Job::setProgress(unsigned int progress) {
   QMutexLocker locked{&m_mutex};

@@ -120,11 +120,23 @@ void
 JobModel::removeJobsIf(std::function<bool(Job const &)> predicate) {
   QMutexLocker locked{&m_mutex};
 
-  for (int idx = m_jobs.size(); 0 < idx; --idx)
-    if (predicate(*m_jobs[idx - 1]))
-      removeRow(idx - 1);
+  auto toBeRemoved = QHash<Job const *, bool>{};
 
-  brng::remove_erase_if(m_jobs, [predicate](JobPtr const &job) { return predicate(*job); });
+  for (int idx = m_jobs.size(); 0 < idx; --idx) {
+    auto job = m_jobs[idx - 1].get();
+
+    if (predicate(*job)) {
+      toBeRemoved[job] = true;
+      removeRow(idx - 1);
+    }
+  }
+
+  brng::remove_erase_if(m_jobs, [&toBeRemoved](JobPtr const &job) { return toBeRemoved[job.get()]; });
+  auto const keys = toBeRemoved.keys();
+  for (auto const &job : keys)
+    m_toBeProcessed.remove(job);
+
+  updateProgress();
 }
 
 void
@@ -132,6 +144,12 @@ JobModel::add(JobPtr const &job) {
   QMutexLocker locked{&m_mutex};
 
   m_jobs << job;
+
+  if (job->isToBeProcessed()) {
+    m_toBeProcessed.insert(job.get());
+    updateProgress();
+  }
+
   invisibleRootItem()->appendRow(createRow(*job));
 
   connect(job.get(), SIGNAL(progressChanged(uint64_t,unsigned int)), this, SLOT(onProgressChanged(uint64_t,unsigned int)));
@@ -150,6 +168,13 @@ JobModel::onStatusChanged(uint64_t id,
     return;
 
   auto const &job = *m_jobs[row];
+  auto numBefore  = m_toBeProcessed.count();
+
+  if (job.isToBeProcessed())
+    m_toBeProcessed.insert(&job);
+
+  if (m_toBeProcessed.count() != numBefore)
+    updateProgress();
 
   item(row, StatusColumn)->setText(displayableJobStatus(job));
 
@@ -168,8 +193,10 @@ JobModel::onProgressChanged(uint64_t id,
   QMutexLocker locked{&m_mutex};
 
   auto row = rowFromId(id);
-  if (row < m_jobs.size())
+  if (row < m_jobs.size()) {
     item(row, ProgressColumn)->setText(to_qs(boost::format("%1%%%") % progress));
+    updateProgress();
+  }
 }
 
 void
@@ -188,6 +215,10 @@ JobModel::startNextAutoJob() {
       job->start();
       return;
     }
+
+  // All jobs are done. Clear total progress.
+  m_toBeProcessed.clear();
+  updateProgress();
 }
 
 void
@@ -199,4 +230,31 @@ JobModel::start() {
 void
 JobModel::stop() {
   m_started = false;
+}
+
+void
+JobModel::updateProgress() {
+  QMutexLocker locked{&m_mutex};
+
+  if (!m_toBeProcessed.count()) {
+    emit progressChanged(0, 0);
+    return;
+  }
+
+  auto numRunning      = 0u;
+  auto numDone         = 0u;
+  auto runningProgress = 0u;
+
+  for (auto const &job : m_toBeProcessed)
+    if (Job::Running == job->m_status) {
+      ++numRunning;
+      runningProgress += job->m_progress;
+
+    } else if (!job->isToBeProcessed() && m_toBeProcessed.contains(job))
+      ++numDone;
+
+  auto progress      = numRunning ? runningProgress / numRunning : 0u;
+  auto totalProgress = (numDone * 100 + runningProgress) / m_toBeProcessed.count();
+
+  emit progressChanged(progress, totalProgress);
 }

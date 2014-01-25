@@ -10,12 +10,15 @@ namespace Ui {
 class MainWindow;
 }
 
+class StatusBarProgressWidget;
+
 class MainWindow : public QMainWindow {
   Q_OBJECT;
 
 protected:
   // UI stuff:
   Ui::MainWindow *ui;
+  StatusBarProgressWidget *m_statusBarProgress;
 
 protected:                      // static
   static MainWindow *ms_mainWindow;

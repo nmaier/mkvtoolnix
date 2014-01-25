@@ -44,6 +44,7 @@ public:
   virtual ~Job();
 
   void action(std::function<void()> code);
+  bool isToBeProcessed() const;
 
   virtual void abort() = 0;
   virtual void start() = 0;

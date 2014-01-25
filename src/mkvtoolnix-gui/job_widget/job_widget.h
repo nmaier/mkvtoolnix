@@ -28,6 +28,8 @@ public:
   explicit JobWidget(QWidget *parent = nullptr);
   ~JobWidget();
 
+  JobModel *getModel() const;
+
 public slots:
   void onStart();
   void onAdd();
