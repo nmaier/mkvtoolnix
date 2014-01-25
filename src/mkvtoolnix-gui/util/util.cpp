@@ -35,6 +35,13 @@ setComboBoxIndexIf(QComboBox *comboBox,
 }
 
 void
+enableWidgets(QList<QWidget *> const &widgets,
+              bool enable) {
+  for (auto &widget : widgets)
+    widget->setEnabled(enable);
+}
+
+void
 resizeViewColumnsToContents(QTreeView *view) {
   auto columnCount = view->model()->columnCount(QModelIndex{});
   for (auto column = 0; columnCount > column; ++column)

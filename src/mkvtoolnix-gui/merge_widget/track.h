@@ -1,5 +1,5 @@
-#ifndef MTX_MKVTOOLNIX_GUI_TRACK_H
-#define MTX_MKVTOOLNIX_GUI_TRACK_H
+#ifndef MTX_MKVTOOLNIX_GUI_MERGE_WIDGET_TRACK_H
+#define MTX_MKVTOOLNIX_GUI_MERGE_WIDGET_TRACK_H
 
 #include "common/common_pch.h"
 
@@ -12,6 +12,7 @@
 #include <QString>
 
 class SourceFile;
+class MkvmergeOptionBuilder;
 
 class Track;
 typedef std::shared_ptr<Track> TrackPtr;
@@ -49,7 +50,7 @@ public:
   Type m_type;
   int64_t m_id;
 
-  bool m_muxThis, m_setAspectRatio, m_defaultTrackFlagWasSet;
+  bool m_muxThis, m_setAspectRatio, m_defaultTrackFlagWasSet, m_aacSbrWasDetected;
   QString m_name, m_codec, m_language, m_tags, m_delay, m_stretchBy, m_defaultDuration, m_timecodes, m_aspectRatio, m_displayWidth, m_displayHeight, m_cropping, m_characterSet, m_userDefinedOptions;
   unsigned int m_defaultTrackFlag, m_forcedTrackFlag, m_stereoscopy, m_cues, m_aacIsSBR;
   Compression m_compression;
@@ -81,6 +82,8 @@ public:
   virtual void fixAssociations(MuxConfig::Loader &l);
 
   virtual std::string debugInfo() const;
+
+  void buildMkvmergeOptions(MkvmergeOptionBuilder &opt) const;
 };
 
-#endif  // MTX_MKVTOOLNIX_GUI_TRACK_H
+#endif  // MTX_MKVTOOLNIX_GUI_MERGE_WIDGET_TRACK_H

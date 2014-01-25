@@ -55,11 +55,14 @@ public:
   };
 
   enum SplitMode {
-    DoNotSplit = 1,
+    DoNotSplit = 0,
     SplitAfterSize,
     SplitAfterDuration,
     SplitAfterTimecodes,
     SplitByParts,
+    SplitByPartsFrames,
+    SplitByFrames,
+    SplitAfterChapters,
   };
 
 public:
@@ -69,11 +72,11 @@ public:
   QList<Track *> m_tracks;
   QList<AttachmentPtr> m_attachments;
 
-  QString m_title, m_destination, m_globalTags, m_segmentinfo, m_splitAfterSize, m_splitAfterDuration, m_splitAfterTimecodes, m_splitByParts;
+  QString m_title, m_destination, m_globalTags, m_segmentinfo, m_splitOptions;
   QString m_segmentUIDs, m_previousSegmentUID, m_nextSegmentUID, m_chapters, m_chapterLanguage, m_chapterCharacterSet, m_chapterCueNameFormat, m_userDefinedOptions;
   SplitMode m_splitMode;
   unsigned int m_splitMaxFiles;
-  bool m_linkFiles, m_webmMode;
+  bool m_linkFiles, m_webmMode, m_titleWasPresent;
 
 public:
   MuxConfig(QString const &fileName = QString{""});
@@ -86,6 +89,8 @@ public:
   virtual void save(QSettings &settings) const;
   virtual void save(QString const &fileName = QString{""});
   virtual void reset();
+
+  QStringList buildMkvmergeOptions() const;
 
 public:
   static MuxConfigPtr loadSettings(QString const &fileName);

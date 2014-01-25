@@ -33,7 +33,7 @@ protected:
   SourceFileModel *m_filesModel;
   TrackModel *m_tracksModel;
 
-  QList<QWidget *> m_audioControls, m_videoControls, m_subtitleControls, m_chapterControls, m_typeIndependantControls, m_allInputControls;
+  QList<QWidget *> m_audioControls, m_videoControls, m_subtitleControls, m_chapterControls, m_typeIndependantControls, m_allInputControls, m_splitControls;
   QList<QComboBox *> m_comboBoxControls;
   bool m_currentlySettingInputControlValues;
 
@@ -100,15 +100,8 @@ public slots:
   virtual void onBrowseGlobalTags();
   virtual void onSegmentinfoEdited(QString newValue);
   virtual void onBrowseSegmentinfo();
-  virtual void onDoNotSplit();
-  virtual void onDoSplitAfterSize();
-  virtual void onDoSplitAfterDuration();
-  virtual void onDoSplitAfterTimecodes();
-  virtual void onDoSplitByParts();
-  virtual void onSplitSizeEdited(QString newValue);
-  virtual void onSplitDurationEdited(QString newValue);
-  virtual void onSplitTimecodesEdited(QString newValue);
-  virtual void onSplitPartsEdited(QString newValue);
+  virtual void onSplitModeChanged(int newMode);
+  virtual void onSplitOptionsEdited(QString newValue);
   virtual void onLinkFilesClicked(bool newValue);
   virtual void onSplitMaxFilesChanged(int newValue);
   virtual void onSegmentUIDsEdited(QString newValue);
@@ -138,6 +131,7 @@ protected:
   virtual void setupAttachmentsControls();
   virtual void setupControlLists();
   virtual void setupInputControls();
+  virtual void setupOutputControls();
   virtual void setupMenu();
 
   virtual void retranslateUI();
@@ -147,7 +141,6 @@ protected:
   virtual QStringList selectFilesToAdd(QString const &title);
   virtual QStringList selectAttachmentsToAdd();
   virtual void addOrAppendFiles(bool append);
-  virtual void enableInputControls(QList<QWidget *> const &controls, bool enable);
   virtual void enableFilesActions();
   virtual void enableAttachmentControls(bool enable);
   virtual void setInputControlValues(Track *track);

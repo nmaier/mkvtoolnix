@@ -9,6 +9,17 @@
 #include <QFileDialog>
 
 void
+MergeWidget::setupOutputControls() {
+  m_splitControls << ui->splitOptionsLabel << ui->splitOptions << ui->splittingOptionsLabel << ui->splitMaxFilesLabel << ui->splitMaxFiles << ui->linkFiles;
+
+  auto comboBoxControls = QList<QComboBox *>{} << ui->splitMode << ui->chapterLanguage << ui->chapterCharacterSet;
+  for (auto const &control : comboBoxControls)
+    control->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+
+  onSplitModeChanged(MuxConfig::DoNotSplit);
+}
+
+void
 MergeWidget::onTitleEdited(QString newValue) {
   m_config.m_title = newValue;
 }
@@ -51,48 +62,110 @@ MergeWidget::onBrowseSegmentinfo() {
 }
 
 void
-MergeWidget::onDoNotSplit() {
-  m_config.m_splitMode = MuxConfig::DoNotSplit;
+MergeWidget::onSplitModeChanged(int newMode) {
+  auto splitMode       = static_cast<MuxConfig::SplitMode>(newMode);
+  m_config.m_splitMode = splitMode;
+
+  if (MuxConfig::DoNotSplit == splitMode) {
+    Util::enableWidgets(m_splitControls, false);
+    return;
+  }
+
+  Util::enableWidgets(m_splitControls, true);
+
+  auto tooltip = QStringList{};
+  auto entries = QStringList{};
+  auto label   = QString{};
+
+  if (MuxConfig::SplitAfterSize == splitMode) {
+    label    = QY("Size:");
+    tooltip << QY("The size after which a new output file is started.")
+            << QY("The letters 'G', 'M' and 'K' can be used to indicate giga/mega/kilo bytes respectively.")
+            << QY("All units are based on 1024 (G = 1024^3, M = 1024^2, K = 1024).");
+    entries << Q("")
+            << Q("350M")
+            << Q("650M")
+            << Q("700M")
+            << Q("703M")
+            << Q("800M")
+            << Q("1000M")
+            << Q("4483M")
+            << Q("8142M");
+
+  } else if (MuxConfig::SplitAfterDuration == splitMode) {
+    label    = QY("Duration:");
+    tooltip << QY("The duration after which a new output file is started.")
+            << QY("The time can be given either in the form HH:MM:SS.nnnnnnnnn or as the number of seconds followed by 's'.")
+            << QY("You may omit the number of hours 'HH' and the number of nanoseconds 'nnnnnnnnn'.")
+            << QY("If given then you may use up to nine digits after the decimal point.")
+            << QY("Examples: 01:00:00 (after one hour) or 1800s (after 1800 seconds).");
+
+    entries << Q("")
+            << Q("01:00:00")
+            << Q("1800s");
+
+  } else if (MuxConfig::SplitAfterTimecodes == splitMode) {
+    label    = QY("Timecodes:");
+    tooltip << QY("The timecodes after which a new output file is started.")
+            << QY("The timecodes refer to the whole stream and not to each individual output file.")
+            << QY("The timecodes can be given either in the form HH:MM:SS.nnnnnnnnn or as the number of seconds followed by 's'.")
+            << QY("You may omit the number of hours 'HH'.")
+            << QY("You can specify up to nine digits for the number of nanoseconds 'nnnnnnnnn' or none at all.")
+            << QY("If given then you may use up to nine digits after the decimal point.")
+            << QY("If two or more timecodes are used then you have to separate them with commas.")
+            << QY("The formats can be mixed, too.")
+            << QY("Examples: 01:00:00,01:30:00 (after one hour and after one hour and thirty minutes) or 1800s,3000s,00:10:00 (after three, five and ten minutes).");
+
+  } else if (MuxConfig::SplitByParts == splitMode) {
+    label    = QY("Parts:");
+    tooltip << QY("A comma-separated list of timecode ranges of content to keep.")
+            << QY("Each range consists of a start and end timecode with a '-' in the middle, e.g. '00:01:15-00:03:20'.")
+            << QY("If a start timecode is left out then the previous range's end timecode is used, or the start of the file if there was no previous range.")
+            << QY("The timecodes can be given either in the form HH:MM:SS.nnnnnnnnn or as the number of seconds followed by 's'.")
+            << QY("If a range's start timecode is prefixed with '+' then its content will be written to the same file as the previous range. Otherwise a new file will be created for this range.");
+
+  } else if (MuxConfig::SplitByPartsFrames == splitMode) {
+    label    = QY("Parts:");
+    tooltip << QY("A comma-separated list of frame/field number ranges of content to keep.")
+            << QY("Each range consists of a start and end frame/field number with a '-' in the middle, e.g. '157-238'.")
+            << QY("The numbering starts at 1.")
+            << QY("This mode considers only the first video track that is output.")
+            << QY("If no video track is output no splitting will occur.")
+            << QY("The numbers given with this argument are interpreted based on the number of Matroska blocks that are output.")
+            << QY("A single Matroska block contains either a full frame (for progressive content) or a single field (for interlaced content).")
+            << QY("mkvmerge does not distinguish between those two and simply counts the number of blocks.")
+            << QY("If a start number is left out then the previous range's end number is used, or the start of the file if there was no previous range.")
+            << QY("If a range's start number is prefixed with '+' then its content will be written to the same file as the previous range. Otherwise a new file will be created for this range.");
+
+  } else if (MuxConfig::SplitByFrames == splitMode) {
+    label    = QY("Frames/fields:");
+    tooltip << QY("A comma-separated list of frame/field numbers after which to split.")
+            << QY("The numbering starts at 1.")
+            << QY("This mode considers only the first video track that is output.")
+            << QY("If no video track is output no splitting will occur.")
+            << QY("The numbers given with this argument are interpreted based on the number of Matroska blocks that are output.")
+            << QY("A single Matroska block contains either a full frame (for progressive content) or a single field (for interlaced content).")
+            << QY("mkvmerge does not distinguish between those two and simply counts the number of blocks.");
+
+  } else if (MuxConfig::SplitAfterChapters == splitMode) {
+    label    = QY("Chapter numbers:");
+    tooltip << QY("Either the word 'all' which selects all chapters or a comma-separated list of chapter numbers before which to split.")
+            << QY("The numbering starts at 1.")
+            << QY("Splitting will occur right before the first key frame whose timecode is equal to or bigger than the start timecode for the chapters whose numbers are listed.")
+            << QY("A chapter starting at 0s is never considered for splitting and discarded silently.")
+            << QY("This mode only considers the top-most level of chapters across all edition entries.");
+
+  }
+
+  ui->splitOptionsLabel->setText(label);
+  ui->splitOptions->clear();
+  ui->splitOptions->addItems(entries);
+  ui->splitOptions->setToolTip(tooltip.join(Q(" ")));
 }
 
 void
-MergeWidget::onDoSplitAfterSize() {
-  m_config.m_splitMode = MuxConfig::SplitAfterSize;
-}
-
-void
-MergeWidget::onDoSplitAfterDuration() {
-  m_config.m_splitMode = MuxConfig::SplitAfterDuration;
-}
-
-void
-MergeWidget::onDoSplitAfterTimecodes() {
-  m_config.m_splitMode = MuxConfig::SplitAfterTimecodes;
-}
-
-void
-MergeWidget::onDoSplitByParts() {
-  m_config.m_splitMode = MuxConfig::SplitByParts;
-}
-
-void
-MergeWidget::onSplitSizeEdited(QString newValue) {
-  m_config.m_splitAfterSize = newValue;
-}
-
-void
-MergeWidget::onSplitDurationEdited(QString newValue) {
-  m_config.m_splitAfterDuration = newValue;
-}
-
-void
-MergeWidget::onSplitTimecodesEdited(QString newValue) {
-  m_config.m_splitAfterTimecodes = newValue;
-}
-
-void
-MergeWidget::onSplitPartsEdited(QString newValue) {
-  m_config.m_splitByParts = newValue;
+MergeWidget::onSplitOptionsEdited(QString newValue) {
+  m_config.m_splitOptions = newValue;
 }
 
 void
@@ -171,27 +244,18 @@ MergeWidget::setOutputControlValues() {
   ui->output->setText(m_config.m_destination);
   ui->globalTags->setText(m_config.m_globalTags);
   ui->segmentinfo->setText(m_config.m_segmentinfo);
-  ui->splitSize->setEditText(m_config.m_splitAfterSize);
-  ui->splitDuration->setEditText(m_config.m_splitAfterDuration);
-  ui->splitTimecodes->setText(m_config.m_splitAfterTimecodes);
-  ui->splitParts->setText(m_config.m_splitByParts);
+  ui->splitMode->setCurrentIndex(m_config.m_splitMode);
+  ui->splitOptions->setEditText(m_config.m_splitOptions);
+  ui->splitMaxFiles->setValue(m_config.m_splitMaxFiles);
+  ui->linkFiles->setChecked(m_config.m_linkFiles);
   ui->segmentUIDs->setText(m_config.m_segmentUIDs);
   ui->previousSegmentUID->setText(m_config.m_previousSegmentUID);
   ui->nextSegmentUID->setText(m_config.m_nextSegmentUID);
   ui->chapters->setText(m_config.m_chapters);
   ui->chapterCueNameFormat->setText(m_config.m_chapterCueNameFormat);
   ui->userDefinedOptions->setText(m_config.m_userDefinedOptions);
-  ui->splitMaxFiles->setValue(m_config.m_splitMaxFiles);
-  ui->linkFiles->setChecked(m_config.m_linkFiles);
   ui->webmMode->setChecked(m_config.m_webmMode);
 
   Util::setComboBoxIndexIf(ui->chapterLanguage,     [&](QString const &, QVariant const &data) { return data.isValid() && (data.toString() == m_config.m_chapterLanguage);     });
   Util::setComboBoxIndexIf(ui->chapterCharacterSet, [&](QString const &, QVariant const &data) { return data.isValid() && (data.toString() == m_config.m_chapterCharacterSet); });
-
-  auto control = MuxConfig::DoNotSplit          == m_config.m_splitMode ? ui->doNotSplit
-               : MuxConfig::SplitAfterSize      == m_config.m_splitMode ? ui->doSplitAfterSize
-               : MuxConfig::SplitAfterDuration  == m_config.m_splitMode ? ui->doSplitAfterDuration
-               : MuxConfig::SplitAfterTimecodes == m_config.m_splitMode ? ui->doSplitAfterTimecodes
-               :                                                          ui->doSplitByParts;
-  control->setChecked(true);
 }

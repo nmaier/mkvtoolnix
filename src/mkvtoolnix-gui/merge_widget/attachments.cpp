@@ -26,6 +26,9 @@ MergeWidget::setupAttachmentsControls() {
   ui->attachments->addAction(m_addAttachmentsAction);
   ui->attachments->addAction(m_removeAttachmentsAction);
 
+  ui->attachmentMIMEType->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+  ui->attachmentStyle   ->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+
   // Signals & slots
   connect(ui->attachments->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)), this, SLOT(onAttachmentSelectionChanged()));
   connect(m_addAttachmentsAction,            SIGNAL(triggered()),                                                      this, SLOT(onAddAttachments()));

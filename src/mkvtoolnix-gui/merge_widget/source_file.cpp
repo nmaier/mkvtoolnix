@@ -1,6 +1,7 @@
 #include "common/common_pch.h"
 
 #include "common/qt.h"
+#include "mkvtoolnix-gui/merge_widget/mkvmerge_option_builder.h"
 #include "mkvtoolnix-gui/merge_widget/mux_config.h"
 #include "mkvtoolnix-gui/merge_widget/source_file.h"
 
@@ -174,4 +175,35 @@ SourceFile::findFirstTrackOfType(Track::Type type)
   const {
   auto itr = brng::find_if(m_tracks, [type](TrackPtr const &track) { return type == track->m_type; });
   return itr != m_tracks.end() ? itr->get() : nullptr;
+}
+
+void
+SourceFile::buildMkvmergeOptions(QStringList &options)
+  const {
+  assert(!m_additionalPart);
+
+  auto opt = MkvmergeOptionBuilder{};
+
+  for (auto const &track : m_tracks)
+    track->buildMkvmergeOptions(opt);
+
+  auto buildTrackIdArg = [&options,&opt](Track::Type type, QString const &enabled, QString const &disabled) {
+    if (!enabled.isEmpty() && !opt.enabledTrackIds[type].isEmpty() && (static_cast<unsigned int>(opt.enabledTrackIds[type].size()) < opt.numTracksOfType[type]))
+      options << enabled << opt.enabledTrackIds[type].join(Q(","));
+
+    else if (opt.enabledTrackIds[type].isEmpty() && opt.numTracksOfType[type])
+      options << disabled;
+  };
+
+  buildTrackIdArg(Track::Audio,      Q("--audio-tracks"),    Q("--no-audio"));
+  buildTrackIdArg(Track::Video,      Q("--video-tracks"),    Q("--no-video"));
+  buildTrackIdArg(Track::Subtitles,  Q("--subtitle-tracks"), Q("--no-subtitles"));
+  buildTrackIdArg(Track::Buttons,    Q("--button-tracks"),   Q("--no-buttons"));
+  buildTrackIdArg(Track::GlobalTags, Q("--attachments"),     Q("--no-attachments"));
+  buildTrackIdArg(Track::Tags,       Q("--track-tags"),      Q("--no-track-tags"));
+  buildTrackIdArg(Track::GlobalTags, Q(""),                  Q("--no-global-tags"));
+  buildTrackIdArg(Track::Chapters,   Q(""),                  Q("--no-chapters"));
+
+  options += opt.options;
+  options << m_fileName;
 }

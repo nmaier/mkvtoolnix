@@ -96,6 +96,9 @@ MergeWidget::setupInputControls() {
     for (auto idx = 0; control->count() > idx; ++idx)
       control->setItemData(idx, idx);
 
+  for (auto const &control : m_comboBoxControls)
+    control->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+
   // Connect signals & slots.
   connect(ui->files->selectionModel(),  SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)), this, SLOT(onFileSelectionChanged()));
   connect(ui->tracks->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)), this, SLOT(onTrackSelectionChanged()));
@@ -123,7 +126,7 @@ MergeWidget::onFileSelectionChanged() {
 
 void
 MergeWidget::onTrackSelectionChanged() {
-  enableInputControls(m_allInputControls, false);
+  Util::enableWidgets(m_allInputControls, false);
 
   auto selection = ui->tracks->selectionModel()->selection();
   if (selection.isEmpty())
@@ -131,11 +134,11 @@ MergeWidget::onTrackSelectionChanged() {
 
   if (1 < selection.size()) {
     setInputControlValues(nullptr);
-    enableInputControls(m_allInputControls, true);
+    Util::enableWidgets(m_allInputControls, true);
     return;
   }
 
-  enableInputControls(m_typeIndependantControls, true);
+  Util::enableWidgets(m_typeIndependantControls, true);
 
   auto idxs = selection[0].indexes();
   if (idxs.isEmpty() || !idxs[0].isValid())
@@ -148,23 +151,16 @@ MergeWidget::onTrackSelectionChanged() {
   setInputControlValues(track);
 
   if (track->isAudio())
-    enableInputControls(m_audioControls, true);
+    Util::enableWidgets(m_audioControls, true);
 
   else if (track->isVideo())
-    enableInputControls(m_videoControls, true);
+    Util::enableWidgets(m_videoControls, true);
 
   else if (track->isSubtitles())
-    enableInputControls(m_subtitleControls, true);
+    Util::enableWidgets(m_subtitleControls, true);
 
   else if (track->isChapters())
-    enableInputControls(m_chapterControls, true);
-}
-
-void
-MergeWidget::enableInputControls(QList<QWidget *> const &controls,
-                                 bool enable) {
-  for (auto &control : controls)
-    control->setEnabled(enable);
+    Util::enableWidgets(m_chapterControls, true);
 }
 
 void

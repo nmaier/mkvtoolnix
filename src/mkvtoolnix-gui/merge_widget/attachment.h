@@ -13,6 +13,8 @@
 class Attachment;
 typedef std::shared_ptr<Attachment> AttachmentPtr;
 
+class QStringList;
+
 class Attachment: public QObject {
   Q_OBJECT;
 public:
@@ -33,6 +35,8 @@ public:
   virtual void saveSettings(QSettings &settings) const;
   virtual void loadSettings(MuxConfig::Loader &l);
   virtual void guessMIMEType();
+
+  void buildMkvmergeOptions(QStringList &options) const;
 };
 
 #endif  // MTX_MKVTOOLNIX_GUI_ATTACHMENT_H

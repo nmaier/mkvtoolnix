@@ -15,6 +15,7 @@ MuxConfig::MuxConfig(QString const &fileName)
   , m_splitMaxFiles{0}
   , m_linkFiles{false}
   , m_webmMode{false}
+  , m_titleWasPresent{}
 {
 }
 
@@ -40,10 +41,7 @@ MuxConfig::operator =(MuxConfig const &other) {
   m_destination          = other.m_destination;
   m_globalTags           = other.m_globalTags;
   m_segmentinfo          = other.m_segmentinfo;
-  m_splitAfterSize       = other.m_splitAfterSize;
-  m_splitAfterDuration   = other.m_splitAfterDuration;
-  m_splitAfterTimecodes  = other.m_splitAfterTimecodes;
-  m_splitByParts         = other.m_splitByParts;
+  m_splitOptions         = other.m_splitOptions;
   m_segmentUIDs          = other.m_segmentUIDs;
   m_previousSegmentUID   = other.m_previousSegmentUID;
   m_nextSegmentUID       = other.m_nextSegmentUID;
@@ -125,10 +123,7 @@ MuxConfig::load(QSettings &settings) {
   m_destination          = settings.value("destination").toString();
   m_globalTags           = settings.value("globalTags").toString();
   m_segmentinfo          = settings.value("segmentinfo").toString();
-  m_splitAfterSize       = settings.value("splitAfterSize").toString();
-  m_splitAfterDuration   = settings.value("splitAfterDuration").toString();
-  m_splitAfterTimecodes  = settings.value("splitAfterTimecodes").toString();
-  m_splitByParts         = settings.value("splitByParts").toString();
+  m_splitOptions         = settings.value("splitOptions").toString();
   m_segmentUIDs          = settings.value("segmentUIDs").toString();
   m_previousSegmentUID   = settings.value("previousSegmentUID").toString();
   m_nextSegmentUID       = settings.value("nextSegmentUID").toString();
@@ -172,10 +167,7 @@ MuxConfig::save(QSettings &settings)
   settings.setValue("destination",          m_destination);
   settings.setValue("globalTags",           m_globalTags);
   settings.setValue("segmentinfo",          m_segmentinfo);
-  settings.setValue("splitAfterSize",       m_splitAfterSize);
-  settings.setValue("splitAfterDuration",   m_splitAfterDuration);
-  settings.setValue("splitAfterTimecodes",  m_splitAfterTimecodes);
-  settings.setValue("splitByParts",         m_splitByParts);
+  settings.setValue("splitOptions",         m_splitOptions);
   settings.setValue("segmentUIDs",          m_segmentUIDs);
   settings.setValue("previousSegmentUID",   m_previousSegmentUID);
   settings.setValue("nextSegmentUID",       m_nextSegmentUID);
@@ -214,4 +206,49 @@ MuxConfig::loadSettings(QString const &fileName) {
   config->load();
 
   return config;
+}
+
+QStringList
+MuxConfig::buildMkvmergeOptions()
+  const {
+  auto options = QStringList{};
+
+  // TODO: buildMkvmergeOptions get ui locale from prefs
+  // if (!preferences.m_uiLocale.isEmpty())
+  //   options << Q("--ui-language") << preferences.m_uiLocale;
+
+  options << Q("--output") << m_destination;
+
+  if (m_webmMode)
+    options << Q("--webm");
+
+  for (auto const &file : m_files)
+    file->buildMkvmergeOptions(options);
+
+  if (m_titleWasPresent || !m_title.isEmpty())
+    options << Q("--title") << m_title;
+
+  if (DoNotSplit != m_splitMode) {
+    // auto mode =
+    // TODO: buildMkvmergeOptions split mode
+
+  }
+
+  if (!m_segmentUIDs.isEmpty())
+    options << Q("--segment-uid") << m_segmentUIDs;
+
+  if (!m_previousSegmentUID.isEmpty())
+    options << Q("--previous-segment-uid") << m_previousSegmentUID;
+
+  if (!m_nextSegmentUID.isEmpty())
+    options << Q("--next-segment-uid") << m_nextSegmentUID;
+
+  // TODO: buildMkvmergeOptions track order
+  // TODO: buildMkvmergeOptions append mapping
+
+  for (auto const &attachment : m_attachments)
+    attachment->buildMkvmergeOptions(options);
+
+
+  return options;
 }

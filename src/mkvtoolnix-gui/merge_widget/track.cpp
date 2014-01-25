@@ -1,6 +1,7 @@
 #include "common/common_pch.h"
 
 #include "common/iso639.h"
+#include "mkvtoolnix-gui/merge_widget/mkvmerge_option_builder.h"
 #include "mkvtoolnix-gui/merge_widget/mux_config.h"
 #include "mkvtoolnix-gui/merge_widget/source_file.h"
 #include "mkvtoolnix-gui/merge_widget/track.h"
@@ -19,6 +20,7 @@ Track::Track(SourceFile *file,
   , m_muxThis{true}
   , m_setAspectRatio{true}
   , m_defaultTrackFlagWasSet{false}
+  , m_aacSbrWasDetected{}
   , m_defaultTrackFlag{0}
   , m_forcedTrackFlag{0}
   , m_stereoscopy{0}
@@ -239,4 +241,31 @@ std::string
 Track::debugInfo()
   const {
   return (boost::format("%1%/%2%:%3%@%4%") % static_cast<unsigned int>(m_type) % m_id % m_codec % this).str();
+}
+
+void
+Track::buildMkvmergeOptions(MkvmergeOptionBuilder &opt)
+  const {
+  ++opt.numTracksOfType[m_type];
+
+  if (!m_muxThis)
+    return;
+
+  auto sid = QString::number(m_id);
+  opt.enabledTrackIds[m_type] << sid;
+
+  if (isAudio()) {
+    if (m_aacSbrWasDetected || (0 != m_aacIsSBR))
+      opt.options << Q("--aac-is-sbr") << Q("%1:%2").arg(sid).arg((1 == m_aacIsSBR) || ((0 == m_aacIsSBR) && m_aacSbrWasDetected) ? 1 : 0);
+
+  } else if (isSubtitles()) {
+    if (!m_characterSet.isEmpty())
+      opt.options << Q("--sub-charset") << Q("%1:%2").arg(sid).arg(m_characterSet);
+
+  } else if (isChapters()) {
+    if (!m_characterSet.isEmpty())
+      opt.options << Q("--charset-charset") << m_characterSet;
+
+
+  }
 }

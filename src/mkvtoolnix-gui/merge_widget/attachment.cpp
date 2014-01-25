@@ -44,3 +44,9 @@ void
 Attachment::guessMIMEType() {
   m_MIMEType = to_qs(guess_mime_type(to_utf8(m_fileName), true));
 }
+
+void
+Attachment::buildMkvmergeOptions(QStringList &)
+  const {
+  // TODO: Attachment::buildMkvmergeOptions
+}

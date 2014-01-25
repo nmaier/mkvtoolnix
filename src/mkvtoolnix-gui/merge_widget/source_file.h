@@ -1,5 +1,5 @@
-#ifndef MTX_MKVTOOLNIX_GUI_SOURCE_FILE_H
-#define MTX_MKVTOOLNIX_GUI_SOURCE_FILE_H
+#ifndef MTX_MKVTOOLNIX_GUI_MERGE_WIDGET_SOURCE_FILE_H
+#define MTX_MKVTOOLNIX_GUI_MERGE_WIDGET_SOURCE_FILE_H
 
 #include "common/common_pch.h"
 
@@ -45,6 +45,8 @@ public:
   virtual void fixAssociations(MuxConfig::Loader &l);
 
   virtual Track *findFirstTrackOfType(Track::Type type) const;
+
+  void buildMkvmergeOptions(QStringList &options) const;
 };
 
 #endif  // MTX_MKVTOOLNIX_GUI_SOURCE_FILE_H

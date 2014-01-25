@@ -35,6 +35,7 @@ MergeWidget::MergeWidget(QWidget *parent)
 
   setupMenu();
   setupInputControls();
+  setupOutputControls();
   setupAttachmentsControls();
 
   retranslateUI();

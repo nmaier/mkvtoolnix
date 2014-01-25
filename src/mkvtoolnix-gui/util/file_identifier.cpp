@@ -117,11 +117,16 @@ FileIdentifier::parseAttachmentLine(QString const &line) {
     return;
 
   auto track                     = std::make_shared<Track>(m_file.get(), Track::Attachment);
+  track->m_properties            = parseProperties(line);
   track->m_id                    = re.cap(1).toLongLong();
   track->m_codec                 = re.cap(2);
   track->m_size                  = re.cap(3).toLongLong();
   track->m_attachmentDescription = re.cap(4);
   track->m_name                  = re.cap(5);
+
+  auto aacIsSbr = track->m_properties["aac_is_sbr"];
+  if ((aacIsSbr == QString{"true"}) || (aacIsSbr == QString{"1"}))
+    track->m_aacSbrWasDetected = true;
 
   m_file->m_tracks << track;
 }
