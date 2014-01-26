@@ -56,6 +56,8 @@ void
 MergeWidget::onShowMkvmergeOptions() {
   auto options = m_config.buildMkvmergeOptions();
   ui->debugOutput->setPlainText(Q("num: %1\n").arg(options.size()) + options.join(Q("\n")));
+  ui->cmdUnix->setPlainText(Util::escape(options, Util::EscapeShellUnix).join(Q(" ")));
+  ui->cmdWindows->setPlainText(Util::escape(options, Util::EscapeShellWindows).join(Q(" ")));
 }
 
 void

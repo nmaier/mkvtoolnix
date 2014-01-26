@@ -136,7 +136,7 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>-309</y>
+                <y>-110</y>
                 <width>461</width>
                 <height>880</height>
                </rect>
@@ -1272,7 +1272,42 @@
       </attribute>
       <layout class="QHBoxLayout" name="horizontalLayout_4">
        <item>
-        <widget class="QTextEdit" name="debugOutput"/>
+        <layout class="QVBoxLayout" name="verticalLayout_13">
+         <item>
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>mkvmerge arguments</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QTextEdit" name="debugOutput"/>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_12">
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Unix escaped</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QTextEdit" name="cmdUnix"/>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>Windows escaped</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QTextEdit" name="cmdWindows"/>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>
@@ -1357,6 +1392,7 @@
   <tabstop>defaultDuration</tabstop>
   <tabstop>timecodes</tabstop>
   <tabstop>browseTimecodes</tabstop>
+  <tabstop>fixBitstreamTimingInfo</tabstop>
   <tabstop>setAspectRatio</tabstop>
   <tabstop>aspectRatio</tabstop>
   <tabstop>setDisplayWidthHeight</tabstop>
