@@ -17,7 +17,7 @@ public:
     priority_highest,
   };
 
-  QString m_mkvmergeExe;
+  QString m_mkvmergeExe, m_defaultTrackLanguage;
   process_priority_e m_priority;
   QDir m_lastOpenDir, m_lastOutputDir, m_lastConfigDir;
   bool m_setAudioDelayFromFileName, m_disableAVCompression;

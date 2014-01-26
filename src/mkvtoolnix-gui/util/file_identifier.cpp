@@ -209,15 +209,6 @@ FileIdentifier::parseTrackLine(QString const &line) {
   track->m_id                     = re.cap(1).toLongLong();
   track->m_codec                  = re.cap(3);
   track->m_properties             = parseProperties(line);
-  track->m_name                   = track->m_properties["track_name"];
-  track->m_nameWasPresent         = !track->m_name.isEmpty();
-  track->m_defaultTrackFlagWasSet = track->m_properties["default_track"] == Q("1");
-  track->m_forcedTrackFlag        = track->m_properties["forced_track"]  == Q("1") ? 1 : 0;
-  track->m_forcedTrackFlagWasSet  = track->m_forcedTrackFlag == 1;
-
-  auto aacIsSbr = track->m_properties["aac_is_sbr"];
-  if ((aacIsSbr == Q("true")) || (aacIsSbr == Q("1")))
-    track->m_aacSbrWasDetected = true;
 
   m_file->m_tracks << track;
 

@@ -33,6 +33,10 @@ Settings::load() {
   m_setAudioDelayFromFileName = reg.value("setAudioDelayFromFileName", true).toBool();
   m_disableAVCompression      = reg.value("disableAVCompression",      false).toBool();
   reg.endGroup();
+
+  reg.beginGroup("defaults");
+  m_defaultTrackLanguage = reg.value("defaultTrackLanguage", Q("und")).toString();
+  reg.endGroup();
 }
 
 void
@@ -51,5 +55,9 @@ Settings::save()
   reg.beginGroup("features");
   reg.setValue("setAudioDelayFromFileName", m_setAudioDelayFromFileName);
   reg.setValue("disableAVCompression",      m_disableAVCompression);
+  reg.endGroup();
+
+  reg.beginGroup("defaults");
+  reg.setValue("defaultTrackLanguage", m_defaultTrackLanguage);
   reg.endGroup();
 }

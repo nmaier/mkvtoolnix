@@ -114,14 +114,19 @@ Track::setDefaults() {
   if (settings.m_disableAVCompression && (isVideo() || isAudio()))
     m_compression = CompNone;
 
-  m_forcedTrackFlag        = m_properties[Q("forced_track")] == "1";
+  m_forcedTrackFlag        = m_properties["forced_track"]  == Q("1") ? 1 : 0;
+  m_forcedTrackFlagWasSet  = m_forcedTrackFlag == 1;
   m_defaultTrackFlagWasSet = m_properties[Q("default_track")] == "1";
   m_name                   = m_properties[Q("track_name")];
+  m_nameWasPresent         = !m_name.isEmpty();
   m_cropping               = m_properties[Q("cropping")];
-  if (!m_properties[Q("stereo_mode")].isEmpty())
-    m_stereoscopy = m_properties[Q("stereo_mode")].toUInt() + 1;
+  m_aacSbrWasDetected      = m_properties["aac_is_sbr"].contains(QRegExp{"1|true"});
+  m_stereoscopy            = m_properties[Q("stereo_mode")].isEmpty() ? 0 : m_properties[Q("stereo_mode")].toUInt() + 1;
 
-  auto idx = map_to_iso639_2_code(to_utf8(m_properties[Q("language")]), true);
+  auto language = m_properties[Q("language")];
+  if (language.isEmpty())
+    language = Settings::get().m_defaultTrackLanguage;
+  auto idx = map_to_iso639_2_code(to_utf8(language), true);
   if (0 <= idx)
     m_language = to_qs(iso639_languages[idx].iso639_2_code);
 
