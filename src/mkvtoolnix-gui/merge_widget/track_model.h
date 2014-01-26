@@ -34,6 +34,7 @@ public:
 
 protected:
   QList<QStandardItem *>createRow(Track *track);
+  void setItemsFromTrack(QList<QStandardItem *> items, Track *track);
 
 public:                         // static
   static Track *fromIndex(QModelIndex const &index);

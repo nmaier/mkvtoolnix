@@ -48,22 +48,34 @@ TrackModel::setTracks(QList<Track *> &tracks) {
 QList<QStandardItem *>
 TrackModel::createRow(Track *track) {
   auto items = QList<QStandardItem *>{};
+  for (int idx = 0; idx < 7; ++idx)
+    items << new QStandardItem{};
 
-  items << new QStandardItem{track->isChapters() || track->isGlobalTags() || track->isTags() ? QY("%1 entries").arg(track->m_size) : track->m_codec};
-  items << new QStandardItem{  track->isAudio()      ? QY("audio")
-                             : track->isVideo()      ? QY("video")
-                             : track->isSubtitles()  ? QY("subtitles")
-                             : track->isButtons()    ? QY("buttons")
-                             : track->isAttachment() ? QY("attachment")
-                             : track->isChapters()   ? QY("chapters")
-                             : track->isTags()       ? QY("tags")
-                             : track->isGlobalTags() ? QY("global tags")
-                             :                          Q("INTERNAL ERROR")};
-  items << new QStandardItem{track->m_muxThis ? QY("yes") : QY("no")};
-  items << new QStandardItem{track->m_language};
-  items << new QStandardItem{QFileInfo{ track->m_file->m_fileName }.fileName()};
-  items << new QStandardItem{track->m_name};
-  items << new QStandardItem{-1 == track->m_id ? Q("") : QString::number(track->m_id)};
+  setItemsFromTrack(items, track);
+
+  m_tracksToItems[track] = items[0];
+
+  return items;
+}
+
+void
+TrackModel::setItemsFromTrack(QList<QStandardItem *> items,
+                              Track *track) {
+  items[0]->setText(track->isChapters() || track->isGlobalTags() || track->isTags() ? QY("%1 entries").arg(track->m_size) : track->m_codec);
+  items[1]->setText(  track->isAudio()      ? QY("audio")
+                    : track->isVideo()      ? QY("video")
+                    : track->isSubtitles()  ? QY("subtitles")
+                    : track->isButtons()    ? QY("buttons")
+                    : track->isAttachment() ? QY("attachment")
+                    : track->isChapters()   ? QY("chapters")
+                    : track->isTags()       ? QY("tags")
+                    : track->isGlobalTags() ? QY("global tags")
+                    :                          Q("INTERNAL ERROR"));
+  items[2]->setText(track->m_muxThis ? QY("yes") : QY("no"));
+  items[3]->setText(track->m_language);
+  items[4]->setText(QFileInfo{ track->m_file->m_fileName }.fileName());
+  items[5]->setText(track->m_name);
+  items[6]->setText(-1 == track->m_id ? Q("") : QString::number(track->m_id));
 
   items[0]->setData(QVariant::fromValue(track), Util::TrackRole);
   items[1]->setIcon(  track->isAudio()      ? m_audioIcon
@@ -76,10 +88,6 @@ TrackModel::createRow(Track *track) {
                     :                         m_genericIcon);
   items[2]->setIcon(track->m_muxThis ? m_yesIcon : m_noIcon);
   items[6]->setTextAlignment(Qt::AlignRight);
-
-  m_tracksToItems[track] = items[0];
-
-  return items;
 }
 
 Track *
@@ -109,17 +117,17 @@ TrackModel::rowForTrack(QList<Track *> const &tracks,
 
 void
 TrackModel::trackUpdated(Track *track) {
-  if (!m_tracks) {
-    mxdebug_if(m_debug, boost::format("trackUpdated() called but !m_tracks!?\n"));
-    return;
-  }
+  assert(m_tracks);
 
   int row = rowForTrack(*m_tracks, track);
-  mxdebug(boost::format("trackUpdated(): row is %1%\n") % row);
   if (-1 == row)
     return;
 
-  emit dataChanged(createIndex(row, 0, track), createIndex(row, columnCount() - 1, track));
+  auto items = QList<QStandardItem *>{};
+  for (int column = 0; column < columnCount(); ++column)
+    items << item(row, column);
+
+  setItemsFromTrack(items, track);
 }
 
 void
