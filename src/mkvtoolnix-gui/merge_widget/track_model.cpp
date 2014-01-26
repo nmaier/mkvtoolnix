@@ -20,7 +20,7 @@ TrackModel::TrackModel(QObject *parent)
   , m_debug{"track_model"}
 {
   auto labels = QStringList{};
-  labels << QY("Codec") << QY("Type") << QY("Mux this") << QY("Language") << QY("Source file") << QY("Name") << QY("ID");
+  labels << QY("Codec") << QY("Type") << QY("Mux this") << QY("Language") << QY("Name") << QY("Source file") << QY("ID");
   setHorizontalHeaderLabels(labels);
   horizontalHeaderItem(6)->setTextAlignment(Qt::AlignRight);
 }
@@ -73,8 +73,8 @@ TrackModel::setItemsFromTrack(QList<QStandardItem *> items,
                     :                          Q("INTERNAL ERROR"));
   items[2]->setText(track->m_muxThis ? QY("yes") : QY("no"));
   items[3]->setText(track->m_language);
-  items[4]->setText(QFileInfo{ track->m_file->m_fileName }.fileName());
-  items[5]->setText(track->m_name);
+  items[4]->setText(track->m_name);
+  items[5]->setText(QFileInfo{ track->m_file->m_fileName }.fileName());
   items[6]->setText(-1 == track->m_id ? Q("") : QString::number(track->m_id));
 
   items[0]->setData(QVariant::fromValue(track), Util::TrackRole);
