@@ -1,6 +1,7 @@
 #include "common/common_pch.h"
 
 #include "common/iso639.h"
+#include "common/strings/editing.h"
 #include "mkvtoolnix-gui/merge_widget/mkvmerge_option_builder.h"
 #include "mkvtoolnix-gui/merge_widget/mux_config.h"
 #include "mkvtoolnix-gui/merge_widget/source_file.h"
@@ -19,15 +20,18 @@ Track::Track(SourceFile *file,
   , m_id{-1}
   , m_muxThis{true}
   , m_setAspectRatio{true}
-  , m_defaultTrackFlagWasSet{false}
+  , m_defaultTrackFlagWasSet{}
+  , m_forcedTrackFlagWasSet{}
   , m_aacSbrWasDetected{}
-  , m_defaultTrackFlag{0}
-  , m_forcedTrackFlag{0}
-  , m_stereoscopy{0}
-  , m_cues{0}
-  , m_aacIsSBR{0}
+  , m_nameWasPresent{}
+  , m_fixBitstreamTimingInfo{}
+  , m_defaultTrackFlag{}
+  , m_forcedTrackFlag{}
+  , m_stereoscopy{}
+  , m_cues{}
+  , m_aacIsSBR{}
   , m_compression{CompDefault}
-  , m_size{0}
+  , m_size{}
 {
 }
 
@@ -153,8 +157,11 @@ Track::saveSettings(QSettings &settings)
   settings.setValue("id",                     static_cast<qlonglong>(m_id));
   settings.setValue("muxThis",                m_muxThis);
   settings.setValue("setAspectRatio",         m_setAspectRatio);
-  settings.setValue("aacIsSBR",               m_aacIsSBR);
   settings.setValue("defaultTrackFlagWasSet", m_defaultTrackFlagWasSet);
+  settings.setValue("forcedTrackFlagWasSet",  m_forcedTrackFlagWasSet);
+  settings.setValue("aacSbrWasDetected",      m_aacSbrWasDetected);
+  settings.setValue("nameWasPresent",         m_nameWasPresent);
+  settings.setValue("fixBitstreamTimingInfo", m_fixBitstreamTimingInfo);
   settings.setValue("name",                   m_name);
   settings.setValue("codec",                  m_codec);
   settings.setValue("language",               m_language);
@@ -173,6 +180,7 @@ Track::saveSettings(QSettings &settings)
   settings.setValue("forcedTrackFlag",        m_forcedTrackFlag);
   settings.setValue("stereoscopy",            m_stereoscopy);
   settings.setValue("cues",                   m_cues);
+  settings.setValue("aacIsSBR",               m_aacIsSBR);
   settings.setValue("compression",            m_compression);
   settings.setValue("size",                   static_cast<qlonglong>(m_size));
   settings.setValue("attachmentDescription",  m_attachmentDescription);
@@ -192,7 +200,11 @@ Track::loadSettings(MuxConfig::Loader &l) {
   m_muxThis                   = l.settings.value("muxThis").toBool();
   m_setAspectRatio            = l.settings.value("setAspectRatio").toBool();
   m_defaultTrackFlagWasSet    = l.settings.value("defaultTrackFlagWasSet").toBool();
+  m_forcedTrackFlagWasSet     = l.settings.value("forcedTrackFlagWasSet").toBool();
+  m_aacSbrWasDetected         = l.settings.value("aacSbrWasDetected").toBool();
   m_name                      = l.settings.value("name").toString();
+  m_nameWasPresent            = l.settings.value("nameWasPresent").toBool();
+  m_fixBitstreamTimingInfo    = l.settings.value("fixBitstreamTimingInfo").toBool();
   m_codec                     = l.settings.value("codec").toString();
   m_language                  = l.settings.value("language").toString();
   m_tags                      = l.settings.value("tags").toString();
@@ -264,8 +276,75 @@ Track::buildMkvmergeOptions(MkvmergeOptionBuilder &opt)
 
   } else if (isChapters()) {
     if (!m_characterSet.isEmpty())
-      opt.options << Q("--charset-charset") << m_characterSet;
+      opt.options << Q("--chapter-charset") << m_characterSet;
 
+    if (!m_language.isEmpty())
+      opt.options << Q("--chapter-language") << m_language;
 
+    return;
+
+  } else if (isTags())
+    return;
+
+  if (!m_appendedTo) {
+    opt.options << Q("--language") << Q("%1:%2").arg(sid).arg(m_language);
+
+    if (m_cues) {
+      auto cues = 1 == m_cues ? Q(":iframes")
+                : 2 == m_cues ? Q(":all")
+                :               Q(":none");
+      opt.options << Q("--cues") << (sid + cues);
+    }
+
+    if (!m_name.isEmpty() || m_nameWasPresent)
+      opt.options << Q("--track-name") << Q("%1:%2").arg(sid).arg(m_name);
+
+    if (0 != m_defaultTrackFlag)
+      opt.options << Q("--default-track") << Q("%1:%2").arg(sid).arg(m_defaultTrackFlag == 1 ? Q("yes") : Q("no"));
+
+    if (m_forcedTrackFlagWasSet != !!m_forcedTrackFlag)
+      opt.options << Q("--forced-track") << Q("%1:%2").arg(sid).arg(m_forcedTrackFlag == 1 ? Q("yes") : Q("no"));
+
+    if (!m_tags.isEmpty())
+      opt.options << Q("--tags") << Q("%1:%2").arg(sid).arg(m_tags);
+
+    if (m_setAspectRatio && !m_aspectRatio.isEmpty())
+      opt.options << Q("--aspect-ratio") << Q("%1:%2").arg(sid).arg(m_aspectRatio);
+
+    else if (!m_setAspectRatio && !m_displayHeight.isEmpty() && !m_displayWidth.isEmpty())
+      opt.options << Q("--display-dimensions") << Q("%1:%2x%3").arg(sid).arg(m_displayWidth).arg(m_displayHeight);
+
+    if (m_stereoscopy)
+      opt.options << Q("--stereo-mode") << Q("%1:%2").arg(sid).arg(m_stereoscopy);
+
+    if (m_compression)
+      opt.options << Q("--compression") << Q("%1:%2").arg(sid).arg(1 == m_compression ? Q("none") : Q("zlib"));
   }
+
+  if (!m_delay.isEmpty() || !m_stretchBy.isEmpty()) {
+    auto arg = Q("%1:%2").arg(sid).arg(m_delay.isEmpty() ? Q("0") : m_delay);
+
+    if (!m_stretchBy.isEmpty()) {
+      arg += Q(",%1").arg(m_stretchBy);
+      if (!m_stretchBy.contains('/'))
+        arg += Q("/1");
+    }
+
+    opt.options << arg;
+  }
+
+  if (!m_defaultDuration.isEmpty()) {
+    auto unit = m_defaultDuration.contains(QRegExp{"[ip]$"}) ? Q("") : Q("fps");
+    opt.options << Q("--default-duration") << Q("%1:%2%3").arg(sid).arg(m_defaultDuration).arg(unit);
+  }
+
+  if (!m_timecodes.isEmpty())
+    opt.options << Q("--timecodes") << Q("%1:%2").arg(sid).arg(m_timecodes);
+
+  if (m_fixBitstreamTimingInfo)
+    opt.options << Q("--fix-bitstream-timing-info") << Q("%1:1").arg(sid);
+
+  auto userDefinedOptions = Q(strip_copy(to_utf8(m_userDefinedOptions)));
+  if (!userDefinedOptions.isEmpty())
+    opt.options += userDefinedOptions.split(QRegExp{" +"});
 }

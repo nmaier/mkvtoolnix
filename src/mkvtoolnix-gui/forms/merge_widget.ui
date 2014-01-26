@@ -136,9 +136,9 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>0</y>
+                <y>-309</y>
                 <width>461</width>
-                <height>851</height>
+                <height>880</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -317,137 +317,148 @@
                  <property name="title">
                   <string>Timecodes and default duration:</string>
                  </property>
-                 <layout class="QGridLayout" name="gridLayout_6">
-                  <item row="0" column="0">
-                   <widget class="QLabel" name="delayLabel">
-                    <property name="text">
-                     <string>Delay (in ms):</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>delay</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="1">
-                   <widget class="QLineEdit" name="delay"/>
-                  </item>
-                  <item row="1" column="0">
-                   <widget class="QLabel" name="stretchByLabel">
-                    <property name="text">
-                     <string>Stretch by:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>stretchBy</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="1">
-                   <widget class="QLineEdit" name="stretchBy"/>
-                  </item>
-                  <item row="2" column="0">
-                   <widget class="QLabel" name="defaultDurationLabel">
-                    <property name="text">
-                     <string>Default duration/FPS:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>defaultDuration</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="1">
-                   <widget class="QComboBox" name="defaultDuration">
-                    <property name="editable">
-                     <bool>true</bool>
-                    </property>
-                    <item>
-                     <property name="text">
-                      <string notr="true"/>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string notr="true">24p</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string notr="true">25p</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string notr="true">30p</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string notr="true">50i</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string notr="true">50p</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string notr="true">60i</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string notr="true">60p</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string notr="true">24000/1001p</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string notr="true">30000/1001p</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string notr="true">60000/1001i</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string notr="true">60000/1001p</string>
-                     </property>
-                    </item>
-                   </widget>
-                  </item>
-                  <item row="3" column="0">
-                   <widget class="QLabel" name="timecodesLabel">
-                    <property name="text">
-                     <string>Timecode file:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>timecodes</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="1">
-                   <layout class="QHBoxLayout" name="horizontalLayout_12">
-                    <item>
-                     <widget class="QLineEdit" name="timecodes"/>
-                    </item>
-                    <item>
-                     <widget class="QPushButton" name="browseTimecodes">
+                 <layout class="QVBoxLayout" name="verticalLayout_11">
+                  <item>
+                   <layout class="QGridLayout" name="gridLayout_6">
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="delayLabel">
                       <property name="text">
-                       <string/>
+                       <string>Delay (in ms):</string>
                       </property>
-                      <property name="icon">
-                       <iconset>
-                        <normaloff>:/icons/16x16/code-class.png</normaloff>:/icons/16x16/code-class.png</iconset>
+                      <property name="buddy">
+                       <cstring>delay</cstring>
                       </property>
                      </widget>
                     </item>
+                    <item row="0" column="1">
+                     <widget class="QLineEdit" name="delay"/>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QLabel" name="stretchByLabel">
+                      <property name="text">
+                       <string>Stretch by:</string>
+                      </property>
+                      <property name="buddy">
+                       <cstring>stretchBy</cstring>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="1">
+                     <widget class="QLineEdit" name="stretchBy"/>
+                    </item>
+                    <item row="2" column="0">
+                     <widget class="QLabel" name="defaultDurationLabel">
+                      <property name="text">
+                       <string>Default duration/FPS:</string>
+                      </property>
+                      <property name="buddy">
+                       <cstring>defaultDuration</cstring>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="1">
+                     <widget class="QComboBox" name="defaultDuration">
+                      <property name="editable">
+                       <bool>true</bool>
+                      </property>
+                      <item>
+                       <property name="text">
+                        <string notr="true"/>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string notr="true">24p</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string notr="true">25p</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string notr="true">30p</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string notr="true">50i</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string notr="true">50p</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string notr="true">60i</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string notr="true">60p</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string notr="true">24000/1001p</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string notr="true">30000/1001p</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string notr="true">60000/1001i</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string notr="true">60000/1001p</string>
+                       </property>
+                      </item>
+                     </widget>
+                    </item>
+                    <item row="3" column="0">
+                     <widget class="QLabel" name="timecodesLabel">
+                      <property name="text">
+                       <string>Timecode file:</string>
+                      </property>
+                      <property name="buddy">
+                       <cstring>timecodes</cstring>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="1">
+                     <layout class="QHBoxLayout" name="horizontalLayout_12">
+                      <item>
+                       <widget class="QLineEdit" name="timecodes"/>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="browseTimecodes">
+                        <property name="text">
+                         <string/>
+                        </property>
+                        <property name="icon">
+                         <iconset>
+                          <normaloff>:/icons/16x16/code-class.png</normaloff>:/icons/16x16/code-class.png</iconset>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
                    </layout>
+                  </item>
+                  <item>
+                   <widget class="QCheckBox" name="fixBitstreamTimingInfo">
+                    <property name="text">
+                     <string>Fix bitstream timing info</string>
+                    </property>
+                   </widget>
                   </item>
                  </layout>
                 </widget>
@@ -814,19 +825,19 @@
                </layout>
               </item>
               <item row="3" column="0">
-               <widget class="QLabel" name="segmentinfoLabel">
+               <widget class="QLabel" name="segmentInfoLabel">
                 <property name="text">
                  <string>Segment info:</string>
                 </property>
                 <property name="buddy">
-                 <cstring>segmentinfo</cstring>
+                 <cstring>segmentInfo</cstring>
                 </property>
                </widget>
               </item>
               <item row="3" column="1">
                <layout class="QHBoxLayout" name="horizontalLayout_8">
                 <item>
-                 <widget class="QLineEdit" name="segmentinfo"/>
+                 <widget class="QLineEdit" name="segmentInfo"/>
                 </item>
                 <item>
                  <widget class="QPushButton" name="browseSegmentInfo">
@@ -1255,6 +1266,16 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>Page</string>
+      </attribute>
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <item>
+        <widget class="QTextEdit" name="debugOutput"/>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
    <item>
@@ -1351,7 +1372,7 @@
   <tabstop>browseOutput</tabstop>
   <tabstop>globalTags</tabstop>
   <tabstop>browseGlobalTags</tabstop>
-  <tabstop>segmentinfo</tabstop>
+  <tabstop>segmentInfo</tabstop>
   <tabstop>browseSegmentInfo</tabstop>
   <tabstop>splitMode</tabstop>
   <tabstop>splitOptions</tabstop>
@@ -1439,8 +1460,8 @@
    <slot>onTrackNameEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>647</x>
-     <y>146</y>
+     <x>840</x>
+     <y>-155</y>
     </hint>
     <hint type="destinationlabel">
      <x>613</x>
@@ -1455,8 +1476,8 @@
    <slot>onMuxThisChanged(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>647</x>
-     <y>118</y>
+     <x>840</x>
+     <y>-186</y>
     </hint>
     <hint type="destinationlabel">
      <x>638</x>
@@ -1471,8 +1492,8 @@
    <slot>onTrackLanguageChanged(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>647</x>
-     <y>174</y>
+     <x>840</x>
+     <y>-124</y>
     </hint>
     <hint type="destinationlabel">
      <x>673</x>
@@ -1487,8 +1508,8 @@
    <slot>onForcedTrackFlagChanged(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>647</x>
-     <y>230</y>
+     <x>840</x>
+     <y>-62</y>
     </hint>
     <hint type="destinationlabel">
      <x>818</x>
@@ -1503,8 +1524,8 @@
    <slot>onDefaultTrackFlagChanged(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>647</x>
-     <y>202</y>
+     <x>840</x>
+     <y>-93</y>
     </hint>
     <hint type="destinationlabel">
      <x>658</x>
@@ -1519,8 +1540,8 @@
    <slot>onCompressionChanged(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>647</x>
-     <y>258</y>
+     <x>840</x>
+     <y>-31</y>
     </hint>
     <hint type="destinationlabel">
      <x>820</x>
@@ -1535,8 +1556,8 @@
    <slot>onTrackTagsEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>648</x>
-     <y>289</y>
+     <x>795</x>
+     <y>5</y>
     </hint>
     <hint type="destinationlabel">
      <x>820</x>
@@ -1551,8 +1572,8 @@
    <slot>onDelayEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>659</x>
-     <y>362</y>
+     <x>839</x>
+     <y>79</y>
     </hint>
     <hint type="destinationlabel">
      <x>819</x>
@@ -1567,8 +1588,8 @@
    <slot>onStretchByEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>659</x>
-     <y>390</y>
+     <x>839</x>
+     <y>110</y>
     </hint>
     <hint type="destinationlabel">
      <x>815</x>
@@ -1583,8 +1604,8 @@
    <slot>onDefaultDurationEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>638</x>
-     <y>418</y>
+     <x>839</x>
+     <y>141</y>
     </hint>
     <hint type="destinationlabel">
      <x>818</x>
@@ -1599,8 +1620,8 @@
    <slot>onTimecodesEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>660</x>
-     <y>449</y>
+     <x>794</x>
+     <y>177</y>
     </hint>
     <hint type="destinationlabel">
      <x>817</x>
@@ -1615,8 +1636,8 @@
    <slot>onBrowseTrackTags()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>838</x>
-     <y>292</y>
+     <x>839</x>
+     <y>9</y>
     </hint>
     <hint type="destinationlabel">
      <x>411</x>
@@ -1632,7 +1653,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>838</x>
-     <y>452</y>
+     <y>181</y>
     </hint>
     <hint type="destinationlabel">
      <x>411</x>
@@ -1647,8 +1668,8 @@
    <slot>onSetAspectRatio()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>519</x>
-     <y>522</y>
+     <x>573</x>
+     <y>276</y>
     </hint>
     <hint type="destinationlabel">
      <x>557</x>
@@ -1663,8 +1684,8 @@
    <slot>onSetDisplayDimensions()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>519</x>
-     <y>551</y>
+     <x>573</x>
+     <y>308</y>
     </hint>
     <hint type="destinationlabel">
      <x>534</x>
@@ -1679,8 +1700,8 @@
    <slot>onAspectRatioEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>660</x>
-     <y>522</y>
+     <x>840</x>
+     <y>278</y>
     </hint>
     <hint type="destinationlabel">
      <x>551</x>
@@ -1695,8 +1716,8 @@
    <slot>onAspectRatioEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>660</x>
-     <y>522</y>
+     <x>840</x>
+     <y>278</y>
     </hint>
     <hint type="destinationlabel">
      <x>411</x>
@@ -1711,8 +1732,8 @@
    <slot>onDefaultDurationEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>638</x>
-     <y>418</y>
+     <x>839</x>
+     <y>141</y>
     </hint>
     <hint type="destinationlabel">
      <x>411</x>
@@ -1727,8 +1748,8 @@
    <slot>onDisplayWidthEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>682</x>
-     <y>551</y>
+     <x>700</x>
+     <y>310</y>
     </hint>
     <hint type="destinationlabel">
      <x>411</x>
@@ -1743,8 +1764,8 @@
    <slot>onDisplayHeightEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>819</x>
-     <y>551</y>
+     <x>839</x>
+     <y>310</y>
     </hint>
     <hint type="destinationlabel">
      <x>411</x>
@@ -1759,8 +1780,8 @@
    <slot>onStereoscopyChanged(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>681</x>
-     <y>580</y>
+     <x>840</x>
+     <y>342</y>
     </hint>
     <hint type="destinationlabel">
      <x>411</x>
@@ -1775,8 +1796,8 @@
    <slot>onCroppingEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>681</x>
-     <y>608</y>
+     <x>840</x>
+     <y>373</y>
     </hint>
     <hint type="destinationlabel">
      <x>411</x>
@@ -1791,8 +1812,8 @@
    <slot>onSubtitleCharacterSetChanged(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>616</x>
-     <y>746</y>
+     <x>840</x>
+     <y>509</y>
     </hint>
     <hint type="destinationlabel">
      <x>819</x>
@@ -1807,8 +1828,8 @@
    <slot>onCuesChanged(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>660</x>
-     <y>815</y>
+     <x>840</x>
+     <y>577</y>
     </hint>
     <hint type="destinationlabel">
      <x>818</x>
@@ -1823,8 +1844,8 @@
    <slot>onUserDefinedTrackOptionsEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>660</x>
-     <y>843</y>
+     <x>840</x>
+     <y>608</y>
     </hint>
     <hint type="destinationlabel">
      <x>819</x>
@@ -1839,8 +1860,8 @@
    <slot>onAacIsSBRChanged(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>695</x>
-     <y>677</y>
+     <x>840</x>
+     <y>441</y>
     </hint>
     <hint type="destinationlabel">
      <x>815</x>
@@ -1897,14 +1918,14 @@
    </hints>
   </connection>
   <connection>
-   <sender>segmentinfo</sender>
+   <sender>segmentInfo</sender>
    <signal>textEdited(QString)</signal>
    <receiver>MergeWidget</receiver>
-   <slot>onSegmentinfoEdited(QString)</slot>
+   <slot>onSegmentInfoEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>304</x>
-     <y>184</y>
+     <x>412</x>
+     <y>210</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -1948,7 +1969,7 @@
    <sender>browseSegmentInfo</sender>
    <signal>clicked()</signal>
    <receiver>MergeWidget</receiver>
-   <slot>onBrowseSegmentinfo()</slot>
+   <slot>onBrowseSegmentInfo()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>432</x>
@@ -1967,8 +1988,8 @@
    <slot>onSplitMaxFilesChanged(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>433</x>
-     <y>338</y>
+     <x>457</x>
+     <y>366</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -1983,8 +2004,8 @@
    <slot>onLinkFilesClicked(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>128</x>
-     <y>365</y>
+     <x>151</x>
+     <y>393</y>
     </hint>
     <hint type="destinationlabel">
      <x>4</x>
@@ -2047,8 +2068,8 @@
    <slot>onChaptersEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>824</x>
-     <y>210</y>
+     <x>820</x>
+     <y>227</y>
     </hint>
     <hint type="destinationlabel">
      <x>819</x>
@@ -2096,7 +2117,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>865</x>
-     <y>268</y>
+     <y>294</y>
     </hint>
     <hint type="destinationlabel">
      <x>817</x>
@@ -2112,7 +2133,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>865</x>
-     <y>295</y>
+     <y>325</y>
     </hint>
     <hint type="destinationlabel">
      <x>818</x>
@@ -2128,7 +2149,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>865</x>
-     <y>361</y>
+     <y>389</y>
     </hint>
     <hint type="destinationlabel">
      <x>815</x>
@@ -2143,8 +2164,8 @@
    <slot>onUserDefinedOptionsEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>779</x>
-     <y>390</y>
+     <x>778</x>
+     <y>421</y>
     </hint>
     <hint type="destinationlabel">
      <x>815</x>
@@ -2160,7 +2181,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>864</x>
-     <y>392</y>
+     <y>422</y>
     </hint>
     <hint type="destinationlabel">
      <x>816</x>
@@ -2287,8 +2308,8 @@
    <slot>resizeAttachmentsColumnsToContents()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>101</x>
-     <y>61</y>
+     <x>112</x>
+     <y>108</y>
     </hint>
     <hint type="destinationlabel">
      <x>629</x>
@@ -2319,8 +2340,8 @@
    <slot>onSplitModeChanged(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>215</x>
-     <y>251</y>
+     <x>410</x>
+     <y>283</y>
     </hint>
     <hint type="destinationlabel">
      <x>7</x>
@@ -2335,12 +2356,28 @@
    <slot>onSplitOptionsEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>230</x>
-     <y>281</y>
+     <x>425</x>
+     <y>314</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
      <y>284</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fixBitstreamTimingInfo</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MergeWidget</receiver>
+   <slot>onFixBitstreamTimingInfoChanged(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>474</x>
+     <y>204</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>410</x>
+     <y>6</y>
     </hint>
    </hints>
   </connection>
@@ -2359,7 +2396,7 @@
   <slot>onBrowseChapters()</slot>
   <slot>onBrowseGlobalTags()</slot>
   <slot>onBrowseOutput()</slot>
-  <slot>onBrowseSegmentinfo()</slot>
+  <slot>onBrowseSegmentInfo()</slot>
   <slot>onBrowseTimecodes()</slot>
   <slot>onBrowseTrackTags()</slot>
   <slot>onChapterCharacterSetChanged(QString)</slot>
@@ -2389,7 +2426,7 @@
   <slot>onSaveConfig()</slot>
   <slot>onSaveConfigAs()</slot>
   <slot>onSegmentUIDsEdited(QString)</slot>
-  <slot>onSegmentinfoEdited(QString)</slot>
+  <slot>onSegmentInfoEdited(QString)</slot>
   <slot>onSetAspectRatio()</slot>
   <slot>onSetDisplayDimensions()</slot>
   <slot>onSplitMaxFilesChanged(int)</slot>
@@ -2411,5 +2448,6 @@
   <slot>resizeAttachmentsColumnsToContents()</slot>
   <slot>resizeFilesColumnsToContents()</slot>
   <slot>resizeTracksColumnsToContents()</slot>
+  <slot>onFixBitstreamTimingInfoChanged(bool)</slot>
  </slots>
 </ui>

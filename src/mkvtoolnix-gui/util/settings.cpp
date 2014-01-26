@@ -31,7 +31,7 @@ Settings::load() {
 
   reg.beginGroup("features");
   m_setAudioDelayFromFileName = reg.value("setAudioDelayFromFileName", true).toBool();
-  m_disableAVCompression      = reg.value("disableAVCompression",      true).toBool();
+  m_disableAVCompression      = reg.value("disableAVCompression",      false).toBool();
   reg.endGroup();
 }
 

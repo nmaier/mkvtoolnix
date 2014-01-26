@@ -30,7 +30,7 @@ MergeWidget::setupControlLists() {
                   << ui->delayLabel << ui->delay << ui->stretchByLabel << ui->stretchBy << ui->defaultDurationLabel << ui->defaultDuration << ui->timecodesLabel << ui->timecodes << ui->browseTimecodes
                   << ui->picturePropertiesBox << ui->setAspectRatio << ui->aspectRatio << ui->setDisplayWidthHeight << ui->displayWidth << ui->displayDimensionsXLabel << ui->displayHeight << ui->stereoscopyLabel
                   << ui->stereoscopy << ui->croppingLabel << ui->cropping << ui->cuesLabel << ui->cues
-                  << ui->propertiesLabel << ui->generalOptionsBox;
+                  << ui->propertiesLabel << ui->generalOptionsBox << ui->fixBitstreamTimingInfo;
 
   m_subtitleControls << ui->trackNameLabel << ui->trackName << ui->trackLanguageLabel << ui->trackLanguage << ui->defaultTrackFlagLabel << ui->defaultTrackFlag
                      << ui->forcedTrackFlagLabel << ui->forcedTrackFlag << ui->compressionLabel << ui->compression << ui->trackTagsLabel << ui->trackTags << ui->browseTrackTags << ui->timecodesAndDefaultDurationBox
@@ -46,7 +46,7 @@ MergeWidget::setupControlLists() {
                      << ui->picturePropertiesBox << ui->setAspectRatio << ui->aspectRatio << ui->setDisplayWidthHeight << ui->displayWidth << ui->displayDimensionsXLabel << ui->displayHeight << ui->stereoscopyLabel
                      << ui->stereoscopy << ui->croppingLabel << ui->cropping << ui->audioPropertiesBox << ui->aacIsSBR << ui->subtitleAndChapterPropertiesBox << ui->characterSetLabel << ui->subtitleCharacterSet
                      << ui->miscellaneousBox << ui->cuesLabel << ui->cues << ui->userDefinedTrackOptionsLabel << ui->userDefinedTrackOptions
-                     << ui->propertiesLabel << ui->generalOptionsBox;
+                     << ui->propertiesLabel << ui->generalOptionsBox << ui->fixBitstreamTimingInfo;
 
   m_comboBoxControls << ui->muxThis << ui->trackLanguage << ui->defaultTrackFlag << ui->forcedTrackFlag << ui->compression << ui->cues << ui->stereoscopy << ui->aacIsSBR << ui->subtitleCharacterSet;
 }
@@ -357,6 +357,11 @@ MergeWidget::onBrowseTimecodes() {
   auto fileName = getOpenFileName(QY("Select timecode file"), QY("Text files") + Q(" (*.txt)"), ui->timecodes);
   if (!fileName.isEmpty())
     withSelectedTracks([&](Track *track) { track->m_timecodes = fileName; });
+}
+
+void
+MergeWidget::onfixBitstreamTimingInfoChanged(bool newValue) {
+  withSelectedTracks([&](Track *track) { track->m_fixBitstreamTimingInfo = newValue; });
 }
 
 void

@@ -1,5 +1,6 @@
 #include "common/common_pch.h"
 
+#include "common/strings/editing.h"
 #include "mkvtoolnix-gui/merge_widget/attachment.h"
 #include "mkvtoolnix-gui/merge_widget/mux_config.h"
 #include "mkvtoolnix-gui/merge_widget/source_file.h"
@@ -40,7 +41,7 @@ MuxConfig::operator =(MuxConfig const &other) {
   m_title                = other.m_title;
   m_destination          = other.m_destination;
   m_globalTags           = other.m_globalTags;
-  m_segmentinfo          = other.m_segmentinfo;
+  m_segmentInfo          = other.m_segmentInfo;
   m_splitOptions         = other.m_splitOptions;
   m_segmentUIDs          = other.m_segmentUIDs;
   m_previousSegmentUID   = other.m_previousSegmentUID;
@@ -122,7 +123,7 @@ MuxConfig::load(QSettings &settings) {
   m_title                = settings.value("title").toString();
   m_destination          = settings.value("destination").toString();
   m_globalTags           = settings.value("globalTags").toString();
-  m_segmentinfo          = settings.value("segmentinfo").toString();
+  m_segmentInfo          = settings.value("segmentInfo").toString();
   m_splitOptions         = settings.value("splitOptions").toString();
   m_segmentUIDs          = settings.value("segmentUIDs").toString();
   m_previousSegmentUID   = settings.value("previousSegmentUID").toString();
@@ -166,7 +167,7 @@ MuxConfig::save(QSettings &settings)
   settings.setValue("title",                m_title);
   settings.setValue("destination",          m_destination);
   settings.setValue("globalTags",           m_globalTags);
-  settings.setValue("segmentinfo",          m_segmentinfo);
+  settings.setValue("segmentInfo",          m_segmentInfo);
   settings.setValue("splitOptions",         m_splitOptions);
   settings.setValue("segmentUIDs",          m_segmentUIDs);
   settings.setValue("previousSegmentUID",   m_previousSegmentUID);
@@ -225,23 +226,48 @@ MuxConfig::buildMkvmergeOptions()
   for (auto const &file : m_files)
     file->buildMkvmergeOptions(options);
 
-  if (m_titleWasPresent || !m_title.isEmpty())
-    options << Q("--title") << m_title;
-
   if (DoNotSplit != m_splitMode) {
-    // auto mode =
-    // TODO: buildMkvmergeOptions split mode
+    auto mode = SplitAfterSize      == m_splitMode ? Q("size:")
+              : SplitAfterDuration  == m_splitMode ? Q("duration:")
+              : SplitAfterTimecodes == m_splitMode ? Q("timecodes:")
+              : SplitByParts        == m_splitMode ? Q("parts:")
+              : SplitByPartsFrames  == m_splitMode ? Q("parts-frames:")
+              : SplitByFrames       == m_splitMode ? Q("frames:")
+              : SplitAfterChapters  == m_splitMode ? Q("chapters:")
+              :                                      Q("PROGRAM EROR");
+    options << Q("--split") << (mode + m_splitOptions);
 
+    if (m_splitMaxFiles)
+      options << Q("--split-max-files") << QString::number(m_splitMaxFiles);
+    if (m_linkFiles)
+      options << Q("--link");
   }
 
-  if (!m_segmentUIDs.isEmpty())
-    options << Q("--segment-uid") << m_segmentUIDs;
+  auto add = [&](QString const &arg, QString const &value, boost::logic::tribool predicate = boost::indeterminate) {
+    if (boost::logic::indeterminate(predicate))
+      predicate = !value.isEmpty();
+    if (predicate)
+      options << arg << value;
+  };
 
-  if (!m_previousSegmentUID.isEmpty())
-    options << Q("--previous-segment-uid") << m_previousSegmentUID;
+  add(Q("--title"), m_title, m_titleWasPresent || !m_title.isEmpty());
+  add(Q("--segment-uid"), m_segmentUIDs);
+  add(Q("--previous-segment-uid"), m_previousSegmentUID);
+  add(Q("--next-segment-uid"), m_nextSegmentUID);
+  add(Q("--segmentinfo"), m_segmentInfo);
 
-  if (!m_nextSegmentUID.isEmpty())
-    options << Q("--next-segment-uid") << m_nextSegmentUID;
+  if (!m_chapters.isEmpty()) {
+    add(Q("--chapter-language"), m_chapterLanguage);
+    add(Q("--chapter-charset"), m_chapterCharacterSet);
+    add(Q("--cue-chapter-name-format"), m_chapterCueNameFormat);
+    options << Q("--chapters") << m_chapters;
+  }
+
+  add(Q("--global-tags"), m_globalTags);
+
+  auto userDefinedOptions = Q(strip_copy(to_utf8(m_userDefinedOptions)));
+  if (!userDefinedOptions.isEmpty())
+    options += userDefinedOptions.split(QRegExp{" +"});
 
   // TODO: buildMkvmergeOptions track order
   // TODO: buildMkvmergeOptions append mapping

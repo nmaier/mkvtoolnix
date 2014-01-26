@@ -75,6 +75,7 @@ public slots:
   virtual void onDefaultDurationEdited(QString newValue);
   virtual void onTimecodesEdited(QString newValue);
   virtual void onBrowseTimecodes();
+  virtual void onfixBitstreamTimingInfoChanged(bool newValue);
   virtual void onBrowseTrackTags();
   virtual void onSetAspectRatio();
   virtual void onSetDisplayDimensions();
@@ -98,8 +99,8 @@ public slots:
   virtual void onBrowseOutput();
   virtual void onGlobalTagsEdited(QString newValue);
   virtual void onBrowseGlobalTags();
-  virtual void onSegmentinfoEdited(QString newValue);
-  virtual void onBrowseSegmentinfo();
+  virtual void onSegmentInfoEdited(QString newValue);
+  virtual void onBrowseSegmentInfo();
   virtual void onSplitModeChanged(int newMode);
   virtual void onSplitOptionsEdited(QString newValue);
   virtual void onLinkFilesClicked(bool newValue);
@@ -126,6 +127,8 @@ public slots:
   virtual void onRemoveAttachments();
 
   virtual void resizeAttachmentsColumnsToContents() const;
+
+  virtual void onShowMkvmergeOptions();
 
 protected:
   virtual void setupAttachmentsControls();

@@ -50,15 +50,15 @@ MergeWidget::onBrowseGlobalTags() {
 }
 
 void
-MergeWidget::onSegmentinfoEdited(QString newValue) {
-  m_config.m_segmentinfo = newValue;
+MergeWidget::onSegmentInfoEdited(QString newValue) {
+  m_config.m_segmentInfo = newValue;
 }
 
 void
-MergeWidget::onBrowseSegmentinfo() {
-  auto fileName = getOpenFileName(QY("Select segment info file"), QY("XML files") + Q(" (*.xml)"), ui->segmentinfo);
+MergeWidget::onBrowseSegmentInfo() {
+  auto fileName = getOpenFileName(QY("Select segment info file"), QY("XML files") + Q(" (*.xml)"), ui->segmentInfo);
   if (!fileName.isEmpty())
-    m_config.m_segmentinfo = fileName;
+    m_config.m_segmentInfo = fileName;
 }
 
 void
@@ -157,9 +157,12 @@ MergeWidget::onSplitModeChanged(int newMode) {
 
   }
 
+  auto options = ui->splitOptions->currentText();
+
   ui->splitOptionsLabel->setText(label);
   ui->splitOptions->clear();
   ui->splitOptions->addItems(entries);
+  ui->splitOptions->setCurrentText(options);
   ui->splitOptions->setToolTip(tooltip.join(Q(" ")));
 }
 
@@ -243,7 +246,7 @@ MergeWidget::setOutputControlValues() {
   ui->title->setText(m_config.m_title);
   ui->output->setText(m_config.m_destination);
   ui->globalTags->setText(m_config.m_globalTags);
-  ui->segmentinfo->setText(m_config.m_segmentinfo);
+  ui->segmentInfo->setText(m_config.m_segmentInfo);
   ui->splitMode->setCurrentIndex(m_config.m_splitMode);
   ui->splitOptions->setEditText(m_config.m_splitOptions);
   ui->splitMaxFiles->setValue(m_config.m_splitMaxFiles);

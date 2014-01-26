@@ -205,5 +205,10 @@ SourceFile::buildMkvmergeOptions(QStringList &options)
   buildTrackIdArg(Track::Chapters,   Q(""),                  Q("--no-chapters"));
 
   options += opt.options;
-  options << m_fileName;
+  if (m_appendedTo)
+    options << Q("+");
+  options << Q("(") << m_fileName;
+  for (auto const &additionalPart : m_additionalParts)
+    options << additionalPart->m_fileName;
+  options << Q(")");
 }

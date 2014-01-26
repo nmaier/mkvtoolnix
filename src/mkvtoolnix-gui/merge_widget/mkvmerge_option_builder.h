@@ -12,6 +12,8 @@ struct MkvmergeOptionBuilder {
   QStringList options;
   QHash<Track::Type, unsigned int> numTracksOfType;
   QHash<Track::Type, QStringList> enabledTrackIds;
+
+  MkvmergeOptionBuilder() {}
 };
 
 #endif // MTX_MKVTOOLNIX_GUI_MERGE_WIDGET_MKVMERGE_OPTION_BUILDER_H
