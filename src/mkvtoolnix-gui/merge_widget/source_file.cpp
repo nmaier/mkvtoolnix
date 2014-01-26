@@ -211,4 +211,7 @@ SourceFile::buildMkvmergeOptions(QStringList &options)
   for (auto const &additionalPart : m_additionalParts)
     options << additionalPart->m_fileName;
   options << Q(")");
+
+  for (auto const &appendedFile : m_appendedFiles)
+    appendedFile->buildMkvmergeOptions(options);
 }

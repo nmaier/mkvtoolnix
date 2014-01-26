@@ -209,6 +209,46 @@ MuxConfig::loadSettings(QString const &fileName) {
   return config;
 }
 
+QHash<SourceFile *, unsigned int>
+MuxConfig::buildFileNumbers()
+  const {
+  auto fileNumbers = QHash<SourceFile *, unsigned int>{};
+  auto number      = 0u;
+  for (auto const &file : m_files) {
+    fileNumbers[file.get()] = number++;
+    for (auto const &appendedFile : file->m_appendedFiles)
+      fileNumbers[appendedFile.get()] = number++;
+  }
+
+  return fileNumbers;
+}
+
+QStringList
+MuxConfig::buildTrackOrder(QHash<SourceFile *, unsigned int> const &fileNumbers)
+  const {
+  auto trackOrder = QStringList{};
+  for (auto const &track : m_tracks)
+    if (track->m_muxThis && (track->isAudio() || track->isVideo() || track->isSubtitles() || track->isButtons()))
+      trackOrder << Q("%1:%2").arg(fileNumbers.value(track->m_file)).arg(track->m_id);
+
+  if (trackOrder.size() > 1)
+    return QStringList{} << Q("--track-order") << trackOrder.join(Q(","));
+  return QStringList{};
+}
+
+QStringList
+MuxConfig::buildAppendToMapping(QHash<SourceFile *, unsigned int> const &fileNumbers)
+  const {
+  auto appendToMapping = QStringList{};
+  for (auto const &destinationTrack : m_tracks) {
+    for (auto const &sourceTrack : destinationTrack->m_appendedTracks)
+      if (sourceTrack->m_muxThis && (sourceTrack->isAudio() || sourceTrack->isVideo() || sourceTrack->isSubtitles() || sourceTrack->isButtons()))
+        appendToMapping << Q("%1:%2:%3:%4").arg(fileNumbers.value(sourceTrack->m_file)).arg(sourceTrack->m_id).arg(fileNumbers.value(destinationTrack->m_file)).arg(destinationTrack->m_id);
+  }
+
+  return appendToMapping.isEmpty() ? QStringList{} : QStringList{} << Q("--append-to") << appendToMapping.join(Q(","));
+}
+
 QStringList
 MuxConfig::buildMkvmergeOptions()
   const {
@@ -225,6 +265,9 @@ MuxConfig::buildMkvmergeOptions()
 
   for (auto const &file : m_files)
     file->buildMkvmergeOptions(options);
+
+  for (auto const &attachment : m_attachments)
+    attachment->buildMkvmergeOptions(options);
 
   if (DoNotSplit != m_splitMode) {
     auto mode = SplitAfterSize      == m_splitMode ? Q("size:")
@@ -269,12 +312,9 @@ MuxConfig::buildMkvmergeOptions()
   if (!userDefinedOptions.isEmpty())
     options += userDefinedOptions.split(QRegExp{" +"});
 
-  // TODO: buildMkvmergeOptions track order
-  // TODO: buildMkvmergeOptions append mapping
-
-  for (auto const &attachment : m_attachments)
-    attachment->buildMkvmergeOptions(options);
-
+  auto fileNumbers  = buildFileNumbers();
+  options          += buildTrackOrder(fileNumbers);
+  options          += buildAppendToMapping(fileNumbers);
 
   return options;
 }

@@ -92,6 +92,11 @@ public:
 
   QStringList buildMkvmergeOptions() const;
 
+protected:
+  QHash<SourceFile *, unsigned int> buildFileNumbers() const;
+  QStringList buildTrackOrder(QHash<SourceFile *, unsigned int> const &fileNumbers) const;
+  QStringList buildAppendToMapping(QHash<SourceFile *, unsigned int> const &fileNumbers) const;
+
 public:
   static MuxConfigPtr loadSettings(QString const &fileName);
   static void saveProperties(QSettings &settings, QHash<QString, QString> const &properties);
