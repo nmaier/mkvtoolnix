@@ -97,7 +97,7 @@ MuxConfig::load(QSettings &settings) {
   QHash<qlonglong, Track *> objectIDToTrack;
   Loader l{settings, objectIDToSourceFile, objectIDToTrack};
 
-  loadSettingsGroup<SourceFile>("files",       m_files,       l);
+  loadSettingsGroup<SourceFile>("files",       m_files,       l, [](){ return std::make_shared<SourceFile>(); });
   loadSettingsGroup<Attachment>("attachments", m_attachments, l);
 
   settings.beginGroup("files");

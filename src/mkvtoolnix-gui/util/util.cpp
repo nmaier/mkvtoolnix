@@ -60,7 +60,7 @@ selectedIndexes(QAbstractItemView *view) {
         indexes << index;
       }
 
-  brng::sort(indexes);
+  std::sort(indexes.begin(), indexes.end());
 
   return indexes;
 }
