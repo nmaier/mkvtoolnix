@@ -7,6 +7,7 @@
 #include <QTreeView>
 
 #include "common/qt.h"
+#include "common/strings/editing.h"
 #include "mkvtoolnix-gui/util/util.h"
 
 namespace Util {
@@ -71,6 +72,101 @@ withSelectedIndexes(QAbstractItemView *view,
   for (auto const &range : view->selectionModel()->selection())
     for (auto const &index : range.indexes())
       worker(index);
+}
+
+static QString
+escape_mkvtoolnix(QString const &source) {
+  return to_qs(::escape(to_utf8(source)));
+}
+
+static QString
+unescape_mkvtoolnix(QString const &source) {
+  return to_qs(::unescape(to_utf8(source)));
+}
+
+static QString
+escape_shell_unix(QString const &source) {
+  if (!source.contains(QRegExp{"[^\\w%+,\\-./:=@]"}))
+    return source;
+
+  auto copy = source;
+  // ' -> '\''
+  copy.replace(QRegExp{"'"}, Q("'\\''"));
+
+  copy = Q("'%1'").arg(copy);
+  copy.replace(QRegExp{"^''"}, Q(""));
+  copy.replace(QRegExp{"''$"}, Q(""));
+
+  return copy;
+}
+
+static QString
+escape_shell_windows(QString const &source) {
+  if (!source.contains(QRegExp{"[\\w+,\\-./:=@]"}))
+    return source;
+
+  auto copy = QString{'"'};
+
+  for (auto it = source.begin(), end = source.end() ; ; ++it) {
+    QString::size_type numBackslashes = 0;
+
+    while ((it != end) && (*it == QChar{'\\'})) {
+      ++it;
+      ++numBackslashes;
+    }
+
+    if (it == end) {
+      copy += QString{numBackslashes * 2, QChar{'\\'}};
+      break;
+
+    } else if (*it == QChar{'"'})
+      copy += QString{numBackslashes * 2 + 1, QChar{'\\'}} + *it;
+
+    else
+      copy += QString{numBackslashes, QChar{'\\'}} + *it;
+  }
+
+  copy += QChar{'"'};
+
+  copy.replace(QRegExp{"([()%!^\"<>&|])"}, Q("^\\1"));
+
+  return copy;
+}
+
+QString
+escape(QString const &source,
+       EscapeMode mode) {
+  return EscapeMkvtoolnix == mode ? escape_mkvtoolnix(source)
+       : EscapeShellUnix  == mode ? escape_shell_unix(source)
+       :                            escape_shell_windows(source);
+}
+
+QString
+unescape(QString const &source,
+         EscapeMode mode) {
+  assert(EscapeMkvtoolnix == mode);
+
+  return unescape_mkvtoolnix(source);
+}
+
+QStringList
+escape(QStringList const &source,
+       EscapeMode mode) {
+  auto escaped = QStringList{};
+  for (auto const &string : source)
+    escaped << escape(string, mode);
+
+  return escaped;
+}
+
+QStringList
+unescape(QStringList const &source,
+         EscapeMode mode) {
+  auto unescaped = QStringList{};
+  for (auto const &string : source)
+    unescaped << unescape(string, mode);
+
+  return unescaped;
 }
 
 }
