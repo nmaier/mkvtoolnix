@@ -360,7 +360,7 @@ MergeWidget::onBrowseTimecodes() {
 }
 
 void
-MergeWidget::onfixBitstreamTimingInfoChanged(bool newValue) {
+MergeWidget::onFixBitstreamTimingInfoChanged(bool newValue) {
   withSelectedTracks([&](Track *track) { track->m_fixBitstreamTimingInfo = newValue; });
 }
 

@@ -75,7 +75,7 @@ public slots:
   virtual void onDefaultDurationEdited(QString newValue);
   virtual void onTimecodesEdited(QString newValue);
   virtual void onBrowseTimecodes();
-  virtual void onfixBitstreamTimingInfoChanged(bool newValue);
+  virtual void onFixBitstreamTimingInfoChanged(bool newValue);
   virtual void onBrowseTrackTags();
   virtual void onSetAspectRatio();
   virtual void onSetDisplayDimensions();
