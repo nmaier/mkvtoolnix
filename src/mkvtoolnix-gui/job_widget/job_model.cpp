@@ -31,8 +31,7 @@ JobModel::selectedJobs(QAbstractItemView *view)
   const {
   auto selectedIds = QMap<uint64_t, bool>{};
   Util::withSelectedIndexes(view, [&](QModelIndex const &idx) {
-      if (!idx.column())
-        selectedIds[ data(idx, Util::JobIdRole).value<uint64_t>() ] = true;
+      selectedIds[ data(idx, Util::JobIdRole).value<uint64_t>() ] = true;
     });
 
   QList<Job *> jobs;

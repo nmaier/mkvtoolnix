@@ -8,6 +8,7 @@
 #include <QStandardItemModel>
 #include <QIcon>
 #include <QList>
+#include <QSet>
 
 class TrackModel;
 typedef std::shared_ptr<TrackModel> TrackModelPtr;
@@ -29,15 +30,18 @@ public:
   virtual void setTracks(QList<Track *> &tracks);
   virtual void addTracks(QList<TrackPtr> const &tracks);
   virtual void appendTracks(SourceFile *fileToAppendTo, QList<TrackPtr> const &tracks);
+  virtual void removeTrack(Track *trackToBeRemoved);
+  virtual void removeTracks(QSet<Track *> const &tracks);
 
   virtual void trackUpdated(Track *track);
+
+  virtual Track *fromIndex(QModelIndex const &idx);
 
 protected:
   QList<QStandardItem *>createRow(Track *track);
   void setItemsFromTrack(QList<QStandardItem *> items, Track *track);
 
 public:                         // static
-  static Track *fromIndex(QModelIndex const &index);
   static int rowForTrack(QList<Track *> const &tracks, Track *trackToLookFor);
 };
 

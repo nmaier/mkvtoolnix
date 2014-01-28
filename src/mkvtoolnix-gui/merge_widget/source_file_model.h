@@ -8,6 +8,7 @@
 #include <QStandardItemModel>
 #include <QIcon>
 #include <QList>
+#include <QSet>
 
 class SourceFileModel;
 typedef std::shared_ptr<SourceFileModel> SourceFileModelPtr;
@@ -30,6 +31,10 @@ public:
   virtual void setTracksModel(TrackModel *tracksModel);
   virtual void addOrAppendFilesAndTracks(QModelIndex const &fileToAddToIdx, QList<SourceFilePtr> const &files, bool append);
   virtual void addAdditionalParts(QModelIndex const &fileToAddToIdx, QStringList const &fileNames);
+  virtual void removeFiles(QList<SourceFile *> const &files);
+  virtual void removeFile(SourceFile *fileToBeRemoved);
+
+  virtual SourceFile *fromIndex(QModelIndex const &idx);
 
 protected:
   virtual void addFilesAndTracks(QList<SourceFilePtr> const &files);
@@ -37,9 +42,6 @@ protected:
   virtual QModelIndex toTopLevelIdx(QModelIndex const &idx) const;
 
   QList<QStandardItem *> createRow(SourceFile *sourceFile) const;
-
-public:                         // static
-  static SourceFile *fromIndex(QModelIndex const &index);
 };
 
 Q_DECLARE_METATYPE(SourceFile *)

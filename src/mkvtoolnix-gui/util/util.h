@@ -15,6 +15,14 @@ class QVariant;
 
 namespace Util {
 
+template<typename Tstored, typename Tcontainer>
+int
+findPtr(Tstored *needle,
+        Tcontainer const &haystack) {
+  auto itr = brng::find_if(haystack, [&](std::shared_ptr<Tstored> const &cmp) { return cmp.get() == needle; });
+  return haystack.end() == itr ? -1 : std::distance(haystack.begin(), itr);
+}
+
 enum MtxGuiRoles {
   SourceFileRole = Qt::UserRole + 1,
   TrackRole,
@@ -25,7 +33,6 @@ QIcon loadIcon(QString const &name, QList<int> const &sizes);
 bool setComboBoxIndexIf(QComboBox *comboBox, std::function<bool(QString const &, QVariant const &)> test);
 void enableWidgets(QList<QWidget *> const &widgets, bool enable);
 void resizeViewColumnsToContents(QTreeView *view);
-QList<QModelIndex> selectedIndexes(QAbstractItemView *view);
 void withSelectedIndexes(QAbstractItemView *view, std::function<void(QModelIndex const &)> worker);
 
 enum EscapeMode {

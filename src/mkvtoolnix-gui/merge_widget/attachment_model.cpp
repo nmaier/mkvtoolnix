@@ -152,15 +152,16 @@ AttachmentModel::removeSelectedAttachments(QItemSelection const &selection) {
   if (selection.isEmpty())
     return;
 
-  std::vector<int> rowsToRemove;
+  auto rowsToRemove = QSet<int>{};
 
   for (auto &range : selection)
     for (auto &index : range.indexes())
-      rowsToRemove.push_back(index.row());
+      rowsToRemove << index.row();
 
-  brng::sort(rowsToRemove, std::greater<int>());
+  auto sortedRowsToRemove = rowsToRemove.toList();
+  std::sort(sortedRowsToRemove.begin(), sortedRowsToRemove.end(), std::greater<int>());
 
-  for (auto row : rowsToRemove | badap::uniqued)
+  for (auto row : rowsToRemove)
     removeRow(row);
 }
 

@@ -91,10 +91,12 @@ TrackModel::setItemsFromTrack(QList<QStandardItem *> items,
 }
 
 Track *
-TrackModel::fromIndex(QModelIndex const &index) {
-  if (index.isValid())
-    return index.data(Util::TrackRole).value<Track *>();
-  return nullptr;
+TrackModel::fromIndex(QModelIndex const &idx) {
+  if (!idx.isValid())
+    return nullptr;
+  return index(idx.row(), 0, idx.parent())
+    .data(Util::TrackRole)
+    .value<Track *>();
 }
 
 int
@@ -163,4 +165,39 @@ TrackModel::appendTracks(SourceFile *fileToAppendTo,
     newTrack->m_appendedTo->m_appendedTracks << newTrack.get();
     m_tracksToItems[ newTrack->m_appendedTo ]->appendRow(createRow(newTrack.get()));
   }
+}
+
+void
+TrackModel::removeTrack(Track *trackToBeRemoved) {
+  if (trackToBeRemoved->m_appendedTo) {
+    auto row            = trackToBeRemoved->m_appendedTo->m_appendedTracks.indexOf(trackToBeRemoved);
+    auto parentTrackRow = m_tracks->indexOf(trackToBeRemoved->m_appendedTo);
+
+    assert((-1 != row) && (-1 != parentTrackRow));
+
+    item(parentTrackRow)->removeRow(row);
+    trackToBeRemoved->m_appendedTo->m_appendedTracks.removeAt(row);
+
+    return;
+  }
+
+  auto row = m_tracks->indexOf(trackToBeRemoved);
+  assert(-1 != row);
+
+  invisibleRootItem()->removeRow(row);
+  m_tracks->removeAt(row);
+}
+
+void
+TrackModel::removeTracks(QSet<Track *> const &tracks) {
+  auto tracksToRemoveLast = QList<Track *>{};
+  for (auto const &trackToBeRemoved : tracks)
+    if (trackToBeRemoved->m_appendedTo)
+      removeTrack(trackToBeRemoved);
+    else
+      tracksToRemoveLast << trackToBeRemoved;
+
+  for (auto const &trackToBeRemoved : tracksToRemoveLast)
+    if (!trackToBeRemoved->m_appendedTo)
+      removeTrack(trackToBeRemoved);
 }

@@ -55,6 +55,7 @@ public slots:
   virtual void onAddFiles();
   virtual void onAddAdditionalParts();
   virtual void onAppendFiles();
+  virtual void onRemoveFiles();
   virtual void onRemoveAllFiles();
   virtual void onNew();
   virtual void onAddToJobQueue();
@@ -158,6 +159,8 @@ protected:
   virtual QString getSaveFileName(QString const &title, QString const &filter, QLineEdit *lineEdit);
 
   virtual QModelIndex selectedSourceFile() const;
+  virtual QList<SourceFile *> selectedSourceFiles() const;
+  virtual QList<Track *> selectedTracks() const;
 };
 
 #endif // MTX_MKVTOOLNIX_GUI_MERGE_WIDGET_MERGE_WIDGET_H

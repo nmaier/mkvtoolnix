@@ -57,14 +57,14 @@ SourceFileModel::createRow(SourceFile *sourceFile)
   auto info  = QFileInfo{sourceFile->m_fileName};
 
   items << new QStandardItem{info.fileName()};
-  items << new QStandardItem{sourceFile->m_additionalPart ? QY("(additional part)") : sourceFile->m_container};
+  items << new QStandardItem{sourceFile->isAdditionalPart() ? QY("(additional part)") : sourceFile->m_container};
   items << new QStandardItem{QString::number(info.size())};
   items << new QStandardItem{info.filePath()};
 
   items[0]->setData(QVariant::fromValue(sourceFile), Util::SourceFileRole);
-  items[0]->setIcon(  sourceFile->m_additionalPart ? m_additionalPartIcon
-                    : sourceFile->m_appended       ? m_addedIcon
-                    :                                m_normalIcon);
+  items[0]->setIcon(  sourceFile->isAdditionalPart() ? m_additionalPartIcon
+                    : sourceFile->isAppended()       ? m_addedIcon
+                    :                                  m_normalIcon);
 
   items[2]->setTextAlignment(Qt::AlignRight);
 
@@ -72,10 +72,12 @@ SourceFileModel::createRow(SourceFile *sourceFile)
 }
 
 SourceFile *
-SourceFileModel::fromIndex(QModelIndex const &index) {
-  if (index.isValid())
-    return index.data(Util::SourceFileRole).value<SourceFile *>();
-  return nullptr;
+SourceFileModel::fromIndex(QModelIndex const &idx) {
+  if (!idx.isValid())
+    return nullptr;
+  return index(idx.row(), 0, idx.parent())
+    .data(Util::SourceFileRole)
+    .value<SourceFile *>();
 }
 
 void
@@ -136,6 +138,73 @@ SourceFileModel::addFilesAndTracks(QList<SourceFilePtr> const &files) {
     invisibleRootItem()->appendRow(createRow(file.get()));
 
   m_tracksModel->addTracks(std::accumulate(files.begin(), files.end(), QList<TrackPtr>{}, [](QList<TrackPtr> &accu, SourceFilePtr const &file) { return accu << file->m_tracks; }));
+}
+
+void
+SourceFileModel::removeFile(SourceFile *fileToBeRemoved) {
+  if (fileToBeRemoved->isAdditionalPart()) {
+    auto row           = Util::findPtr(fileToBeRemoved,               fileToBeRemoved->m_appendedTo->m_additionalParts);
+    auto parentFileRow = Util::findPtr(fileToBeRemoved->m_appendedTo, *m_sourceFiles);
+
+    assert((-1 != row) && (-1 != parentFileRow));
+
+    item(parentFileRow)->removeRow(row);
+    fileToBeRemoved->m_appendedTo->m_additionalParts.removeAt(row);
+
+    return;
+  }
+
+  if (fileToBeRemoved->isAppended()) {
+    auto row           = Util::findPtr(fileToBeRemoved,               fileToBeRemoved->m_appendedTo->m_appendedFiles);
+    auto parentFileRow = Util::findPtr(fileToBeRemoved->m_appendedTo, *m_sourceFiles);
+
+    assert((-1 != row) && (-1 != parentFileRow));
+
+    item(parentFileRow)->removeRow(row);
+    fileToBeRemoved->m_appendedTo->m_appendedFiles.removeAt(row);
+
+    return;
+  }
+
+  auto row = Util::findPtr(fileToBeRemoved, *m_sourceFiles);
+  assert(-1 != row);
+
+  invisibleRootItem()->removeRow(row);
+  m_sourceFiles->removeAt(row);
+}
+
+void
+SourceFileModel::removeFiles(QList<SourceFile *> const &files) {
+  auto filesToRemove  = files.toSet();
+  auto tracksToRemove = QSet<Track *>{};
+
+  mxinfo(boost::format("about to remove\n"));
+
+  for (auto const &file : files) {
+    for (auto const &track : file->m_tracks)
+      tracksToRemove << track.get();
+
+    for (auto const &appendedFile : file->m_appendedFiles) {
+      filesToRemove << appendedFile.get();
+      for (auto const &track : appendedFile->m_tracks)
+        tracksToRemove << track.get();
+    }
+  }
+
+  // TODO: SourceFileModel::removeFiles re-distribute orphaned tracks
+
+  m_tracksModel->removeTracks(tracksToRemove);
+
+  auto filesToRemoveLast = QList<SourceFile *>{};
+  for (auto &file : filesToRemove)
+    if (!file->isRegular())
+      removeFile(file);
+    else
+      filesToRemoveLast << file;
+
+  for (auto &file : filesToRemoveLast)
+    if (file->isRegular())
+      removeFile(file);
 }
 
 QModelIndex

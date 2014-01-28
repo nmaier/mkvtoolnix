@@ -35,9 +35,9 @@ SourceFile::SourceFile(QString const &fileName)
   , m_additionalParts{}
   , m_appendedFiles{}
   , m_type{FILE_TYPE_IS_UNKNOWN}
-  , m_appended{false}
-  , m_additionalPart{false}
-  , m_appendedTo{nullptr}
+  , m_appended{}
+  , m_additionalPart{}
+  , m_appendedTo{}
 {
 
 }
@@ -48,26 +48,26 @@ SourceFile::~SourceFile() {
 bool
 SourceFile::isValid()
   const {
-  return !m_container.isEmpty() || m_additionalPart;
+  return !m_container.isEmpty() || isAdditionalPart();
 }
 
 
 bool
 SourceFile::isRegular()
   const {
-  return !m_appended;
+  return !m_appended && !m_additionalPart;
 }
 
 bool
 SourceFile::isAppended()
   const {
-  return m_appended && m_additionalPart;
+  return m_appended;
 }
 
 bool
 SourceFile::isAdditionalPart()
   const {
-  return m_appended && !m_additionalPart;
+  return m_additionalPart;
 }
 
 bool
@@ -153,14 +153,15 @@ SourceFile::loadSettings(MuxConfig::Loader &l) {
 
 void
 SourceFile::fixAssociations(MuxConfig::Loader &l) {
-  if (m_appended || m_additionalPart) {
+  if (isRegular())
+    m_appendedTo = nullptr;
+
+  else {
     auto appendedToID = reinterpret_cast<qlonglong>(m_appendedTo);
     if ((0 >= appendedToID) || !l.objectIDToSourceFile.contains(appendedToID))
       throw mtx::InvalidSettingsX{};
     m_appendedTo = l.objectIDToSourceFile.value(appendedToID);
-
-  } else
-    m_appendedTo = nullptr;
+  }
 
   for (auto &track : m_tracks)
     track->m_file = this;
@@ -180,7 +181,7 @@ SourceFile::findFirstTrackOfType(Track::Type type)
 void
 SourceFile::buildMkvmergeOptions(QStringList &options)
   const {
-  assert(!m_additionalPart);
+  assert(!isAdditionalPart());
 
   auto opt = MkvmergeOptionBuilder{};
 

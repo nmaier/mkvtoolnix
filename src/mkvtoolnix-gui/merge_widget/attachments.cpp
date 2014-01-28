@@ -42,11 +42,7 @@ MergeWidget::withSelectedAttachments(std::function<void(Attachment *)> code) {
   if (m_currentlySettingInputControlValues)
     return;
 
-  auto selection = ui->attachments->selectionModel()->selection();
-  if (selection.isEmpty())
-    return;
-
-  for (auto &indexRange : selection) {
+  for (auto &indexRange : ui->attachments->selectionModel()->selection()) {
     auto idxs = indexRange.indexes();
     if (idxs.isEmpty() || !idxs.at(0).isValid())
       continue;

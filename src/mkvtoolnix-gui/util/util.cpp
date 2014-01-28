@@ -49,29 +49,18 @@ resizeViewColumnsToContents(QTreeView *view) {
     view->resizeColumnToContents(column);
 }
 
-QList<QModelIndex>
-selectedIndexes(QAbstractItemView *view) {
-  auto indexes  = QList<QModelIndex>{};
-  auto indexMap = QMap<QModelIndex, bool>{};
-
-  for (auto const &range : view->selectionModel()->selection())
-    for (auto const &index : range.indexes())
-      if (!indexMap[index]) {
-        indexMap[index] = true;
-        indexes << index;
-      }
-
-  std::sort(indexes.begin(), indexes.end());
-
-  return indexes;
-}
-
 void
 withSelectedIndexes(QAbstractItemView *view,
                     std::function<void(QModelIndex const &)> worker) {
+  auto rowsSeen = QSet<int>{};
   for (auto const &range : view->selectionModel()->selection())
-    for (auto const &index : range.indexes())
-      worker(index);
+    for (auto const &index : range.indexes()) {
+      auto row = index.row();
+      if (rowsSeen.contains(row))
+        continue;
+      rowsSeen << row;
+      worker(index.sibling(row, 0));
+    }
 }
 
 static QString

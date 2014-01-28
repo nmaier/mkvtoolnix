@@ -113,7 +113,7 @@ MergeWidget::setupInputControls() {
   connect(m_addFilesAction,           SIGNAL(triggered()), this, SLOT(onAddFiles()));
   connect(m_appendFilesAction,        SIGNAL(triggered()), this, SLOT(onAppendFiles()));
   connect(m_addAdditionalPartsAction, SIGNAL(triggered()), this, SLOT(onAddAdditionalParts()));
-  // connect(m_removeFilesAction,        SIGNAL(triggered()), this, SLOT(onRemoveFiles()));
+  connect(m_removeFilesAction,        SIGNAL(triggered()), this, SLOT(onRemoveFiles()));
   connect(m_removeAllFilesAction,     SIGNAL(triggered()), this, SLOT(onRemoveAllFiles()));
 
   onTrackSelectionChanged();
@@ -144,7 +144,7 @@ MergeWidget::onTrackSelectionChanged() {
   if (idxs.isEmpty() || !idxs[0].isValid())
     return;
 
-  auto track = TrackModel::fromIndex(idxs[0]);
+  auto track = m_tracksModel->fromIndex(idxs[0]);
   if (!track)
     return;
 
@@ -227,6 +227,32 @@ MergeWidget::setInputControlValues(Track *track) {
   m_currentlySettingInputControlValues = false;
 }
 
+QList<SourceFile *>
+MergeWidget::selectedSourceFiles()
+  const {
+  auto sourceFiles = QList<SourceFile *>{};
+  Util::withSelectedIndexes(ui->files, [&sourceFiles, this](QModelIndex const &idx) {
+      auto sourceFile = m_filesModel->fromIndex(idx);
+      if (sourceFile)
+        sourceFiles << sourceFile;
+    });
+
+  return sourceFiles;
+}
+
+QList<Track *>
+MergeWidget::selectedTracks()
+  const {
+  auto tracks = QList<Track *>{};
+  Util::withSelectedIndexes(ui->tracks, [&tracks, this](QModelIndex const &idx) {
+      auto track = m_tracksModel->fromIndex(idx);
+      if (track)
+        tracks << track;
+    });
+
+  return tracks;
+}
+
 void
 MergeWidget::withSelectedTracks(std::function<void(Track *)> code,
                                 bool notIfAppending,
@@ -234,8 +260,8 @@ MergeWidget::withSelectedTracks(std::function<void(Track *)> code,
   if (m_currentlySettingInputControlValues)
     return;
 
-  auto selection = ui->tracks->selectionModel()->selection();
-  if (selection.isEmpty())
+  auto tracks = selectedTracks();
+  if (tracks.isEmpty())
     return;
 
   if (!widget)
@@ -247,13 +273,8 @@ MergeWidget::withSelectedTracks(std::function<void(Track *)> code,
   bool withChapters  = m_chapterControls.contains(widget);
   bool withAll       = m_typeIndependantControls.contains(widget);
 
-  for (auto &indexRange : selection) {
-    auto idxs = indexRange.indexes();
-    if (idxs.isEmpty() || !idxs[0].isValid())
-      continue;
-
-    auto track = TrackModel::fromIndex(idxs[0]);
-    if (!track || (track->m_appendedTo && notIfAppending))
+  for (auto &track : tracks) {
+    if (track->m_appendedTo && notIfAppending)
       continue;
 
     if (   withAll
@@ -452,7 +473,7 @@ MergeWidget::onAddFiles() {
 
 void
 MergeWidget::onAppendFiles() {
-  // auto selectedFile = SourceFileModel::fromIndex(selectedSourceFile());
+  // auto selectedFile = m_filesModel->fromIndex(selectedSourceFile());
   // if (selectedFile && !selectedFile->m_tracks.size()) {
   //   QMessageBox::critical(this, QY("Unable to append files"), QY("You cannot append tracks or add additional parts to files that contain tracks."));
   //   return;
@@ -500,13 +521,24 @@ MergeWidget::selectFilesToAdd(QString const &title) {
 void
 MergeWidget::onAddAdditionalParts() {
   auto currentIdx = selectedSourceFile();
-  auto sourceFile = SourceFileModel::fromIndex(currentIdx);
+  auto sourceFile = m_filesModel->fromIndex(currentIdx);
   if (sourceFile && !sourceFile->m_tracks.size()) {
     QMessageBox::critical(this, QY("Unable to append files"), QY("You cannot append tracks or add additional parts to files that contain tracks."));
     return;
   }
 
   m_filesModel->addAdditionalParts(currentIdx, selectFilesToAdd(QY("Add media files as additional parts")));
+}
+
+void
+MergeWidget::onRemoveFiles() {
+  auto selectedFiles = selectedSourceFiles();
+  if (selectedFiles.isEmpty())
+    return;
+
+  m_filesModel->removeFiles(selectedFiles);
+
+  reinitFilesTracksControls();
 }
 
 void
@@ -573,5 +605,6 @@ MergeWidget::retranslateInputUI() {
 QModelIndex
 MergeWidget::selectedSourceFile()
   const {
-  return ui->files->selectionModel()->currentIndex();
+  auto idx = ui->files->selectionModel()->currentIndex();
+  return m_filesModel->index(idx.row(), 0, idx.parent());
 }
