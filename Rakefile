@@ -34,6 +34,7 @@ require_relative "rake.d/helpers"
 require_relative "rake.d/target"
 require_relative "rake.d/application"
 require_relative "rake.d/library"
+require_relative "rake.d/format_string_verifier"
 require_relative 'rake.d/gtest' if $have_gtest
 
 def setup_globals
@@ -333,10 +334,20 @@ EOT
 
   desc "Verify format strings in translations"
   task "verify-format-strings" do
-    files = $available_languages[:applications].collect { |language| "po/#{language}.po" }.join(' ')
-    runq 'VERIFY', <<-COMMAND
-      ./src/scripts/verify_format_srings_in_translations.rb #{files}
-    COMMAND
+    is_ok = true
+
+    languages = (ENV['LANGUAGES'] || '').split(/ +/)
+    languages = $available_languages[:applications] if languages.empty?
+
+    languages.
+      collect { |language| "po/#{language}.po" }.
+      sort.
+      each do |file_name|
+      puts "VERIFY #{file_name}"
+      is_ok &&= FormatStringVerifier.new.verify file_name
+    end
+
+    exit 1 if !is_ok
   end
 
   [ :applications, :manpages, :guides ].each { |type| task type => $translations[type] }
@@ -363,7 +374,7 @@ EOT
         task language => "po/mkvtoolnix.pot" do |t|
           po       = "po/#{language}.po"
           tmp_file = "#{po}.new"
-          no_wrap  = %{es it}.include?(language) ? "" : "--no-wrap"
+          no_wrap  = %{es eu it}.include?(language) ? "" : "--no-wrap"
           runq "MSGMERGE #{po}", "msgmerge -q -s #{no_wrap} #{po} po/mkvtoolnix.pot > #{tmp_file}", :allow_failure => true
 
           exit_code = last_exit_code

@@ -69,6 +69,7 @@ Page custom showExternalLinks
   !insertmacro LANG_STRING "un.${NAME}" "${VALUE}"
 !macroend
 
+!insertmacro LANG_LOAD "Basque"
 !insertmacro LANG_LOAD "Czech"
 !insertmacro LANG_LOAD "Dutch"
 !insertmacro LANG_LOAD "English"

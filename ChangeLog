@@ -1,3 +1,33 @@
+2014-01-22  Moritz Bunkus  <moritz@bunkus.org>
+
+        * all: Windows 64bit: fixed return value checks for opening
+        files. Fixes #972.
+
+2014-01-21  Moritz Bunkus  <moritz@bunkus.org>
+
+        * all: Windows: when redirecting the program's output with cmd.exe
+        (e.g. »mkvinfo file.mkv > info.txt«) the programs will no longer
+        write two line feed characters (\r) per carriage return character
+        (\n). Fixes #970.
+
+        * all: Windows: the default charset for the files created with
+        »--redirect-output« has been changed from the system's local
+        charset to UTF-8. Just like before it can be changed with
+        »--output-charset«. See #970.
+
+        * all: bug fix: Windows: messages written to the console (cmd.exe)
+        are not re-encoded to the local charset and back to UTF-16 before
+        they're handed over to ConsoleWriteW(). This fixes outputting
+        Unicode characters to the console that are not part of the local
+        charset. Fixes #971.
+
+2014-01-18  Moritz Bunkus  <moritz@bunkus.org>
+
+        * extract: bug fix: using names of non-existing files in
+        »attachments«, »chapters«, »cuesheet« or »tags« mode caused
+        mkvextract to crash instead of emitting a proper error
+        message. Fixes #964.
+
 2014-01-17  Moritz Bunkus  <moritz@bunkus.org>
 
         * mmg: bug fix: fixed the check for WebM-compatible track types

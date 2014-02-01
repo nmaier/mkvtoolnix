@@ -1611,19 +1611,57 @@ AAC、AC3、MP3、SRT、及びWAVファイル: ファイル中の唯一のトラ
 このセクションは、暗黙のうちに\fBmkvmerge\fR(1)だけでなくMKVToolNixの全てのプログラムにあてはまります。
 .sp .5v
 .RE
+.SS "はじめに"
 .PP
 Matroska(TM)ファイルに格納されているテキストの文字コードは全てUTF\-8です。よって、\fBmkvmerge\fR(1)がテキストファイルを読み込む際には全てをUTF\-8に文字コード変換する必要があります。代わりに、\fBmkvmerge\fR(1)が例えば\fB\-\-ui\-language\fRによって非英語翻訳が使用される際や、Matroska(TM)ファイルに格納されていたテキストを出力する際には、UTF\-8から指定された文字コードに変換すればよいということになります。
 .PP
 \fBmkvmerge\fR(1)はこの変換をバイト・オーダー・マーク(BOM)の有無、又はシステムのロケールに基づいて自動的に行ないます。ロケールからどのように文字コードが推測されるかは、\fBmkvmerge\fR(1)を実行するシステムに依存します。
+.SS "Byte order markers (BOM)"
 .PP
 BOMで始まるテキストファイルは、既にUTFエンコーディングの一種でエンコードされています。\fBmkvmerge\fR(1)はUTF\-8、UTF\-16リトルエンディアン及びビッグエンディアン、UTF\-32リトルエンディアン及びビッグエンディアンの五つのモードをサポートします。BOMで始まるテキストファイルは自動的にUTF\-8に変換されます。この場合、テキストファイルの文字コードを指定するパラメータ(例:
 \fB\-\-sub\-charset\fR)は全て黙殺されます。
+.SS "Linux and Unix\-like systems including Mac OS"
 .PP
 UNIX系システム上では、\fBmkvmerge\fR(1)は\fBsetlocale\fR(3)システムコールを使うので、\fILANG\fR、\fILC_ALL\fR及び\fILC_CYPE\fR環境変数を使用します。大抵は、UTF\-8かISO\-8859\-*ファミリのどれかが全てのテキストファイルとコマンドライン文字列の処理、及びコンソールへの出力の文字コードとして使用されます。
+.SS "Windows"
 .PP
-Windowsでは、\fBcmd\&.exe\fRWindowsシェルプログラムの実装方式のために、\fBmkvmerge\fR(1)は実は二つの異なる文字コードを使用します。一つ目は\fBGetACP()\fRシステムコールによって決定される文字コードです。この文字コードはテキストファイル変換にデフォルトで使用され、MKVToolNixパッケージに含まれるGUIプログラムで表示される全ての文字列に適用されます。
+On Windows the default character set used for converting text files is determined by a call to the
+\fBGetACP()\fR
+system call\&.
 .PP
-\fBcmd\&.exe\fRを使用した場合、もう1つの文字コードが使用されるかもしれません。しかし、コマンドラインの読み込みは、既にユニコード文字列を返している\fBGetCommandLineW()\fR関数によってなされます。よって、\fB\-\-command\-line\-charset\fRオプションはWindowsでは無視されます。コンソールへの出力は\fBWriteConsoleW()\fR関数によってなされます。よって、\fB\-\-output\-charset\fRオプションは、Windows上では\fB\-\-redirect\-output\fRで出力がリダイレクトされた場合のみ使用されます。
+Reading the command line is done with the
+\fBGetCommandLineW()\fR
+function which already returns a Unicode string\&. Therefore the option
+\fB\-\-command\-line\-charset\fR
+is ignored on Windows\&.
+.PP
+Output to the console consists of three scenarios:
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 1.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  1." 4.2
+.\}
+If the output is redirected with the option
+\fB\-\-redirect\-output\fR
+then the default charset is UTF\-8\&. This can be changed with
+\fB\-\-output\-charset\fR\&.
+.sp
+If the output is redirected with
+\fBcmd\&.exe\fR
+itself, e\&.g\&. with
+mkvinfo file\&.mkv > info\&.txt, then the charset is always UTF\-8 and cannot be changed\&.
+.sp
+Otherwise (when writing directly to the console) the Windows function
+\fBWriteConsoleW()\fR
+is used and the option
+\fB\-\-output\-charset\fR
+is ignored\&. The console should be able to output all Unicode characters for which the corresponding language support is installed (e\&.g\&. Chinese characters might not be displayed on English Windows versions)\&.
+.RE
+.SS "Command line options"
 .PP
 次のような文字コードを指定するオプションがあります。
 .sp
@@ -1668,7 +1706,15 @@ Windowsでは、\fBcmd\&.exe\fRWindowsシェルプログラムの実装方式の
 .sp -1
 .IP \(bu 2.3
 .\}
-\fB\-\-output\-charset\fRはコンソールに出力される文字列の文字コード及び、\fB\-\-redirect\-output\fRオプションによりファイルに出力がリダイレクトされている場合、そのファイルの文字列の文字コードを指定します。
+\fB\-\-output\-charset\fR
+for all strings written to the console or to a file if the output has been redirected with the
+\fB\-\-redirect\-output\fR
+option\&. On non\-Windows systems the default for the output charset is the system\*(Aqs current charset\&. On Windows it defaults to UTF\-8 both for redirecting with
+\fB\-\-redirect\-output\fR
+and with
+\fBcmd\&.exe\fR
+itself, e\&.g\&.
+mkvinfo file\&.mkv > info\&.txt\&.
 .RE
 .SH "オプションファイル："
 .PP

@@ -548,6 +548,11 @@ $ mkvpropedit movie\&.mkv \-\-delete\-attachment mime\-type:application/x\-truet
 \fB2\fR
 \-\- この返り値は、エラーが発生し、エラーメッセージを表示した直後に\fBmkvpropedit\fR(1)が終了したことを示します。エラーメッセージは不正なコマンドラインやファイルI/Oエラー、壊れたファイルなど様々です。
 .RE
+.SH "テキストファイルと文字コード変換"
+.PP
+For an in\-depth discussion about how all tools in the MKVToolNix suite handle character set conversions, input/output encoding, command line encoding and console encoding please see the identically\-named section in the
+\fBmkvmerge\fR(1)
+man page\&.
 .SH "テキスト中の特殊文字をエスケープする"
 .PP
 特殊文字をエスケープしなければならない、あるいはすべき場所が少しだけあります。エスケープのルールは単純です：エスケープする必要のある各文字を、バックスラッシュ（Windows上の日本語フォントでは\e記号）の後ろに違う文字が1つついたものと入れ替えます。

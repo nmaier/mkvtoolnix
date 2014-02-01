@@ -16,7 +16,9 @@
 #if defined(SYS_WINDOWS)
 
 #include <direct.h>
+#include <fcntl.h>
 #include <errno.h>
+#include <io.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -78,7 +80,7 @@ mm_file_io_c::mm_file_io_c(const std::string &path,
     prepare_path(path);
 
   m_file = (void *)CreateFileUtf8(path.c_str(), access_mode, share_mode, nullptr, disposition, 0, nullptr);
-  if ((HANDLE)m_file == (HANDLE)0xFFFFFFFF)
+  if (static_cast<HANDLE>(m_file) == INVALID_HANDLE_VALUE)
     throw mtx::mm_io::open_x{mtx::mm_io::make_error_code()};
 
   m_dos_style_newlines = true;
@@ -205,6 +207,8 @@ void
 mm_file_io_c::setup() {
 }
 
+static bool s_stdout_binmode_set = false;
+
 size_t
 mm_stdio_c::_write(const void *buffer,
                    size_t size) {
@@ -220,12 +224,17 @@ mm_stdio_c::_write(const void *buffer,
   }
 
   if (is_console) {
-    const std::wstring &w = to_wide(g_cc_stdio->utf8(std::string(static_cast<const char *>(buffer), size)));
+    const std::wstring &w = to_wide(std::string(static_cast<const char *>(buffer), size));
     DWORD bytes_written   = 0;
 
     WriteConsoleW(h_stdout, w.c_str(), w.length(), &bytes_written, nullptr);
 
     return bytes_written;
+  }
+
+  if (!s_stdout_binmode_set) {
+    _setmode(1, _O_BINARY);
+    s_stdout_binmode_set = true;
   }
 
   size_t bytes_written = fwrite(buffer, 1, size, stdout);
