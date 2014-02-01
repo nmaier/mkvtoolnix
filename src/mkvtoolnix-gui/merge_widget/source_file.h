@@ -8,6 +8,7 @@
 #include "mkvtoolnix-gui/merge_widget/mux_config.h"
 #include "mkvtoolnix-gui/merge_widget/track.h"
 
+#include <QFileInfo>
 #include <QHash>
 #include <QList>
 #include <QObject>
@@ -24,10 +25,13 @@ public:
   QString m_fileName, m_container;
   QList<TrackPtr> m_tracks;
   QList<SourceFilePtr> m_additionalParts, m_appendedFiles;
+  QList<QFileInfo> m_playlistFiles;
 
   file_type_e m_type;
-  bool m_appended, m_additionalPart;
+  bool m_appended, m_additionalPart, m_isPlaylist;
   SourceFile *m_appendedTo;
+
+  uint64_t m_playlistDuration, m_playlistSize, m_playlistChapters;
 
 public:
   explicit SourceFile(QString const &fileName = QString{""});
@@ -38,6 +42,7 @@ public:
   virtual bool isRegular() const;
   virtual bool isAppended() const;
   virtual bool isAdditionalPart() const;
+  virtual bool isPlaylist() const;
   virtual bool hasRegularTrack() const;
 
   virtual void saveSettings(QSettings &settings) const;

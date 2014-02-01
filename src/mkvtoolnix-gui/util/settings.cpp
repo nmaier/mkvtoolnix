@@ -22,11 +22,13 @@ Settings::load() {
   QSettings reg;
 
   reg.beginGroup("settings");
-  m_mkvmergeExe   = reg.value("mkvmergeExe", "mkvmerge").toString();
-  m_priority      = static_cast<process_priority_e>(reg.value("priority", static_cast<int>(priority_normal)).toInt());
-  m_lastOpenDir   = QDir{reg.value("lastOpenDir").toString()};
-  m_lastOutputDir = QDir{reg.value("lastOutputDir").toString()};
-  m_lastConfigDir = QDir{reg.value("lastConfigDir").toString()};
+  m_mkvmergeExe             = reg.value("mkvmergeExe", "mkvmerge").toString();
+  m_priority                = static_cast<ProcessPriority>(reg.value("priority", static_cast<int>(NormalPriority)).toInt());
+  m_lastOpenDir             = QDir{reg.value("lastOpenDir").toString()};
+  m_lastOutputDir           = QDir{reg.value("lastOutputDir").toString()};
+  m_lastConfigDir           = QDir{reg.value("lastConfigDir").toString()};
+  m_scanForPlaylistsPolicy  = static_cast<ScanForPlaylistsPolicy>(reg.value("scanForPlaylistsPolicy", static_cast<int>(AskBeforeScanning)).toInt());
+  m_minimumPlaylistDuration = reg.value("minimumPlaylistDuration", 120).toUInt();
   reg.endGroup();
 
   reg.beginGroup("features");
@@ -45,11 +47,13 @@ Settings::save()
   QSettings reg;
 
   reg.beginGroup("settings");
-  reg.setValue("mkvmergeExe",   m_mkvmergeExe);
-  reg.setValue("priority",      static_cast<int>(m_priority));
-  reg.setValue("lastOpenDir",   m_lastOpenDir.path());
-  reg.setValue("lastOutputDir", m_lastOutputDir.path());
-  reg.setValue("lastConfigDir", m_lastConfigDir.path());
+  reg.setValue("mkvmergeExe",             m_mkvmergeExe);
+  reg.setValue("priority",                static_cast<int>(m_priority));
+  reg.setValue("lastOpenDir",             m_lastOpenDir.path());
+  reg.setValue("lastOutputDir",           m_lastOutputDir.path());
+  reg.setValue("lastConfigDir",           m_lastConfigDir.path());
+  reg.setValue("scanForPlaylistsPolicy",  static_cast<int>(m_scanForPlaylistsPolicy));
+  reg.setValue("minimumPlaylistDuration", m_minimumPlaylistDuration);
   reg.endGroup();
 
   reg.beginGroup("features");

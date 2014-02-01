@@ -18,6 +18,7 @@
 
 #define Q(s)  to_qs(s)
 #define QY(s) to_qs(Y(s))
+#define QNY(singular, plural, count) to_qs(NY(singular, plural, count))
 
 inline QString
 to_qs(std::string const &source) {

@@ -4,6 +4,7 @@
 #include "common/iso639.h"
 #include "common/qt.h"
 #include "common/stereo_mode.h"
+#include "mkvtoolnix-gui/merge_widget/ask_scan_for_playlists_dialog.h"
 #include "mkvtoolnix-gui/merge_widget/merge_widget.h"
 #include "mkvtoolnix-gui/forms/merge_widget.h"
 #include "mkvtoolnix-gui/util/file_identifier.h"
@@ -495,6 +496,9 @@ MergeWidget::addOrAppendFiles(bool append) {
       identifiedFiles << identifier.file();
   }
 
+  if (!append)
+    checkAddingPlaylists(identifiedFiles);
+
   if (identifiedFiles.isEmpty())
     return;
 
@@ -509,6 +513,7 @@ MergeWidget::selectFilesToAdd(QString const &title) {
   dlg.setFileMode(QFileDialog::ExistingFiles);
   dlg.setDirectory(Settings::get().m_lastOpenDir);
   dlg.setWindowTitle(title);
+  dlg.setOptions(QFileDialog::HideNameFilterDetails);
 
   if (!dlg.exec())
     return QStringList{};
@@ -607,4 +612,40 @@ MergeWidget::selectedSourceFile()
   const {
   auto idx = ui->files->selectionModel()->currentIndex();
   return m_filesModel->index(idx.row(), 0, idx.parent());
+}
+
+void
+MergeWidget::checkAddingPlaylists(QList<SourceFilePtr> &files) {
+  if (Settings::NeverScan == Settings::get().m_scanForPlaylistsPolicy)
+    return;
+
+  for (auto &file : files) {
+    if (!file->isPlaylist())
+      continue;
+
+    auto info       = QFileInfo{file->m_fileName};
+    auto otherFiles = QDir{info.path()}.entryInfoList(QStringList{QString{"*.%1"}.arg(info.suffix())}, QDir::Files, QDir::Name);
+    if (otherFiles.isEmpty())
+      continue;
+
+    auto doScan = (Settings::AlwaysScan == Settings::get().m_scanForPlaylistsPolicy);
+    if (!doScan)
+      doScan = askScanForPlaylists(*file, otherFiles.size());
+
+    if (doScan)
+      scanForPlaylists(file, otherFiles);
+  }
+}
+
+bool
+MergeWidget::askScanForPlaylists(SourceFile const &file,
+                                 unsigned int numOtherFiles) {
+
+  AskScanForPlaylistsDialog dialog{this};
+  return dialog.ask(file, numOtherFiles);
+}
+
+void
+MergeWidget::scanForPlaylists(SourceFilePtr &/*file*/,
+                              QFileInfoList const &/*otherFiles*/) {
 }

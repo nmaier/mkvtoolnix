@@ -37,7 +37,11 @@ SourceFile::SourceFile(QString const &fileName)
   , m_type{FILE_TYPE_IS_UNKNOWN}
   , m_appended{}
   , m_additionalPart{}
+  , m_isPlaylist{}
   , m_appendedTo{}
+  , m_playlistDuration{}
+  , m_playlistSize{}
+  , m_playlistChapters{}
 {
 
 }
@@ -68,6 +72,12 @@ bool
 SourceFile::isAdditionalPart()
   const {
   return m_additionalPart;
+}
+
+bool
+SourceFile::isPlaylist()
+  const {
+  return m_isPlaylist;
 }
 
 bool
@@ -118,13 +128,23 @@ SourceFile::saveSettings(QSettings &settings)
   saveSettingsGroup("additionalParts", m_additionalParts, settings);
   saveSettingsGroup("appendedFiles",   m_appendedFiles,   settings);
 
-  settings.setValue("objectID",       reinterpret_cast<qlonglong>(this));
-  settings.setValue("fileName",       m_fileName);
-  settings.setValue("container",      m_container);
-  settings.setValue("type",           m_type);
-  settings.setValue("appended",       m_appended);
-  settings.setValue("additionalPart", m_additionalPart);
-  settings.setValue("appendedTo",     reinterpret_cast<qlonglong>(m_appendedTo));
+  settings.setValue("objectID",        reinterpret_cast<qlonglong>(this));
+  settings.setValue("fileName",        m_fileName);
+  settings.setValue("container",       m_container);
+  settings.setValue("type",            m_type);
+  settings.setValue("appended",        m_appended);
+  settings.setValue("additionalPart",  m_additionalPart);
+  settings.setValue("appendedTo",      reinterpret_cast<qlonglong>(m_appendedTo));
+
+  auto playlistFiles = QStringList{};
+  for (auto const &playlistFile : m_playlistFiles)
+    playlistFiles << playlistFile.filePath();
+
+  settings.setValue("isPlaylist",       m_isPlaylist);
+  settings.setValue("playlistFiles",    playlistFiles);
+  settings.setValue("playlistDuration", static_cast<qulonglong>(m_playlistDuration));
+  settings.setValue("playlistSize",     static_cast<qulonglong>(m_playlistSize));
+  settings.setValue("playlistChapters", static_cast<qulonglong>(m_playlistChapters));
 }
 
 void
@@ -140,6 +160,16 @@ SourceFile::loadSettings(MuxConfig::Loader &l) {
   m_appended                       = l.settings.value("appended").toBool();
   m_additionalPart                 = l.settings.value("additionalPart").toBool();
   m_appendedTo                     = reinterpret_cast<SourceFile *>(l.settings.value("appendedTo").toLongLong());
+
+  m_isPlaylist                     = l.settings.value("isPlaylist").toBool();
+  auto playlistFiles               = l.settings.value("playlistFiles").toStringList();
+  m_playlistDuration               = l.settings.value("playlistDuration").toULongLong();
+  m_playlistSize                   = l.settings.value("playlistSize").toULongLong();
+  m_playlistChapters               = l.settings.value("playlistChapters").toULongLong();
+
+  m_playlistFiles.clear();
+  for (auto const &playlistFile : playlistFiles)
+    m_playlistFiles << QFileInfo{playlistFile};
 
   if ((FILE_TYPE_IS_UNKNOWN > m_type) || (FILE_TYPE_MAX < m_type))
     throw mtx::InvalidSettingsX{};

@@ -9,18 +9,27 @@
 class Settings: public QObject {
   Q_OBJECT;
 public:
-  enum process_priority_e {
-    priority_lowest = 0,
-    priority_low,
-    priority_normal,
-    priority_high,
-    priority_highest,
+  enum ProcessPriority {
+    LowestPriority = 0,
+    LowPriority,
+    NormalPriority,
+    HighPriority,
+    HighestPriority,
+  };
+
+  enum ScanForPlaylistsPolicy {
+    AskBeforeScanning = 0,
+    AlwaysScan,
+    NeverScan,
   };
 
   QString m_mkvmergeExe, m_defaultTrackLanguage;
-  process_priority_e m_priority;
+  ProcessPriority m_priority;
   QDir m_lastOpenDir, m_lastOutputDir, m_lastConfigDir;
   bool m_setAudioDelayFromFileName, m_disableAVCompression;
+
+  ScanForPlaylistsPolicy m_scanForPlaylistsPolicy;
+  unsigned int m_minimumPlaylistDuration;
 
 public:
   Settings();

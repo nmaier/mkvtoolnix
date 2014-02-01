@@ -3,6 +3,7 @@
 #include <QComboBox>
 #include <QIcon>
 #include <QList>
+#include <QPushButton>
 #include <QString>
 #include <QTreeView>
 
@@ -40,6 +41,14 @@ enableWidgets(QList<QWidget *> const &widgets,
               bool enable) {
   for (auto &widget : widgets)
     widget->setEnabled(enable);
+}
+
+QPushButton *
+buttonForRole(QDialogButtonBox *box,
+              QDialogButtonBox::ButtonRole role) {
+  auto buttons = box->buttons();
+  auto button  = boost::find_if(buttons, [&](QAbstractButton *b) { return box->buttonRole(b) == role; });
+  return button == buttons.end() ? nullptr : static_cast<QPushButton *>(*button);
 }
 
 void
@@ -156,6 +165,13 @@ unescape(QStringList const &source,
     unescaped << unescape(string, mode);
 
   return unescaped;
+}
+
+QString
+joinSentences(QStringList const &sentences) {
+  // TODO: act differently depending on the UI locale. Some languages,
+  // e.g. Japanese, don't join sentences with spaces.
+  return sentences.join(" ");
 }
 
 }
