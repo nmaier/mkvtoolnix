@@ -1,6 +1,7 @@
 #include "common/common_pch.h"
 
 #include "common/sorting.h"
+#include "common/strings/formatting.h"
 #include "mkvtoolnix-gui/merge_widget/source_file_model.h"
 #include "mkvtoolnix-gui/merge_widget/track_model.h"
 #include "mkvtoolnix-gui/util/util.h"
@@ -58,8 +59,8 @@ SourceFileModel::createRow(SourceFile *sourceFile)
 
   items << new QStandardItem{info.fileName()};
   items << new QStandardItem{sourceFile->isAdditionalPart() ? QY("(additional part)") : sourceFile->m_container};
-  items << new QStandardItem{QString::number(info.size())};
   items << new QStandardItem{info.filePath()};
+  items << new QStandardItem{to_qs(format_file_size(sourceFile->isPlaylist() ? sourceFile->m_playlistSize : info.size()))};
 
   items[0]->setData(QVariant::fromValue(sourceFile), Util::SourceFileRole);
   items[0]->setIcon(  sourceFile->isAdditionalPart() ? m_additionalPartIcon
