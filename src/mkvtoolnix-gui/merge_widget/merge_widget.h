@@ -162,10 +162,6 @@ protected:
   virtual QModelIndex selectedSourceFile() const;
   virtual QList<SourceFile *> selectedSourceFiles() const;
   virtual QList<Track *> selectedTracks() const;
-
-  virtual void checkAddingPlaylists(QList<SourceFilePtr> &files);
-  virtual bool askScanForPlaylists(SourceFile const &file, unsigned int numOtherFiles);
-  virtual void scanForPlaylists(SourceFilePtr &file, QFileInfoList const &otherFiles);
 };
 
 #endif // MTX_MKVTOOLNIX_GUI_MERGE_WIDGET_MERGE_WIDGET_H

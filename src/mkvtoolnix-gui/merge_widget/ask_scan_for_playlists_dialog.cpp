@@ -61,5 +61,5 @@ AskScanForPlaylistsDialog::ask(SourceFile const &file,
   Settings::get().m_scanForPlaylistsPolicy = static_cast<Settings::ScanForPlaylistsPolicy>(ui->scanPolicy->currentIndex());
   Settings::get().save();
 
-  return result == QDialogButtonBox::YesRole;
+  return result == QDialog::Accepted;
 }

@@ -81,6 +81,8 @@ public:
   virtual void loadSettings(MuxConfig::Loader &l);
   virtual void fixAssociations(MuxConfig::Loader &l);
 
+  virtual QString nameForType() const;
+
   virtual std::string debugInfo() const;
 
   void buildMkvmergeOptions(MkvmergeOptionBuilder &opt) const;

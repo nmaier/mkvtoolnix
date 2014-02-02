@@ -62,15 +62,7 @@ void
 TrackModel::setItemsFromTrack(QList<QStandardItem *> items,
                               Track *track) {
   items[0]->setText(track->isChapters() || track->isGlobalTags() || track->isTags() ? QY("%1 entries").arg(track->m_size) : track->m_codec);
-  items[1]->setText(  track->isAudio()      ? QY("audio")
-                    : track->isVideo()      ? QY("video")
-                    : track->isSubtitles()  ? QY("subtitles")
-                    : track->isButtons()    ? QY("buttons")
-                    : track->isAttachment() ? QY("attachment")
-                    : track->isChapters()   ? QY("chapters")
-                    : track->isTags()       ? QY("tags")
-                    : track->isGlobalTags() ? QY("global tags")
-                    :                          Q("INTERNAL ERROR"));
+  items[1]->setText(track->nameForType());
   items[2]->setText(track->m_muxThis ? QY("yes") : QY("no"));
   items[3]->setText(track->m_language);
   items[4]->setText(track->m_name);

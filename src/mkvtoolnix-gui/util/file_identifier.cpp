@@ -152,9 +152,9 @@ FileIdentifier::parseContainerLine(QString const &line) {
   m_file->setContainer(re.cap(1));
   m_file->m_properties       = parseProperties(line);
   m_file->m_isPlaylist       = m_file->m_properties["playlist"] == "1";
-  m_file->m_playlistDuration = m_file->m_properties["playlistDuration"].toULongLong();
-  m_file->m_playlistSize     = m_file->m_properties["playlistSize"].toULongLong();
-  m_file->m_playlistChapters = m_file->m_properties["playlistChapters"].toULongLong();
+  m_file->m_playlistDuration = m_file->m_properties["playlist_duration"].toULongLong();
+  m_file->m_playlistSize     = m_file->m_properties["playlist_size"].toULongLong();
+  m_file->m_playlistChapters = m_file->m_properties["playlist_chapters"].toULongLong();
 
   if (m_file->m_isPlaylist && !m_file->m_properties["playlist_file"].isEmpty())
     for (auto const &fileName : m_file->m_properties["playlist_file"].split("\t"))
