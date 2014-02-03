@@ -2391,10 +2391,19 @@ add_filelists_for_playlists() {
 
     auto &file_names          = filelist->playlist_mpls_in->get_file_names();
     auto previous_filelist_id = filelist->id;
+    auto const &play_items    = filelist->playlist_mpls_in->get_mpls_parser().get_playlist().items;
+
+    assert(file_names.size() == play_items.size());
+
+    filelist->restricted_timecode_min = play_items[0].in_time;
+    filelist->restricted_timecode_max = play_items[0].out_time;
 
     for (size_t idx = 1, idx_end = file_names.size(); idx < idx_end; ++idx) {
-      auto current_filelist_id = g_files.size() + new_filelists.size();
-      auto new_filelist        = create_filelist_for_playlist(file_names[idx], previous_filelist_id, current_filelist_id, idx, *filelist->ti);
+      auto current_filelist_id             = g_files.size() + new_filelists.size();
+      auto new_filelist                    = create_filelist_for_playlist(file_names[idx], previous_filelist_id, current_filelist_id, idx, *filelist->ti);
+      new_filelist.restricted_timecode_min = play_items[idx].in_time;
+      new_filelist.restricted_timecode_max = play_items[idx].out_time;
+
       new_filelists.push_back(new_filelist);
 
       previous_filelist_id = new_filelist.id;

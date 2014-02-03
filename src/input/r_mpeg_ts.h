@@ -362,7 +362,7 @@ protected:
   bool PAT_found, PMT_found;
   int16_t PMT_pid;
   int es_to_process;
-  timecode_c m_global_timecode_offset;
+  timecode_c m_global_timecode_offset, m_stream_timecode;
 
   mpeg_ts_input_type_e input_status; // can be INPUT_PROBE, INPUT_READ
   int track_buffer_ready;

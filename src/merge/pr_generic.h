@@ -32,6 +32,7 @@
 #include "common/stereo_mode.h"
 #include "common/strings/editing.h"
 #include "common/tags/tags.h"
+#include "common/timecode.h"
 #include "common/translation.h"
 #include "merge/item_selector.h"
 #include "merge/packet.h"
@@ -353,9 +354,11 @@ public:
 
   int64_t m_reference_timecode_tolerance;
 
-private:
+protected:
   id_result_t m_id_results_container;
   std::vector<id_result_t> m_id_results_tracks, m_id_results_attachments, m_id_results_chapters, m_id_results_tags;
+
+  timecode_c m_restricted_timecodes_min, m_restricted_timecodes_max;
 
 public:
   generic_reader_c(const track_info_c &ti, const mm_io_cptr &in);
@@ -365,6 +368,10 @@ public:
   virtual bool is_providing_timecodes() const {
     return true;
   }
+
+  virtual void set_timecode_restrictions(timecode_c const &min, timecode_c const &max);
+  virtual timecode_c const &get_timecode_restriction_min() const;
+  virtual timecode_c const &get_timecode_restriction_max() const;
 
   virtual void read_headers() = 0;
   virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false) = 0;

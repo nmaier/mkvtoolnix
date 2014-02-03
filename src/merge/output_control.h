@@ -119,6 +119,8 @@ struct filelist_t {
   size_t playlist_index, playlist_previous_filelist_id;
   mm_mpls_multi_file_io_cptr playlist_mpls_in;
 
+  timecode_c restricted_timecode_min, restricted_timecode_max;
+
   filelist_t()
     : size{}
     , id{}

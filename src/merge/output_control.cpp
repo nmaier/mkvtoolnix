@@ -1301,6 +1301,8 @@ calc_attachment_sizes() {
 */
 void
 create_readers() {
+  static auto s_debug_timecode_restrictions = debugging_option_c{"timecode_restrictions"};
+
   for (auto &file : g_files) {
     try {
       mm_io_cptr input_file = file.playlist_mpls_in ? std::static_pointer_cast<mm_io_c>(file.playlist_mpls_in) : open_input_file(file);
@@ -1401,10 +1403,14 @@ create_readers() {
       }
 
       file.reader->read_headers();
+      file.reader->set_timecode_restrictions(file.restricted_timecode_min, file.restricted_timecode_max);
 
       // Re-calculate file size because the reader might switch to a
       // multi I/O reader in read_headers().
       file.size = file.reader->get_file_size();
+
+      mxdebug_if(s_debug_timecode_restrictions,
+                 boost::format("Timecode restrictions for %3%: min %1% max %2%\n") % file.restricted_timecode_min % file.restricted_timecode_max % file.ti->m_fname);
 
     } catch (mtx::mm_io::open_x &error) {
       mxerror(boost::format(Y("The demultiplexer for the file '%1%' failed to initialize:\n%2%\n")) % file.ti->m_fname % Y("The file could not be opened for reading, or there was not enough data to parse its headers."));
