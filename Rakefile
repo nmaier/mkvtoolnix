@@ -43,7 +43,7 @@ def setup_globals
   $programs                =  %w{mkvmerge mkvinfo mkvextract mkvpropedit}
   $programs                << "mmg" if c?(:USE_WXWIDGETS)
   $programs                << "mkvtoolnix-gui" if $build_mkvtoolnix_gui
-  $tools                   =  %w{ac3parser base64tool diracparser ebml_validator vc1parser}
+  $tools                   =  %w{ac3parser base64tool diracparser ebml_validator mpls_dump vc1parser}
   $mmg_bin                 =  c(:MMG_BIN)
   $mmg_bin                 =  "mmg" if $mmg_bin.empty?
 
@@ -811,6 +811,16 @@ if $build_tools
     description("Build the ebml_validator executable").
     aliases("tools:ebml_validator").
     sources("src/tools/ebml_validator.cpp", "src/tools/element_info.cpp").
+    libraries($common_libs).
+    create
+
+  #
+  # tools: mpls_dump
+  #
+  Application.new("src/tools/mpls_dump").
+    description("Build the mpls_dump executable").
+    aliases("tools:mpls_dump").
+    sources("src/tools/mpls_dump.cpp").
     libraries($common_libs).
     create
 
