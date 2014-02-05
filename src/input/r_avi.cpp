@@ -934,6 +934,11 @@ avi_reader_c::debug_dump_video_index() {
   int num_video_frames = AVI_video_frames(m_avi), i;
 
   mxinfo(boost::format("AVI video index dump: %1% entries; frame rate: %2%\n") % num_video_frames % m_fps);
-  for (i = 0; num_video_frames > i; ++i)
-    mxinfo(boost::format("  %1%: %2% bytes\n") % i % AVI_frame_size(m_avi, i));
+  for (i = 0; num_video_frames > i; ++i) {
+    int key = 0;
+    AVI_read_frame(m_avi, nullptr, &key);
+    mxinfo(boost::format("  %1%: %2% bytes; key: %3%\n") % i % AVI_frame_size(m_avi, i) % key);
+  }
+
+  AVI_set_video_position(m_avi, 0);
 }
