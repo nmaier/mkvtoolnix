@@ -1,3 +1,8 @@
+2014-02-05  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: enhancements: AVI reader: audio chunks with obvious
+        wrong size information (bigger than 10 MB) will be skipped.
+
 2014-02-03  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: bug fix: When reading M2TS files belonging to an MPLS
