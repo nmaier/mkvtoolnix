@@ -54,13 +54,26 @@ mpeg_ts_track_c::send_to_packetizer() {
   auto timecode_to_use = !m_timecode.valid()                                             ? timecode_c{}
                        : reader.m_dont_use_audio_pts && (ES_AUDIO_TYPE == type)          ? timecode_c{}
                        : m_apply_dts_timecode_fix && (m_previous_timecode == m_timecode) ? timecode_c{}
-                       : (m_timecode  < reader.m_global_timecode_offset)                 ? timecode_c::ns(0)
-                       :                                                                   m_timecode - reader.m_global_timecode_offset;
+                       :                                                                   std::max(m_timecode, reader.m_global_timecode_offset);
+
+  auto timecode_to_check = timecode_to_use.valid() ? timecode_to_use : reader.m_stream_timecode;
+  auto const &min        = reader.get_timecode_restriction_min();
+  auto const &max        = reader.get_timecode_restriction_max();
+  auto use_packet        = ptzr != -1;
+
+  if (   (min.valid() && (timecode_to_check < min))
+      || (max.valid() && (timecode_to_check > max)))
+    use_packet = false;
+
+  if (timecode_to_use.valid()) {
+    reader.m_stream_timecode  = timecode_to_use;
+    timecode_to_use          -= std::max(reader.m_global_timecode_offset, min.valid() ? min : timecode_c::ns(0));
+  }
 
   mxdebug_if(m_debug_delivery, boost::format("send_to_packetizer() PID %1% expected %2% actual %3% timecode_to_use %4% m_previous_timecode %5%\n")
              % pid % pes_payload_size % pes_payload->get_size() % timecode_to_use % m_previous_timecode);
 
-  if (ptzr != -1)
+  if (use_packet)
     reader.m_reader_packetizers[ptzr]->process(new packet_t(memory_c::clone(pes_payload->get_buffer(), pes_payload->get_size()), timecode_to_use.to_ns(-1)));
 
   pes_payload->remove(pes_payload->get_size());
@@ -387,6 +400,7 @@ mpeg_ts_reader_c::mpeg_ts_reader_c(const track_info_c &ti,
   , PMT_pid(-1)
   , es_to_process{}
   , m_global_timecode_offset{}
+  , m_stream_timecode{timecode_c::ns(0)}
   , input_status(INPUT_PROBE)
   , track_buffer_ready(-1)
   , file_done{}

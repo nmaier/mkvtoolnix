@@ -77,17 +77,13 @@ mm_mpls_multi_file_io_c::open_multi(mm_io_c *in) {
   };
 
   std::vector<bfs::path> file_names;
-  std::unordered_map<std::string, bool> file_names_seen;
 
   for (auto const &item : mpls_parser->get_playlist().items) {
     auto file = find_file(item);
 
     mxdebug_if(ms_debug, boost::format("Item clip ID: %1% codec ID: %2%: have file? %3% file: %4%\n") % item.clip_id % item.codec_id % !file.empty() % file.string());
-    if (file.empty() || file_names_seen[file.string()])
-      continue;
-
-    file_names.push_back(file);
-    file_names_seen[file.string()] = true;
+    if (!file.empty())
+      file_names.push_back(file);
   }
 
   mxdebug_if(ms_debug, boost::format("Number of files left: %1%\n") % file_names.size());

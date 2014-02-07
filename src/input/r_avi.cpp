@@ -49,6 +49,8 @@
 #include "output/p_vorbis.h"
 #include "output/p_vpx.h"
 
+#define AVI_MAX_AUDIO_CHUNK_SIZE (10 * 1024 * 1024)
+
 #define GAB2_TAG                 FOURCC('G', 'A', 'B', '2')
 #define GAB2_ID_LANGUAGE         0x0000
 #define GAB2_ID_LANGUAGE_UNICODE 0x0002
@@ -509,8 +511,11 @@ avi_reader_c::add_audio_demuxer(int aid) {
   m_audio_demuxers.push_back(demuxer);
 
   int i, maxchunks = AVI_audio_chunks(m_avi);
-  for (i = 0; i < maxchunks; i++)
-    m_bytes_to_process += AVI_audio_size(m_avi, i);
+  for (i = 0; i < maxchunks; i++) {
+    auto size = AVI_audio_size(m_avi, i);
+    if (size < AVI_MAX_AUDIO_CHUNK_SIZE)
+      m_bytes_to_process += size;
+  }
 }
 
 generic_packetizer_c *
@@ -762,10 +767,14 @@ avi_reader_c::read_audio(avi_demuxer_t &demuxer) {
   while (true) {
     int size = AVI_audio_size(m_avi, AVI_get_audio_position_index(m_avi));
 
+    // -1 indicates the last chunk.
     if (-1 == size)
       return flush_packetizer(demuxer.m_ptzr);
 
-    if (!size) {
+    // Sanity check. Ignore chunks with obvious wrong size information
+    // (> 10 MB). Also skip 0-sized blocks. Those are officially
+    // skipped.
+    if (!size || (size > AVI_MAX_AUDIO_CHUNK_SIZE)) {
       AVI_set_audio_position_index(m_avi, AVI_get_audio_position_index(m_avi) + 1);
       continue;
     }
@@ -934,6 +943,11 @@ avi_reader_c::debug_dump_video_index() {
   int num_video_frames = AVI_video_frames(m_avi), i;
 
   mxinfo(boost::format("AVI video index dump: %1% entries; frame rate: %2%\n") % num_video_frames % m_fps);
-  for (i = 0; num_video_frames > i; ++i)
-    mxinfo(boost::format("  %1%: %2% bytes\n") % i % AVI_frame_size(m_avi, i));
+  for (i = 0; num_video_frames > i; ++i) {
+    int key = 0;
+    AVI_read_frame(m_avi, nullptr, &key);
+    mxinfo(boost::format("  %1%: %2% bytes; key: %3%\n") % i % AVI_frame_size(m_avi, i) % key);
+  }
+
+  AVI_set_video_position(m_avi, 0);
 }

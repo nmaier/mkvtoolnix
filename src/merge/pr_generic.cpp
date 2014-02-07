@@ -1256,6 +1256,25 @@ generic_reader_c::~generic_reader_c() {
 }
 
 void
+generic_reader_c::set_timecode_restrictions(timecode_c const &min,
+                                            timecode_c const &max) {
+  m_restricted_timecodes_min = min;
+  m_restricted_timecodes_max = max;
+}
+
+timecode_c const &
+generic_reader_c::get_timecode_restriction_min()
+  const {
+  return m_restricted_timecodes_min;
+}
+
+timecode_c const &
+generic_reader_c::get_timecode_restriction_max()
+  const {
+  return m_restricted_timecodes_max;
+}
+
+void
 generic_reader_c::read_all() {
   for (auto &packetizer : m_reader_packetizers)
     while (read(packetizer, true) != FILE_STATUS_DONE)

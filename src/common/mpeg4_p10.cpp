@@ -1559,6 +1559,8 @@ mpeg4::p10::avc_es_parser_c::get_most_often_used_duration()
 
 void
 mpeg4::p10::avc_es_parser_c::cleanup() {
+  auto s_debug_force_simple_picture_order = debugging_option_c{"avc_parser_force_simple_picture_order"};
+
   if (m_frames.empty())
     return;
 
@@ -1632,7 +1634,7 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
     }
   }
 
-  if (!simple_picture_order)
+  if (!simple_picture_order && !s_debug_force_simple_picture_order)
     brng::sort(m_frames, [](const avc_frame_t &f1, const avc_frame_t &f2) { return f1.m_presentation_order < f2.m_presentation_order; });
 
   brng::sort(m_provided_timecodes);

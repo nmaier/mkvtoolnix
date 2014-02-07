@@ -41,6 +41,10 @@ public:
     return m_files;
   }
 
+  mtx::mpls::parser_c const &get_mpls_parser() const {
+    return *m_mpls_parser;
+  }
+
   std::vector<timecode_c> const &get_chapters() const;
   virtual void create_verbose_identification_info(std::vector<std::string> &verbose_info);
 
