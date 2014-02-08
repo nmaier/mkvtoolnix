@@ -5,7 +5,6 @@
 
 #include <QHash>
 #include <QList>
-#include <QObject>
 #include <QSettings>
 #include <QString>
 #include <QStringList>
@@ -35,9 +34,7 @@ typedef std::shared_ptr<SourceFile> SourceFilePtr;
 class MuxConfig;
 typedef std::shared_ptr<MuxConfig> MuxConfigPtr;
 
-class MuxConfig : public QObject {
-  Q_OBJECT;
-
+class MuxConfig {
 public:
   struct Loader {
     QSettings &settings;

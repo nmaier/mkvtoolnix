@@ -11,15 +11,13 @@
 #include <QFileInfo>
 #include <QHash>
 #include <QList>
-#include <QObject>
 #include <QSettings>
 #include <QString>
 
 class SourceFile;
 typedef std::shared_ptr<SourceFile> SourceFilePtr;
 
-class SourceFile: public QObject {
-  Q_OBJECT;
+class SourceFile {
 public:
   QHash<QString, QString> m_properties;
   QString m_fileName, m_container;

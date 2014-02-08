@@ -10,8 +10,7 @@
 #include <QStringList>
 
 MuxConfig::MuxConfig(QString const &fileName)
-  : QObject{}
-  , m_configFileName{fileName}
+  : m_configFileName{fileName}
   , m_splitMode{DoNotSplit}
   , m_splitMaxFiles{0}
   , m_linkFiles{false}
@@ -24,7 +23,6 @@ MuxConfig::~MuxConfig() {
 }
 
 MuxConfig::MuxConfig(MuxConfig const &other)
-  : QObject{}
 {
   *this = other;
 }

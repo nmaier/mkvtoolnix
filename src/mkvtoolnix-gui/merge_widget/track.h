@@ -7,7 +7,6 @@
 #include "mkvtoolnix-gui/merge_widget/mux_config.h"
 
 #include <QHash>
-#include <QObject>
 #include <QSettings>
 #include <QString>
 
@@ -17,8 +16,7 @@ class MkvmergeOptionBuilder;
 class Track;
 typedef std::shared_ptr<Track> TrackPtr;
 
-class Track: public QObject {
-  Q_OBJECT;
+class Track {
 public:
   enum Type {
     Audio = 0,

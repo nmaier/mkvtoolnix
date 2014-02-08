@@ -6,7 +6,6 @@
 #include "common/qt.h"
 #include "mkvtoolnix-gui/merge_widget/mux_config.h"
 
-#include <QObject>
 #include <QSettings>
 #include <QString>
 
@@ -15,8 +14,7 @@ typedef std::shared_ptr<Attachment> AttachmentPtr;
 
 class QStringList;
 
-class Attachment: public QObject {
-  Q_OBJECT;
+class Attachment {
 public:
   enum Style {
     ToAllFiles = 1,
