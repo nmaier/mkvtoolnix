@@ -33,7 +33,10 @@ public:
 
 public:
   explicit SourceFile(QString const &fileName = QString{""});
+  SourceFile(SourceFile const &other);
   virtual ~SourceFile();
+
+  SourceFile &operator =(SourceFile const &other);
 
   virtual void setContainer(QString const &container);
   virtual bool isValid() const;

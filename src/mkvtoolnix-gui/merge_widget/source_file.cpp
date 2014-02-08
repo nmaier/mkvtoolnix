@@ -46,7 +46,47 @@ SourceFile::SourceFile(QString const &fileName)
 
 }
 
+SourceFile::SourceFile(SourceFile const &other)
+{
+  *this = other;
+}
+
 SourceFile::~SourceFile() {
+}
+
+SourceFile &
+SourceFile::operator =(SourceFile const &other) {
+  if (this == &other)
+    return *this;
+
+  m_properties       = other.m_properties;
+  m_fileName         = other.m_fileName;
+  m_container        = other.m_container;
+  m_type             = other.m_type;
+  m_appended         = other.m_appended;
+  m_additionalPart   = other.m_additionalPart;
+  m_isPlaylist       = other.m_isPlaylist;
+  m_playlistDuration = other.m_playlistDuration;
+  m_playlistSize     = other.m_playlistSize;
+  m_playlistChapters = other.m_playlistChapters;
+  m_playlistFiles    = other.m_playlistFiles;
+  m_appendedTo       = nullptr;
+
+  m_tracks.empty();
+  m_additionalParts.empty();
+  m_appendedFiles.empty();
+  m_playlistFiles.empty();
+
+  for (auto const &track : other.m_tracks)
+    m_tracks << std::make_shared<Track>(*track);
+
+  for (auto const &file : other.m_additionalParts)
+    m_additionalParts << std::make_shared<SourceFile>(*file);
+
+  for (auto const &file : other.m_appendedFiles)
+    m_appendedFiles << std::make_shared<SourceFile>(*file);
+
+  return *this;
 }
 
 bool

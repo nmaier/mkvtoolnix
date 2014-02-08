@@ -9,6 +9,56 @@
 #include <QFile>
 #include <QStringList>
 
+static void
+addToMaps(SourceFile *oldFile,
+          SourceFile *newFile,
+          QHash<SourceFile *, SourceFile *> &fileMap,
+          QHash<Track *, Track *> &trackMap) {
+  assert(!!oldFile && !!newFile);
+
+  fileMap[oldFile] = newFile;
+
+  for (auto idx = 0, end = oldFile->m_tracks.size(); idx < end; ++idx)
+    trackMap[ oldFile->m_tracks[idx].get() ] = newFile->m_tracks[idx].get();
+
+  for (auto idx = 0, end = oldFile->m_additionalParts.size(); idx < end; ++idx)
+    addToMaps(oldFile->m_additionalParts[idx].get(), newFile->m_additionalParts[idx].get(), fileMap, trackMap);
+
+  for (auto idx = 0, end = oldFile->m_appendedFiles.size(); idx < end; ++idx)
+    addToMaps(oldFile->m_appendedFiles[idx].get(), newFile->m_appendedFiles[idx].get(), fileMap, trackMap);
+}
+
+static void
+fixMappings(SourceFile *oldFile,
+            QHash<SourceFile *, SourceFile *> &fileMap,
+            QHash<Track *, Track *> &trackMap) {
+  auto newFile = fileMap[oldFile];
+
+  assert(!!oldFile && !!newFile);
+
+  for (auto idx = 0, end = oldFile->m_tracks.size(); idx < end; ++idx) {
+    auto oldTrack = oldFile->m_tracks[idx].get();
+    auto newTrack = trackMap[oldTrack];
+
+    assert(!!oldTrack && !!newTrack);
+
+    newTrack->m_file       = fileMap[oldTrack->m_file];
+    newTrack->m_appendedTo = trackMap[oldTrack->m_appendedTo];
+
+    assert((!!newTrack->m_file == !!oldTrack->m_file) && (!!newTrack->m_appendedTo == !!newTrack->m_appendedTo));
+
+    newTrack->m_appendedTracks.empty();
+    for (auto const &oldAppendedTrack : oldTrack->m_appendedTracks) {
+      auto newAppendedTrack = trackMap[oldAppendedTrack];
+      assert(!!newAppendedTrack);
+      newTrack->m_appendedTracks << newAppendedTrack;
+    }
+  }
+
+  for (auto const &oldAppendedFile : oldFile->m_appendedFiles)
+    fixMappings(oldAppendedFile.get(), fileMap, trackMap);
+}
+
 MuxConfig::MuxConfig(QString const &fileName)
   : m_configFileName{fileName}
   , m_splitMode{DoNotSplit}
@@ -33,9 +83,6 @@ MuxConfig::operator =(MuxConfig const &other) {
     return *this;
 
   m_configFileName       = other.m_configFileName;
-  m_files                = other.m_files;
-  m_tracks               = other.m_tracks;
-  m_attachments          = other.m_attachments;
   m_title                = other.m_title;
   m_destination          = other.m_destination;
   m_globalTags           = other.m_globalTags;
@@ -53,6 +100,32 @@ MuxConfig::operator =(MuxConfig const &other) {
   m_splitMaxFiles        = other.m_splitMaxFiles;
   m_linkFiles            = other.m_linkFiles;
   m_webmMode             = other.m_webmMode;
+
+  m_files.empty();
+  m_tracks.empty();
+  m_attachments.empty();
+
+  for (auto const &attachment : other.m_attachments)
+    m_attachments << std::make_shared<Attachment>(*attachment);
+
+  auto fileMap  = QHash<SourceFile *, SourceFile *>{};
+  auto trackMap = QHash<Track *, Track *>{};
+
+  for (auto const &oldFile : other.m_files) {
+    auto newFile = std::make_shared<SourceFile>(*oldFile);
+    m_files << newFile;
+
+    addToMaps(oldFile.get(), newFile.get(), fileMap, trackMap);
+  }
+
+  for (auto const &oldFile : other.m_files)
+    fixMappings(oldFile.get(), fileMap, trackMap);
+
+  for (auto const &oldTrack : other.m_tracks) {
+    auto newTrack = trackMap[oldTrack];
+    assert(!!newTrack);
+    m_tracks << newTrack;
+  }
 
   return *this;
 }
