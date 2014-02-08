@@ -2,6 +2,7 @@
 
 #include "common/qt.h"
 #include "mkvtoolnix-gui/job_widget/job_widget.h"
+#include "mkvtoolnix-gui/merge_widget/mux_config.h"
 #include "mkvtoolnix-gui/forms/job_widget.h"
 #include "mkvtoolnix-gui/util/util.h"
 
@@ -87,12 +88,11 @@ JobWidget::onStart() {
 
 void
 JobWidget::onAdd() {
-  auto job           = std::make_shared<MuxJob>(Job::PendingManual);
+  auto job           = std::make_shared<MuxJob>(Job::PendingManual, std::make_shared<MuxConfig>());
   job->m_description = to_qs(boost::format("Yay %1%") % job->m_id);
   job->m_dateAdded   = QDateTime::currentDateTime();
 
-  m_model->add(std::static_pointer_cast<Job>(job));
-  resizeColumnsToContents();
+  addJob(std::static_pointer_cast<Job>(job));
 }
 
 void
@@ -130,6 +130,12 @@ void
 JobWidget::resizeColumnsToContents()
   const {
   Util::resizeViewColumnsToContents(ui->jobs);
+}
+
+void
+JobWidget::addJob(JobPtr const &job) {
+  m_model->add(job);
+  resizeColumnsToContents();
 }
 
 void

@@ -162,6 +162,8 @@ protected:
   virtual QModelIndex selectedSourceFile() const;
   virtual QList<SourceFile *> selectedSourceFiles() const;
   virtual QList<Track *> selectedTracks() const;
+
+  virtual void addToJobQueue(bool startNow);
 };
 
 #endif // MTX_MKVTOOLNIX_GUI_MERGE_WIDGET_MERGE_WIDGET_H

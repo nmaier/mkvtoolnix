@@ -29,6 +29,7 @@ public:
   ~JobWidget();
 
   JobModel *getModel() const;
+  void addJob(JobPtr const &job);
 
 public slots:
   void onStart();

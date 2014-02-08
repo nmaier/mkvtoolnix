@@ -1,6 +1,8 @@
 #include "common/common_pch.h"
 
 #include "common/qt.h"
+#include "mkvtoolnix-gui/job_widget/job.h"
+#include "mkvtoolnix-gui/job_widget/job_widget.h"
 #include "mkvtoolnix-gui/main_window/main_window.h"
 #include "mkvtoolnix-gui/merge_widget/merge_widget.h"
 #include "mkvtoolnix-gui/forms/main_window.h"
@@ -9,6 +11,7 @@
 #include "mkvtoolnix-gui/util/util.h"
 
 #include <QFileDialog>
+#include <QInputDialog>
 #include <QList>
 #include <QMessageBox>
 #include <QString>
@@ -113,12 +116,12 @@ MergeWidget::onNew() {
 
 void
 MergeWidget::onAddToJobQueue() {
-  // TODO
+  addToJobQueue(false);
 }
 
 void
 MergeWidget::onStartMuxing() {
-  // TODO
+  addToJobQueue(true);
 }
 
 QString
@@ -203,4 +206,27 @@ void
 MergeWidget::retranslateUI() {
   retranslateInputUI();
   retranslateAttachmentsUI();
+}
+
+void
+MergeWidget::addToJobQueue(bool startNow) {
+  auto newConfig     = std::make_shared<MuxConfig>(m_config);
+  auto job           = std::make_shared<MuxJob>(startNow ? Job::PendingAuto : Job::PendingManual, newConfig);
+  job->m_dateAdded   = QDateTime::currentDateTime();
+  job->m_description = QY("Merge to %1").arg(newConfig->m_destination);
+
+  if (!startNow) {
+    auto newDescription = QString{};
+
+    while (newDescription.isEmpty()) {
+      bool ok = false;
+      newDescription = QInputDialog::getText(this, QY("Enter job description"), QY("Please enter the new job's description."), QLineEdit::Normal, job->m_description, &ok);
+      if (!ok)
+        return;
+    }
+
+    job->m_description = newDescription;
+  }
+
+  MainWindow::getJobWidget()->addJob(std::static_pointer_cast<Job>(job));
 }

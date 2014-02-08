@@ -62,14 +62,17 @@ signals:
 typedef std::shared_ptr<Job> JobPtr;
 
 class MuxJob;
+class MuxConfig;
+typedef std::shared_ptr<MuxConfig> MuxConfigPtr;
 
 class MuxJobThread: public QThread {
   Q_OBJECT;
 protected:
   volatile bool m_aborted;
+  MuxConfig const &m_config;
 
 public:
-  MuxJobThread(MuxJob *job);
+  MuxJobThread(MuxJob *job, MuxConfig const &config);
 
   void abort();
 
@@ -84,10 +87,11 @@ signals:
 class MuxJob: public Job {
   Q_OBJECT;
 protected:
+  MuxConfigPtr m_config;
   MuxJobThread *m_thread;
 
 public:
-  MuxJob(Status status);
+  MuxJob(Status status, MuxConfigPtr const &config);
   virtual ~MuxJob();
 
   virtual void abort();

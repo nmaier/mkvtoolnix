@@ -2,6 +2,7 @@
 
 #include "common/qt.h"
 #include "mkvtoolnix-gui/job_widget/job.h"
+#include "mkvtoolnix-gui/merge_widget/mux_config.h"
 
 uint64_t Job::ms_next_id = 0;
 
@@ -62,8 +63,10 @@ Job::setPendingAuto() {
 
 // ------------------------------------------------------------
 
-MuxJob::MuxJob(Status status)
+MuxJob::MuxJob(Status status,
+               MuxConfigPtr const &config)
   : Job{status}
+  , m_config{config}
   , m_thread{}
 {
 }
@@ -83,7 +86,7 @@ MuxJob::start() {
 
   setStatus(Job::Running);
 
-  m_thread = new MuxJobThread{this};
+  m_thread = new MuxJobThread{this, *m_config};
   m_thread->start();
 }
 
@@ -94,9 +97,11 @@ MuxJob::threadFinished() {
 
 // ------------------------------------------------------------
 
-MuxJobThread::MuxJobThread(MuxJob *job)
+MuxJobThread::MuxJobThread(MuxJob *job,
+                           MuxConfig const &config)
   : QThread{}
   , m_aborted{false}
+  , m_config(config)
 {
   connect(this, SIGNAL(progressChanged(unsigned int)), job, SLOT(setProgress(unsigned int)));
   connect(this, SIGNAL(statusChanged(Job::Status)),    job, SLOT(setStatus(Job::Status)));

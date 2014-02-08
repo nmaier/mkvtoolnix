@@ -10,6 +10,8 @@ namespace Ui {
 class MainWindow;
 }
 
+class JobWidget;
+class MergeWidget;
 class StatusBarProgressWidget;
 
 class MainWindow : public QMainWindow {
@@ -19,6 +21,8 @@ protected:
   // UI stuff:
   Ui::MainWindow *ui;
   StatusBarProgressWidget *m_statusBarProgress;
+  MergeWidget *m_toolMerge;
+  JobWidget *m_toolJobs;
 
 protected:                      // static
   static MainWindow *ms_mainWindow;
@@ -32,6 +36,8 @@ public:
 
 public:                         // static
   static MainWindow *get();
+  static MergeWidget *getMergeWidget();
+  static JobWidget *getJobWidget();
 
 protected:
   virtual void setupToolSelector();

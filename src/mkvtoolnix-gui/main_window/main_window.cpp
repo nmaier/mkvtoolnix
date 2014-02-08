@@ -19,6 +19,8 @@ MainWindow *MainWindow::ms_mainWindow = nullptr;
 MainWindow::MainWindow(QWidget *parent)
   : QMainWindow{parent}
   , ui{new Ui::MainWindow}
+  , m_toolMerge{}
+  , m_toolJobs{}
 {
   ms_mainWindow = this;
 
@@ -72,26 +74,36 @@ void
 MainWindow::setupToolSelector() {
   // ui->tool->setIconSize(QSize{48, 48});
 
-  auto toolMerge = new MergeWidget{ui->tool};
-  auto toolJobs  = new JobWidget{ui->tool};
+  m_toolMerge = new MergeWidget{ui->tool};
+  m_toolJobs  = new JobWidget{ui->tool};
 
-  ui->tool->insertTab(0, toolMerge,                    QIcon{":/icons/48x48/merge.png"},                      QY("merge"));
+  ui->tool->insertTab(0, m_toolMerge,                  QIcon{":/icons/48x48/merge.png"},                      QY("merge"));
   ui->tool->insertTab(1, createNotImplementedWidget(), QIcon{":/icons/48x48/split.png"},                      QY("extract"));
   ui->tool->insertTab(2, createNotImplementedWidget(), QIcon{":/icons/48x48/document-preview-archive.png"},   QY("info"));
   ui->tool->insertTab(3, createNotImplementedWidget(), QIcon{":/icons/48x48/document-edit.png"},              QY("edit headers"));
   ui->tool->insertTab(4, createNotImplementedWidget(), QIcon{":/icons/48x48/story-editor.png"},               QY("edit chapters"));
   ui->tool->insertTab(5, createNotImplementedWidget(), QIcon{":/icons/48x48/document-edit-sign-encrypt.png"}, QY("edit tags"));
-  ui->tool->insertTab(6, toolJobs,                     QIcon{":/icons/48x48/view-task.png"},                  QY("job queue"));
+  ui->tool->insertTab(6, m_toolJobs,                   QIcon{":/icons/48x48/view-task.png"},                  QY("job queue"));
 
   for (int i = 0; 6 >= i; i++)
     ui->tool->setTabEnabled(i, true);
 
   ui->tool->setCurrentIndex(0);
 
-  connect(toolJobs->getModel(), SIGNAL(progressChanged(unsigned int,unsigned int)), m_statusBarProgress, SLOT(setProgress(unsigned int,unsigned int)));
+  connect(m_toolJobs->getModel(), SIGNAL(progressChanged(unsigned int,unsigned int)), m_statusBarProgress, SLOT(setProgress(unsigned int,unsigned int)));
 }
 
 MainWindow *
 MainWindow::get() {
   return ms_mainWindow;
+}
+
+MergeWidget *
+MainWindow::getMergeWidget() {
+  return get()->m_toolMerge;
+}
+
+JobWidget *
+MainWindow::getJobWidget() {
+  return get()->m_toolJobs;
 }
