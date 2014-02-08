@@ -224,6 +224,7 @@ MergeWidget::setInputControlValues(Track *track) {
 
   ui->setAspectRatio->setChecked(        track->m_setAspectRatio);
   ui->setDisplayWidthHeight->setChecked(!track->m_setAspectRatio);
+  ui->fixBitstreamTimingInfo->setChecked(track->m_fixBitstreamTimingInfo);
 
   m_currentlySettingInputControlValues = false;
 }
