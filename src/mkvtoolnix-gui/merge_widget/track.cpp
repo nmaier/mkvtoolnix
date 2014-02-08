@@ -288,7 +288,7 @@ Track::buildMkvmergeOptions(MkvmergeOptionBuilder &opt)
 
     return;
 
-  } else if (isTags())
+  } else if (isTags() || isGlobalTags() || isAttachment())
     return;
 
   if (!m_appendedTo) {

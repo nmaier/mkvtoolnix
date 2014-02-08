@@ -270,7 +270,7 @@ SourceFile::buildMkvmergeOptions(QStringList &options)
   buildTrackIdArg(Track::Video,      Q("--video-tracks"),    Q("--no-video"));
   buildTrackIdArg(Track::Subtitles,  Q("--subtitle-tracks"), Q("--no-subtitles"));
   buildTrackIdArg(Track::Buttons,    Q("--button-tracks"),   Q("--no-buttons"));
-  buildTrackIdArg(Track::GlobalTags, Q("--attachments"),     Q("--no-attachments"));
+  buildTrackIdArg(Track::Attachment, Q("--attachments"),     Q("--no-attachments"));
   buildTrackIdArg(Track::Tags,       Q("--track-tags"),      Q("--no-track-tags"));
   buildTrackIdArg(Track::GlobalTags, Q(""),                  Q("--no-global-tags"));
   buildTrackIdArg(Track::Chapters,   Q(""),                  Q("--no-chapters"));

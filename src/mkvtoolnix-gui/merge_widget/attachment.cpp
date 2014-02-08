@@ -46,7 +46,11 @@ Attachment::guessMIMEType() {
 }
 
 void
-Attachment::buildMkvmergeOptions(QStringList &)
+Attachment::buildMkvmergeOptions(QStringList &opt)
   const {
-  // TODO: Attachment::buildMkvmergeOptions
+  if (!m_description.isEmpty()) opt << Q("--attachment-description") << m_description;
+  if (!m_name.isEmpty())        opt << Q("--attachment-name")        << m_name;
+  if (!m_MIMEType.isEmpty())    opt << Q("--attachment-mime-type")   << m_MIMEType;
+
+  opt << (ToAllFiles == m_style ? Q("--attach-file") : Q("--attach-file-once")) << m_fileName;
 }
