@@ -18,7 +18,16 @@
     <property name="spacing">
      <number>0</number>
     </property>
-    <property name="margin">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
      <number>0</number>
     </property>
     <item>
@@ -32,18 +41,14 @@
      <x>0</x>
      <y>0</y>
      <width>838</width>
-     <height>24</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
      <string>&amp;File</string>
     </property>
-    <addaction name="actionNew"/>
-    <addaction name="actionOpen"/>
-    <addaction name="actionSave"/>
-    <addaction name="actionSave_as"/>
-    <addaction name="actionSave_option_file"/>
+    <addaction name="actionPreferences"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
@@ -51,13 +56,18 @@
     <property name="title">
      <string>&amp;Muxing</string>
     </property>
-    <addaction name="action_Start_muxing"/>
+    <addaction name="actionNew"/>
+    <addaction name="actionOpen"/>
+    <addaction name="actionSave"/>
+    <addaction name="actionSaveAs"/>
+    <addaction name="actionSaveOptionFile"/>
     <addaction name="separator"/>
-    <addaction name="actionAdd_to_job_queue"/>
-    <addaction name="action_Job_manager"/>
+    <addaction name="actionStartMuxing"/>
     <addaction name="separator"/>
-    <addaction name="actionShow_mkvmerge_command_line"/>
-    <addaction name="actionCopy_command_line_to_clipboard"/>
+    <addaction name="actionAddToJobQueue"/>
+    <addaction name="separator"/>
+    <addaction name="actionShowMkvmergeCommandLine"/>
+    <addaction name="actionCopyCommandLineToClipboard"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuMuxing"/>
@@ -93,13 +103,13 @@
      <normaloff>:/icons/16x16/document-open.png</normaloff>:/icons/16x16/document-open.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Open</string>
+    <string>&amp;Open settings</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
    </property>
   </action>
-  <action name="actionSave_as">
+  <action name="actionSaveAs">
    <property name="icon">
     <iconset resource="../qt_resources.qrc">
      <normaloff>:/icons/16x16/document-save-as.png</normaloff>:/icons/16x16/document-save-as.png</iconset>
@@ -120,7 +130,7 @@
     <string>Ctrl+Q</string>
    </property>
   </action>
-  <action name="action_Start_muxing">
+  <action name="actionStartMuxing">
    <property name="icon">
     <iconset resource="../qt_resources.qrc">
      <normaloff>:/icons/16x16/media-playback-start.png</normaloff>:/icons/16x16/media-playback-start.png</iconset>
@@ -132,17 +142,17 @@
     <string>Ctrl+R</string>
    </property>
   </action>
-  <action name="actionSave_option_file">
+  <action name="actionSaveOptionFile">
    <property name="text">
     <string>Create &amp;option file</string>
    </property>
   </action>
-  <action name="actionShow_mkvmerge_command_line">
+  <action name="actionShowMkvmergeCommandLine">
    <property name="text">
     <string>S&amp;how command line</string>
    </property>
   </action>
-  <action name="actionCopy_command_line_to_clipboard">
+  <action name="actionCopyCommandLineToClipboard">
    <property name="icon">
     <iconset resource="../qt_resources.qrc">
      <normaloff>:/icons/16x16/edit-copy.png</normaloff>:/icons/16x16/edit-copy.png</iconset>
@@ -151,7 +161,7 @@
     <string>&amp;Copy command line to clipboard</string>
    </property>
   </action>
-  <action name="actionAdd_to_job_queue">
+  <action name="actionAddToJobQueue">
    <property name="icon">
     <iconset resource="../qt_resources.qrc">
      <normaloff>:/icons/16x16/task-delegate.png</normaloff>:/icons/16x16/task-delegate.png</iconset>
@@ -160,35 +170,13 @@
     <string>&amp;Add to job queue</string>
    </property>
   </action>
-  <action name="action_Job_manager">
-   <property name="icon">
-    <iconset resource="../qt_resources.qrc">
-     <normaloff>:/icons/16x16/task-ongoing.png</normaloff>:/icons/16x16/task-ongoing.png</iconset>
-   </property>
-   <property name="text">
-    <string>&amp;Job manager</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+J</string>
-   </property>
-  </action>
-  <action name="action_Header_editor">
-   <property name="text">
-    <string>&amp;Header editor</string>
-   </property>
-  </action>
-  <action name="action_Chapter_editor">
-   <property name="text">
-    <string>&amp;Chapter editor</string>
-   </property>
-  </action>
-  <action name="action_Options">
+  <action name="actionPreferences">
    <property name="icon">
     <iconset resource="../qt_resources.qrc">
      <normaloff>:/icons/16x16/preferences-other.png</normaloff>:/icons/16x16/preferences-other.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Options...</string>
+    <string>&amp;Preferences</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+P</string>

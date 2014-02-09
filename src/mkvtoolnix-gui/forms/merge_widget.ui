@@ -136,9 +136,9 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>-110</y>
-                <width>461</width>
-                <height>880</height>
+                <y>0</y>
+                <width>463</width>
+                <height>858</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -1333,12 +1333,20 @@
        <property name="text">
         <string>&amp;Add files</string>
        </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>:/icons/16x16/list-add.png</normaloff>:/icons/16x16/list-add.png</iconset>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="startMuxing">
        <property name="text">
         <string>Sta&amp;rt muxing</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>:/icons/16x16/media-playback-start.png</normaloff>:/icons/16x16/media-playback-start.png</iconset>
        </property>
       </widget>
      </item>
@@ -1347,12 +1355,20 @@
        <property name="text">
         <string>Add to job &amp;queue</string>
        </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>:/icons/16x16/task-delegate.png</normaloff>:/icons/16x16/task-delegate.png</iconset>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="saveSettings">
        <property name="text">
         <string>&amp;Save settings</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>:/icons/16x16/document-save.png</normaloff>:/icons/16x16/document-save.png</iconset>
        </property>
       </widget>
      </item>

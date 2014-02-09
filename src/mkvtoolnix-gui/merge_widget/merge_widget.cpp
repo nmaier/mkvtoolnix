@@ -172,18 +172,17 @@ void
 MergeWidget::setupMenu() {
   auto mwUi = MainWindow::get()->getUi();
 
-  connect(mwUi->actionNew,                            SIGNAL(triggered()), this,              SLOT(onNew()));
-  connect(mwUi->actionOpen,                           SIGNAL(triggered()), this,              SLOT(onOpenConfig()));
-  connect(mwUi->actionSave,                           SIGNAL(triggered()), this,              SLOT(onSaveConfig()));
-  connect(mwUi->actionSave_as,                        SIGNAL(triggered()), this,              SLOT(onSaveConfigAs()));
-  // connect(mwUi->actionSave_option_file,               SIGNAL(triggered()), this,              SLOT(onSaveOpenFile()));
-  connect(mwUi->actionExit,                           SIGNAL(triggered()), MainWindow::get(), SLOT(close()));
+  connect(mwUi->actionNew,                        SIGNAL(triggered()), this,              SLOT(onNew()));
+  connect(mwUi->actionOpen,                       SIGNAL(triggered()), this,              SLOT(onOpenConfig()));
+  connect(mwUi->actionSave,                       SIGNAL(triggered()), this,              SLOT(onSaveConfig()));
+  connect(mwUi->actionSaveAs,                     SIGNAL(triggered()), this,              SLOT(onSaveConfigAs()));
+  // connect(mwUi->actionSaveOptionFile,             SIGNAL(triggered()), this,              SLOT(onSaveOpenFile()));
+  connect(mwUi->actionExit,                       SIGNAL(triggered()), MainWindow::get(), SLOT(close()));
 
-  connect(mwUi->action_Start_muxing,                  SIGNAL(triggered()), this,              SLOT(onStartMuxing()));
-  connect(mwUi->actionAdd_to_job_queue,               SIGNAL(triggered()), this,              SLOT(onAddToJobQueue()));
-  // connect(mwUi->action_Job_manager,                   SIGNAL(triggered()), this,              SLOT(onJobManager()));
-  // connect(mwUi->actionShow_mkvmerge_command_line,     SIGNAL(triggered()), this,              SLOT(onShowCommandLine()));
-  // connect(mwUi->actionCopy_command_line_to_clipboard, SIGNAL(triggered()), this,              SLOT(onCopyCommandLineToClipboard()));
+  connect(mwUi->actionStartMuxing,                SIGNAL(triggered()), this,              SLOT(onStartMuxing()));
+  connect(mwUi->actionAddToJobQueue,              SIGNAL(triggered()), this,              SLOT(onAddToJobQueue()));
+  // connect(mwUi->actionShowMkvmergeCommandLine,    SIGNAL(triggered()), this,              SLOT(onShowCommandLine()));
+  // connect(mwUi->actionCopyCommandLineToClipboard, SIGNAL(triggered()), this,              SLOT(onCopyCommandLineToClipboard()));
 }
 
 void
