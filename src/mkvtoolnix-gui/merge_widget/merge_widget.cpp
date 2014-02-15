@@ -1,8 +1,8 @@
 #include "common/common_pch.h"
 
 #include "common/qt.h"
-#include "mkvtoolnix-gui/job_widget/job.h"
 #include "mkvtoolnix-gui/job_widget/job_widget.h"
+#include "mkvtoolnix-gui/job_widget/mux_job.h"
 #include "mkvtoolnix-gui/main_window/main_window.h"
 #include "mkvtoolnix-gui/merge_widget/merge_widget.h"
 #include "mkvtoolnix-gui/forms/main_window.h"
