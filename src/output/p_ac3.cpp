@@ -163,16 +163,22 @@ ac3_packetizer_c::adjust_header_values(ac3::frame_c &ac3_header) {
   if (0 != m_packetno)
     return;
 
-  m_first_ac3_header = ac3_header;
+  if (m_first_ac3_header.m_sample_rate != ac3_header.m_sample_rate)
+    set_audio_sampling_freq((float)ac3_header.m_sample_rate);
 
-  if (m_first_ac3_header.is_eac3())
+  if (m_first_ac3_header.m_channels != ac3_header.m_channels)
+    set_audio_channels(ac3_header.m_channels);
+
+  if (ac3_header.is_eac3())
     set_codec_id(MKV_A_EAC3);
 
-  if (1536 != m_first_ac3_header.m_samples) {
-    m_s2tc.set(1000000000ll * m_first_ac3_header.m_samples, m_first_ac3_header.m_sample_rate);
+  if ((1536 != ac3_header.m_samples) || (m_first_ac3_header.m_sample_rate != ac3_header.m_sample_rate)) {
+    m_s2tc.set(1000000000ll * ac3_header.m_samples, ac3_header.m_sample_rate);
     m_single_packet_duration = 1 * m_s2tc;
     set_track_default_duration(m_single_packet_duration);
   }
+
+  m_first_ac3_header = ac3_header;
 
   rerender_track_headers();
 }

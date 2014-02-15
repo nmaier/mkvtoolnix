@@ -1,3 +1,10 @@
+2014-02-15  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: bug fix: The AC3 packetizer will re-derive the
+        sampling frequency and the number of channels from the
+        bitstream. This way obviously invalid information from the source
+        container like a sampling frequency of 0 Hz will be fixed.
+
 2014-02-05  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: enhancements: AVI reader: audio chunks with obvious
