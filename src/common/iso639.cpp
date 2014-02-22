@@ -576,14 +576,12 @@ is_popular_language_code(std::string const &code) {
 int
 map_to_iso639_2_code(std::string const &s,
                      bool allow_short_english_name) {
-  auto deprecated_code = s_deprecated_2_codes.find(s);
-  if (deprecated_code != s_deprecated_2_codes.end()) {
-    auto lang = brng::find_if(iso639_languages, [&](iso639_language_t const &lang) { return lang.iso639_2_code == deprecated_code->second; });
-    if (lang != iso639_languages.end())
-      return std::distance(iso639_languages.begin(), lang);
-  }
+  auto source          = s;
+  auto deprecated_code = s_deprecated_2_codes.find(source);
+  if (deprecated_code != s_deprecated_2_codes.end())
+    source = deprecated_code->second;
 
-  auto lang = brng::find_if(iso639_languages, [&](iso639_language_t const &lang) { return (lang.iso639_2_code == s) || (lang.terminology_abbrev == s) || (lang.iso639_1_code == s); });
+  auto lang = brng::find_if(iso639_languages, [&](iso639_language_t const &lang) { return (lang.iso639_2_code == source) || (lang.terminology_abbrev == source) || (lang.iso639_1_code == source); });
   if (lang != iso639_languages.end())
     return std::distance(iso639_languages.begin(), lang);
 
@@ -592,7 +590,7 @@ map_to_iso639_2_code(std::string const &s,
   for (auto lang = boost::begin(range); lang != end; lang++) {
     auto names = split(lang->english_name, ";");
     strip(names);
-    if (brng::find(names, s) != names.end())
+    if (brng::find(names, source) != names.end())
       return lang.index();
   }
 
@@ -602,7 +600,7 @@ map_to_iso639_2_code(std::string const &s,
   for (auto lang = boost::begin(range); lang != end; lang++) {
     auto names = split(lang->english_name, ";");
     strip(names);
-    if (names.end() != brng::find_if(names, [&](std::string const &name) { return balg::istarts_with(name, s); }))
+    if (names.end() != brng::find_if(names, [&](std::string const &name) { return balg::istarts_with(name, source); }))
       return lang.index();
   }
 
