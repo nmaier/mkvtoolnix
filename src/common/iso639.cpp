@@ -506,7 +506,11 @@ std::vector<iso639_language_t> const iso639_languages{
   { "Zuni",                                                                             "zun", std::string{}, std::string{}  },
 };
 
-std::unordered_map<std::string, std::string> s_deprecated_2_codes{
+std::unordered_map<std::string, std::string> s_deprecated_1_and_2_codes{
+  // ISO 639-1
+  { "iw", "he" },
+
+  // ISO 639-2
   { "scr", "hrv" },
   { "scc", "srp" },
   { "mol", "rum" },
@@ -577,8 +581,8 @@ int
 map_to_iso639_2_code(std::string const &s,
                      bool allow_short_english_name) {
   auto source          = s;
-  auto deprecated_code = s_deprecated_2_codes.find(source);
-  if (deprecated_code != s_deprecated_2_codes.end())
+  auto deprecated_code = s_deprecated_1_and_2_codes.find(source);
+  if (deprecated_code != s_deprecated_1_and_2_codes.end())
     source = deprecated_code->second;
 
   auto lang = brng::find_if(iso639_languages, [&](iso639_language_t const &lang) { return (lang.iso639_2_code == source) || (lang.terminology_abbrev == source) || (lang.iso639_1_code == source); });
