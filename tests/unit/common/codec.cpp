@@ -134,6 +134,11 @@ TEST(Codec, LookUpStringVideo) {
   EXPECT_TRUE(codec_c::look_up("x264").is(CT_V_MPEG4_P10));
   EXPECT_TRUE(codec_c::look_up("avc1").is(CT_V_MPEG4_P10));
 
+  EXPECT_TRUE(codec_c::look_up(MKV_V_MPEGH_HEVC).is(CT_V_MPEGH_P2));
+  EXPECT_TRUE(codec_c::look_up("h265").is(CT_V_MPEGH_P2));
+  EXPECT_TRUE(codec_c::look_up("x265").is(CT_V_MPEGH_P2));
+  EXPECT_TRUE(codec_c::look_up("hevc").is(CT_V_MPEGH_P2));
+
   EXPECT_TRUE(codec_c::look_up(MKV_V_REALV1).is(CT_V_REAL));
   EXPECT_TRUE(codec_c::look_up(MKV_V_REALV2).is(CT_V_REAL));
   EXPECT_TRUE(codec_c::look_up(MKV_V_REALV3).is(CT_V_REAL));

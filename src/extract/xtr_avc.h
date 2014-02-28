@@ -18,7 +18,7 @@
 #include "extract/xtr_base.h"
 
 class xtr_avc_c: public xtr_base_c {
-private:
+protected:
   int m_nal_size_size;
 
 public:

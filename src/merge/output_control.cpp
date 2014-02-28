@@ -88,6 +88,7 @@
 #include "input/r_flac.h"
 #include "input/r_flv.h"
 #include "input/r_hdsub.h"
+#include "input/r_hevc.h"
 #include "input/r_ivf.h"
 #include "input/r_matroska.h"
 #include "input/r_microdvd.h"
@@ -453,6 +454,8 @@ get_file_type(filelist_t &file) {
 
   else if (avc_es_reader_c::probe_file(io, size))
     type = FILE_TYPE_AVC_ES;
+  else if (hevc_es_reader_c::probe_file(io, size))
+    type = FILE_TYPE_HEVC_ES;
   else {
     // File types which are the same in raw format and in other container formats.
     // Detection requires 20 or more consecutive packets.
@@ -1316,6 +1319,9 @@ create_readers() {
           break;
         case FILE_TYPE_AVC_ES:
           file.reader = new avc_es_reader_c(*file.ti, input_file);
+          break;
+        case FILE_TYPE_HEVC_ES:
+          file.reader = new hevc_es_reader_c(*file.ti, input_file);
           break;
         case FILE_TYPE_AVI:
           file.reader = new avi_reader_c(*file.ti, input_file);
