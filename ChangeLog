@@ -5,7 +5,9 @@
 2014-02-28  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge, mkvextract: new feature: added support for h.265/HEVC
-        by merging the patches from DivX/Rovi Corp.
+        by merging the patches from DivX/Rovi Corp. So far HEVC is only
+        supported as elementary streams and read from other Matroska
+        files.
 
 2014-02-22  Moritz Bunkus  <moritz@bunkus.org>
 
