@@ -1,3 +1,9 @@
+2014-03-04  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: bug fix: fixed timestamp assignment for AVC/h.264
+        videos in which recovery point SEIs occur in front of the second
+        field of two interlaced fields.
+
 2014-03-02  Moritz Bunkus  <moritz@bunkus.org>
 
         * Released v6.8.0.

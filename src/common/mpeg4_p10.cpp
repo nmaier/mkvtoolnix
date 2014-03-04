@@ -1235,7 +1235,8 @@ mpeg4::p10::avc_es_parser_c::handle_slice_nalu(memory_cptr &nalu) {
   if (m_incomplete_frame.m_keyframe) {
     m_first_keyframe_found    = true;
     m_b_frames_since_keyframe = false;
-    cleanup();
+    if (!si.field_pic_flag || !si.bottom_field_flag)
+      cleanup();
 
   } else
     m_b_frames_since_keyframe |= is_b_slice;
