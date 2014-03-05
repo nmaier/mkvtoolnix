@@ -313,6 +313,21 @@ mpeg_ts_track_c::detect_timecode_wrap(timecode_c &timecode) {
 }
 
 void
+mpeg_ts_track_c::adjust_timecode_for_wrap(timecode_c &timecode) {
+  static auto const s_wrap_limit = timecode_c::mpeg(1ll << 30);
+  static auto const s_bad_limit  = timecode_c::m(5);
+
+  if (!timecode.valid())
+    return;
+
+  if (timecode < s_wrap_limit)
+    timecode += m_timecode_wrap_add;
+
+  if ((timecode - m_previous_valid_timecode).abs() >= s_bad_limit)
+    timecode = timecode_c{};
+}
+
+void
 mpeg_ts_track_c::handle_timecode_wrap(timecode_c &pts,
                                       timecode_c &dts) {
   static auto const s_wrap_add    = timecode_c::mpeg(1ll << 33);
@@ -336,11 +351,10 @@ mpeg_ts_track_c::handle_timecode_wrap(timecode_c &pts,
                % pid % pts % dts % m_previous_valid_timecode % reader.m_global_timecode_offset % m_timecode_wrap_add);
   }
 
-  if (pts.valid() && (pts < s_wrap_limit))
-    pts += m_timecode_wrap_add;
+  adjust_timecode_for_wrap(pts);
+  adjust_timecode_for_wrap(dts);
 
-  if (dts.valid() && (dts < s_wrap_limit))
-    dts += m_timecode_wrap_add;
+  // mxinfo(boost::format("pid %5% PTS before %1% now %2% wrapped %3% reset prevvalid %4% diff %6%\n") % before % pts % m_timecodes_wrapped % m_previous_valid_timecode % pid % (pts - m_previous_valid_timecode));
 }
 
 // ------------------------------------------------------------

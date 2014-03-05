@@ -353,6 +353,7 @@ public:
 
   void handle_timecode_wrap(timecode_c &pts, timecode_c &dts);
   bool detect_timecode_wrap(timecode_c &timecode);
+  void adjust_timecode_for_wrap(timecode_c &timecode);
 };
 
 typedef std::shared_ptr<mpeg_ts_track_c> mpeg_ts_track_ptr;
