@@ -1,3 +1,8 @@
+2014-03-05  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: enhancements: trailing zero bytes will be removed from
+        AVC/h.264 NALUs. Implements #997.
+
 2014-03-04  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: bug fix: fixed timestamp assignment for AVC/h.264
