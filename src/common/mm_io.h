@@ -30,7 +30,7 @@ typedef std::shared_ptr<charset_converter_c> charset_converter_cptr;
 
 class mm_io_c: public IOCallback {
 protected:
-  bool m_dos_style_newlines;
+  bool m_dos_style_newlines, m_bom_written;
   std::stack<int64_t> m_positions;
   int64_t m_current_position, m_cached_size;
   charset_converter_cptr m_string_output_converter;
@@ -38,6 +38,7 @@ protected:
 public:
   mm_io_c()
     : m_dos_style_newlines(false)
+    , m_bom_written{}
     , m_current_position(0)
     , m_cached_size(-1)
   {
@@ -91,6 +92,7 @@ public:
     return puts(format.str());
   }
   virtual bool write_bom(const std::string &charset);
+  virtual bool bom_written() const;
   virtual int getch();
 
   virtual void save_pos(int64_t new_pos = -1);

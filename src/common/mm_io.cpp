@@ -554,7 +554,7 @@ mm_io_c::write_bom(const std::string &charset) {
   const unsigned char *bom;
   unsigned int bom_len;
 
-  if (charset.empty())
+  if (m_bom_written || charset.empty())
     return false;
 
   if ((charset =="UTF-8") || (charset =="UTF8")) {
@@ -577,7 +577,15 @@ mm_io_c::write_bom(const std::string &charset) {
 
   setFilePointer(0, seek_beginning);
 
-  return (write(bom, bom_len) == bom_len);
+  m_bom_written = write(bom, bom_len) == bom_len;
+
+  return m_bom_written;
+}
+
+bool
+mm_io_c::bom_written()
+  const {
+  return m_bom_written;
 }
 
 int64_t
