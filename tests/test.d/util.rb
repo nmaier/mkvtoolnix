@@ -1,3 +1,5 @@
+require 'digest/md5'
+
 $message_mutex = Mutex.new
 def show_message message
   $message_mutex.lock
@@ -32,6 +34,12 @@ end
 class Array
   def extract_options!
     last.is_a?(::Hash) ? pop : {}
+  end
+end
+
+class String
+  def md5
+    Digest::MD5.hexdigest self
   end
 end
 
