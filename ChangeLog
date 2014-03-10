@@ -1,3 +1,9 @@
+2014-03-10  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvextract: bug fix: during the extraction of chapters, tags or
+        segment info XML files with the --redirect-output parameter the
+        BOM (byte order mark) was written twice.
+
 2014-03-05  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: bug fix: MPEG TS: timestamp outliers are ignored if
