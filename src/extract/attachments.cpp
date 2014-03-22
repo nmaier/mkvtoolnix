@@ -36,12 +36,12 @@ using namespace libmatroska;
 
 struct attachment_t {
   std::string name, type;
-  int64_t size, id;
+  uint64_t size, id;
   KaxFileData *fdata;
   bool valid;
 
   attachment_t()
-    : size(-1)
+    : size{std::numeric_limits<uint64_t>::max()}
     , id{}
     , fdata(nullptr)
     , valid(false)
@@ -79,7 +79,7 @@ attachment_t::parse(KaxAttached &att) {
     }
   }
 
-  valid = (-1 != size) && !type.empty();
+  valid = (std::numeric_limits<uint64_t>::max() != size) && !type.empty();
 
   return *this;
 }
