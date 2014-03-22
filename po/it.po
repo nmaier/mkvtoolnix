@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2014-03-15 20:48+0100\n"
+"PO-Revision-Date: 2014-03-19 10:52+0100\n"
 "Last-Translator: bovirus <bovirus@libero.it>\n"
 "Language-Team: Italian <moritz@bunkus.org>\n"
 "Language: it\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.6.3\n"
+"X-Generator: Poedit 1.6.4\n"
 
 #: src/extract/xtr_tta.cpp:107
 #, boost-format
@@ -1966,7 +1966,7 @@ msgid ""
 "A chapter starting at 0s is never considered for splitting and discarded "
 "silently."
 msgstr ""
-"Un capitolo che parte a 0s non è mai considerato per la suddivisione e verrà "
+"Un capitolo che inizia a 0s non è mai considerato per la suddivisione e verrà "
 "ignorato."
 
 #: src/mmg/tabs/global.cpp:249
@@ -4025,13 +4025,13 @@ msgid "Extract the data to a raw file."
 msgstr "Estrai i dati in file RAW."
 
 #: src/output/p_hevc.cpp:69 src/output/p_hevc_es.cpp:135
-#, fuzzy, boost-format
+#, boost-format
 msgid ""
 "Extracted the aspect ratio information from the HEVC video data and set the "
 "display dimensions to %1%/%2%.\n"
 msgstr ""
-"Estrae le informazioni sul rapporto d'aspetto dai dati video MPEG-4 Layer 2 "
-"e imposta la dimensione di visualizzazione a %1%/%2%.\n"
+"Estratte informazioni rapporto di aspetto dai dati video HEVC e impostata la "
+"dimensione schermo a %1%/%2%.\n"
 
 #: src/output/p_avc.cpp:147 src/output/p_mpeg4_p10.cpp:93
 #, boost-format
@@ -4442,19 +4442,16 @@ msgid "H&eaders"
 msgstr "Int&estazioni"
 
 #: src/input/r_hevc.h:31 src/output/p_hevc.h:33
-#, fuzzy
 msgid "HEVC/h.265"
-msgstr "AVC/h.264"
+msgstr "HEVC/H.265"
 
 #: src/output/p_hevc_es.h:41
-#, fuzzy
 msgid "HEVC/h.265 (unframed)"
-msgstr "AVC/h.264 (senza frame)"
+msgstr "HEVC/H.265 (senza frame)"
 
 #: src/common/file_types.cpp:37
-#, fuzzy
 msgid "HEVC/h.265 elementary streams"
-msgstr "Flussi elementare AVC/h.264"
+msgstr "Flussi elementare HEVC/H.265"
 
 #: src/mmg/header_editor/frame.cpp:172
 msgid "Header editor"
@@ -9308,7 +9305,7 @@ msgid ""
 "This AVC/h.264 track does not start with a key frame. The first %1% frames "
 "have been skipped.\n"
 msgstr ""
-"Questa traccia AVC/H.264 non parte con un frame chiave. I primi %1% frame "
+"Questa traccia AVC/H.264 non inizia con un frame chiave. I primi %1% frame "
 "sono stati ignorati.\n"
 
 #: src/output/p_avc.cpp:126
@@ -9324,25 +9321,24 @@ msgstr ""
 "risultante potrebbe non essere utilizzabile.\n"
 
 #: src/output/p_hevc_es.cpp:96
-#, fuzzy, boost-format
+#, boost-format
 msgid ""
 "This HEVC contains frames that are too big for the current maximum NALU "
 "size. You have to re-run mkvmerge and set the maximum NALU size to %1% for "
 "this track (command line parameter '--nalu-size-length %2%:%1%').\n"
 msgstr ""
-"Questo AVC/H.264 contiene frame che sono troppo grandi per il valore massimo "
-"NALU attuale. Riesegui mkvmerge e imposta il valore massimo di NALU a %1% "
-"per questa traccia (parametro linea di comando: '--nalu-size-length %2%:"
-"%1%').\n"
+"Questo HEVC contiene frame che sono troppo grandi per il valore massimo NALU "
+"attuale. Riesegui mkvmerge e imposta il valore massimo di NALU a %1% per "
+"questa traccia (parametro linea di comando: '--nalu-size-length %2%:%1%').\n"
 
 #: src/output/p_hevc_es.cpp:114
-#, fuzzy, boost-format
+#, boost-format
 msgid ""
 "This HEVC track does not start with a key frame. The first %1% frames have "
 "been skipped.\n"
 msgstr ""
-"Questa traccia AVC/H.264 non parte con un frame chiave. I primi %1% frame "
-"sono stati ignorati.\n"
+"Questa traccia HEVC non inizia con un frame chiave. I primi %1% frame sono "
+"stati ignorati.\n"
 
 #: src/output/p_mp3.cpp:59
 #, boost-format
@@ -11029,7 +11025,7 @@ msgstr ""
 "%1%\n"
 
 #: src/output/p_hevc_es.cpp:103
-#, fuzzy, boost-format
+#, boost-format
 msgid ""
 "mkvmerge encountered broken or unparsable data in this HEVC video track. "
 "Either your file is damaged (which mkvmerge cannot cope with yet) or this is "
@@ -11037,8 +11033,8 @@ msgid ""
 "%1%\n"
 msgstr ""
 "mkvmerge ha incontrato dati corrotti o non analizzabili in questa traccia "
-"video AVC/H.264. Potrebbe essere o il file danneggiato (a cui mkvmerge non "
-"può ancora far fronte) o c'è un bug in mkvmerge. Il messaggio d'errore era:\n"
+"video HEVC. Potrebbe essere o il file danneggiato (a cui mkvmerge non può "
+"ancora far fronte) o c'è un bug in mkvmerge. Il messaggio d'errore era:\n"
 "%1%\n"
 
 #: src/mmg/options/mkvmerge.cpp:50
@@ -11375,7 +11371,7 @@ msgstr "dividi per capitoli"
 
 #: src/mmg/tabs/global.cpp:317
 msgid "split by parts based on frame/field numbers"
-msgstr "dividi in parte in base al numero frame/campo"
+msgstr "dividi in parti in base al numero frame/campo"
 
 #: src/mmg/tabs/global.cpp:316
 msgid "split by parts based on timecodes"
