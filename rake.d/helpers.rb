@@ -179,7 +179,7 @@ def adjust_to_poedit_style(in_name, out_name, language)
     state          = :initial
     previous_state = :initial
     sources        = []
-    one_source     = !%w{es it}.include?(language)
+    one_source     = !%w{es it uk}.include?(language)
 
     lines.each do |line|
       previous_state = state
