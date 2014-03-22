@@ -530,22 +530,17 @@ ssa_parser_c::add_attachment_maybe(std::string &name,
   attachment.description  = (boost::format(SSA_SECTION_FONTS == section ? Y("Imported font from %1%") : Y("Imported picture from %1%")) % short_name).str();
   attachment.to_all_files = true;
 
-  size_t allocated        = 1024;
-  attachment.data         = memory_c::alloc(allocated);
-  attachment.data->set_size(0);
+  size_t data_size        = data_uu.length() % 4;
+  data_size               = 3 == data_size ? 2 : 2 == data_size ? 1 : 0;
+  data_size              += data_uu.length() / 4 * 3;
+  attachment.data         = memory_c::alloc(data_size);
+  auto out                = attachment.data->get_buffer();
+  auto in                 = reinterpret_cast<unsigned char const *>(data_uu.c_str());
 
-  const unsigned char *p  = (const unsigned char *)data_uu.c_str();
-  for (pos = 0; data_uu.length() > (pos + 4); pos += 4)
-    decode_chars(p[pos], p[pos + 1], p[pos + 2], p[pos + 3], attachment.data, 3, allocated);
+  for (auto end = in + (data_uu.length() / 4) * 4; in < end; in += 4, out += 3)
+    decode_chars(in, out, 4);
 
-  switch (data_uu.length() % 4) {
-    case 2:
-      decode_chars(p[pos], p[pos + 1], 0, 0, attachment.data, 1, allocated);
-      break;
-    case 3:
-      decode_chars(p[pos], p[pos + 1], p[pos + 2], 0, attachment.data, 2, allocated);
-      break;
-  }
+  decode_chars(in, out, data_uu.length() % 4);
 
   attachment.mime_type = guess_mime_type(name, false);
 
@@ -559,29 +554,20 @@ ssa_parser_c::add_attachment_maybe(std::string &name,
 }
 
 void
-ssa_parser_c::decode_chars(unsigned char c1,
-                           unsigned char c2,
-                           unsigned char c3,
-                           unsigned char c4,
-                           memory_cptr &buffer,
-                           size_t bytes_to_add,
-                           size_t &allocated) {
-  unsigned char bytes[3];
+ssa_parser_c::decode_chars(unsigned char const *in,
+                           unsigned char *out,
+                           size_t bytes_in) {
+  if (!bytes_in)
+    return;
 
-  uint32_t value = ((c1 - 33) << 18) + ((c2 - 33) << 12) + ((c3 - 33) << 6) + (c4 - 33);
-  bytes[2]       =  value & 0x0000ff;
-  bytes[1]       = (value & 0x00ff00) >>  8;
-  bytes[0]       = (value & 0xff0000) >> 16;
+  size_t bytes_out = 4 == bytes_in ? 3 : 3 == bytes_in ? 2 : 1;
+  uint32_t value   = 0;
 
-  if ((buffer->get_size() + bytes_to_add) > allocated) {
-    int old_size  = buffer->get_size();
-    allocated    += 1024;
-    buffer->resize(allocated);
-    buffer->set_size(old_size);
-  }
+  for (size_t idx = 0; idx < bytes_in; ++idx)
+    value |= (static_cast<uint32_t>(in[idx]) - 33) << (6 * (3 - idx));
 
-  memcpy(buffer->get_buffer() + buffer->get_size(), bytes, bytes_to_add);
-  buffer->set_size(buffer->get_size() + bytes_to_add);
+  for (size_t idx = 0; idx < bytes_out; ++idx)
+    out[idx] = (value >> ((2 - idx) * 8)) & 0xff;
 }
 
 // ------------------------------------------------------------

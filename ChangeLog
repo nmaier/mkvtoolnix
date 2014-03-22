@@ -1,5 +1,9 @@
 2014-03-22  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mkvmerge: bug fix: reading fonts embedded in SSA/ASS files was
+        sometimes truncating the attachments created from them. Fixes
+        #1003.
+
         * mkvmerge: bug fix: fixed display of very large IDs during
         attachment extraction.
 

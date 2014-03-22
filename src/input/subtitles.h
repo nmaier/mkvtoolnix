@@ -142,7 +142,7 @@ protected:
   std::string get_element(const char *index, std::vector<std::string> &fields);
   std::string recode_text(std::vector<std::string> &fields);
   void add_attachment_maybe(std::string &name, std::string &data_uu, ssa_section_e section);
-  void decode_chars(unsigned char c1, unsigned char c2, unsigned char c3, unsigned char c4, memory_cptr &buffer, size_t bytes_to_add, size_t &allocated);
+  void decode_chars(unsigned char const *in, unsigned char *out, size_t bytes_in);
 };
 typedef std::shared_ptr<ssa_parser_c> ssa_parser_cptr;
 
