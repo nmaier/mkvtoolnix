@@ -354,8 +354,8 @@ open_playlist_file(filelist_t &file,
    Opens the input file and calls the \c probe_file function for each known
    file reader class. Uses \c mm_text_io_c for subtitle probing.
 */
-void
-get_file_type(filelist_t &file) {
+static std::pair<file_type_e, int64_t>
+get_file_type_internal(filelist_t &file) {
   mm_io_cptr af_io = open_input_file(file);
   mm_io_c *io      = af_io.get();
   int64_t size     = std::min(io->get_size(), static_cast<int64_t>(1 << 25));
@@ -365,6 +365,36 @@ get_file_type(filelist_t &file) {
     io = file.playlist_mpls_in.get();
 
   file_type_e type = FILE_TYPE_IS_UNKNOWN;
+
+  // All text file types (subtitles).
+  auto text_io = mm_text_io_cptr{};
+  try {
+    text_io        = std::make_shared<mm_text_io_c>(new mm_file_io_c(file.name));
+    auto text_size = text_io->get_size();
+
+    if (srt_reader_c::probe_file(text_io.get(), text_size))
+      type = FILE_TYPE_SRT;
+    else if (ssa_reader_c::probe_file(text_io.get(), text_size))
+      type = FILE_TYPE_SSA;
+    else if (vobsub_reader_c::probe_file(text_io.get(), text_size))
+      type = FILE_TYPE_VOBSUB;
+    else if (usf_reader_c::probe_file(text_io.get(), text_size))
+      type = FILE_TYPE_USF;
+
+    // Unsupported text subtitle formats
+    else if (microdvd_reader_c::probe_file(text_io.get(), text_size))
+      type = FILE_TYPE_MICRODVD;
+
+    if (type != FILE_TYPE_IS_UNKNOWN)
+      return std::make_pair(type, text_size);
+
+  } catch (mtx::mm_io::exception &ex) {
+    mxerror(boost::format(Y("The file '%1%' could not be opened for reading: %2%.\n")) % file.name % ex);
+
+  } catch (...) {
+    mxerror(boost::format(Y("The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n")) % file.name);
+  }
+
   // File types that can be detected unambiguously but are not supported
   if (aac_adif_reader_c::probe_file(io, size))
     type = FILE_TYPE_AAC;
@@ -472,41 +502,17 @@ get_file_type(filelist_t &file) {
         type = FILE_TYPE_AAC;
   }
 
-  if (FILE_TYPE_IS_UNKNOWN == type) {
-    // All text file types (subtitles).
-    mm_text_io_c *text_io = nullptr;
-    try {
-      text_io = new mm_text_io_c(new mm_file_io_c(file.name));
-      size    = text_io->get_size();
-    } catch (mtx::mm_io::exception &ex) {
-      mxerror(boost::format(Y("The file '%1%' could not be opened for reading: %2%.\n")) % file.name % ex);
+  return std::make_pair(type, size);
+}
 
-    } catch (...) {
-      mxerror(boost::format(Y("The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n")) % file.name);
-    }
+void
+get_file_type(filelist_t &file) {
+  auto result = get_file_type_internal(file);
 
-    if (srt_reader_c::probe_file(text_io, size))
-      type = FILE_TYPE_SRT;
-    else if (ssa_reader_c::probe_file(text_io, size))
-      type = FILE_TYPE_SSA;
-    else if (vobsub_reader_c::probe_file(text_io, size))
-      type = FILE_TYPE_VOBSUB;
-    else if (usf_reader_c::probe_file(text_io, size))
-      type = FILE_TYPE_USF;
+  g_file_sizes += result.second;
 
-    // Unsupported text subtitle formats
-    else if (microdvd_reader_c::probe_file(text_io, size))
-      type = FILE_TYPE_MICRODVD;
-    else
-      type = FILE_TYPE_IS_UNKNOWN;
-
-    delete text_io;
-  }
-
-  g_file_sizes += size;
-
-  file.size     = size;
-  file.type     = type;
+  file.size     = result.second;
+  file.type     = result.first;
 }
 
 static generic_reader_c *
