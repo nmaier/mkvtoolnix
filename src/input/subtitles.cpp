@@ -247,6 +247,7 @@ bool
 ssa_parser_c::probe(mm_text_io_c *io) {
   boost::regex script_info_re("^\\s*\\[script\\s+info\\]",   boost::regex::perl | boost::regex::icase);
   boost::regex styles_re(     "^\\s*\\[V4\\+?\\s+Styles\\]", boost::regex::perl | boost::regex::icase);
+  boost::regex comment_re(    "^\\s*$|^\\s*;",               boost::regex::perl | boost::regex::icase);
 
   try {
     int line_number = 0;
@@ -258,11 +259,18 @@ ssa_parser_c::probe(mm_text_io_c *io) {
 
       // Read at most 100 lines.
       if (100 < line_number)
-        return 0;
+        return false;
+
+      // Skip comments and empty lines.
+      if (boost::regex_search(line, comment_re))
+        continue;
 
       // This is the line mkvmerge is looking for: positive match.
       if (boost::regex_search(line, script_info_re) || boost::regex_search(line, styles_re))
         return true;
+
+      // Neither a wanted line nor an empty one/a comment: negative result.
+      return false;
     }
   } catch (...) {
   }
