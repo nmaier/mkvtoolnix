@@ -374,7 +374,7 @@ EOT
         task language => "po/mkvtoolnix.pot" do |t|
           po       = "po/#{language}.po"
           tmp_file = "#{po}.new"
-          no_wrap  = %{es eu it uk}.include?(language) ? "" : "--no-wrap"
+          no_wrap  = %{es eu it nl uk}.include?(language) ? "" : "--no-wrap"
           runq "MSGMERGE #{po}", "msgmerge -q -s #{no_wrap} #{po} po/mkvtoolnix.pot > #{tmp_file}", :allow_failure => true
 
           exit_code = last_exit_code
