@@ -25,7 +25,7 @@
 #include "common/strings/parsing.h"
 #include "common/version.h"
 
-#define VERSIONNAME "Theme for Great Cities"
+#define VERSIONNAME "On Duende"
 
 version_number_t::version_number_t()
   : valid(false)
