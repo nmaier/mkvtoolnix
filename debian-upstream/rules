@@ -24,7 +24,7 @@ ifneq "$(wildcard /usr/share/misc/config.guess)" ""
 endif
 	dh_auto_configure -- --enable-gui --docdir='$${datarootdir}/doc/mkvtoolnix-gui'
 
-	./drake -j $(NCPUS)
+	./drake -j $(NCPUS) apps:mkvinfo apps:mmg
 
 	mv src/mkvinfo src/mkvinfo-gui
 	mv src/mmg/mmg src/mmg/mmg-gui
