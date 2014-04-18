@@ -625,6 +625,15 @@ kax_analyzer_c::remove_from_meta_seeks(EbmlId id) {
     if (!modified)
       continue;
 
+    // If the seek head is now empty then simply remove and overwrite
+    // it with a void element.
+    if (0 == seek_head->ListSize()) {
+      m_data[data_idx]->m_size = 0;
+      handle_void_elements(data_idx);
+
+      continue;
+    }
+
     // First make sure the new element is smaller than the old one.
     // The following code cannot deal with the other case.
     seek_head->UpdateSize(true);
