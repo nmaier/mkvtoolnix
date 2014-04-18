@@ -356,6 +356,8 @@ Section "Program files" SEC01
   File "/oname=wxstd.mo" "wxWidgets-po\pl\LC_MESSAGES\wxstd.mo"
   SetOutPath "$INSTDIR\locale\pt\LC_MESSAGES"
   File "/oname=mkvtoolnix.mo" "po\pt.mo"
+  SetOutPath "$INSTDIR\locale\pt_BR\LC_MESSAGES"
+  File "/oname=mkvtoolnix.mo" "po\pt_BR.mo"
   # File "/oname=wxstd.mo" "wxWidgets-po\pt\LC_MESSAGES\wxstd.mo"
   SetOutPath "$INSTDIR\locale\ru\LC_MESSAGES"
   File "/oname=mkvtoolnix.mo" "po\ru.mo"
