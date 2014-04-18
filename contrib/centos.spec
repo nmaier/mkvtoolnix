@@ -7,7 +7,7 @@
 
 Summary: mkvtoolnix
 Name: mkvtoolnix
-Version: 6.9.0
+Version: 6.9.1
 Release: 1
 License: GPL
 Group: Multimedia
