@@ -1,5 +1,8 @@
 2014-04-18  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mkvmerge: bug fix: fixed huge memory usage when probing files
+        (it was reading the whole file into memory for that).
+
         * Released v6.9.0.
 
         * all: new feature: added a Brazilian Portuguese translation of

@@ -30,7 +30,7 @@ int
 usf_reader_c::probe_file(mm_text_io_c *in,
                          uint64_t) {
   try {
-    auto doc = mtx::xml::load_file(in->get_file_name());
+    auto doc = mtx::xml::load_file(in->get_file_name(), pugi::parse_default | pugi::parse_declaration | pugi::parse_doctype | pugi::parse_pi | pugi::parse_comments, 10 * 1024 * 1024);
     return doc && std::string{ doc->document_element().name() } == "USFSubtitles" ? 1 : 0;
 
   } catch(...) {
