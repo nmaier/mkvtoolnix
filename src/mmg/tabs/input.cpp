@@ -510,7 +510,7 @@ tab_input::parse_tags_line(mmg_file_cptr file,
 bool
 tab_input::run_mkvmerge_identification(wxString const &file_name,
                                        wxArrayString &output) {
-  auto opt_file_name = wxString::Format(wxT("%smmg-mkvmerge-options-%d-%d"), get_temp_dir().c_str(), (int)wxGetProcessId(), (int)wxGetUTCTime());
+  auto opt_file_name = get_temp_settings_file_name();
   auto out_file_name = opt_file_name + wxT("-output");
   wxArrayString errors;
   long result;

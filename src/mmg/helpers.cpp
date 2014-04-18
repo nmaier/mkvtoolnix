@@ -20,6 +20,7 @@
 
 #include "mmg/mmg.h"
 #include "common/common_pch.h"
+#include "common/fs_sys_helpers.h"
 #include "common/strings/formatting.h"
 #include "common/wx.h"
 
@@ -275,18 +276,8 @@ format_tooltip(const wxString &s) {
 #endif
 
 wxString
-get_temp_dir() {
-  wxString temp_dir;
-
-  wxGetEnv(wxT("TMP"), &temp_dir);
-  if (temp_dir == wxEmptyString)
-    wxGetEnv(wxT("TEMP"), &temp_dir);
-  if ((temp_dir == wxEmptyString) && wxDirExists(wxT("/tmp")))
-    temp_dir = wxT("/tmp");
-  if (temp_dir != wxEmptyString)
-    temp_dir += wxT(PATHSEP);
-
-  return temp_dir;
+get_temp_settings_file_name() {
+  return wxU((bfs::temp_directory_path() / (boost::format("mmg-mkvmerge-options-%1%-%2%") % wxGetProcessId() % get_current_time_millis()).str()).string());
 }
 
 wxString

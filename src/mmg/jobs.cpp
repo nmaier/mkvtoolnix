@@ -172,7 +172,7 @@ job_run_dialog::start_next_job() {
 
   mdlg->load(wxString::Format(wxT("%s/%d.mmg"), app->get_jobs_folder().c_str(), jobs[ndx].id), true);
 
-  opt_file_name.Printf(wxT("%smmg-mkvmerge-options-%d-%d"), get_temp_dir().c_str(), (int)wxGetProcessId(), (int)wxGetUTCTime());
+  opt_file_name = get_temp_settings_file_name();
 
   wxFile *opt_file;
   try {

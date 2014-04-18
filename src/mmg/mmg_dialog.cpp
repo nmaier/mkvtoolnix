@@ -382,9 +382,7 @@ mmg_dialog::on_quit(wxCommandEvent &) {
 
 void
 mmg_dialog::on_file_new(wxCommandEvent &evt) {
-  wxString tmp_name;
-
-  tmp_name.Printf(wxT("%stempsettings-%d.mmg"), get_temp_dir().c_str(), (int)wxGetProcessId());
+  auto tmp_name = get_temp_settings_file_name();
   wxFileConfig cfg(wxT("mkvmerge GUI"), wxT("Moritz Bunkus"), tmp_name);
   cfg.SetExpandEnvVars(false);
 

@@ -72,7 +72,7 @@ scan_directory_thread_c::identify_file(wxString const &file_name)
   const {
   wxArrayString output;
 
-  auto opt_file_name = wxU(boost::format("%1%mmg-mkvmerge-options-%2%-%3%") % to_utf8(get_temp_dir()) % wxGetProcessId() % get_current_time_millis());
+  auto opt_file_name = get_temp_settings_file_name();
 
   try {
     const unsigned char utf8_bom[3] = {0xef, 0xbb, 0xbf};

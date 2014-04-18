@@ -99,7 +99,7 @@ void
 mux_dialog::run() {
   auto &arg_list = static_cast<mmg_dialog *>(GetParent())->get_command_line_args();
 
-  opt_file_name.Printf(wxT("%smmg-mkvmerge-options-%d-%d"), get_temp_dir().c_str(), (int)wxGetProcessId(), (int)wxGetUTCTime());
+  opt_file_name = get_temp_settings_file_name();
   try {
     const unsigned char utf8_bom[3] = {0xef, 0xbb, 0xbf};
     wxFile opt_file{opt_file_name, wxFile::write};
