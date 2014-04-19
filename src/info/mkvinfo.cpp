@@ -1729,8 +1729,9 @@ process_file(const std::string &file_name) {
 }
 
 void
-setup(const std::string &locale) {
-  mtx_common_init("mkvinfo");
+setup(char const *argv0,
+      std::string const &locale) {
+  mtx_common_init("mkvinfo", argv0);
 
   init_locales(locale);
   init_common_boost_formats();
@@ -1751,7 +1752,7 @@ console_main() {
 int
 main(int argc,
      char **argv) {
-  setup();
+  setup(argv[0]);
 
   g_options = info_cli_parser_c(command_line_utf8(argc, argv)).run();
 

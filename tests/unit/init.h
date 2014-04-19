@@ -44,7 +44,7 @@ public:
   }
 };
 
-void init_suite();
+void init_suite(char const *argv0);
 void init_case();
 
 }

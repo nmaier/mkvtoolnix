@@ -65,8 +65,8 @@ show_error(const std::string &error) {
 }
 
 static void
-setup() {
-  mtx_common_init("mkvextract");
+setup(char **argv) {
+  mtx_common_init("mkvextract", argv[0]);
 
   set_process_priority(-1);
 
@@ -77,7 +77,7 @@ setup() {
 int
 main(int argc,
      char **argv) {
-  setup();
+  setup(argv);
 
   options_c options = extract_cli_parser_c(command_line_utf8(argc, argv)).run();
 

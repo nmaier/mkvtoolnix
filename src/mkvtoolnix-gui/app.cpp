@@ -9,7 +9,7 @@ App::App(int &argc,
          char **argv)
   : QApplication{argc, argv}
 {
-  mtx_common_init("mkvtoolnix-gui");
+  mtx_common_init("mkvtoolnix-gui", argv[0]);
 
   QCoreApplication::setOrganizationName("bunkus.org");
   QCoreApplication::setOrganizationDomain("bunkus.org");

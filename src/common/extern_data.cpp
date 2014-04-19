@@ -2670,7 +2670,7 @@ guess_mime_type_internal(std::string ext,
 # endif  // MAGIC_MIME_TYPE
 
 # ifdef SYS_WINDOWS
-  std::string magic_filename = get_installation_path() + "\\data\\magic";
+  auto magic_filename = (mtx::get_installation_path() / "data" / "magic").string();
   if (!m || (-1 == magic_load(m, magic_filename.c_str())))
     return guess_mime_type_by_ext(ext);
 # else  // defined(SYS_WINDOWS)

@@ -112,9 +112,9 @@ mmg_app::init_ui_locale() {
   m_ui_locale = locale;
 
   if (s_first_init) {
-    std::string installation_path = get_installation_path();
+    auto installation_path = mtx::get_installation_path();
     if (!installation_path.empty())
-      wxLocale::AddCatalogLookupPathPrefix(wxU(installation_path + "/locale"));
+      wxLocale::AddCatalogLookupPathPrefix(wxU((installation_path / "locale").string()));
 
     auto lang_info = !m_ui_locale.empty() ? wxLocale::FindLanguageInfo(wxU(m_ui_locale)) : nullptr;
     auto language  = lang_info            ? lang_info->Language                          : wxLANGUAGE_ENGLISH;
@@ -139,9 +139,9 @@ wxString
 mmg_app::get_config_file_name()
   const {
 #ifdef SYS_WINDOWS
-  return wxU(get_installation_path()) + wxT("/mkvtoolnix.ini");
+  return wxU((mtx::get_installation_path() / "mkvtoolnix.ini").string());
 #else
-  return wxU(get_application_data_folder()) + wxT("/config");
+  return wxU((mtx::get_application_data_folder() / "config").string());
 #endif
 }
 
@@ -149,9 +149,9 @@ wxString
 mmg_app::get_jobs_folder()
   const {
 #if defined(SYS_WINDOWS)
-  return (m_is_installed ? wxU(get_application_data_folder()) : wxU(get_installation_path())) + wxT("\\jobs");
+  return m_is_installed ? wxU(mtx::get_application_data_folder().string()) : wxU((mtx::get_installation_path() / "jobs").string());
 #else
-  return wxU(get_application_data_folder()) + wxT("/jobs");
+  return wxU((mtx::get_application_data_folder() / "jobs").string());
 #endif
 }
 
@@ -203,7 +203,7 @@ mmg_app::OnInit() {
 
   wxImage::AddHandler(new wxPNGHandler);
 
-  mtx_common_init("mmg");
+  mtx_common_init("mmg", to_utf8(this->argv[0]).c_str());
 
   debugging_c::send_to_logger(true);
 

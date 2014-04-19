@@ -68,7 +68,7 @@ parse_file(const std::string &file_name) {
 int
 main(int argc,
      char **argv) {
-  mtx_common_init("mpls_dump");
+  mtx_common_init("mpls_dump", argv[0]);
 
   auto args = command_line_utf8(argc, argv);
   while (handle_common_cli_args(args, "-r"))

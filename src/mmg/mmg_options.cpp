@@ -76,7 +76,7 @@ mmg_options_t::mkvmerge_exe() {
     exe.Empty();
 
   if (exe.IsEmpty()) {
-    exe = wxU(get_installation_path());
+    exe = wxU(mtx::get_installation_path().string());
     if (!exe.IsEmpty())
       exe += wxT("\\mkvmerge.exe");
   }

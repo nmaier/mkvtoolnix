@@ -2452,7 +2452,7 @@ setup(int argc,
       char **argv) {
   clear_list_of_unique_numbers(UNIQUE_ALL_IDS);
 
-  mtx_common_init("mkvmerge");
+  mtx_common_init("mkvmerge", argv[0]);
   g_kax_tracks = new KaxTracks();
 
 #if defined(SYS_UNIX) || defined(COMP_CYGWIN) || defined(SYS_APPLE)

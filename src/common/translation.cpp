@@ -270,7 +270,7 @@ init_locales(std::string locale) {
     boost::filesystem::path::imbue(utf8_locale);
   }
 
-  locale_dir = get_installation_path() + "\\locale";
+  locale_dir = (mtx::get_installation_path() / "locale").string();
 
 # else  // SYS_WINDOWS
   std::string chosen_locale;

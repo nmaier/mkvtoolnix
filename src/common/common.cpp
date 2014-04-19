@@ -150,7 +150,8 @@ mtx_common_cleanup() {
 }
 
 void
-mtx_common_init(std::string const &program_name) {
+mtx_common_init(std::string const &program_name,
+                char const *argv0) {
   init_common_output(true);
 
   s_program_name = program_name;
@@ -175,6 +176,8 @@ mtx_common_init(std::string const &program_name) {
   init_common_output(false);
 
   stereo_mode_c::init();
+
+  mtx::determine_path_to_current_executable(argv0 ? std::string{argv0} : std::string{});
 }
 
 std::string const &

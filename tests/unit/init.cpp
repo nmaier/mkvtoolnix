@@ -33,9 +33,9 @@ mxmsg_handler(unsigned int level,
 }
 
 void
-mtxut::init_suite() {
+mtxut::init_suite(char const *argv0) {
   clear_list_of_unique_numbers(UNIQUE_ALL_IDS);
-  mtx_common_init("UNITTESTS");
+  mtx_common_init("UNITTESTS", argv0);
 
   set_mxmsg_handler(MXMSG_INFO,    mxmsg_handler);
   set_mxmsg_handler(MXMSG_WARNING, mxmsg_handler);

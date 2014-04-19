@@ -6,6 +6,6 @@ int
 main(int argc,
      char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
-  ::mtxut::init_suite();
+  ::mtxut::init_suite(argv[0]);
   return RUN_ALL_TESTS();
 }

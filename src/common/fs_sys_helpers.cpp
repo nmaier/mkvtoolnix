@@ -18,6 +18,10 @@
 #include "common/strings/editing.h"
 #include "common/strings/utf8.h"
 
+#if defined(SYS_APPLE)
+# include <mach-o/dyld.h>
+#endif
+
 #if defined(SYS_WINDOWS)
 
 # include <io.h>
@@ -26,6 +30,17 @@
 # include <direct.h>
 # include <shlobj.h>
 # include <sys/timeb.h>
+
+#else
+
+# include <stdlib.h>
+# include <sys/time.h>
+
+#endif
+
+static bfs::path s_current_executable_path;
+
+#if defined(SYS_WINDOWS)
 
 HANDLE
 CreateFileUtf8(LPCSTR lpFileName,
@@ -83,28 +98,6 @@ get_registry_key_value(const std::string &key,
   return ok;
 }
 
-std::string
-get_current_exe_path() {
-  char file_name[4000];
-  memset(file_name, 0, sizeof(file_name));
-  if (!GetModuleFileNameA(nullptr, file_name, 3999))
-    return "";
-
-  std::string path           = file_name;
-  std::string::size_type pos = path.rfind('\\');
-  if (std::string::npos == pos)
-    return "";
-
-  path.erase(pos);
-
-  return path;
-}
-
-std::string
-get_installation_path() {
-  return get_current_exe_path();
-}
-
 void
 set_environment_variable(const std::string &key,
                          const std::string &value) {
@@ -137,20 +130,17 @@ get_windows_version() {
   return (os_version_info.dwMajorVersion << 16) | os_version_info.dwMinorVersion;
 }
 
-std::string
-get_application_data_folder() {
+bfs::path
+mtx::get_application_data_folder() {
   wchar_t szPath[MAX_PATH];
 
   if (SUCCEEDED(SHGetFolderPathW(nullptr, CSIDL_APPDATA | CSIDL_FLAG_CREATE, nullptr, 0, szPath)))
-    return to_utf8(std::wstring(szPath)) + "\\mkvtoolnix";
+    return bfs::path{to_utf8(std::wstring(szPath))} / "mkvtoolnix";
 
-  return "";
+  return bfs::path{};
 }
 
 #else // SYS_WINDOWS
-
-# include <stdlib.h>
-# include <sys/time.h>
 
 int64_t
 get_current_time_millis() {
@@ -161,30 +151,25 @@ get_current_time_millis() {
   return (int64_t)tv.tv_sec * 1000 + (int64_t)tv.tv_usec / 1000;
 }
 
-std::string
-get_application_data_folder() {
+bfs::path
+mtx::get_application_data_folder() {
   const char *home = getenv("HOME");
   if (!home)
-    return "";
+    return bfs::path{};
 
   // If $HOME/.mkvtoolnix exists already then keep using it to avoid
   // losing existing user configuration.
-  std::string old_default_folder = std::string(home) + "/.mkvtoolnix";
+  auto old_default_folder = bfs::path{home} / ".mkvtoolnix";
   if (boost::filesystem::exists(old_default_folder))
     return old_default_folder;
 
   // If XDG_CONFIG_HOME is set then use that folder.
-  const char *xdg_config_home = getenv("XDG_CONFIG_HOME");
+  auto xdg_config_home = getenv("XDG_CONFIG_HOME");
   if (xdg_config_home)
-    return std::string(xdg_config_home) + "/mkvtoolnix";
+    return bfs::path{xdg_config_home} / "mkvtoolnix";
 
   // If all fails then use the XDG fallback folder for config files.
-  return std::string(home) + "/.config/mkvtoolnix";
-}
-
-std::string
-get_installation_path() {
-  return "";
+  return bfs::path{home} / ".config" / "mkvtoolnix";
 }
 
 #endif // SYS_WINDOWS
@@ -226,6 +211,77 @@ system(std::string const &command) {
 #else  // SYS_WINDOWS
   return ::system(command.c_str());
 #endif  // SYS_WINDOWS
+}
+
+#if defined(SYS_WINDOWS)
+static bfs::path
+get_current_exe_path(std::string const &) {
+  std::wstring file_name;
+  file_name.resize(4000);
+
+  while (true) {
+    memset(&file_name[0], 0, file_name.size() * sizeof(std::wstring::value_type));
+    auto size = GetModuleFileNameW(nullptr, &file_name[0], file_name.size() - 1);
+    if (size) {
+      file_name.resize(size);
+      break;
+    }
+
+    file_name.resize(file_name.size() + 4000);
+  }
+
+  return bfs::absolute(bfs::path{to_utf8(file_name)}).parent_path();
+}
+
+#elif defined(SYS_APPLE)
+
+static bfs::path
+get_current_exe_path(std::string const &) {
+  std::string file_name;
+  file_name.resize(4000);
+
+  while (true) {
+    memset(&file_name[0], 0, file_name.size());
+    uint32_t size = file_name.size();
+    auto result   = _NSGetExecutablePath(&file_name[0], &size);
+    file_name.resize(size);
+
+    if (0 == result)
+      break;
+  }
+
+  return bfs::absolute(bfs::path{file_name}).parent_path();
+}
+
+#else // Neither Windows nor Mac OS
+
+static bfs::path
+get_current_exe_path(std::string const &argv0) {
+  // Linux
+  auto exe = bfs::path{"/proc/self/exe"};
+  if (bfs::exists(exe))
+    return bfs::absolute(bfs::read_symlink(exe)).parent_path();
+
+  if (argv0.empty())
+    return bfs::current_path();
+
+  exe = bfs::absolute(argv0);
+  if (bfs::exists(exe))
+    return exe.parent_path();
+
+  return bfs::current_path();
+}
+
+#endif
+
+bfs::path const &
+get_installation_path() {
+  return s_current_executable_path;;
+}
+
+void
+determine_path_to_current_executable(std::string const &argv0) {
+  s_current_executable_path = get_current_exe_path(argv0);
 }
 
 }
