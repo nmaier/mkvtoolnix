@@ -66,28 +66,32 @@ mmg_options_t::validate() {
 wxString
 mmg_options_t::mkvmerge_exe() {
 #if defined(SYS_WINDOWS)
+  auto exe_with_ext = "mkvmerge.exe";
+#else
+  auto exe_with_ext = "mkvmerge";
+#endif
+
   // Check whether or not the mkvmerge executable path is still set to
   // the default value "mkvmerge". If it is try getting the
   // installation path from the registry and use that for a more
   // precise location for mkvmerge.exe. Fall back to the old default
   // value "mkvmerge" if all else fails.
-  wxString exe = mkvmerge;
-  if (exe == wxT("mkvmerge"))
-    exe.Empty();
+  auto exe = bfs::path{to_utf8(mkvmerge)};
+  if ((exe.string() == "mkvmerge") || (exe.string() == exe_with_ext))
+    exe = bfs::path{};
 
-  if (exe.IsEmpty()) {
-    exe = wxU(mtx::get_installation_path().string());
-    if (!exe.IsEmpty())
-      exe += wxT("\\mkvmerge.exe");
+  if (exe.empty()) {
+    exe = mtx::get_installation_path();
+    if (!exe.empty() && bfs::exists(exe) && bfs::exists(exe / exe_with_ext))
+      exe = exe / exe_with_ext;
+    else
+      exe = bfs::path{};
   }
 
-  if (exe.IsEmpty())
-    exe = wxT("mkvmerge");
+  if (exe.empty())
+    exe = exe_with_ext;
 
-  return exe;
+  wxLogMessage(wxT("mkvmerge_exe %s installation_path %s\n"), wxU(exe.string()).c_str(), wxU(mtx::get_installation_path().string()).c_str());
 
-#else  // SYS_WINDOWS
-  return mkvmerge;
-
-#endif  // SYS_WINDOWS
+  return wxU(exe.string());
 }
