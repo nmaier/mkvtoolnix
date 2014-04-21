@@ -22,6 +22,7 @@
 #include <wx/statline.h>
 
 #include "common/extern_data.h"
+#include "common/file_types.h"
 #include "common/iso639.h"
 #include "common/stereo_mode.h"
 #include "mmg/mmg.h"
@@ -288,6 +289,7 @@ tab_input_format::set_track_mode(mmg_track_t *t) {
   bool avc_es       = video && (t->packetizer == wxT("mpeg4_p10_es_video"));
   bool avc          = video && (t->packetizer == wxT("mpeg4_p10_video"));
   bool normal_track = video || audio_app || subs_app;
+  auto container    = t ? files[t->source]->container : FILE_TYPE_IS_UNKNOWN;
 
   ctype = ctype.Lower();
 
@@ -295,8 +297,8 @@ tab_input_format::set_track_mode(mmg_track_t *t) {
   tc_delay->Enable(t && normal_track);
   st_stretch->Enable(t && normal_track);
   tc_stretch->Enable(t && normal_track);
-  st_sub_charset->Enable(chapters_app || (subs_app && (ctype.Find(wxT("vobsub")) < 0)));
-  cob_sub_charset->Enable(chapters_app || (subs_app && (ctype.Find(wxT("vobsub")) < 0)));
+  st_sub_charset->Enable(chapters_app || (subs_app && (ctype.Find(wxT("vobsub")) < 0) && (container != FILE_TYPE_MATROSKA)));
+  cob_sub_charset->Enable(chapters_app || (subs_app && (ctype.Find(wxT("vobsub")) < 0) && (container != FILE_TYPE_MATROSKA)));
   st_fourcc->Enable(video);
   cob_fourcc->Enable(video);
   st_stereo_mode->Enable(video);
