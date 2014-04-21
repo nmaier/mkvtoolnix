@@ -1000,7 +1000,7 @@ tab_input::on_track_selected(wxCommandEvent &) {
   ti_format->cb_fix_bitstream_timing_info->SetValue(t->fix_bitstream_timing_info);
   ti_format->cob_nalu_size_length->SetSelection(t->nalu_size_length / 2);
   ti_format->cob_stereo_mode->SetSelection(t->stereo_mode);
-  ti_format->cob_sub_charset->SetValue(ti_format->cob_sub_charset_translations.to_translated(t->sub_charset));
+  ti_format->cob_sub_charset->SetValue(ti_format->cob_sub_charset_translations.to_translated(t->sub_charset.IsEmpty() ? wxT("default") : t->sub_charset));
   ti_format->tc_cropping->SetValue(t->cropping);
   ti_format->tc_delay->SetValue(t->delay);
   ti_format->tc_display_height->SetValue(t->dheight);

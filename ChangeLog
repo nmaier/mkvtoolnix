@@ -1,3 +1,9 @@
+2014-04-21  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mmg: bug fix: Selecting a subtitle track correctly sets the
+        »character set« drop-down box if no character set was set for this
+        track. Fixes #1008.
+
 2014-04-20  Moritz Bunkus  <moritz@bunkus.org>
 
         * mmg: enhancement: mmg will look for the »mkvmerge« executable in
