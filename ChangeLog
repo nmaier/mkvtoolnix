@@ -4,6 +4,11 @@
         »character set« drop-down box if no character set was set for this
         track. Fixes #1008.
 
+        * mmg: enhancement: the subtitle character set cannot be set
+        anymore for subtitle tracks read from Matroska files as mkvmerge
+        ignores that setting for said container anyway (text subs are
+        always encoded in UTF-8 in Matroska).
+
 2014-04-20  Moritz Bunkus  <moritz@bunkus.org>
 
         * mmg: enhancement: mmg will look for the »mkvmerge« executable in
