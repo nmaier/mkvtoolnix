@@ -203,7 +203,7 @@ mmg_app::OnInit() {
 
   wxImage::AddHandler(new wxPNGHandler);
 
-  mtx_common_init("mmg", to_utf8(this->argv[0]).c_str());
+  mtx_common_init("mmg", to_utf8(wxString{this->argv[0]}).c_str());
 
   debugging_c::send_to_logger(true);
 

@@ -76,7 +76,7 @@ mi_app::OnInit() {
   wxConfigBase *cfg = new wxConfig(wxT("mkvmergeGUI"));
   wxConfigBase::Set(cfg);
 
-  setup(to_utf8(this->argv[0]).c_str(), get_ui_locale());
+  setup(to_utf8(wxString{this->argv[0]}).c_str(), get_ui_locale());
 
   frame = new mi_frame(wxT("mkvinfo"), wxPoint(50, 50), wxSize(600, 400));
   frame->Show(true);
