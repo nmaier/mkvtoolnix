@@ -1,3 +1,11 @@
+2014-04-20  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mmg: enhancement: mmg will look for the »mkvmerge« executable in
+        the same directory as the »mmg« executable is located it if the
+        location hasn't been set by the user on all operating systems
+        (before: only on Windows). Improves detection if »mkvmerge« is not
+        in the $PATH.
+
 2014-04-18  Moritz Bunkus  <moritz@bunkus.org>
 
         * Released v6.9.1.
