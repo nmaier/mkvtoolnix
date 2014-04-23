@@ -701,6 +701,10 @@ Section Uninstall
   RMDir "$INSTDIR\locale\pt\LC_MESSAGES"
   RMDir "$INSTDIR\locale\pt"
 
+  Delete "$INSTDIR\locale\pt_BR\LC_MESSAGES\*.*"
+  RMDir "$INSTDIR\locale\pt_BR\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\pt_BR"
+
   Delete "$INSTDIR\locale\ru\LC_MESSAGES\*.*"
   RMDir "$INSTDIR\locale\ru\LC_MESSAGES"
   RMDir "$INSTDIR\locale\ru"
