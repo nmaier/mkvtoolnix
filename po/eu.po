@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: mkvtoonix-eu\n"
 "Report-Msgid-Bugs-To: Xabier Aramendi <azpidatziak@gmail.com>\n"
 "POT-Creation-Date: 2010-06-08 10:00+0200\n"
-"PO-Revision-Date: 2014-01-23 22:57+0100\n"
+"PO-Revision-Date: 2014-04-27 18:31+0100\n"
 "Last-Translator: Xabier Aramendi <azpidatziak@gmail.com>\n"
 "Language-Team: (EUS_Xabier Aramendi) <azpidatziak@gmail.com>\n"
 "Language: eu\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.6.2\n"
+"X-Generator: Poedit 1.6.4\n"
 
 #: src/extract/xtr_tta.cpp:107
 #, boost-format
@@ -766,12 +766,11 @@ msgid " (FourCC: %1%%2%%3%%4%, 0x%|5$08x|)"
 msgstr " (FourCC: %1%%2%%3%%4%, 0x%|5$08x|)"
 
 #: src/info/mkvinfo.cpp:366
-#, fuzzy, boost-format
+#, boost-format
 msgid " (HEVC profile: %1% @L%2%.%3%)"
-msgstr " (h.264 profila: %1% @L%2%.%3%)"
+msgstr " (HEVC profila: %1% @L%2%.%3%)"
 
-#: src/info/mkvinfo.cpp:193
-#: src/info/mkvinfo.cpp:869
+#: src/info/mkvinfo.cpp:193 src/info/mkvinfo.cpp:869
 #, boost-format
 msgid " (adler: 0x%|1$08x|)"
 msgstr " (adler: 0x%|1$08x|)"
@@ -862,16 +861,13 @@ msgstr " Beste aukerak:\n"
 msgid " Segment info handling:\n"
 msgstr " Zati argibide kudeaketa:\n"
 
-#: src/extract/mkvextract.cpp:58
-#: src/info/mkvinfo.cpp:221
+#: src/extract/mkvextract.cpp:58 src/info/mkvinfo.cpp:221
 #, boost-format
 msgid " at %1%"
 msgstr " %1%"
 
-#: src/merge/output_control.cpp:279
-#: src/merge/output_control.cpp:288
-#: src/merge/output_control.cpp:296
-#: src/merge/output_control.cpp:303
+#: src/merge/output_control.cpp:279 src/merge/output_control.cpp:288
+#: src/merge/output_control.cpp:296 src/merge/output_control.cpp:303
 msgid " done\n"
 msgstr " eginda\n"
 
@@ -1045,8 +1041,7 @@ msgstr ""
 "Iturburuak eta azken binarioak betik daude eskuragarri hemen:\n"
 "http://www.bunkus.org/videotools/mkvtoolnix/"
 
-#: src/mmg/jobs.cpp:98
-#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:45
+#: src/mmg/jobs.cpp:98 src/mmg/tabs/scanning_for_playlists_dlg.cpp:45
 msgid "&Abort"
 msgstr "&Utzi"
 
@@ -1063,8 +1058,7 @@ msgstr "&Honi buruz\tF1"
 msgid "&Add"
 msgstr "&Gehitu"
 
-#: src/mmg/mmg_dialog.cpp:299
-#: src/mmg/mmg_dialog.cpp:334
+#: src/mmg/mmg_dialog.cpp:299 src/mmg/mmg_dialog.cpp:334
 msgid "&Add to job queue"
 msgstr "&Gehitu lana lerrora"
 
@@ -1088,8 +1082,7 @@ msgstr "A&tal editatzailea\tAlt-4"
 msgid "&Check for updates"
 msgstr "&Egiaztatu eguneraketak"
 
-#: src/mmg/tabs/additional_parts_dlg.cpp:52
-#: src/mmg/update_checker.cpp:79
+#: src/mmg/tabs/additional_parts_dlg.cpp:52 src/mmg/update_checker.cpp:79
 msgid "&Close"
 msgstr "&Itxi"
 
@@ -1117,8 +1110,7 @@ msgstr "&Ezgaitu"
 msgid "&Don't scan, just add the file"
 msgstr "E&z mihatu beste irakur-zerrendentzat"
 
-#: src/mmg/jobs.cpp:500
-#: src/mmg/tabs/additional_parts_dlg.cpp:50
+#: src/mmg/jobs.cpp:500 src/mmg/tabs/additional_parts_dlg.cpp:50
 msgid "&Down"
 msgstr "&Jeitsi"
 
@@ -1134,8 +1126,7 @@ msgstr "&Hedatu sarrera guztiak\tCtrl-E"
 msgid "&Expand important elements\tCtrl-E"
 msgstr "&Hedatu gai garrantzitsuak\tCtrl-E"
 
-#: src/info/wxwidgets_ui.cpp:128
-#: src/mmg/header_editor/frame.cpp:151
+#: src/info/wxwidgets_ui.cpp:128 src/mmg/header_editor/frame.cpp:151
 #: src/mmg/mmg_dialog.cpp:319
 msgid "&File"
 msgstr "&Agiria"
@@ -1148,14 +1139,12 @@ msgstr "&Aukera orokorrak\tAlt-3"
 msgid "&Header editor\tCtrl-E"
 msgstr "I&dazburu editatzailea\tCtrl-E"
 
-#: src/info/wxwidgets_ui.cpp:130
-#: src/mmg/header_editor/frame.cpp:153
+#: src/info/wxwidgets_ui.cpp:130 src/mmg/header_editor/frame.cpp:153
 #: src/mmg/mmg_dialog.cpp:323
 msgid "&Help"
 msgstr "&Laguntza"
 
-#: src/mmg/header_editor/frame.cpp:150
-#: src/mmg/mmg_dialog.cpp:312
+#: src/mmg/header_editor/frame.cpp:150 src/mmg/mmg_dialog.cpp:312
 msgid "&Help\tF1"
 msgstr "&Laguntza\tF1"
 
@@ -1187,14 +1176,11 @@ msgstr "&Berria\tCtrl-N"
 msgid "&New chapters"
 msgstr "&Atal berriak"
 
-#: src/mmg/jobs.cpp:96
-#: src/mmg/jobs.cpp:420
-#: src/mmg/jobs.cpp:527
+#: src/mmg/jobs.cpp:96 src/mmg/jobs.cpp:420 src/mmg/jobs.cpp:527
 msgid "&Ok"
 msgstr "&Ongi"
 
-#: src/info/wxwidgets_ui.cpp:112
-#: src/mmg/header_editor/frame.cpp:142
+#: src/info/wxwidgets_ui.cpp:112 src/mmg/header_editor/frame.cpp:142
 msgid "&Open\tCtrl-O"
 msgstr "&Ireki\tCtrl-O"
 
@@ -1202,8 +1188,7 @@ msgstr "&Ireki\tCtrl-O"
 msgid "&Options"
 msgstr "&Aukerak"
 
-#: src/mmg/header_editor/frame.cpp:146
-#: src/mmg/mmg_dialog.cpp:293
+#: src/mmg/header_editor/frame.cpp:146 src/mmg/mmg_dialog.cpp:293
 msgid "&Quit\tCtrl-Q"
 msgstr "&Utzi\tCtrl-Q"
 
@@ -1223,8 +1208,7 @@ msgstr "&Kendu"
 msgid "&Reset"
 msgstr "&Berrezarri"
 
-#: src/mmg/jobs.cpp:425
-#: src/mmg/mmg_dialog.cpp:304
+#: src/mmg/jobs.cpp:425 src/mmg/mmg_dialog.cpp:304
 msgid "&Save"
 msgstr "G&orde"
 
@@ -1256,8 +1240,7 @@ msgstr "&Hasi"
 msgid "&Troubleshooting"
 msgstr "&Arazo konponketa"
 
-#: src/mmg/jobs.cpp:497
-#: src/mmg/tabs/additional_parts_dlg.cpp:49
+#: src/mmg/jobs.cpp:497 src/mmg/tabs/additional_parts_dlg.cpp:49
 msgid "&Up"
 msgstr "&Igo"
 
@@ -1347,8 +1330,7 @@ msgstr ""
 "ikusi 'mkvmerge --list-languages' hizkuntza guztien zerrenda eta dagokion "
 "ISO639-2 koderako.\n"
 
-#: src/common/chapters/chapters.cpp:184
-#: src/common/chapters/chapters.cpp:201
+#: src/common/chapters/chapters.cpp:184 src/common/chapters/chapters.cpp:201
 #, boost-format
 msgid "'%1%' is not a CHAPTERxx=... line."
 msgstr "'%1%' ez da ATALAxx=...lerroa."
@@ -1384,8 +1366,7 @@ msgstr ""
 msgid "'%1%' is not a valid ccTLD country code."
 msgstr "'%1%' ez da ccTLD herrialde kode baliozko bat."
 
-#: src/merge/mkvmerge.cpp:1238
-#: src/merge/mkvmerge.cpp:1241
+#: src/merge/mkvmerge.cpp:1238 src/merge/mkvmerge.cpp:1241
 #, boost-format
 msgid "'%1%' is not a valid file ID in '--track-order %2%'.\n"
 msgstr "'%1%' ez da agiri ID baliozko bat hemen: '--track-order %2%'.\n"
@@ -1472,8 +1453,7 @@ msgstr "'%1%' bideak ateratzerakoan bakarrik dago ahalbidetuta.\n"
 msgid "'%1%' lacks a file name.\n"
 msgstr "'%1%' ez du agiri izenik.\n"
 
-#: src/merge/mkvmerge.cpp:2047
-#: src/merge/mkvmerge.cpp:2211
+#: src/merge/mkvmerge.cpp:2047 src/merge/mkvmerge.cpp:2211
 #, boost-format
 msgid "'%1%' lacks its argument.\n"
 msgstr "'%1%' ez du argumentorik.\n"
@@ -1498,27 +1478,21 @@ msgstr "'%1%' ez du agiri izenik.\n"
 msgid "'%1%' lacks the track ID.\n"
 msgstr "'%1%' ez du bide ID-rik.\n"
 
-#: src/merge/mkvmerge.cpp:2085
-#: src/merge/mkvmerge.cpp:2092
-#: src/merge/mkvmerge.cpp:2099
-#: src/merge/mkvmerge.cpp:2106
+#: src/merge/mkvmerge.cpp:2085 src/merge/mkvmerge.cpp:2092
+#: src/merge/mkvmerge.cpp:2099 src/merge/mkvmerge.cpp:2106
 #: src/merge/mkvmerge.cpp:2113
 #, boost-format
 msgid "'%1%' lacks the track numbers.\n"
 msgstr "'%1%' ez du bide zenbakirik.\n"
 
-#: src/common/output.cpp:157
-#: src/common/output.cpp:170
-#: src/common/output.cpp:183
-#: src/common/output.cpp:204
+#: src/common/output.cpp:157 src/common/output.cpp:170
+#: src/common/output.cpp:183 src/common/output.cpp:204
 #, boost-format
 msgid "'%1%' track %2%: %3%"
 msgstr "'%1%' bidea %2%: %3%"
 
-#: src/common/output.cpp:150
-#: src/common/output.cpp:163
-#: src/common/output.cpp:176
-#: src/common/output.cpp:193
+#: src/common/output.cpp:150 src/common/output.cpp:163
+#: src/common/output.cpp:176 src/common/output.cpp:193
 #, boost-format
 msgid "'%1%': %2%"
 msgstr "'%1%': %2%"
@@ -1774,18 +1748,15 @@ msgstr "-D eta -d iturburu agiri berean erabilita.\n"
 msgid "'-S' and '-s' used on the same source file.\n"
 msgstr "-S eta -s iturburu agiri berean erabilita.\n"
 
-#: src/common/property_element.cpp:115
-#: src/mmg/header_editor/frame.cpp:384
+#: src/common/property_element.cpp:115 src/mmg/header_editor/frame.cpp:384
 msgid "'Default track' flag"
 msgstr "'Berezko bidea' ikurra"
 
-#: src/common/property_element.cpp:118
-#: src/mmg/header_editor/frame.cpp:391
+#: src/common/property_element.cpp:118 src/mmg/header_editor/frame.cpp:391
 msgid "'Forced display' flag"
 msgstr "'Behartu erakuspena' ikurra"
 
-#: src/common/property_element.cpp:117
-#: src/mmg/header_editor/frame.cpp:388
+#: src/common/property_element.cpp:117 src/mmg/header_editor/frame.cpp:388
 msgid "'Track enabled' flag"
 msgstr "'Bidea gaituta' ikurra"
 
@@ -1802,12 +1773,9 @@ msgstr "(atal agiri berria)"
 msgid "(unnamed chapter)"
 msgstr "(izengabeko atala)"
 
-#: src/mmg/tabs/chapters.cpp:886
-#: src/mmg/tabs/chapters.cpp:935
-#: src/mmg/tabs/chapters.cpp:1050
-#: src/mmg/tabs/chapters.cpp:1433
-#: src/mmg/tabs/chapters.cpp:1440
-#: src/mmg/tabs/chapters.cpp:1765
+#: src/mmg/tabs/chapters.cpp:886 src/mmg/tabs/chapters.cpp:935
+#: src/mmg/tabs/chapters.cpp:1050 src/mmg/tabs/chapters.cpp:1433
+#: src/mmg/tabs/chapters.cpp:1440 src/mmg/tabs/chapters.cpp:1765
 msgid "(unnamed)"
 msgstr "(izengabea)"
 
@@ -1863,8 +1831,7 @@ msgstr "--- AMAITU lana %d"
 msgid "--- No job output found.\n"
 msgstr "--- Ez da irteera lanik aurkitu.\n"
 
-#: src/mmg/options/languages.cpp:41
-#: src/mmg/tabs/input_general.cpp:163
+#: src/mmg/options/languages.cpp:41 src/mmg/tabs/input_general.cpp:163
 msgid "---all---"
 msgstr "---denak---"
 
@@ -1979,8 +1946,7 @@ msgstr ""
 "Bloke taldea bat aurkitu da %1% kokapenean, baina ez da bloke gairik aurkitu "
 "barruan. Honek mkvmergeren matxura eragin dezake.\n"
 
-#: src/input/r_matroska.cpp:1912
-#: src/input/r_matroska.cpp:2016
+#: src/input/r_matroska.cpp:1912 src/input/r_matroska.cpp:2016
 #, boost-format
 msgid ""
 "A block was found at timestamp %1% for track number %2%. However, no headers "
@@ -2012,13 +1978,11 @@ msgid "A comma-separated list of timecode ranges of content to keep."
 msgstr ""
 "Kakotxaz banandutako husteko edukiaren denbora-kode maila zerrenda bat."
 
-#: src/common/property_element.cpp:130
-#: src/mmg/header_editor/frame.cpp:421
+#: src/common/property_element.cpp:130 src/mmg/header_editor/frame.cpp:421
 msgid "A human-readable string specifying the codec."
 msgstr "Gizaki-irakurgarria den kate batek adierazten du kodeka."
 
-#: src/common/property_element.cpp:127
-#: src/mmg/header_editor/frame.cpp:411
+#: src/common/property_element.cpp:127 src/mmg/header_editor/frame.cpp:411
 msgid "A human-readable track name."
 msgstr "Bide izen gizakiak-irakurgarri bat."
 
@@ -2031,8 +1995,7 @@ msgstr ""
 "Jadanik badago '%s' azalpena duen lan bat. Egitan nahi duzu gehitzea beste "
 "bat azalpen berdinarekin?"
 
-#: src/common/property_element.cpp:105
-#: src/mmg/header_editor/frame.cpp:333
+#: src/common/property_element.cpp:105 src/mmg/header_editor/frame.cpp:333
 msgid ""
 "A randomly generated unique ID to identify the current\n"
 "segment between many others (128 bits)."
@@ -2053,8 +2016,7 @@ msgstr ""
 "aurrezenbakiarekin edo gabe, tarte edo tarte gabe, zehaz-mehatz 32 "
 "zenbakin.\n"
 
-#: src/mmg/tabs/global.cpp:255
-#: src/mmg/tabs/global.cpp:270
+#: src/mmg/tabs/global.cpp:255 src/mmg/tabs/global.cpp:270
 msgid ""
 "A single Matroska block contains either a full frame (for progressive "
 "content) or a single field (for interlaced content)."
@@ -2075,8 +2037,7 @@ msgstr ""
 "%1% ID-dun bidea eskatu da baina ez da agirian aurkitu. Aukera hori ezikusi "
 "egingo da.\n"
 
-#: src/common/property_element.cpp:113
-#: src/mmg/header_editor/frame.cpp:381
+#: src/common/property_element.cpp:113 src/mmg/header_editor/frame.cpp:381
 msgid ""
 "A unique ID to identify the Track. This should be\n"
 "kept the same when making a direct stream copy\n"
@@ -2086,8 +2047,7 @@ msgstr ""
 "Hau Bidearen zuzeneko jario kopia bat beste\n"
 "agiri batera egitearen berdina izan behar da."
 
-#: src/common/property_element.cpp:108
-#: src/mmg/header_editor/frame.cpp:341
+#: src/common/property_element.cpp:108 src/mmg/header_editor/frame.cpp:341
 msgid ""
 "A unique ID to identify the next chained\n"
 "segment (128 bits)."
@@ -2095,8 +2055,7 @@ msgstr ""
 "ID bakar bat kateaturiko hurrengo zatia\n"
 "ezagutarazteko (128 bits)."
 
-#: src/common/property_element.cpp:107
-#: src/mmg/header_editor/frame.cpp:337
+#: src/common/property_element.cpp:107 src/mmg/header_editor/frame.cpp:337
 msgid ""
 "A unique ID to identify the previous chained\n"
 "segment (128 bits)."
@@ -2108,8 +2067,7 @@ msgstr ""
 msgid "A/52 (aka AC3)"
 msgstr "A/52 (AC3)"
 
-#: src/input/r_aac.h:37
-#: src/output/p_aac.h:42
+#: src/input/r_aac.h:37 src/output/p_aac.h:42
 msgid "AAC"
 msgstr "AAC"
 
@@ -2138,8 +2096,7 @@ msgstr "AAC da SBR/HE-AAC/AAC+"
 msgid "AAC with ADIF headers"
 msgstr "AAC ADIF idazburuekin"
 
-#: src/input/r_ac3.h:36
-#: src/output/p_ac3.h:41
+#: src/input/r_ac3.h:36 src/output/p_ac3.h:41
 msgid "AC3"
 msgstr "AC3"
 
@@ -2163,8 +2120,7 @@ msgstr ""
 "ASCII katea (ez hizki bereziak\n"
 "Umlaute, etab. bezalakoak)"
 
-#: src/input/r_avc.h:35
-#: src/output/p_mpeg4_p10.h:34
+#: src/input/r_avc.h:35 src/output/p_mpeg4_p10.h:34
 msgid "AVC/h.264"
 msgstr "AVC/h.264"
 
@@ -2205,8 +2161,7 @@ msgstr "Utzi mulltiplexaketa garapena orain"
 msgid "Aborted processing on %s"
 msgstr "Garapena utzita: %s"
 
-#: src/info/qt_ui.cpp:125
-#: src/info/wxwidgets_ui.cpp:343
+#: src/info/qt_ui.cpp:125 src/info/wxwidgets_ui.cpp:343
 msgid "About mkvinfo"
 msgstr "mkvinfo buruz"
 
@@ -2397,8 +2352,7 @@ msgstr "Betik gainean"
 msgid "An <attachment-selector> can have three forms:"
 msgstr "<eranskin-hautatzaile> batek hiru forma izan ditzake:"
 
-#: src/common/property_element.cpp:129
-#: src/mmg/header_editor/frame.cpp:418
+#: src/common/property_element.cpp:129 src/mmg/header_editor/frame.cpp:418
 msgid "An ID corresponding to the codec."
 msgstr "Kodekari dagokion ID bat."
 
@@ -2411,8 +2365,7 @@ msgstr "%1% ID-a duen eranskin bat ez da aurkitu\n"
 msgid "An empty file name is not valid.\n"
 msgstr "Agiri izen hutsa ez da baliozkoa.\n"
 
-#: src/common/property_element.cpp:104
-#: src/mmg/header_editor/frame.cpp:329
+#: src/common/property_element.cpp:104 src/mmg/header_editor/frame.cpp:329
 msgid ""
 "An escaped filename corresponding to\n"
 "the next segment."
@@ -2420,8 +2373,7 @@ msgstr ""
 "Hurrengo zatiari dagkion\n"
 "saihesturiko agirizen bat."
 
-#: src/common/property_element.cpp:103
-#: src/mmg/header_editor/frame.cpp:326
+#: src/common/property_element.cpp:103 src/mmg/header_editor/frame.cpp:326
 msgid ""
 "An escaped filename corresponding to\n"
 "the previous segment."
@@ -2429,8 +2381,7 @@ msgstr ""
 "Aurreko zatiari dagkion\n"
 "saihesturiko agirizen bat."
 
-#: src/mmg/header_editor/frame.cpp:679
-#: src/mmg/tabs/chapters.cpp:1858
+#: src/mmg/header_editor/frame.cpp:679 src/mmg/tabs/chapters.cpp:1858
 #: src/propedit/propedit.cpp:44
 msgid "An unknown error occured. The file has been modified."
 msgstr "Akats ezezagun bat gertatu da. Agiria aldatu egin da."
@@ -2537,30 +2488,24 @@ msgstr "Eranskin hautatzaileak"
 msgid "Attachment style:"
 msgstr "Eranskinaren estiloa:"
 
-#: src/info/mkvinfo.cpp:1094
-#: src/mmg/mmg_dialog.cpp:326
-#: src/mmg/tabs/attachments.cpp:156
-#: src/propedit/options.cpp:195
+#: src/info/mkvinfo.cpp:1094 src/mmg/mmg_dialog.cpp:326
+#: src/mmg/tabs/attachments.cpp:156 src/propedit/options.cpp:195
 msgid "Attachments"
 msgstr "Eranskinak"
 
-#: src/common/property_element.cpp:153
-#: src/mmg/header_editor/frame.cpp:493
+#: src/common/property_element.cpp:153 src/mmg/header_editor/frame.cpp:493
 msgid "Audio bit depth"
 msgstr "Audio bit sakonera"
 
-#: src/common/property_element.cpp:152
-#: src/mmg/header_editor/frame.cpp:489
+#: src/common/property_element.cpp:152 src/mmg/header_editor/frame.cpp:489
 msgid "Audio channels"
 msgstr "Audio bideak"
 
-#: src/common/property_element.cpp:151
-#: src/mmg/header_editor/frame.cpp:485
+#: src/common/property_element.cpp:151 src/mmg/header_editor/frame.cpp:485
 msgid "Audio output sampling frequency"
 msgstr "Audio irteera laginketa maiztasuna"
 
-#: src/common/property_element.cpp:150
-#: src/mmg/header_editor/frame.cpp:480
+#: src/common/property_element.cpp:150 src/mmg/header_editor/frame.cpp:480
 msgid "Audio sampling frequency"
 msgstr "Audio laginketa maiztasuna"
 
@@ -2607,8 +2552,7 @@ msgstr "Binarioa (hex zenbaki bezala erakutsita)"
 msgid "Bit depth: %1%"
 msgstr "Bit sakonera: %1%"
 
-#: src/common/property_element.cpp:153
-#: src/mmg/header_editor/frame.cpp:493
+#: src/common/property_element.cpp:153 src/mmg/header_editor/frame.cpp:493
 msgid "Bits per sample, mostly used for PCM."
 msgstr "Bit lagineko, PCM-rako erabilia gehienbat."
 
@@ -2632,8 +2576,7 @@ msgstr "Bloke gehigarria: %1%"
 msgid "Block duration: %1%.%|2$06d|ms"
 msgstr "Bloke iraupena: %1%.%|2$06d|sm"
 
-#: src/extract/timecodes_v2.cpp:303
-#: src/extract/tracks.cpp:458
+#: src/extract/timecodes_v2.cpp:303 src/extract/tracks.cpp:458
 #: src/info/mkvinfo.cpp:1145
 msgid "Block group"
 msgstr "Bloke taldea"
@@ -2664,14 +2607,10 @@ msgstr "Biak ikuspegi maila ezaugarria eta '--display-dimensions' eman dira.\n"
 msgid "Brings up the job queue editor"
 msgstr "Lan lerro editatzailea irekitzen du"
 
-#: src/mmg/mmg_dialog.cpp:331
-#: src/mmg/options/mkvmerge.cpp:52
-#: src/mmg/options/output.cpp:45
-#: src/mmg/tabs/global.cpp:345
-#: src/mmg/tabs/global.cpp:362
-#: src/mmg/tabs/global.cpp:366
-#: src/mmg/tabs/input_general.cpp:191
-#: src/mmg/tabs/input_general.cpp:194
+#: src/mmg/mmg_dialog.cpp:331 src/mmg/options/mkvmerge.cpp:52
+#: src/mmg/options/output.cpp:45 src/mmg/tabs/global.cpp:345
+#: src/mmg/tabs/global.cpp:362 src/mmg/tabs/global.cpp:366
+#: src/mmg/tabs/input_general.cpp:191 src/mmg/tabs/input_general.cpp:194
 msgid "Browse"
 msgstr "Bilatu"
 
@@ -2721,10 +2660,8 @@ msgstr ""
 "'%5%' Kodek ID-arekin jadanik agiri berean idazten ari da, eta bere Kodek-"
 "Pribatu datuak (USF estiloak, etab.) ez datoz bat.\n"
 
-#: src/extract/xtr_avi.cpp:48
-#: src/extract/xtr_base.cpp:67
-#: src/extract/xtr_ivf.cpp:52
-#: src/extract/xtr_textsubs.cpp:290
+#: src/extract/xtr_avi.cpp:48 src/extract/xtr_base.cpp:67
+#: src/extract/xtr_ivf.cpp:52 src/extract/xtr_textsubs.cpp:290
 #, boost-format
 msgid ""
 "Cannot write track %1% with the CodecID '%2%' to the file '%3%' because "
@@ -2737,8 +2674,7 @@ msgstr ""
 msgid "Category is not NUL terminated"
 msgstr "Kategoria ez da NUL-en amaitua"
 
-#: src/extract/timecodes_v2.cpp:382
-#: src/extract/tracks.cpp:513
+#: src/extract/timecodes_v2.cpp:382 src/extract/tracks.cpp:513
 #: src/info/mkvinfo.cpp:1726
 msgid "Caught exception"
 msgstr "Salbuespena harrapatu da"
@@ -2888,12 +2824,9 @@ msgstr ""
 "Atal aztertzailea: %1% UID-Edizioa ez da bakarra eta ezingo da berrerabili. "
 "Berri bat sortuko da.\n"
 
-#: src/mmg/tabs/chapters.cpp:782
-#: src/mmg/tabs/chapters.cpp:789
-#: src/mmg/tabs/chapters.cpp:795
-#: src/mmg/tabs/chapters.cpp:803
-#: src/mmg/tabs/chapters.cpp:818
-#: src/mmg/tabs/chapters.cpp:836
+#: src/mmg/tabs/chapters.cpp:782 src/mmg/tabs/chapters.cpp:789
+#: src/mmg/tabs/chapters.cpp:795 src/mmg/tabs/chapters.cpp:803
+#: src/mmg/tabs/chapters.cpp:818 src/mmg/tabs/chapters.cpp:836
 msgid "Chapter verification error"
 msgstr "Atal egiaztapen akatsa"
 
@@ -2901,10 +2834,8 @@ msgstr "Atal egiaztapen akatsa"
 msgid "Chapter verification succeeded"
 msgstr "Atal egiaztapen ongi egin da"
 
-#: src/info/mkvinfo.cpp:1509
-#: src/mmg/options/chapters.cpp:130
-#: src/mmg/tabs/global.cpp:342
-#: src/propedit/options.cpp:186
+#: src/info/mkvinfo.cpp:1509 src/mmg/options/chapters.cpp:130
+#: src/mmg/tabs/global.cpp:342 src/propedit/options.cpp:186
 msgid "Chapters"
 msgstr "Atalak"
 
@@ -2925,8 +2856,7 @@ msgstr ""
 msgid "Chapters loaded."
 msgstr "Gertaturiko atalak."
 
-#: src/mmg/tabs/chapters.cpp:758
-#: src/mmg/tabs/chapters.cpp:1835
+#: src/mmg/tabs/chapters.cpp:758 src/mmg/tabs/chapters.cpp:1835
 msgid "Chapters written."
 msgstr "Idatziriko atalak."
 
@@ -2943,18 +2873,15 @@ msgstr "Atalak: %1% sarrera"
 msgid "Charset for strings on the command line"
 msgstr "Hizkikodea agindu lerroko kateentzat"
 
-#: src/mmg/tabs/global.cpp:351
-#: src/mmg/tabs/input_format.cpp:255
+#: src/mmg/tabs/global.cpp:351 src/mmg/tabs/input_format.cpp:255
 msgid "Charset:"
 msgstr "Hizkikodea:"
 
-#: src/mmg/mmg_dialog.cpp:316
-#: src/mmg/options/mmg.cpp:80
+#: src/mmg/mmg_dialog.cpp:316 src/mmg/options/mmg.cpp:80
 msgid "Check online for the latest release"
 msgstr "Egiaztatu online azken argitalpena"
 
-#: src/common/cli_parser.cpp:183
-#: src/merge/mkvmerge.cpp:278
+#: src/common/cli_parser.cpp:183 src/merge/mkvmerge.cpp:278
 msgid "Check online for the latest release."
 msgstr "Egiaztatu onlin azken argitalpena."
 
@@ -3000,13 +2927,9 @@ msgstr "Hautatu gehitzeko sarrera agiri bat"
 msgid "Choose an input file to append"
 msgstr "Hautatu eransteko sarrera agiri bat"
 
-#: src/mmg/jobs.cpp:438
-#: src/mmg/mmg_dialog.cpp:354
-#: src/mmg/mmg_dialog.cpp:456
-#: src/mmg/mmg_dialog.cpp:769
-#: src/mmg/mmg_dialog.cpp:790
-#: src/mmg/mux_dialog.cpp:211
-#: src/mmg/tabs/chapters.cpp:678
+#: src/mmg/jobs.cpp:438 src/mmg/mmg_dialog.cpp:354 src/mmg/mmg_dialog.cpp:456
+#: src/mmg/mmg_dialog.cpp:769 src/mmg/mmg_dialog.cpp:790
+#: src/mmg/mux_dialog.cpp:211 src/mmg/tabs/chapters.cpp:678
 #: src/mmg/tabs/chapters.cpp:715
 msgid "Choose an output file"
 msgstr "Hautatu irteera agiri bat"
@@ -3047,8 +2970,7 @@ msgstr "Garbitu sarrerak lan bat lan lerrora gehitu ondoren"
 msgid "Close the current file without saving"
 msgstr "Itxi oraingo agiria aldaketak gorde gabe"
 
-#: src/extract/timecodes_v2.cpp:284
-#: src/extract/tracks.cpp:436
+#: src/extract/timecodes_v2.cpp:284 src/extract/tracks.cpp:436
 #: src/info/mkvinfo.cpp:1686
 msgid "Cluster"
 msgstr "Kluster"
@@ -3073,8 +2995,7 @@ msgstr "Klusterraren kokapena: %1%"
 msgid "Cluster previous size: %1%"
 msgstr "Klusterraren aurreko neurria: %1%"
 
-#: src/extract/timecodes_v2.cpp:299
-#: src/extract/tracks.cpp:445
+#: src/extract/timecodes_v2.cpp:299 src/extract/tracks.cpp:445
 #: src/info/mkvinfo.cpp:217
 #, boost-format
 msgid "Cluster timecode: %|1$.3f|s"
@@ -3084,8 +3005,7 @@ msgstr "Klusterraren denbora-kodea: %|1$.3f|s"
 msgid "Codec"
 msgstr "Kodeka"
 
-#: src/common/property_element.cpp:129
-#: src/mmg/header_editor/frame.cpp:418
+#: src/common/property_element.cpp:129 src/mmg/header_editor/frame.cpp:418
 msgid "Codec ID"
 msgstr "Kodek ID-a"
 
@@ -3114,8 +3034,7 @@ msgstr "Kodek jeisketa URL-a: %1%"
 msgid "Codec info URL: %1%"
 msgstr "Kodekaren argibide URL-a: %1%"
 
-#: src/common/property_element.cpp:130
-#: src/mmg/header_editor/frame.cpp:421
+#: src/common/property_element.cpp:130 src/mmg/header_editor/frame.cpp:421
 msgid "Codec name"
 msgstr "Kodekaren izena"
 
@@ -3173,8 +3092,7 @@ msgstr "Hizkuntza arruntak"
 msgid "Compression failed: %1%\n"
 msgstr "Konpresio hutsegitea: %1%\n"
 
-#: src/mmg/tabs/input_extra.cpp:54
-#: src/mmg/tabs/input_extra.cpp:128
+#: src/mmg/tabs/input_extra.cpp:54 src/mmg/tabs/input_extra.cpp:128
 msgid "Compression:"
 msgstr "Konpresioa:"
 
@@ -3218,9 +3136,7 @@ msgstr "Kopiatu agindu lerroa gakora"
 msgid "CoreAudio"
 msgstr "CoreAudio"
 
-#: src/mmg/jobs.cpp:181
-#: src/mmg/mux_dialog.cpp:120
-#: src/mmg/tabs/input.cpp:546
+#: src/mmg/jobs.cpp:181 src/mmg/mux_dialog.cpp:120 src/mmg/tabs/input.cpp:546
 #, c-format, boost-format
 msgid ""
 "Could not create a temporary file for mkvmerge's command line option called "
@@ -3246,8 +3162,7 @@ msgstr ""
 "Ezin izan da atera dekodeatzailearen itxurapen datu bereizia (AVCC) AVC/"
 "h.264 bide honetatik.\n"
 
-#: src/input/r_avi.cpp:301
-#: src/input/r_avi.cpp:306
+#: src/input/r_avi.cpp:301 src/input/r_avi.cpp:306
 msgid "Could not extract the sequence header from this MPEG-1/2 track.\n"
 msgstr "Ezin izan da atera sekuentzia idazburua MPEG-1/2 bide honetatik.\n"
 
@@ -3281,8 +3196,7 @@ msgstr ""
 "Ezin izan da aurkitu hurrengo Ogg orrialdea. Honek adierazten du Ogg/Ogm "
 "agiri hondatua. Jarraitzen saiatuko da.\n"
 
-#: src/input/r_avi.cpp:602
-#: src/input/r_matroska.cpp:1459
+#: src/input/r_avi.cpp:602 src/input/r_matroska.cpp:1459
 msgid "Could not find valid DTS headers in this track's first frames.\n"
 msgstr ""
 "Ezin izan da aurkitu DTS idazburu baliozkorik bide honen lehen frametan.\n"
@@ -3309,8 +3223,7 @@ msgstr ""
 "batzuk ez dira bihurtuko UTF-8-ra eta badaiteke oker erakustea (akatsa: %2%, "
 "%3%).\n"
 
-#: src/common/chapters/chapters.cpp:294
-#: src/common/chapters/chapters.cpp:296
+#: src/common/chapters/chapters.cpp:294 src/common/chapters/chapters.cpp:296
 #, boost-format
 msgid "Could not open '%1%' for reading.\n"
 msgstr "Ezin izan da ireki '%1%' irakurtzeko.\n"
@@ -3359,8 +3272,7 @@ msgstr "Ezin dira FLAC idazburu paketeak irakurri.\n"
 msgid "Could not write to the output file: %1% (%2%)\n"
 msgstr "Ezin da idatzi irteera agirira: %1% (%2%)\n"
 
-#: src/mmg/options/chapters.cpp:89
-#: src/mmg/tabs/chapters.cpp:378
+#: src/mmg/options/chapters.cpp:89 src/mmg/tabs/chapters.cpp:378
 msgid "Country:"
 msgstr "Herrialdea:"
 
@@ -3503,8 +3415,7 @@ msgstr "Cue bidea: %1%"
 msgid "Cues (subentries will be skipped)"
 msgstr "Cues (azpisarrerak jauzi egingo dira)"
 
-#: src/mmg/tabs/input_extra.cpp:46
-#: src/mmg/tabs/input_extra.cpp:126
+#: src/mmg/tabs/input_extra.cpp:46 src/mmg/tabs/input_extra.cpp:126
 msgid "Cues:"
 msgstr "Cue-ak:"
 
@@ -3537,8 +3448,7 @@ msgstr "Oraingo bertsioa:"
 msgid "D&elete"
 msgstr "E&zabatu"
 
-#: src/input/r_dts.h:41
-#: src/output/p_dts.h:45
+#: src/input/r_dts.h:41 src/output/p_dts.h:45
 msgid "DTS"
 msgstr "DTS"
 
@@ -3576,14 +3486,12 @@ msgstr "Eguna: %1% UTC"
 msgid "Debug> "
 msgstr "Garbiketa>"
 
-#: src/mmg/options/mmg.cpp:155
-#: src/mmg/tabs/input_format.cpp:205
+#: src/mmg/options/mmg.cpp:155 src/mmg/tabs/input_format.cpp:205
 #: src/mmg/tabs/input_format.cpp:220
 msgid "Default"
 msgstr "Berezkoa"
 
-#: src/common/property_element.cpp:126
-#: src/mmg/header_editor/frame.cpp:407
+#: src/common/property_element.cpp:126 src/mmg/header_editor/frame.cpp:407
 msgid "Default duration"
 msgstr "Berezko iraupena"
 
@@ -3647,8 +3555,7 @@ msgstr "Azalpena"
 msgid "Description already exists"
 msgstr "Azalpena jadanik badago"
 
-#: src/mmg/cli_options_dlg.cpp:52
-#: src/mmg/header_editor/value_page.cpp:155
+#: src/mmg/cli_options_dlg.cpp:52 src/mmg/header_editor/value_page.cpp:155
 #: src/mmg/tabs/attachments.cpp:161
 msgid "Description:"
 msgstr "Azalpena:"
@@ -3657,9 +3564,7 @@ msgstr "Azalpena:"
 msgid "Details"
 msgstr "Xehetasunak"
 
-#: src/common/file_types.cpp:30
-#: src/input/r_dirac.h:33
-#: src/output/p_dirac.h:38
+#: src/common/file_types.cpp:30 src/input/r_dirac.h:33 src/output/p_dirac.h:38
 msgid "Dirac"
 msgstr "Dirac"
 
@@ -3693,8 +3598,7 @@ msgstr ""
 msgid "Discard padding: %|1$.3f|ms (%2%ns)"
 msgstr "Baztertu betegarria: %|1$.3f|ms (%2%ns)"
 
-#: src/merge/mkvmerge.cpp:645
-#: src/merge/mkvmerge.cpp:651
+#: src/merge/mkvmerge.cpp:645 src/merge/mkvmerge.cpp:651
 #, boost-format
 msgid ""
 "Display dimensions: not given in the form <TID>:<width>x<height>, e.g. "
@@ -3769,8 +3673,7 @@ msgstr "Jeisketa URL-a:"
 msgid "Duration"
 msgstr "Iraupena"
 
-#: src/mmg/tabs/global.cpp:212
-#: src/mmg/tabs/select_scanned_file_dlg.cpp:78
+#: src/mmg/tabs/global.cpp:212 src/mmg/tabs/select_scanned_file_dlg.cpp:78
 msgid "Duration:"
 msgstr "Iraupena:"
 
@@ -3864,8 +3767,7 @@ msgstr "Editatu ezaugarri hautatzaileak"
 msgid "Edition"
 msgstr "Edizioa"
 
-#: src/mmg/tabs/chapters.cpp:881
-#: src/mmg/tabs/chapters.cpp:928
+#: src/mmg/tabs/chapters.cpp:881 src/mmg/tabs/chapters.cpp:928
 #, c-format, boost-format
 msgid "EditionEntry %u"
 msgstr "Edizio-Sarrera %u"
@@ -3929,13 +3831,11 @@ msgstr "Amaiera:"
 msgid "English language name"
 msgstr "Hizkuntza izena ingeleraz"
 
-#: src/info/qt_ui.cpp:130
-#: src/info/wxwidgets_ui.cpp:234
+#: src/info/qt_ui.cpp:130 src/info/wxwidgets_ui.cpp:234
 msgid "Error"
 msgstr "Akatsa"
 
-#: src/input/r_avc.cpp:66
-#: src/input/r_hevc.cpp:63
+#: src/input/r_avc.cpp:66 src/input/r_hevc.cpp:63
 #, boost-format
 msgid "Error %1%\n"
 msgstr "Akatsa %1%\n"
@@ -3956,9 +3856,7 @@ msgstr ""
 "Akatsa %1% lerroan: azpidatzi zenbaki bat itxaroten zen eta idazki zati bat "
 "aurkitu da.\n"
 
-#: src/mmg/mmg.cpp:281
-#: src/mmg/mmg_dialog.cpp:413
-#: src/mmg/mmg_dialog.cpp:434
+#: src/mmg/mmg.cpp:281 src/mmg/mmg_dialog.cpp:413 src/mmg/mmg_dialog.cpp:434
 msgid "Error loading settings"
 msgstr "Akatsa ezarpenak gordetzerakoan"
 
@@ -3984,8 +3882,7 @@ msgstr "Akatsa atalak aztertzerakoan, '%1%': ez daude nahitaezko gai batzuk.\n"
 msgid "Error parsing the file"
 msgstr "Akatsa agiria aztertzerakoan"
 
-#: src/merge/mkvmerge.cpp:484
-#: src/propedit/tag_target.cpp:139
+#: src/merge/mkvmerge.cpp:484 src/propedit/tag_target.cpp:139
 #, boost-format
 msgid "Error parsing the tags in '%1%': some mandatory elements are missing.\n"
 msgstr ""
@@ -3995,16 +3892,13 @@ msgstr ""
 msgid "Error saving the information"
 msgstr "Akatsa argibideak gordetzerakoan"
 
-#: src/mmg/header_editor/frame.cpp:663
-#: src/mmg/header_editor/frame.cpp:669
-#: src/mmg/tabs/chapters.cpp:1829
-#: src/mmg/tabs/chapters.cpp:1841
+#: src/mmg/header_editor/frame.cpp:663 src/mmg/header_editor/frame.cpp:669
+#: src/mmg/tabs/chapters.cpp:1829 src/mmg/tabs/chapters.cpp:1841
 #: src/mmg/tabs/chapters.cpp:1847
 msgid "Error writing Matroska file"
 msgstr "Akatsa Matroska agiria idazterakoan"
 
-#: src/common/output.cpp:78
-#: src/mmg/mux_dialog.cpp:283
+#: src/common/output.cpp:78 src/mmg/mux_dialog.cpp:283
 msgid "Error:"
 msgstr "Akatsa:"
 
@@ -4017,8 +3911,7 @@ msgstr "Akatsa:"
 msgid "Error: Couldn't open input file %1% (%2%).\n"
 msgstr "Akatsa: Ezinezkoa sarrera agiria irekitzea %1% (%2%).\n"
 
-#: src/extract/timecodes_v2.cpp:204
-#: src/extract/tracks.cpp:392
+#: src/extract/timecodes_v2.cpp:204 src/extract/tracks.cpp:392
 msgid "Error: No EBML head found."
 msgstr "Akatsa: Ez da EBML burua aurkitu."
 
@@ -4046,10 +3939,8 @@ msgstr "Akatsak:"
 msgid "Everything went fine."
 msgstr "Dena ongi joan da."
 
-#: src/extract/extract_cli_parser.cpp:73
-#: src/extract/extract_cli_parser.cpp:81
-#: src/extract/extract_cli_parser.cpp:90
-#: src/extract/extract_cli_parser.cpp:98
+#: src/extract/extract_cli_parser.cpp:73 src/extract/extract_cli_parser.cpp:81
+#: src/extract/extract_cli_parser.cpp:90 src/extract/extract_cli_parser.cpp:98
 #: src/extract/extract_cli_parser.cpp:107
 #: src/extract/extract_cli_parser.cpp:115
 msgid "Example"
@@ -4100,18 +3991,16 @@ msgstr ""
 msgid "Extract the data to a raw file."
 msgstr "Atera datuak raw agiri batera."
 
-#: src/output/p_hevc.cpp:69
-#: src/output/p_hevc_es.cpp:135
-#, fuzzy, boost-format
+#: src/output/p_hevc.cpp:69 src/output/p_hevc_es.cpp:135
+#, boost-format
 msgid ""
 "Extracted the aspect ratio information from the HEVC video data and set the "
 "display dimensions to %1%/%2%.\n"
 msgstr ""
-"Ikuspegi maila argibideak aterata MPEG-4 layer 2 bideo datuetatik eta "
-"erakuspen neurriak honela ezarrita: %1%/%2%.\n"
+"Ikuspegi maila argibideak aterata HEVC bideo datuetatik eta erakuspen "
+"neurriak honela ezarrita:  %1%/%2%.\n"
 
-#: src/output/p_avc.cpp:147
-#: src/output/p_mpeg4_p10.cpp:93
+#: src/output/p_avc.cpp:147 src/output/p_mpeg4_p10.cpp:93
 #, boost-format
 msgid ""
 "Extracted the aspect ratio information from the MPEG-4 layer 10 (AVC) video "
@@ -4152,8 +4041,7 @@ msgstr ""
 msgid "Extraction of track ID %1% with the CodecID '%2%' is not supported.\n"
 msgstr "%1% bidea '%2%' Kodek ID-arekin ateratzea ez dago sostengaturik.\n"
 
-#: src/input/r_flac.h:52
-#: src/output/p_flac.h:39
+#: src/input/r_flac.h:52 src/output/p_flac.h:39
 msgid "FLAC"
 msgstr "FLAC"
 
@@ -4174,8 +4062,7 @@ msgstr "FS-ko:"
 msgid "Failed to create the VobSub data file '%1%': %2%\n"
 msgstr "Hutsegitea '%1%': %2% VobSub datu agiria sortzerakoan\n"
 
-#: src/extract/xtr_textsubs.cpp:340
-#: src/extract/xtr_vobsub.cpp:225
+#: src/extract/xtr_textsubs.cpp:340 src/extract/xtr_vobsub.cpp:225
 #, boost-format
 msgid "Failed to create the file '%1%': %2%\n"
 msgstr "Hutsegitea '%1%': %2% agiria sortzerakoan\n"
@@ -4228,8 +4115,7 @@ msgstr "Agiria '%1%': edukiontzi sostengugabea: %2%\n"
 msgid "File UID: %1%"
 msgstr "Agiri UID-a:%1%"
 
-#: src/input/r_real.cpp:430
-#: src/input/r_real.cpp:439
+#: src/input/r_real.cpp:430 src/input/r_real.cpp:439
 #, boost-format
 msgid ""
 "File contains fewer frames than expected or is corrupt after frame %1%.\n"
@@ -4237,8 +4123,7 @@ msgstr ""
 "Agiriak uste baino frame gutxiago ditu edo hondatuta dago %1% framearen "
 "ondoren.\n"
 
-#: src/mmg/mmg_dialog.cpp:799
-#: src/mmg/mux_dialog.cpp:121
+#: src/mmg/mmg_dialog.cpp:799 src/mmg/mux_dialog.cpp:121
 #: src/mmg/tabs/input.cpp:547
 msgid "File creation failed"
 msgstr "Agiri sortze hutsegitea"
@@ -4253,8 +4138,7 @@ msgstr "Agiri datuak, neurria: %1%"
 msgid "File description: %1%"
 msgstr "Agiri azalpena: %1%"
 
-#: src/mmg/tabs/input.cpp:593
-#: src/mmg/tabs/input.cpp:608
+#: src/mmg/tabs/input.cpp:593 src/mmg/tabs/input.cpp:608
 msgid "File identification failed"
 msgstr "Agiri ezagupen hutsegitea"
 
@@ -4291,8 +4175,7 @@ msgstr "Agiri izena"
 msgid "File name: %1%"
 msgstr "Agiri izena: %1%"
 
-#: src/mmg/header_editor/frame.cpp:258
-#: src/mmg/tabs/chapters.cpp:598
+#: src/mmg/header_editor/frame.cpp:258 src/mmg/tabs/chapters.cpp:598
 msgid "File parsing failed"
 msgstr "Agiri azterketa hutsegitea"
 
@@ -4300,8 +4183,7 @@ msgstr "Agiri azterketa hutsegitea"
 msgid "File removal not possible"
 msgstr "Ezin da agiria kendu"
 
-#: src/mmg/header_editor/frame.cpp:675
-#: src/mmg/tabs/chapters.cpp:1854
+#: src/mmg/header_editor/frame.cpp:675 src/mmg/tabs/chapters.cpp:1854
 msgid "File structure warning"
 msgstr "Agiri egitura matxura"
 
@@ -4351,8 +4233,7 @@ msgstr "Flash Video"
 msgid "Floating point number"
 msgstr "Zenbaki hamarrena"
 
-#: src/mmg/tabs/global.cpp:339
-#: src/mmg/tabs/global.cpp:341
+#: src/mmg/tabs/global.cpp:339 src/mmg/tabs/global.cpp:341
 msgid ""
 "For an in-depth explanantion of file/segment linking and this feature please "
 "read mkvmerge's documentation."
@@ -4475,8 +4356,7 @@ msgstr "Frame zenbakia: %1%"
 msgid "Frame rate: %1%"
 msgstr "Frame neurria: %1%"
 
-#: src/info/mkvinfo.cpp:195
-#: src/info/mkvinfo.cpp:214
+#: src/info/mkvinfo.cpp:195 src/info/mkvinfo.cpp:214
 #, boost-format
 msgid "Frame with size %1%%2%%3%"
 msgstr "Framearen neurria: %1%%2%%3%"
@@ -4510,8 +4390,7 @@ msgstr "Bidearen aukera orokorrak"
 msgid "Global"
 msgstr "Orokorra"
 
-#: src/extract/extract_cli_parser.cpp:59
-#: src/mmg/tabs/global.cpp:301
+#: src/extract/extract_cli_parser.cpp:59 src/mmg/tabs/global.cpp:301
 msgid "Global options"
 msgstr "Aukera orokorrak"
 
@@ -4529,21 +4408,17 @@ msgstr "Etiketa orokorrak: %1% sarrera"
 msgid "H&eaders"
 msgstr "&Idazburuak"
 
-#: src/input/r_hevc.h:31
-#: src/output/p_hevc.h:33
-#, fuzzy
+#: src/input/r_hevc.h:31 src/output/p_hevc.h:33
 msgid "HEVC/h.265"
-msgstr "AVC/h.264"
+msgstr "HEVC/h.265"
 
 #: src/output/p_hevc_es.h:41
-#, fuzzy
 msgid "HEVC/h.265 (unframed)"
-msgstr "AVC/h.264 (framegabetuta)"
+msgstr "HEVC/h.265 (framegabetuta)"
 
 #: src/common/file_types.cpp:37
-#, fuzzy
 msgid "HEVC/h.265 elementary streams"
-msgstr "AVC/h.264 ohinarrizko jarioak"
+msgstr "HEVC/h.265 ohinarrizko jarioak"
 
 #: src/mmg/header_editor/frame.cpp:172
 msgid "Header editor"
@@ -4576,30 +4451,25 @@ msgstr ""
 "Ezinezkoa idazburu konpresioa kentzea bufferra ez delako hasten kendu behar "
 "diren bytekin. Beharrezko byteak: %1%; aurkituta:%2%."
 
-#: src/mmg/header_editor/frame.cpp:525
-#: src/mmg/header_editor/frame.cpp:615
+#: src/mmg/header_editor/frame.cpp:525 src/mmg/header_editor/frame.cpp:615
 #: src/mmg/header_editor/frame.cpp:620
 msgid "Header validation"
 msgstr "Idazburu balioztapena"
 
-#: src/mmg/header_editor/frame.cpp:553
-#: src/mmg/header_editor/frame.cpp:562
+#: src/mmg/header_editor/frame.cpp:553 src/mmg/header_editor/frame.cpp:562
 #: src/mmg/header_editor/frame.cpp:754
 msgid "Headers modified"
 msgstr "Idazburuak aldatuta"
 
-#: src/common/property_element.cpp:136
-#: src/mmg/header_editor/frame.cpp:431
+#: src/common/property_element.cpp:136 src/mmg/header_editor/frame.cpp:431
 msgid "Height of the encoded video frames in pixels."
 msgstr "Kodeaturiko bideo framen garaiera pixeletan."
 
-#: src/common/property_element.cpp:138
-#: src/mmg/header_editor/frame.cpp:441
+#: src/common/property_element.cpp:138 src/mmg/header_editor/frame.cpp:441
 msgid "Height of the video frames to display."
 msgstr "Erakuspenerako bideo framen garaiera."
 
-#: src/mmg/mmg_dialog.cpp:716
-#: src/mmg/mmg_dialog.cpp:722
+#: src/mmg/mmg_dialog.cpp:716 src/mmg/mmg_dialog.cpp:722
 msgid "Help file not found"
 msgstr "Laguntza agiria ez da aurkitu"
 
@@ -4798,8 +4668,7 @@ msgstr ""
 "Hutsik utziz gero mmg-ek irteera agiri izena lan honetara gehitutako lehen "
 "agiriaren zuzenbide berean ezarriko du. Bestela zuzenbide hau erabiliko da."
 
-#: src/mmg/tabs/global.cpp:253
-#: src/mmg/tabs/global.cpp:268
+#: src/mmg/tabs/global.cpp:253 src/mmg/tabs/global.cpp:268
 msgid "If no video track is output no splitting will occur."
 msgstr "Irteera bideo bide gabe bada bananketa ez da gertatuko."
 
@@ -4855,12 +4724,9 @@ msgstr "Handitu berritsukeria."
 msgid "Input"
 msgstr "Sarrera"
 
-#: src/mmg/tabs/chapters.cpp:1262
-#: src/mmg/tabs/chapters.cpp:1316
-#: src/mmg/tabs/chapters.cpp:1322
-#: src/mmg/tabs/chapters.cpp:1334
-#: src/mmg/tabs/chapters.cpp:1353
-#: src/mmg/tabs/chapters.cpp:1361
+#: src/mmg/tabs/chapters.cpp:1262 src/mmg/tabs/chapters.cpp:1316
+#: src/mmg/tabs/chapters.cpp:1322 src/mmg/tabs/chapters.cpp:1334
+#: src/mmg/tabs/chapters.cpp:1353 src/mmg/tabs/chapters.cpp:1361
 msgid "Input data error"
 msgstr "Sarrera datu okerrak"
 
@@ -4887,8 +4753,7 @@ msgstr "Elkarlotura: %1%"
 msgid "Internal bug: tracks.cpp SSA #1. %1%"
 msgstr "Baren akatsa: bideak.cpp SSA #1. %1%"
 
-#: src/mmg/header_editor/frame.cpp:679
-#: src/mmg/tabs/chapters.cpp:1858
+#: src/mmg/header_editor/frame.cpp:679 src/mmg/tabs/chapters.cpp:1858
 msgid "Internal program error"
 msgstr "Programaren barne akatsa"
 
@@ -4935,9 +4800,7 @@ msgstr ""
 msgid "Invalid UTF-8 char. First byte: 0x%|1$02x|"
 msgstr "UTF-8 hizki baliogabea. Lehen bytea: 0x%|1$02x|"
 
-#: src/input/r_avi.cpp:611
-#: src/input/r_avi.cpp:616
-#: src/input/r_avi.cpp:633
+#: src/input/r_avi.cpp:611 src/input/r_avi.cpp:616 src/input/r_avi.cpp:633
 msgid "Invalid Vorbis headers in AVI audio track."
 msgstr "Vorbis idazburu baliogabeak AVI-aren audio bidean."
 
@@ -4980,8 +4843,7 @@ msgstr "Boolean aukera baliogabea adierazi da hemen: '--aac-is-sbr %1%'.\n"
 msgid "Invalid change spec (%3%) in '%1% %2%'.\n"
 msgstr "Bereizitasun aldaketa baliogabea (%3%) hemen: '%1% %2%'.\n"
 
-#: src/merge/mkvmerge.cpp:811
-#: src/merge/mkvmerge.cpp:850
+#: src/merge/mkvmerge.cpp:811 src/merge/mkvmerge.cpp:850
 #, boost-format
 msgid "Invalid chapter number '%1%' for '--split' in '--split %2%': %3%\n"
 msgstr ""
@@ -5016,8 +4878,7 @@ msgstr ""
 "Cue aukera baliogabea adierazi da. Ez da bide ID-rik adierazi hemen: '--cues "
 "%1%'.\n"
 
-#: src/common/xml/ebml_converter.cpp:281
-#: src/common/xml/ebml_converter.cpp:285
+#: src/common/xml/ebml_converter.cpp:281 src/common/xml/ebml_converter.cpp:285
 msgid "Invalid data for Base64 encoding found."
 msgstr "Datu baliogabeak aurkitu dira Base64 kodeaketarako"
 
@@ -5172,8 +5033,7 @@ msgstr ""
 "Idazburu luzera baliogabea: %1% (luzera guztira: %2%, idx: %3%, dataidx: "
 "%4%)\n"
 
-#: src/mmg/options/chapters.cpp:114
-#: src/mmg/tabs/chapters.cpp:1209
+#: src/mmg/options/chapters.cpp:114 src/mmg/tabs/chapters.cpp:1209
 msgid "Invalid language selected"
 msgstr "Hautaturiko hizkuntza baliogabea da"
 
@@ -5201,8 +5061,7 @@ msgstr "Minutu zenbateko baliogabea: %1% > 59"
 msgid "Invalid number of seconds: %1% > 59"
 msgstr "Minutu zenbateko baliogabea: %1% > 59"
 
-#: src/mmg/tabs/chapters.cpp:1651
-#: src/mmg/tabs/chapters.cpp:1658
+#: src/mmg/tabs/chapters.cpp:1651 src/mmg/tabs/chapters.cpp:1658
 msgid "Invalid operation"
 msgstr "Eragiketa baliogabea"
 
@@ -5350,8 +5209,7 @@ msgstr ""
 msgid "Invalid track ID in '%1% %2%'.\n"
 msgstr "Bide ID baliogabea hemen: '%1% %2%'.\n"
 
-#: src/merge/mkvmerge.cpp:541
-#: src/merge/mkvmerge.cpp:1187
+#: src/merge/mkvmerge.cpp:541 src/merge/mkvmerge.cpp:1187
 #, boost-format
 msgid "Invalid track ID specified in '%1% %2%'.\n"
 msgstr "Bide ID baliogabea adierazi da hemen: '%1% %2%'.\n"
@@ -5449,8 +5307,7 @@ msgstr "Lokarri zenbakia: %1%"
 msgid "Lacing flag: %1%"
 msgstr "Lokarri ikurra: %1%"
 
-#: src/common/property_element.cpp:128
-#: src/mmg/header_editor/frame.cpp:414
+#: src/common/property_element.cpp:128 src/mmg/header_editor/frame.cpp:414
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:101
 msgid "Language"
 msgstr "Hizkuntza"
@@ -5463,10 +5320,8 @@ msgstr "Bide honentzako hizkuntza. Hautatu  bat ISO639-2 hizkuntza kodeetatik."
 msgid "Language is not NUL terminated"
 msgstr "Hizkuntza ez da NULO amaitu"
 
-#: src/mmg/options/chapters.cpp:86
-#: src/mmg/tabs/chapters.cpp:377
-#: src/mmg/tabs/global.cpp:347
-#: src/mmg/tabs/input_general.cpp:184
+#: src/mmg/options/chapters.cpp:86 src/mmg/tabs/chapters.cpp:377
+#: src/mmg/tabs/global.cpp:347 src/mmg/tabs/input_general.cpp:184
 msgid "Language:"
 msgstr "Hizkuntza:"
 
@@ -5508,8 +5363,7 @@ msgstr ""
 "frame zenbakia amaiera framearen zenbakia baino handiagoa da, edo balio "
 "batzuk huts baino txikiagoak dira).\n"
 
-#: src/merge/timecode_factory.cpp:114
-#: src/merge/timecode_factory.cpp:349
+#: src/merge/timecode_factory.cpp:114 src/merge/timecode_factory.cpp:349
 #, boost-format
 msgid "Line %1% of the timecode file '%2%' could not be parsed.\n"
 msgstr "'%2%' denbora-kode agiriko %1% lerroa ezin da aztertu.\n"
@@ -5536,8 +5390,7 @@ msgstr ""
 "azpidatzi sarrera batzuk oker antolatzea eragin dezake. Hau bada arazoa .idx "
 "agiria eskuz zuzendu behar duzu.\n"
 
-#: src/input/r_vobsub.cpp:244
-#: src/input/r_vobsub.cpp:267
+#: src/input/r_vobsub.cpp:244 src/input/r_vobsub.cpp:267
 #, boost-format
 msgid ""
 "Line %1%: The line seems to be a subtitle entry but the format couldn't be "
@@ -5663,8 +5516,7 @@ msgstr ""
 "azpidatziak). Irakurgailuek berezko bide ikurra ezarrita duten bideak "
 "hobetsi beharko lituzkete."
 
-#: src/input/r_matroska.cpp:1387
-#: src/input/r_matroska.cpp:1402
+#: src/input/r_matroska.cpp:1387 src/input/r_matroska.cpp:1402
 msgid "Malformed AAC codec initialization data found.\n"
 msgstr "AAC kodek abiarazpen datu hondatuak aurkitu dira.\n"
 
@@ -5673,8 +5525,7 @@ msgstr "AAC kodek abiarazpen datu hondatuak aurkitu dira.\n"
 msgid "Malformed codec id '%1%'.\n"
 msgstr "Kodek id hondatua: '%1%'.\n"
 
-#: src/input/subtitles.cpp:368
-#: src/input/subtitles.cpp:376
+#: src/input/subtitles.cpp:368 src/input/subtitles.cpp:376
 #: src/input/subtitles.cpp:381
 #, boost-format
 msgid "Malformed line? (%1%)\n"
@@ -5734,15 +5585,13 @@ msgstr "Geh.-Katxea: %1%"
 msgid "Maximum allowed length: %1%, actual length: %2%"
 msgstr "Ahalbideturiko gehienezko luzera: %1%, oraingo luzera: %2%"
 
-#: src/common/xml/ebml_converter.cpp:171
-#: src/common/xml/ebml_converter.cpp:185
+#: src/common/xml/ebml_converter.cpp:171 src/common/xml/ebml_converter.cpp:185
 #: src/common/xml/ebml_converter.cpp:216
 #, boost-format
 msgid "Maximum allowed value: %1%, actual value: %2%"
 msgstr "Ahalbideturiko gehienezko balioa: %1%, oraingo balioa: %2%"
 
-#: src/common/property_element.cpp:124
-#: src/mmg/header_editor/frame.cpp:402
+#: src/common/property_element.cpp:124 src/mmg/header_editor/frame.cpp:402
 msgid "Maximum cache"
 msgstr "Gehienezko katxea"
 
@@ -5770,15 +5619,13 @@ msgstr "Gutx-Katxea: %1%"
 msgid "Minimum allowed length: %1%, actual length: %2%"
 msgstr "Ahalbideturiko gutxienezko luzera: %1%, oraingo luzera: %2%"
 
-#: src/common/xml/ebml_converter.cpp:169
-#: src/common/xml/ebml_converter.cpp:183
+#: src/common/xml/ebml_converter.cpp:169 src/common/xml/ebml_converter.cpp:183
 #: src/common/xml/ebml_converter.cpp:214
 #, boost-format
 msgid "Minimum allowed value: %1%, actual value: %2%"
 msgstr "Ahalbideturiko gutxienezko balioa: %1%, oraingo balioa: %2%"
 
-#: src/common/property_element.cpp:122
-#: src/mmg/header_editor/frame.cpp:397
+#: src/common/property_element.cpp:122 src/mmg/header_editor/frame.cpp:397
 msgid "Minimum cache"
 msgstr "Gutxieneko katxea"
 
@@ -5915,8 +5762,7 @@ msgstr "Multiplexaketak hartu du %1%.\n"
 msgid "NALU size length:"
 msgstr "NALU neurri luzera:"
 
-#: src/common/property_element.cpp:127
-#: src/mmg/header_editor/frame.cpp:411
+#: src/common/property_element.cpp:127 src/mmg/header_editor/frame.cpp:411
 msgid "Name"
 msgstr "Izena"
 
@@ -5924,8 +5770,7 @@ msgstr "Izena"
 msgid "Name for this track, e.g. \"director's comments\"."
 msgstr "Bide honentzako izena, adib. \"zuzendariaren aipamenak\"."
 
-#: src/mmg/tabs/attachments.cpp:159
-#: src/mmg/tabs/chapters.cpp:376
+#: src/mmg/tabs/attachments.cpp:159 src/mmg/tabs/chapters.cpp:376
 msgid "Name:"
 msgstr "Izena:"
 
@@ -5942,8 +5787,7 @@ msgstr "Atal berriak sortuta."
 msgid "New value:"
 msgstr "Balio berria:"
 
-#: src/common/property_element.cpp:104
-#: src/mmg/header_editor/frame.cpp:329
+#: src/common/property_element.cpp:104 src/mmg/header_editor/frame.cpp:329
 msgid "Next filename"
 msgstr "Hurrengo agirizena"
 
@@ -5966,8 +5810,7 @@ msgstr "Hurrengo zatiaren UID-a:"
 msgid "Next segment UID: %1%"
 msgstr "Hurrengo zatiaren UID-a: %1%"
 
-#: src/common/property_element.cpp:108
-#: src/mmg/header_editor/frame.cpp:340
+#: src/common/property_element.cpp:108 src/mmg/header_editor/frame.cpp:340
 msgid "Next segment's unique ID"
 msgstr "Hurrengo zatiaren ID bakarra"
 
@@ -6032,8 +5875,7 @@ msgstr "Ez dago atal zenbakirik zerredaturik '--split %1%' ondoren.\n"
 msgid "No chapters found"
 msgstr "Ez da atalik aurkitu"
 
-#: src/merge/mkvmerge.cpp:820
-#: src/merge/mkvmerge.cpp:846
+#: src/merge/mkvmerge.cpp:820 src/merge/mkvmerge.cpp:846
 msgid "No chapters in source files or chapter files found to split by.\n"
 msgstr ""
 "Ez da banantzeko atalik aurkitu iturburu agirietan edo atal agirietan.\n"
@@ -6054,8 +5896,7 @@ msgstr ""
 msgid "No file loaded"
 msgstr "Ez dago agiririk gertatuta"
 
-#: src/info/mkvinfo.cpp:1746
-#: src/propedit/options.cpp:33
+#: src/info/mkvinfo.cpp:1746 src/propedit/options.cpp:33
 msgid "No file name given.\n"
 msgstr "Ez da agiri izenik eman.\n"
 
@@ -6084,8 +5925,7 @@ msgstr ""
 msgid "No permission to read from, to write to or to create"
 msgstr "Baimen gabe -tik irakurtzeko, -ra idazteko edo sortzeko"
 
-#: src/extract/timecodes_v2.cpp:218
-#: src/extract/tracks.cpp:407
+#: src/extract/timecodes_v2.cpp:218 src/extract/tracks.cpp:407
 #: src/info/mkvinfo.cpp:1650
 msgid "No segment/level 0 element found."
 msgstr "Ez da zati/0 maila gairik aurkitu."
@@ -6186,10 +6026,8 @@ msgstr ""
 "EXPERIMENTAL' erabiltzen du '%2%'-ren ordez. Ohar hau kendu egingo da "
 "ezaugarritzea amaitutakoan eta mkvmerge horretarako eguneratutakoan.\n"
 
-#: src/extract/attachments.cpp:132
-#: src/extract/timecodes_v2.cpp:186
-#: src/extract/tracks.cpp:349
-#: src/propedit/options.cpp:36
+#: src/extract/attachments.cpp:132 src/extract/timecodes_v2.cpp:186
+#: src/extract/tracks.cpp:349 src/propedit/options.cpp:36
 msgid "Nothing to do.\n"
 msgstr "Ezer ez egiteko.\n"
 
@@ -6201,13 +6039,11 @@ msgstr "Oharra"
 msgid "Number of chapters:"
 msgstr "Atal zenbatekoa:"
 
-#: src/common/property_element.cpp:126
-#: src/mmg/header_editor/frame.cpp:408
+#: src/common/property_element.cpp:126 src/mmg/header_editor/frame.cpp:408
 msgid "Number of nanoseconds (not scaled) per frame."
 msgstr "nanosegundu zenbatekoa (neurriratugabe) frame bakoitzeko."
 
-#: src/common/property_element.cpp:152
-#: src/mmg/header_editor/frame.cpp:489
+#: src/common/property_element.cpp:152 src/mmg/header_editor/frame.cpp:489
 msgid "Numbers of channels in the track."
 msgstr "Bideko kanal zenbatekoa"
 
@@ -6219,8 +6055,7 @@ msgstr "Ogg/OGM"
 msgid "Ogg/OGM audio/video files"
 msgstr "ogg/OGM audio/bideo agiriak"
 
-#: src/mmg/message_dialog.cpp:31
-#: src/mmg/mux_dialog.cpp:77
+#: src/mmg/message_dialog.cpp:31 src/mmg/mux_dialog.cpp:77
 msgid "Ok"
 msgstr "Ongi"
 
@@ -6328,8 +6163,7 @@ msgstr "&Aukerak\tCtrl-P"
 msgid "Open File"
 msgstr "Ireki Agiria"
 
-#: src/info/wxwidgets_ui.cpp:112
-#: src/mmg/header_editor/frame.cpp:238
+#: src/info/wxwidgets_ui.cpp:112 src/mmg/header_editor/frame.cpp:238
 msgid "Open a Matroska file"
 msgstr "Ireki Matroska agiri bat"
 
@@ -6345,8 +6179,7 @@ msgstr "&Ireki agiritegia"
 msgid "Option file created."
 msgstr "Aukera agiria sortuta."
 
-#: src/info/info_cli_parser.cpp:35
-#: src/mmg/options/dialog.cpp:37
+#: src/info/info_cli_parser.cpp:35 src/mmg/options/dialog.cpp:37
 #: src/propedit/propedit_cli_parser.cpp:191
 msgid "Options"
 msgstr "Aukerak"
@@ -6380,8 +6213,7 @@ msgstr "Jatorrizko balioak:"
 msgid "Other options"
 msgstr "Beste aukerak"
 
-#: src/mmg/mux_dialog.cpp:64
-#: src/mmg/options/output.cpp:159
+#: src/mmg/mux_dialog.cpp:64 src/mmg/options/output.cpp:159
 msgid "Output"
 msgstr "Irteera"
 
@@ -6406,8 +6238,7 @@ msgstr "Irteera laginketa maiztasuna: %1%"
 msgid "Output:"
 msgstr "Irteera:"
 
-#: src/mmg/mmg_dialog.cpp:555
-#: src/mmg/mmg_dialog.cpp:1432
+#: src/mmg/mmg_dialog.cpp:555 src/mmg/mmg_dialog.cpp:1432
 msgid "Overwrite existing file?"
 msgstr "Gainidatzi dagoen agiria?"
 
@@ -6468,8 +6299,7 @@ msgstr "Aztertu agiri osoa aurkibideaz fidatzearen ordez."
 msgid "Parsing file"
 msgstr "Agiri azterketa"
 
-#: src/mmg/tabs/global.cpp:236
-#: src/mmg/tabs/global.cpp:247
+#: src/mmg/tabs/global.cpp:236 src/mmg/tabs/global.cpp:247
 msgid "Parts:"
 msgstr "Zatiak:"
 
@@ -6535,8 +6365,7 @@ msgstr ""
 "Hor azaltzen dira xehetasun asko modu zabalagaoan,\n"
 "zerrenda honetan hain argiak ez direnak.\n"
 
-#: src/common/property_element.cpp:103
-#: src/mmg/header_editor/frame.cpp:326
+#: src/common/property_element.cpp:103 src/mmg/header_editor/frame.cpp:326
 msgid "Previous filename"
 msgstr "Aurreko agirizena"
 
@@ -6554,8 +6383,7 @@ msgstr "Aurreko zatiaren UID-a:"
 msgid "Previous segment UID: %1%"
 msgstr "Aurreko zatiaren UID-a: %1%"
 
-#: src/common/property_element.cpp:107
-#: src/mmg/header_editor/frame.cpp:336
+#: src/common/property_element.cpp:107 src/mmg/header_editor/frame.cpp:336
 msgid "Previous segment's unique ID"
 msgstr "Aurreko zatiaren ID bakarra"
 
@@ -6576,21 +6404,17 @@ msgstr "Garatzen 1000/1000"
 msgid "Processing job %d/%d"
 msgstr "Lana garatzen %d/%d"
 
-#: src/mmg/jobs.cpp:262
-#: src/mmg/mux_dialog.cpp:295
+#: src/mmg/jobs.cpp:262 src/mmg/mux_dialog.cpp:295
 msgid "Progress"
 msgstr "Garapena"
 
-#: src/extract/timecodes_v2.cpp:289
-#: src/extract/tracks.cpp:440
-#: src/merge/mkvmerge.cpp:2325
-#: src/merge/output_control.cpp:566
+#: src/extract/timecodes_v2.cpp:289 src/extract/tracks.cpp:440
+#: src/merge/mkvmerge.cpp:2325 src/merge/output_control.cpp:566
 #, boost-format
 msgid "Progress: %1%%%%2%"
 msgstr "Garapena: %1%%%%2%"
 
-#: src/extract/mkvextract.cpp:88
-#: src/extract/timecodes_v2.cpp:379
+#: src/extract/mkvextract.cpp:88 src/extract/timecodes_v2.cpp:379
 msgid "Progress: 100%\n"
 msgstr "Garapena: 100%\n"
 
@@ -6643,8 +6467,7 @@ msgstr ""
 "Quicktime/MP4 irakurgailua: Ezin da irakurri %1%/%2% zenbakiko chunk-"
 "argibidea %3% neurriarekin %4% kokapenetik. Uzten.\n"
 
-#: src/input/r_qtmp4.cpp:2142
-#: src/input/r_qtmp4.cpp:2156
+#: src/input/r_qtmp4.cpp:2142 src/input/r_qtmp4.cpp:2156
 #, boost-format
 msgid ""
 "Quicktime/MP4 reader: Could not read the extended sound description atom for "
@@ -6807,10 +6630,8 @@ msgstr ""
 "Quicktime/MP4 irakurgailua: Agiri honek idazburu konprimituak erabiltzen "
 "ditu, baina ezin da deskonprimitu. Akats kodea zlib-tik: %1%. Uzten.\n"
 
-#: src/input/r_qtmp4.cpp:2482
-#: src/input/r_qtmp4.cpp:2497
-#: src/input/r_qtmp4.cpp:2523
-#: src/input/r_qtmp4.cpp:2573
+#: src/input/r_qtmp4.cpp:2482 src/input/r_qtmp4.cpp:2497
+#: src/input/r_qtmp4.cpp:2523 src/input/r_qtmp4.cpp:2573
 #, boost-format
 msgid ""
 "Quicktime/MP4 reader: Track %1% is missing some data. Broken header atoms?\n"
@@ -6818,8 +6639,7 @@ msgstr ""
 "Quicktime/MP4 irakurgailua: %1% bideak ez ditu datu batzuk. Hautsitako atomo "
 "idazburuak?\n"
 
-#: src/input/r_qtmp4.cpp:2121
-#: src/input/r_qtmp4.cpp:2195
+#: src/input/r_qtmp4.cpp:2121 src/input/r_qtmp4.cpp:2195
 #, boost-format
 msgid ""
 "Quicktime/MP4 reader: Track ID %1% has more than one FourCC. Only using the "
@@ -6869,8 +6689,7 @@ msgstr ""
 msgid "Ready"
 msgstr "Gertu"
 
-#: src/common/property_element.cpp:151
-#: src/mmg/header_editor/frame.cpp:485
+#: src/common/property_element.cpp:151 src/mmg/header_editor/frame.cpp:485
 msgid "Real output sampling frequency in Hz."
 msgstr "Egizko irteera lagin maiztasun Hz-tan."
 
@@ -6928,16 +6747,14 @@ msgstr "Xehetasun birtuala: %1%"
 msgid "Reload the current file without saving"
 msgstr "Birgertatu oraingo agiria gorde gabe"
 
-#: src/mmg/jobs.cpp:67
-#: src/mmg/jobs.cpp:69
-#: src/mmg/mux_dialog.cpp:52
+#: src/mmg/jobs.cpp:67 src/mmg/jobs.cpp:69 src/mmg/mux_dialog.cpp:52
 #: src/mmg/tabs/scanning_for_playlists_dlg.cpp:43
 msgid "Remaining time:"
 msgstr "Gelditzen den denbora:"
 
 #: src/mmg/tabs/chapters.cpp:345
 msgid "Remove chapter"
-msgstr "Kendtu atala"
+msgstr "Kendu atala"
 
 #: src/mmg/header_editor/value_page.cpp:167
 msgid "Remove element"
@@ -7010,8 +6827,7 @@ msgstr "G&orde agindu lerroa"
 msgid "Same directory as the first input file's"
 msgstr "Lehen sarrera agiriaren zuzenbide bera"
 
-#: src/common/property_element.cpp:150
-#: src/mmg/header_editor/frame.cpp:480
+#: src/common/property_element.cpp:150 src/mmg/header_editor/frame.cpp:480
 msgid "Sampling frequency in Hz."
 msgstr "Laginketa maiztasuna Hz-tan."
 
@@ -7127,10 +6943,8 @@ msgstr "Bilatu kokapena: %1%"
 msgid "Seek pre-roll: %|1$.3f|ms (%2%ns)"
 msgstr "Bilaketa aurrealdia : %|1$.3f|ms (%2%ns)"
 
-#: src/extract/timecodes_v2.cpp:222
-#: src/extract/tracks.cpp:412
-#: src/info/qt_ui.cpp:177
-#: src/info/wxwidgets_ui.cpp:210
+#: src/extract/timecodes_v2.cpp:222 src/extract/tracks.cpp:412
+#: src/info/qt_ui.cpp:177 src/info/wxwidgets_ui.cpp:210
 msgid "Segment"
 msgstr "Zatia"
 
@@ -7151,8 +6965,7 @@ msgstr "Zati UID-ak:"
 msgid "Segment edition UID:"
 msgstr "Zati edizio UID-a:"
 
-#: src/common/property_element.cpp:102
-#: src/mmg/header_editor/frame.cpp:323
+#: src/common/property_element.cpp:102 src/mmg/header_editor/frame.cpp:323
 msgid "Segment filename"
 msgstr "Zati agirizena"
 
@@ -7170,26 +6983,20 @@ msgstr "Zati argibide agiria:"
 msgid "Segment info files (*.xml)|*.xml|%s"
 msgstr "Zati argibide agiriak (*.xml)|*.xml|%s"
 
-#: src/extract/timecodes_v2.cpp:242
-#: src/info/mkvinfo.cpp:481
-#: src/info/qt_ui.cpp:178
-#: src/info/wxwidgets_ui.cpp:213
-#: src/mmg/header_editor/frame.cpp:314
-#: src/propedit/options.cpp:172
+#: src/extract/timecodes_v2.cpp:242 src/info/mkvinfo.cpp:481
+#: src/info/qt_ui.cpp:178 src/info/wxwidgets_ui.cpp:213
+#: src/mmg/header_editor/frame.cpp:314 src/propedit/options.cpp:172
 #: src/propedit/propedit_cli_parser.cpp:140
 #: src/propedit/propedit_cli_parser.cpp:225
 msgid "Segment information"
 msgstr "Zati argibideak"
 
-#: src/extract/timecodes_v2.cpp:276
-#: src/info/mkvinfo.cpp:792
-#: src/info/qt_ui.cpp:179
-#: src/info/wxwidgets_ui.cpp:213
+#: src/extract/timecodes_v2.cpp:276 src/info/mkvinfo.cpp:792
+#: src/info/qt_ui.cpp:179 src/info/wxwidgets_ui.cpp:213
 msgid "Segment tracks"
 msgstr "Zati bideak"
 
-#: src/common/property_element.cpp:105
-#: src/mmg/header_editor/frame.cpp:332
+#: src/common/property_element.cpp:105 src/mmg/header_editor/frame.cpp:332
 msgid "Segment unique ID"
 msgstr "Zatiaren ID bakarra"
 
@@ -7254,8 +7061,7 @@ msgstr "Ezarri &Irteera agiria"
 msgid "Set country to:"
 msgstr "Ezarri herrialdea:"
 
-#: src/common/property_element.cpp:115
-#: src/mmg/header_editor/frame.cpp:385
+#: src/common/property_element.cpp:115 src/mmg/header_editor/frame.cpp:385
 msgid ""
 "Set if that track (audio, video or subs) SHOULD\n"
 "be used if no language found matches the\n"
@@ -7265,8 +7071,7 @@ msgstr ""
 "BEHAR den erabiltzailearen hobespenetan aurkitutako\n"
 "hizkuntzarekin bat ez badator."
 
-#: src/common/property_element.cpp:118
-#: src/mmg/header_editor/frame.cpp:392
+#: src/common/property_element.cpp:118 src/mmg/header_editor/frame.cpp:392
 msgid ""
 "Set if that track MUST be used during playback.\n"
 "There can be many forced track for a kind (audio,\n"
@@ -7279,8 +7084,7 @@ msgstr ""
 "ugari egon daitezke. Irakurgailuak erabiltzaileak hobetsitakoarekin\n"
 "bat datorrena hautatu beharko luke edo berezkoa + behartutako bidea."
 
-#: src/common/property_element.cpp:117
-#: src/mmg/header_editor/frame.cpp:388
+#: src/common/property_element.cpp:117 src/mmg/header_editor/frame.cpp:388
 msgid "Set if the track is used."
 msgstr "Ezarri bidea erabilia den."
 
@@ -7579,8 +7383,7 @@ msgstr ""
 msgid "Size"
 msgstr "Neurria"
 
-#: src/mmg/tabs/global.cpp:195
-#: src/mmg/tabs/global.cpp:198
+#: src/mmg/tabs/global.cpp:195 src/mmg/tabs/global.cpp:198
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:80
 msgid "Size:"
 msgstr "Neurria:"
@@ -7645,8 +7448,7 @@ msgstr ""
 "Ez dago zenbait etiketa osagai (akats hau ez litzake gertatu behar - antzeko "
 "beste akats bat gertatu da duela gutxi). %1%\n"
 
-#: src/common/property_element.cpp:128
-#: src/mmg/header_editor/frame.cpp:415
+#: src/common/property_element.cpp:128 src/mmg/header_editor/frame.cpp:415
 msgid ""
 "Specifies the language of the track in the\n"
 "Matroska languages form."
@@ -7654,8 +7456,7 @@ msgstr ""
 "Bidearen hizkuntza adierazten du\n"
 "Matroskaren hizkuntza galdekizunean."
 
-#: src/common/property_element.cpp:144
-#: src/mmg/header_editor/frame.cpp:471
+#: src/common/property_element.cpp:144 src/mmg/header_editor/frame.cpp:471
 msgid ""
 "Specify the possible modifications to the aspect ratio\n"
 "(0: free resizing, 1: keep aspect ratio, 2: fixed)."
@@ -7749,13 +7550,11 @@ msgstr ""
 msgid "Status"
 msgstr "Egoera"
 
-#: src/mmg/jobs.cpp:58
-#: src/mmg/mux_dialog.cpp:50
+#: src/mmg/jobs.cpp:58 src/mmg/mux_dialog.cpp:50
 msgid "Status and progress"
 msgstr "Egoera eta garapena"
 
-#: src/mmg/header_editor/value_page.cpp:174
-#: src/mmg/update_checker.cpp:61
+#: src/mmg/header_editor/value_page.cpp:174 src/mmg/update_checker.cpp:61
 msgid "Status:"
 msgstr "Egoera:"
 
@@ -7775,8 +7574,7 @@ msgstr ""
 msgid "Stereo mode: %1% (%2%)"
 msgstr "Estereo modua: %1% (%2%)"
 
-#: src/common/property_element.cpp:146
-#: src/mmg/header_editor/frame.cpp:475
+#: src/common/property_element.cpp:146 src/mmg/header_editor/frame.cpp:475
 msgid "Stereo-3D video mode (0 - 11, see documentation)."
 msgstr "Estereo-3D bideo modua (0 - 11, ikusi agiritza)."
 
@@ -7824,8 +7622,7 @@ msgstr "Sostengaturiko agiri motak:\n"
 msgid "Suppress status output."
 msgstr "Ezeztatu egoera irteera."
 
-#: src/input/r_tta.h:38
-#: src/output/p_tta.h:34
+#: src/input/r_tta.h:38 src/output/p_tta.h:34
 msgid "TTA"
 msgstr "TTA"
 
@@ -7855,8 +7652,7 @@ msgstr "Etiketa agiriak (*.xml;*.txt)|*.xml;*.txt|%s"
 msgid "Tag selectors"
 msgstr "Etiketa hautatzaileak"
 
-#: src/info/mkvinfo.cpp:1525
-#: src/propedit/options.cpp:177
+#: src/info/mkvinfo.cpp:1525 src/propedit/options.cpp:177
 msgid "Tags"
 msgstr "Etiketak"
 
@@ -8020,8 +7816,7 @@ msgstr ""
 "batzuetan gertatzen da atalak ez daudenean UTF-8-an kodeatuta. Erabili '--"
 "chapter-charset' aukera erabiltzeko hizkikodea adierazteko.\n"
 
-#: src/mmg/header_editor/frame.cpp:673
-#: src/propedit/propedit.cpp:40
+#: src/mmg/header_editor/frame.cpp:673 src/propedit/propedit.cpp:40
 msgid ""
 "The Matroska file was modified, but the meta seek entry could not be "
 "updated. This means that players might have a hard time finding this "
@@ -8209,8 +8004,7 @@ msgstr ""
 "Oharra: Ohar hau 'aukerak' elkarrizketan eten daiteke. Itzali 'Erabilpenari "
 "buruzko oharrak...' aukera."
 
-#: src/output/p_hevc.cpp:156
-#: src/output/p_mpeg4_p10.cpp:182
+#: src/output/p_hevc.cpp:156 src/output/p_mpeg4_p10.cpp:182
 #, boost-format
 msgid "The chosen NALU size length of %1% is too small. Try using '4'.\n"
 msgstr ""
@@ -8225,14 +8019,12 @@ msgstr "Itxiera hitzartea ')' ez dago.\n"
 msgid "The codec type '%1%' cannot be used in a WebM compliant file.\n"
 msgstr "'%1%' kodek mota ezin da WebM agiri bateragarri batean erabili.\n"
 
-#: src/output/p_flac.cpp:101
-#: src/merge/connection_checks.h:61
+#: src/output/p_flac.cpp:101 src/merge/connection_checks.h:61
 #, boost-format
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
 msgstr "Kodekaren datu pribatuak ez datoz bat (luzerak: %1% eta %2%)."
 
-#: src/output/p_hevc.cpp:102
-#: src/output/p_mpeg4_p10.cpp:128
+#: src/output/p_hevc.cpp:102 src/output/p_mpeg4_p10.cpp:128
 #, boost-format
 msgid ""
 "The codec's private data does not match. Both have the same length (%1%) but "
@@ -8304,10 +8096,8 @@ msgstr ""
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr "nr bidearentzako atzerapen ezarpena. %s '%s' agirian baliogabea da."
 
-#: src/merge/output_control.cpp:1422
-#: src/merge/output_control.cpp:1425
-#: src/merge/output_control.cpp:1428
-#: src/merge/output_control.cpp:1431
+#: src/merge/output_control.cpp:1422 src/merge/output_control.cpp:1425
+#: src/merge/output_control.cpp:1428 src/merge/output_control.cpp:1431
 #: src/merge/output_control.cpp:1434
 #, boost-format
 msgid ""
@@ -8317,8 +8107,7 @@ msgstr ""
 "'%1%' agiriarentzako demultiplexaketak huts egin du abiaraztean:\n"
 "%2%\n"
 
-#: src/mmg/tabs/global.cpp:363
-#: src/mmg/tabs/global.cpp:367
+#: src/mmg/tabs/global.cpp:363 src/mmg/tabs/global.cpp:367
 msgid ""
 "The difference between tags associated with a track and global tags is "
 "explained in mkvmerge's documentation. In short: global tags apply to the "
@@ -8390,8 +8179,7 @@ msgstr ""
 "Edizio UID-a loturaturiko zatitik irakurtzeko atalen zati UID-an. Hau "
 "zenbaki bat besterik ez da."
 
-#: src/mmg/header_editor/frame.cpp:661
-#: src/mmg/tabs/chapters.cpp:1839
+#: src/mmg/header_editor/frame.cpp:661 src/mmg/tabs/chapters.cpp:1839
 #: src/propedit/propedit.cpp:32
 msgid ""
 "The element was written at the end of the file, but the segment size could "
@@ -8440,28 +8228,19 @@ msgstr ""
 "%1% agiria ezin da ireki irakurtzeko edo idazteko, edo irakur/idaz "
 "eragiketak huts egin du: %2%.\n"
 
-#: src/common/command_line.cpp:49
-#: src/extract/attachments.cpp:142
-#: src/extract/chapters.cpp:49
-#: src/extract/cuesheets.cpp:207
-#: src/extract/tags.cpp:48
-#: src/extract/timecodes_v2.cpp:193
-#: src/extract/tracks.cpp:358
-#: src/merge/output_control.cpp:330
-#: src/merge/output_control.cpp:482
-#: src/propedit/attachment_target.cpp:63
+#: src/common/command_line.cpp:49 src/extract/attachments.cpp:142
+#: src/extract/chapters.cpp:49 src/extract/cuesheets.cpp:207
+#: src/extract/tags.cpp:48 src/extract/timecodes_v2.cpp:193
+#: src/extract/tracks.cpp:358 src/merge/output_control.cpp:330
+#: src/merge/output_control.cpp:482 src/propedit/attachment_target.cpp:63
 #, boost-format
 msgid "The file '%1%' could not be opened for reading: %2%.\n"
 msgstr "%1% agiria ezin da irakurtzeko ireki: %2%.\n"
 
-#: src/extract/attachments.cpp:122
-#: src/extract/tracks.cpp:299
-#: src/extract/xtr_avi.cpp:56
-#: src/extract/xtr_avi.cpp:60
-#: src/extract/xtr_rmff.cpp:40
-#: src/extract/xtr_tta.cpp:76
-#: src/extract/xtr_wav.cpp:115
-#: src/merge/output_control.cpp:1634
+#: src/extract/attachments.cpp:122 src/extract/tracks.cpp:299
+#: src/extract/xtr_avi.cpp:56 src/extract/xtr_avi.cpp:60
+#: src/extract/xtr_rmff.cpp:40 src/extract/xtr_tta.cpp:76
+#: src/extract/xtr_wav.cpp:115 src/merge/output_control.cpp:1634
 #, boost-format
 msgid "The file '%1%' could not be opened for writing: %2%.\n"
 msgstr "%1% agiria ezin da idazteko ireki: %2%.\n"
@@ -8471,8 +8250,7 @@ msgstr "%1% agiria ezin da idazteko ireki: %2%.\n"
 msgid "The file '%1%' has been opened for writing.\n"
 msgstr "%1% agiria idazteko ireki da.\n"
 
-#: src/merge/mkvmerge.cpp:1721
-#: src/merge/mkvmerge.cpp:2347
+#: src/merge/mkvmerge.cpp:1721 src/merge/mkvmerge.cpp:2347
 #, boost-format
 msgid ""
 "The file '%1%' has unknown type. Please have a look at the supported file "
@@ -8508,8 +8286,7 @@ msgstr ""
 msgid "The file content does not match its format type and was not recognized."
 msgstr "Agiriaren edukia ez dator bat heuskarri motarekin eta ez da ezagutzen."
 
-#: src/merge/output_control.cpp:1422
-#: src/merge/output_control.cpp:1425
+#: src/merge/output_control.cpp:1422 src/merge/output_control.cpp:1425
 msgid ""
 "The file could not be opened for reading, or there was not enough data to "
 "parse its headers."
@@ -8564,8 +8341,7 @@ msgstr ""
 msgid "The file is an unsupported container format (%s)."
 msgstr "Agiria sostengatu gabeko edukiontzi heuskarria da (%s)."
 
-#: src/mmg/wx_kax_analyzer.cpp:36
-#: src/propedit/propedit.cpp:94
+#: src/mmg/wx_kax_analyzer.cpp:36 src/propedit/propedit.cpp:94
 msgid "The file is being analyzed."
 msgstr "Agiria aztertzen..."
 
@@ -8585,8 +8361,7 @@ msgstr "Agiria zuzentzen ari da, zatia 3/4..."
 msgid "The file is being fixed, part 4/4..."
 msgstr "Agiria zuzentzen ari da, zatia 4/4..."
 
-#: src/common/property_element.cpp:102
-#: src/mmg/header_editor/frame.cpp:323
+#: src/common/property_element.cpp:102 src/mmg/header_editor/frame.cpp:323
 msgid "The file name for this segment."
 msgstr "Agiri izena zati honentzat."
 
@@ -8681,8 +8456,7 @@ msgstr ""
 "Hurrengo zatiak lehen agiriaren ondoren irakurtzen dira, denak agiri handi "
 "baten atalak balira bezala."
 
-#: src/mmg/tabs/global.cpp:631
-#: src/mmg/tabs/global.cpp:653
+#: src/mmg/tabs/global.cpp:631 src/mmg/tabs/global.cpp:653
 msgid "The format of the split argument is invalid."
 msgstr "Bananketa argumentuaren heuskarria baliogabea da."
 
@@ -8690,8 +8464,7 @@ msgstr "Bananketa argumentuaren heuskarria baliogabea da."
 msgid "The format of the split size is invalid (size too small)."
 msgstr "Bananketa neurriaren heuskarria baliogabea da (neurri txikiegia)"
 
-#: src/mmg/tabs/global.cpp:584
-#: src/mmg/tabs/global.cpp:588
+#: src/mmg/tabs/global.cpp:584 src/mmg/tabs/global.cpp:588
 msgid "The format of the split size is invalid."
 msgstr "Bananketa neurriaren heuskarria baliogabea da."
 
@@ -8777,8 +8550,7 @@ msgstr ""
 "\n"
 "(Akatsa gertatu da: tab_input::load(), #3)"
 
-#: src/mmg/options/chapters.cpp:113
-#: src/mmg/tabs/chapters.cpp:1209
+#: src/mmg/options/chapters.cpp:113 src/mmg/tabs/chapters.cpp:1209
 #, c-format, boost-format
 msgid "The language '%s' is not a valid language and cannot be selected."
 msgstr "'%s' hizkuntza ez da baliozko hizkuntza eta ezin da hautatu."
@@ -8827,8 +8599,7 @@ msgstr ""
 "dituzunean. Hau  hutsik uzten baduzu ez dago mugarik mkvmergek sortu "
 "ditzakeen agiri zenbatekoan."
 
-#: src/common/property_element.cpp:124
-#: src/mmg/header_editor/frame.cpp:403
+#: src/common/property_element.cpp:124 src/mmg/header_editor/frame.cpp:403
 msgid ""
 "The maximum number of frames a player\n"
 "should be able to cache during playback.\n"
@@ -8840,8 +8611,7 @@ msgstr ""
 "0 ezartzen baduzu, xehetasunezko\n"
 "sasi-katxe sistema ez da erabiliko."
 
-#: src/mmg/header_editor/frame.cpp:667
-#: src/mmg/tabs/chapters.cpp:1845
+#: src/mmg/header_editor/frame.cpp:667 src/mmg/tabs/chapters.cpp:1845
 #: src/propedit/propedit.cpp:36
 msgid ""
 "The meta seek element was written at the end of the file, but the segment "
@@ -8852,8 +8622,7 @@ msgstr ""
 "izan da eguneratu. Hortaz gaia ez da ikusgarria izango. Garapena utzi egingo "
 "da. Agiria aldatu egin da!"
 
-#: src/common/property_element.cpp:122
-#: src/mmg/header_editor/frame.cpp:398
+#: src/common/property_element.cpp:122 src/mmg/header_editor/frame.cpp:398
 msgid ""
 "The minimum number of frames a player\n"
 "should be able to cache during playback.\n"
@@ -8932,8 +8701,7 @@ msgstr ""
 "txikiagoa da. Bide honetako gainontzeko frameak badaiteke ez egotea denbora-"
 "irarketaturik egitea nahi zenuen bezala. mkvmerge matxuratu egin daiteke.\n"
 
-#: src/common/property_element.cpp:143
-#: src/mmg/header_editor/frame.cpp:466
+#: src/common/property_element.cpp:143 src/mmg/header_editor/frame.cpp:466
 msgid ""
 "The number of video pixels to remove\n"
 "on the bottom of the image."
@@ -8941,8 +8709,7 @@ msgstr ""
 "Irudiaren behealdean kentzeko\n"
 "bideo pixel zenbatekoa."
 
-#: src/common/property_element.cpp:140
-#: src/mmg/header_editor/frame.cpp:451
+#: src/common/property_element.cpp:140 src/mmg/header_editor/frame.cpp:451
 msgid ""
 "The number of video pixels to remove\n"
 "on the left of the image."
@@ -8950,8 +8717,7 @@ msgstr ""
 "Irudiaren ezkerraldean kentzeko\n"
 "bideo pixel zenbatekoa."
 
-#: src/common/property_element.cpp:142
-#: src/mmg/header_editor/frame.cpp:461
+#: src/common/property_element.cpp:142 src/mmg/header_editor/frame.cpp:461
 msgid ""
 "The number of video pixels to remove\n"
 "on the right of the image."
@@ -8959,8 +8725,7 @@ msgstr ""
 "Irudiaren eskuinaldean kentzeko\n"
 "bideo pixel zenbatekoa."
 
-#: src/common/property_element.cpp:141
-#: src/mmg/header_editor/frame.cpp:456
+#: src/common/property_element.cpp:141 src/mmg/header_editor/frame.cpp:456
 msgid ""
 "The number of video pixels to remove\n"
 "on the top of the image."
@@ -8968,14 +8733,12 @@ msgstr ""
 "Irudiaren goialdean kentzeko\n"
 "bideo pixel zenbatekoa."
 
-#: src/mmg/tabs/global.cpp:251
-#: src/mmg/tabs/global.cpp:266
+#: src/mmg/tabs/global.cpp:251 src/mmg/tabs/global.cpp:266
 #: src/mmg/tabs/global.cpp:279
 msgid "The numbering starts at 1."
 msgstr "Zenbakipena 1-etik hasten da."
 
-#: src/mmg/tabs/global.cpp:254
-#: src/mmg/tabs/global.cpp:269
+#: src/mmg/tabs/global.cpp:254 src/mmg/tabs/global.cpp:269
 msgid ""
 "The numbers given with this argument are interpreted based on the number of "
 "Matroska blocks that are output."
@@ -8996,8 +8759,7 @@ msgstr ""
 msgid "The order of the various options is not important."
 msgstr "Aukera ezberdinen hurrenkera ez da garrantzitsua."
 
-#: src/mmg/mmg_dialog.cpp:555
-#: src/mmg/mmg_dialog.cpp:1429
+#: src/mmg/mmg_dialog.cpp:555 src/mmg/mmg_dialog.cpp:1429
 #, c-format, boost-format
 msgid "The output file '%s' already exists. Do you want to overwrite it?"
 msgstr "'%s' irtera agiria jadanik badago. Gainidaztea nahi duzu?"
@@ -9114,8 +8876,7 @@ msgstr ""
 msgid "The size of attachment '%1%' is 0.\n"
 msgstr "'%1%' eranskinaren neurria da 0.\n"
 
-#: src/merge/output_control.cpp:334
-#: src/merge/output_control.cpp:485
+#: src/merge/output_control.cpp:334 src/merge/output_control.cpp:485
 #, boost-format
 msgid ""
 "The source file '%1%' could not be opened successfully, or retrieving its "
@@ -9235,10 +8996,8 @@ msgstr ""
 msgid "The timecode file '%1%' could not be opened for reading.\n"
 msgstr "'%1%' denbora-kode agiria ezin da irakurtzeko ireki.\n"
 
-#: src/merge/timecode_factory.cpp:87
-#: src/merge/timecode_factory.cpp:95
-#: src/merge/timecode_factory.cpp:101
-#: src/merge/timecode_factory.cpp:303
+#: src/merge/timecode_factory.cpp:87 src/merge/timecode_factory.cpp:95
+#: src/merge/timecode_factory.cpp:101 src/merge/timecode_factory.cpp:303
 #, boost-format
 msgid ""
 "The timecode file '%1%' does not contain a valid 'Assume' line with the "
@@ -9256,8 +9015,7 @@ msgstr ""
 "'%1%' denbora-kode agiriak ez du 'Gap' lerro baliozko bat alde "
 "iraupenarekin.\n"
 
-#: src/merge/timecode_factory.cpp:240
-#: src/merge/timecode_factory.cpp:367
+#: src/merge/timecode_factory.cpp:240 src/merge/timecode_factory.cpp:367
 #, boost-format
 msgid "The timecode file '%1%' does not contain any valid entry.\n"
 msgstr "'%1%' denbora-kode agiriak ez dut baliozko sarrerarik.\n"
@@ -9330,8 +9088,7 @@ msgstr ""
 "Jario honentzako denbora-kodeak agiriaren erdian berrezarri dira. Hau ez "
 "dago sostengaturik. Oraingo paketea baztertu egingo da.\n"
 
-#: src/common/property_element.cpp:101
-#: src/mmg/header_editor/frame.cpp:320
+#: src/common/property_element.cpp:101 src/mmg/header_editor/frame.cpp:320
 msgid "The title for the whole movie."
 msgstr "Filma osoaren izenburua."
 
@@ -9377,8 +9134,7 @@ msgstr ""
 "%1% zebk. bidea '%2%' agiritik ezin da erantsi %3% zebk. bidera '%4%' "
 "agiritik. %5%\n"
 
-#: src/common/property_element.cpp:112
-#: src/mmg/header_editor/frame.cpp:377
+#: src/common/property_element.cpp:112 src/mmg/header_editor/frame.cpp:377
 msgid "The track number as used in the Block Header."
 msgstr "Bide zenbakia Bloke Idazburuan erabili bezala."
 
@@ -9403,8 +9159,7 @@ msgstr "Theora"
 msgid "There is a new version available online."
 msgstr "Bertsio berri bat dago eskuragarri online."
 
-#: src/merge/output_control.cpp:1066
-#: src/merge/output_control.cpp:1076
+#: src/merge/output_control.cpp:1066 src/merge/output_control.cpp:1076
 #, boost-format
 msgid ""
 "There is no file with the ID '%1%'. The argument for '--append-to' was "
@@ -9426,8 +9181,7 @@ msgstr "Akats bat egon da eguneraketa egoera galdetzerakoan."
 msgid "There were ERRORs."
 msgstr "AKATSAK egon dira."
 
-#: src/mmg/header_editor/frame.cpp:525
-#: src/mmg/header_editor/frame.cpp:620
+#: src/mmg/header_editor/frame.cpp:525 src/mmg/header_editor/frame.cpp:620
 msgid ""
 "There were errors in the header values preventing the headers from being "
 "saved. The first error has been selected."
@@ -9443,8 +9197,7 @@ msgstr "Kontuz oharrak egon dira."
 msgid "There were warnings, or the process was terminated."
 msgstr "Kontuz oharrak egon dira, edo garapena amaitu da."
 
-#: src/input/r_avi.cpp:550
-#: src/input/r_real.cpp:290
+#: src/input/r_avi.cpp:550 src/input/r_real.cpp:290
 msgid ""
 "This AAC track does not contain valid headers. Could not parse the AAC "
 "information.\n"
@@ -9505,24 +9258,24 @@ msgstr ""
 "erabilgarriak.\n"
 
 #: src/output/p_hevc_es.cpp:96
-#, fuzzy, boost-format
+#, boost-format
 msgid ""
 "This HEVC contains frames that are too big for the current maximum NALU "
 "size. You have to re-run mkvmerge and set the maximum NALU size to %1% for "
 "this track (command line parameter '--nalu-size-length %2%:%1%').\n"
 msgstr ""
-"AVC/h.264 bide honek handiegiak diren frameak ditu oraingo NALU neurrirako. "
+"HEVC bide honek handiegiak diren frameak ditu oraingo NALU neurrirako. "
 "mkvmerge berrekin behar duzu eta gehienezko NALU neurria %1% ezarri bide "
 "honentzat (agindu lerro parametroa '--nalu-size-length %2%:%1%').\n"
 
 #: src/output/p_hevc_es.cpp:114
-#, fuzzy, boost-format
+#, boost-format
 msgid ""
 "This HEVC track does not start with a key frame. The first %1% frames have "
 "been skipped.\n"
 msgstr ""
-"AVC/h.264 bide hau ez da giltza frame batekin hasten. Lehen %1% frameak "
-"jauzi egin dira.\n"
+"HEVC bide hau ez da giltza frame batekin hasten. Lehen %1% frameak jauzi "
+"egin dira.\n"
 
 #: src/output/p_mp3.cpp:59
 #, boost-format
@@ -9607,8 +9360,7 @@ msgstr ""
 "sostengaturik Matroska SRT azpidatzi heuskarrian. Koordenadak "
 "berezgaitasunez kenduko dira.\n"
 
-#: src/mmg/header_editor/frame.cpp:258
-#: src/mmg/tabs/chapters.cpp:598
+#: src/mmg/header_editor/frame.cpp:258 src/mmg/tabs/chapters.cpp:598
 msgid "This file could not be opened or parsed."
 msgstr "Agiri hau ezin da ireki edo aztertu."
 
@@ -9649,8 +9401,7 @@ msgstr "Zerrenda hau argibide asmoetarako da bakarrik eta ezin da aldatu."
 msgid "This message will only shown to you once."
 msgstr "Mezu hau behin bakarrik erakutsiko zaizu"
 
-#: src/mmg/tabs/global.cpp:252
-#: src/mmg/tabs/global.cpp:267
+#: src/mmg/tabs/global.cpp:252 src/mmg/tabs/global.cpp:267
 msgid "This mode considers only the first video track that is output."
 msgstr "Modu honek irteerako lehen bideo bidea bakarrik hartzen du kontuan."
 
@@ -9749,20 +9500,17 @@ msgstr "Denbora-kode aterapena"
 msgid "Timecode files (*.tmc;*.txt)|*.tmc;*.txt|%s"
 msgstr "Denbora-kode agiriak (*.tmc;*.txt)|*.tmc;*.txt|%s"
 
-#: src/extract/timecodes_v2.cpp:251
-#: src/info/mkvinfo.cpp:493
+#: src/extract/timecodes_v2.cpp:251 src/info/mkvinfo.cpp:493
 #: src/info/mkvinfo.cpp:928
 #, boost-format
 msgid "Timecode scale: %1%"
 msgstr "Denbora-kode neurria: %1%"
 
-#: src/mmg/tabs/global.cpp:223
-#: src/mmg/tabs/input_general.cpp:192
+#: src/mmg/tabs/global.cpp:223 src/mmg/tabs/input_general.cpp:192
 msgid "Timecodes:"
 msgstr "Denbora-kodeak:"
 
-#: src/common/property_element.cpp:101
-#: src/mmg/header_editor/frame.cpp:320
+#: src/common/property_element.cpp:101 src/mmg/header_editor/frame.cpp:320
 msgid "Title"
 msgstr "Izenburua"
 
@@ -9775,8 +9523,7 @@ msgstr "Izenburua: %1%"
 msgid "To all files"
 msgstr "Agiri guztientzat"
 
-#: src/extract/xtr_avc.cpp:66
-#: src/extract/xtr_hevc.cpp:29
+#: src/extract/xtr_avc.cpp:66 src/extract/xtr_hevc.cpp:29
 #, boost-format
 msgid "Track %1% CodecPrivate is too small.\n"
 msgstr "Kodek-Pribatuaren %1% bidea txikiegia da.\n"
@@ -9831,18 +9578,12 @@ msgstr ""
 "'%2%' Kodek ID-dun %1% bideak ez du \"bits per second (bps)\" gaia eta ezn "
 "da atera.\n"
 
-#: src/extract/xtr_aac.cpp:42
-#: src/extract/xtr_alac.cpp:47
-#: src/extract/xtr_avc.cpp:61
-#: src/extract/xtr_avi.cpp:39
-#: src/extract/xtr_hevc.cpp:24
-#: src/extract/xtr_ogg.cpp:40
-#: src/extract/xtr_ogg.cpp:76
-#: src/extract/xtr_rmff.cpp:31
-#: src/extract/xtr_textsubs.cpp:95
-#: src/extract/xtr_textsubs.cpp:274
-#: src/extract/xtr_vobsub.cpp:65
-#: src/extract/xtr_wav.cpp:97
+#: src/extract/xtr_aac.cpp:42 src/extract/xtr_alac.cpp:47
+#: src/extract/xtr_avc.cpp:61 src/extract/xtr_avi.cpp:39
+#: src/extract/xtr_hevc.cpp:24 src/extract/xtr_ogg.cpp:40
+#: src/extract/xtr_ogg.cpp:76 src/extract/xtr_rmff.cpp:31
+#: src/extract/xtr_textsubs.cpp:95 src/extract/xtr_textsubs.cpp:274
+#: src/extract/xtr_vobsub.cpp:65 src/extract/xtr_wav.cpp:97
 #, boost-format
 msgid ""
 "Track %1% with the CodecID '%2%' is missing the \"codec private\" element "
@@ -9904,8 +9645,7 @@ msgstr ""
 msgid "Track %1%: The AAC information could not be parsed.\n"
 msgstr "%1% bidea: AAC argibideak ezin dira aztertu.\n"
 
-#: src/extract/xtr_aac.cpp:62
-#: src/extract/xtr_aac.cpp:74
+#: src/extract/xtr_aac.cpp:62 src/extract/xtr_aac.cpp:74
 #, boost-format
 msgid "Track ID %1% has an unknown AAC type.\n"
 msgstr "%1% ID-dun bideak AAC mota ezezaguna du.\n"
@@ -9915,8 +9655,7 @@ msgstr "%1% ID-dun bideak AAC mota ezezaguna du.\n"
 msgid "Track ID %1%: %2% (%3%)"
 msgstr "%1% ID-dun bidea: %1%: %2% (%3%)"
 
-#: src/common/property_element.cpp:113
-#: src/mmg/header_editor/frame.cpp:380
+#: src/common/property_element.cpp:113 src/mmg/header_editor/frame.cpp:380
 msgid "Track UID"
 msgstr "Bide UID-a"
 
@@ -9929,8 +9668,7 @@ msgstr "Bide UID-a: %1%"
 msgid "Track extraction"
 msgstr "Bide aterapena"
 
-#: src/propedit/options.cpp:164
-#: src/propedit/propedit_cli_parser.cpp:141
+#: src/propedit/options.cpp:164 src/propedit/propedit_cli_parser.cpp:141
 #: src/propedit/propedit_cli_parser.cpp:228
 msgid "Track headers"
 msgstr "Bide idazburuak"
@@ -9939,8 +9677,7 @@ msgstr "Bide idazburuak"
 msgid "Track name:"
 msgstr "Bide izena:"
 
-#: src/common/property_element.cpp:112
-#: src/mmg/header_editor/frame.cpp:376
+#: src/common/property_element.cpp:112 src/mmg/header_editor/frame.cpp:376
 msgid "Track number"
 msgstr "Bide zenbakia"
 
@@ -9988,8 +9725,7 @@ msgstr "Bideak:"
 msgid "Troubleshooting advice for playback issues"
 msgstr "Arazo konponketa aholkuak irakurketa akatsentzat"
 
-#: src/input/r_truehd.h:36
-#: src/output/p_truehd.h:42
+#: src/input/r_truehd.h:36 src/output/p_truehd.h:42
 msgid "TrueHD"
 msgstr "TrueHD"
 
@@ -10019,8 +9755,7 @@ msgstr ""
 msgid "Type"
 msgstr "Mota"
 
-#: src/common/property_element.cpp:139
-#: src/mmg/header_editor/frame.cpp:446
+#: src/common/property_element.cpp:139 src/mmg/header_editor/frame.cpp:446
 msgid ""
 "Type of the unit for DisplayWidth/Height\n"
 "(0: pixels, 1: centimeters, 2: inches, 3: aspect ratio)."
@@ -10073,8 +9808,7 @@ msgstr ""
 "Ustekabeko irudi framea eremu bakar frame baten ondoren. Zuzendu MPEG2 bideo "
 "jarioa multiplexatzen saiatu aurretik.\n"
 
-#: src/info/mkvinfo.cpp:361
-#: src/info/mkvinfo.cpp:370
+#: src/info/mkvinfo.cpp:361 src/info/mkvinfo.cpp:370
 msgid "Unknown"
 msgstr "Ezezaguna"
 
@@ -10220,8 +9954,7 @@ msgstr "Erabili aurreko irteera zuzenbidea"
 msgid "Use this directory:"
 msgstr "Erabili zuzenbide hau:"
 
-#: src/mmg/tabs/input_extra.cpp:62
-#: src/mmg/tabs/input_extra.cpp:132
+#: src/mmg/tabs/input_extra.cpp:62 src/mmg/tabs/input_extra.cpp:132
 msgid "User defined options:"
 msgstr "Erabiltzaileak zehazturiko aukerak:"
 
@@ -10246,8 +9979,7 @@ msgstr "Irteera modulo generikoa erabiltzen '%1%' bide motarako.\n"
 msgid "Using the output module for the format '%1%'.\n"
 msgstr "Irteera moduloa erabiltzen '%1%' heuskarrirako.\n"
 
-#: src/input/r_vc1.h:34
-#: src/output/p_vc1.h:37
+#: src/input/r_vc1.h:34 src/output/p_vc1.h:37
 msgid "VC1"
 msgstr "VC1"
 
@@ -10275,43 +10007,35 @@ msgstr "Egiaztatu uneko atal sarrera akatsen bat dagoen ikusteko"
 msgid "VfW compatible video"
 msgstr "VfW bideo bateragarria"
 
-#: src/common/property_element.cpp:144
-#: src/mmg/header_editor/frame.cpp:470
+#: src/common/property_element.cpp:144 src/mmg/header_editor/frame.cpp:470
 msgid "Video aspect ratio type"
 msgstr "Bideo ikuspegi maila mota"
 
-#: src/common/property_element.cpp:143
-#: src/mmg/header_editor/frame.cpp:466
+#: src/common/property_element.cpp:143 src/mmg/header_editor/frame.cpp:466
 msgid "Video crop bottom"
 msgstr "Bideo mozketa behea"
 
-#: src/common/property_element.cpp:140
-#: src/mmg/header_editor/frame.cpp:451
+#: src/common/property_element.cpp:140 src/mmg/header_editor/frame.cpp:451
 msgid "Video crop left"
 msgstr "Bideo mozketa ezkerra"
 
-#: src/common/property_element.cpp:142
-#: src/mmg/header_editor/frame.cpp:461
+#: src/common/property_element.cpp:142 src/mmg/header_editor/frame.cpp:461
 msgid "Video crop right"
 msgstr "Bideo mozketa eskuina"
 
-#: src/common/property_element.cpp:141
-#: src/mmg/header_editor/frame.cpp:456
+#: src/common/property_element.cpp:141 src/mmg/header_editor/frame.cpp:456
 msgid "Video crop top"
 msgstr "Bideo mozketa goia"
 
-#: src/common/property_element.cpp:138
-#: src/mmg/header_editor/frame.cpp:441
+#: src/common/property_element.cpp:138 src/mmg/header_editor/frame.cpp:441
 msgid "Video display height"
 msgstr "Bideo erakuspen garaiera"
 
-#: src/common/property_element.cpp:139
-#: src/mmg/header_editor/frame.cpp:446
+#: src/common/property_element.cpp:139 src/mmg/header_editor/frame.cpp:446
 msgid "Video display unit"
 msgstr "Bideo erakuspen batekoa"
 
-#: src/common/property_element.cpp:137
-#: src/mmg/header_editor/frame.cpp:436
+#: src/common/property_element.cpp:137 src/mmg/header_editor/frame.cpp:436
 msgid "Video display width"
 msgstr "Bideo erakuspen zabalera"
 
@@ -10324,18 +10048,15 @@ msgstr "Bideo elkarlotu ikurra"
 msgid "Video packet assembly failed. Error code: %1% (%2%)\n"
 msgstr "Hutsegitea bideo paketatze osaketan. Akats kodea: %1% (%2%)\n"
 
-#: src/common/property_element.cpp:136
-#: src/mmg/header_editor/frame.cpp:431
+#: src/common/property_element.cpp:136 src/mmg/header_editor/frame.cpp:431
 msgid "Video pixel height"
 msgstr "Bideoaren pixel garaiera"
 
-#: src/common/property_element.cpp:135
-#: src/mmg/header_editor/frame.cpp:426
+#: src/common/property_element.cpp:135 src/mmg/header_editor/frame.cpp:426
 msgid "Video pixel width"
 msgstr "Bideoaren pixel zabalera"
 
-#: src/common/property_element.cpp:146
-#: src/mmg/header_editor/frame.cpp:475
+#: src/common/property_element.cpp:146 src/mmg/header_editor/frame.cpp:475
 msgid "Video stereo mode"
 msgstr "Bideo estereo modua"
 
@@ -10361,8 +10082,7 @@ msgstr ""
 "Ikusi mkvmergek multiplexaketa garapenean zehar hautaturiko lanentzat "
 "sorturiko irteerak"
 
-#: src/input/r_vobbtn.h:36
-#: src/output/p_vobbtn.h:36
+#: src/input/r_vobbtn.h:36 src/output/p_vobbtn.h:36
 msgid "VobBtn"
 msgstr "VobBtn"
 
@@ -10370,8 +10090,7 @@ msgstr "VobBtn"
 msgid "VobButtons"
 msgstr "Vob-Botoiak"
 
-#: src/input/r_vobsub.h:75
-#: src/output/p_vobsub.h:31
+#: src/input/r_vobsub.h:75 src/output/p_vobsub.h:31
 msgid "VobSub"
 msgstr "VobSub"
 
@@ -10447,13 +10166,11 @@ msgstr ""
 "hitza zenbaki batez jarraitua zenbaki hau berezgaitasunez jartzen da "
 "sarrerako 'atzerapena' eremuan agirian aurkitzen den audio bide ororentzat."
 
-#: src/common/property_element.cpp:135
-#: src/mmg/header_editor/frame.cpp:426
+#: src/common/property_element.cpp:135 src/mmg/header_editor/frame.cpp:426
 msgid "Width of the encoded video frames in pixels."
 msgstr "Kodeaturiko bideo framen zabalera pixeletan."
 
-#: src/common/property_element.cpp:137
-#: src/mmg/header_editor/frame.cpp:436
+#: src/common/property_element.cpp:137 src/mmg/header_editor/frame.cpp:436
 msgid "Width of the video frames to display."
 msgstr "Erakusteko bideo framen zabalera."
 
@@ -10515,14 +10232,12 @@ msgstr "Argumento okerra: '--split-max-files'.\n"
 msgid "Wrong file chosen"
 msgstr "Agiri okerra hautatu da"
 
-#: src/mmg/header_editor/frame.cpp:248
-#: src/mmg/tabs/chapters.cpp:684
+#: src/mmg/header_editor/frame.cpp:248 src/mmg/tabs/chapters.cpp:684
 #: src/mmg/tabs/chapters.cpp:722
 msgid "Wrong file selected"
 msgstr "Agiri okerra hautatuta"
 
-#: src/common/kate.cpp:44
-#: src/common/theora.cpp:33
+#: src/common/kate.cpp:44 src/common/theora.cpp:33
 #, boost-format
 msgid "Wrong header type: 0x%|1$02x| != 0x%|2$02x|"
 msgstr "Idazburu mota okerra: 0x%|1$02x| != 0x%|2$02x|"
@@ -10564,21 +10279,17 @@ msgstr ""
 "Adibidea: -00:05:23 atal guztiak 5 minutu eta 23 segundu lehenago hasi "
 "ahalko dira."
 
-#: src/common/compression/zlib.cpp:51
-#: src/common/compression/zlib.cpp:88
+#: src/common/compression/zlib.cpp:51 src/common/compression/zlib.cpp:88
 #, boost-format
 msgid "Zlib decompression failed. Result: %1%\n"
 msgstr "Zlib deskonpresio hutsegitea. Emaitza: %1%\n"
 
-#: src/info/mkvinfo.cpp:212
-#: src/info/mkvinfo.cpp:216
+#: src/info/mkvinfo.cpp:212 src/info/mkvinfo.cpp:216
 #, boost-format
 msgid "[%1% frame for track %2%, timecode %3%]"
 msgstr "[%1% frame %2% bidearentzat, denbora-kodea %3%]"
 
-#: src/mmg/jobs.cpp:358
-#: src/mmg/jobs.cpp:482
-#: src/mmg/jobs.cpp:562
+#: src/mmg/jobs.cpp:358 src/mmg/jobs.cpp:482 src/mmg/jobs.cpp:562
 msgid "aborted"
 msgstr "utzita"
 
@@ -10594,8 +10305,7 @@ msgstr ""
 "eta zuzen, mesedez jarri harremanetan egilearekin, Moritz Bunkus, en "
 "moritz@bunkus.org.\n"
 
-#: src/mmg/tabs/attachments.cpp:157
-#: src/mmg/tabs/input.cpp:193
+#: src/mmg/tabs/attachments.cpp:157 src/mmg/tabs/input.cpp:193
 msgid "add"
 msgstr "gehitu"
 
@@ -10607,15 +10317,13 @@ msgstr "zati gehigarriak"
 msgid "always"
 msgstr "betik"
 
-#: src/mmg/options/mmg.cpp:127
-#: src/mmg/options/mmg.cpp:131
+#: src/mmg/options/mmg.cpp:127 src/mmg/options/mmg.cpp:131
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:41
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:45
 msgid "always ask the user"
 msgstr "betik galdetu erabiltzaileari"
 
-#: src/mmg/options/mmg.cpp:128
-#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:42
+#: src/mmg/options/mmg.cpp:128 src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:42
 msgid "always scan for other playlists"
 msgstr "betik mihatu beste irakur-zerrendentzat"
 
@@ -10631,9 +10339,7 @@ msgstr "Anaglifoa (orlegia/magenta)"
 msgid "append"
 msgstr "erantsi"
 
-#: src/info/mkvinfo.cpp:950
-#: src/input/r_matroska.cpp:99
-#: src/mmg/mmg.cpp:65
+#: src/info/mkvinfo.cpp:950 src/input/r_matroska.cpp:99 src/mmg/mmg.cpp:65
 #: src/mmg/tabs/scanning_for_playlists_dlg.cpp:187
 msgid "audio"
 msgstr "audioa"
@@ -10656,8 +10362,7 @@ msgstr "bi begiak bloke batean nahastuta (eskuina lehenik)"
 msgid "built on %1% %2%"
 msgstr "eraikia: %1% %2%"
 
-#: src/info/mkvinfo.cpp:953
-#: src/input/r_matroska.cpp:100
+#: src/info/mkvinfo.cpp:953 src/input/r_matroska.cpp:100
 msgid "buttons"
 msgstr "botoiak"
 
@@ -10699,10 +10404,8 @@ msgstr "konpresioa"
 msgid "create_track_number: file_num not found. %1%\n"
 msgstr "create_track_number: file_num ez da aurkitu. %1%\n"
 
-#: src/mmg/tabs/chapters.cpp:393
-#: src/mmg/tabs/input_extra.cpp:81
-#: src/mmg/tabs/input_extra.cpp:160
-#: src/mmg/tabs/input_general.cpp:102
+#: src/mmg/tabs/chapters.cpp:393 src/mmg/tabs/input_extra.cpp:81
+#: src/mmg/tabs/input_extra.cpp:160 src/mmg/tabs/input_general.cpp:102
 msgid "default"
 msgstr "berezkoa"
 
@@ -10738,8 +10441,7 @@ msgstr "erakuspen garaiera: %1%"
 msgid "display width: %1%"
 msgstr "erakuspen zabalera: %1%"
 
-#: src/mmg/jobs.cpp:560
-#: src/mmg/jobs.cpp:748
+#: src/mmg/jobs.cpp:560 src/mmg/jobs.cpp:748
 msgid "done"
 msgstr "eginda"
 
@@ -10767,8 +10469,7 @@ msgstr "enkriptaketa"
 msgid "even if there were warnings"
 msgstr "baita kontuz oharrak egonda ere"
 
-#: src/mmg/jobs.cpp:370
-#: src/mmg/jobs.cpp:563
+#: src/mmg/jobs.cpp:370 src/mmg/jobs.cpp:563
 msgid "failed"
 msgstr "hutseginda"
 
@@ -10831,9 +10532,7 @@ msgstr "flac_reader: ezin da FLAC paketatzailea abiarazi.\n"
 msgid "for all frames"
 msgstr "frame guztientzat"
 
-#: src/input/r_avc.cpp:69
-#: src/input/r_hevc.cpp:66
-#: src/input/r_vc1.cpp:53
+#: src/input/r_avc.cpp:69 src/input/r_hevc.cpp:66 src/input/r_vc1.cpp:53
 msgid "have an xcptn\n"
 msgstr "izan xcptn bat\n"
 
@@ -10841,8 +10540,7 @@ msgstr "izan xcptn bat\n"
 msgid "header removal"
 msgstr "Idazburu kentzea"
 
-#: src/mmg/tabs/chapters.cpp:362
-#: src/mmg/tabs/chapters.cpp:370
+#: src/mmg/tabs/chapters.cpp:362 src/mmg/tabs/chapters.cpp:370
 msgid "hidden"
 msgstr "ezkutaturik"
 
@@ -10859,11 +10557,8 @@ msgstr "handiena"
 msgid "inflateInit() failed. Result: %1%\n"
 msgstr "inflateInit() hutsegitea. Emaitza: %1%\n"
 
-#: src/mmg/jobs.cpp:68
-#: src/mmg/jobs.cpp:70
-#: src/mmg/jobs.cpp:160
-#: src/mmg/mux_dialog.cpp:53
-#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:44
+#: src/mmg/jobs.cpp:68 src/mmg/jobs.cpp:70 src/mmg/jobs.cpp:160
+#: src/mmg/mux_dialog.cpp:53 src/mmg/tabs/scanning_for_playlists_dlg.cpp:44
 msgid "is being estimated"
 msgstr "estimatzen ari da"
 
@@ -10961,8 +10656,7 @@ msgstr ""
 "matroska_reader: Ezin izan zaio %1% bide UID-ari heutsi jadanik agiri "
 "berriari esleiturik dagoelako.\n"
 
-#: src/input/r_matroska.cpp:1124
-#: src/input/r_matroska.cpp:1129
+#: src/input/r_matroska.cpp:1124 src/input/r_matroska.cpp:1129
 msgid "matroska_reader: No segment found.\n"
 msgstr "matroska_reader: Ez da zatirik aurkitu.\n"
 
@@ -10979,8 +10673,7 @@ msgstr "matroska_reader: Ez dago pixel zabalera.\n"
 msgid "matroska_reader: The CodecID '%1%' for track %2% is unknown.\n"
 msgstr "matroska_reader: %1% Kodek ID-a '%2%' bidearentzat ezezaguna da.\n"
 
-#: src/input/r_matroska.cpp:331
-#: src/input/r_matroska.cpp:355
+#: src/input/r_matroska.cpp:331 src/input/r_matroska.cpp:355
 #: src/input/r_matroska.cpp:376
 #, boost-format
 msgid ""
@@ -11021,8 +10714,7 @@ msgstr ""
 "matroska_reader: %1% bidearentzako Kodek ID-a '%2%' da, baina ez dago kodek "
 "pribatu idazbururik.\n"
 
-#: src/input/r_matroska.cpp:508
-#: src/input/r_matroska.cpp:519
+#: src/input/r_matroska.cpp:508 src/input/r_matroska.cpp:519
 #, boost-format
 msgid ""
 "matroska_reader: The CodecID for track %1% is '%2%', but there was no "
@@ -11054,8 +10746,7 @@ msgstr "matroska_reader: %1% bidea ongi dagoela dirudi.\n"
 msgid "matroska_reader: Track type was not found.\n"
 msgstr "matroska_reader: Bide mota ez da aurkitu.\n"
 
-#: src/input/r_matroska.cpp:1215
-#: src/input/r_matroska.cpp:1892
+#: src/input/r_matroska.cpp:1215 src/input/r_matroska.cpp:1892
 msgid "matroska_reader: caught exception\n"
 msgstr "matroska_reader: salbuespen bat atzeman da\n"
 
@@ -11197,14 +10888,10 @@ msgstr ""
 msgid "mkvmerge FAILED with a return code of %d. %s"
 msgstr "mkvmerge HUTSEGITEA %d erantzun kodearekin. %s"
 
-#: src/mmg/tabs/global.cpp:570
-#: src/mmg/tabs/global.cpp:584
-#: src/mmg/tabs/global.cpp:588
-#: src/mmg/tabs/global.cpp:592
-#: src/mmg/tabs/global.cpp:603
-#: src/mmg/tabs/global.cpp:611
-#: src/mmg/tabs/global.cpp:631
-#: src/mmg/tabs/global.cpp:653
+#: src/mmg/tabs/global.cpp:570 src/mmg/tabs/global.cpp:584
+#: src/mmg/tabs/global.cpp:588 src/mmg/tabs/global.cpp:592
+#: src/mmg/tabs/global.cpp:603 src/mmg/tabs/global.cpp:611
+#: src/mmg/tabs/global.cpp:631 src/mmg/tabs/global.cpp:653
 #: src/mmg/tabs/global.cpp:672
 msgid "mkvmerge GUI error"
 msgstr "mkvmerge EIG akatsa"
@@ -11213,18 +10900,14 @@ msgstr "mkvmerge EIG akatsa"
 msgid "mkvmerge GUI ready"
 msgstr "mkvmerge EIG gertu"
 
-#: src/mmg/mmg_dialog.cpp:408
-#: src/mmg/mmg_dialog.cpp:456
+#: src/mmg/mmg_dialog.cpp:408 src/mmg/mmg_dialog.cpp:456
 #, c-format, boost-format
 msgid "mkvmerge GUI settings (*.mmg)|*.mmg|%s"
 msgstr "mkvmerge EIG ezarpenak (*.mmg)|*.mmg|%s"
 
-#: src/mmg/tabs/input.cpp:1371
-#: src/mmg/tabs/input.cpp:1397
-#: src/mmg/tabs/input.cpp:1408
-#: src/mmg/tabs/input.cpp:1418
-#: src/mmg/tabs/input.cpp:1430
-#: src/mmg/tabs/input.cpp:1472
+#: src/mmg/tabs/input.cpp:1371 src/mmg/tabs/input.cpp:1397
+#: src/mmg/tabs/input.cpp:1408 src/mmg/tabs/input.cpp:1418
+#: src/mmg/tabs/input.cpp:1430 src/mmg/tabs/input.cpp:1472
 msgid "mkvmerge GUI: error"
 msgstr "mkvmerge EIG: akatsa"
 
@@ -11245,8 +10928,7 @@ msgstr ""
 "Gainontzekoa den bezala kopiatzen da. Ez bada ezer sartzen, '%p - %t' "
 "erabiliko da."
 
-#: src/mmg/tabs/input_general.cpp:193
-#: src/mmg/tabs/input_general.cpp:195
+#: src/mmg/tabs/input_general.cpp:193 src/mmg/tabs/input_general.cpp:195
 msgid ""
 "mkvmerge can read and use timecodes from an external text file. This feature "
 "is a very advanced feature. Almost all users should leave this entry empty."
@@ -11255,8 +10937,7 @@ msgstr ""
 "erabili. Ezaugarri hau ezaugarri oso aurreratu  bat da. Erabiltzaile "
 "gehienek sarrera hau hutsik utzi beharko lukete."
 
-#: src/mmg/tabs/global.cpp:256
-#: src/mmg/tabs/global.cpp:271
+#: src/mmg/tabs/global.cpp:256 src/mmg/tabs/global.cpp:271
 msgid ""
 "mkvmerge does not distinguish between those two and simply counts the number "
 "of blocks."
@@ -11278,14 +10959,14 @@ msgstr ""
 "%1%\n"
 
 #: src/output/p_hevc_es.cpp:103
-#, fuzzy, boost-format
+#, boost-format
 msgid ""
 "mkvmerge encountered broken or unparsable data in this HEVC video track. "
 "Either your file is damaged (which mkvmerge cannot cope with yet) or this is "
 "a bug in mkvmerge itself. The error message was:\n"
 "%1%\n"
 msgstr ""
-"mkvmergek datu hautsiak edo azterrezinak aurkitu ditu AVC/h.264 bideo bide "
+"mkvmergek datu hautsiak edo azterrezinak aurkitu ditu HEVC bideo bide "
 "honetan. Badaiteke zure agiria hondatuta egotea (mkvmergek ezin dio oraindik "
 "aurre egin) edo mkvmerge beraren akats bat izan. Akats mezua izan da:\n"
 "%1%\n"
@@ -11299,8 +10980,7 @@ msgstr "mkvmerge exekutagarria:"
 msgid "mkvmerge finished with a return code of %d. %s"
 msgstr "mkvmergek %d erantzun koderekin amaitu du. %s"
 
-#: src/mmg/jobs.cpp:145
-#: src/mmg/mux_dialog.cpp:336
+#: src/mmg/jobs.cpp:145 src/mmg/mux_dialog.cpp:336
 msgid "mkvmerge has finished"
 msgstr "mkvmergek amaitu du"
 
@@ -11312,8 +10992,7 @@ msgstr ""
 "mkvmerge ez da bildua izan FLAC sostenguarekin, baina jario honen kudeaketa "
 "eskatua izan da.\n"
 
-#: src/mmg/jobs.cpp:43
-#: src/mmg/mux_dialog.cpp:35
+#: src/mmg/jobs.cpp:43 src/mmg/mux_dialog.cpp:35
 msgid "mkvmerge is running"
 msgstr "mkvmerge ekinean dago"
 
@@ -11325,8 +11004,7 @@ msgstr "mkvmerge aukerak"
 msgid "mkvmerge output:"
 msgstr "mkvmerge irteera:"
 
-#: src/mmg/tabs/global.cpp:344
-#: src/mmg/tabs/global.cpp:346
+#: src/mmg/tabs/global.cpp:344 src/mmg/tabs/global.cpp:346
 msgid ""
 "mkvmerge supports two chapter formats: The OGM like text format and the full "
 "featured XML format."
@@ -11358,8 +11036,7 @@ msgstr ""
 "adierazten du OGM atal heuskarria erabiltzen bada. Ezikusi egiten da XML "
 "atal agiretarako."
 
-#: src/merge/output_control.cpp:269
-#: src/merge/output_control.cpp:305
+#: src/merge/output_control.cpp:269 src/merge/output_control.cpp:305
 msgid "mkvmerge was interrupted by a SIGINT (Ctrl+C?)\n"
 msgstr "mkvmerge SIGINT batek eten du (inteligentzia seinaleak) (Ktrl+C?)\n"
 
@@ -11415,14 +11092,12 @@ msgstr "mpeg_ps_reader: Hau ez litzake gertatu behar #1. %1%"
 msgid "mpeg_ps_reader: Should not have happened #2. %1%"
 msgstr "mpeg_ps_reader: Hau ez litzake gertatu behar #2. %1%"
 
-#: src/mmg/options/mmg.cpp:129
-#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:43
+#: src/mmg/options/mmg.cpp:129 src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:43
 msgid "never scan for other playlists"
 msgstr "inoiz ez mihatu beste irakur-zerrendentzat"
 
 #: src/mmg/header_editor/bool_value_page.cpp:43
-#: src/mmg/tabs/input_general.cpp:104
-#: src/mmg/tabs/input_general.cpp:124
+#: src/mmg/tabs/input_general.cpp:104 src/mmg/tabs/input_general.cpp:124
 msgid "no"
 msgstr "ez"
 
@@ -11450,10 +11125,8 @@ msgstr "hash algoritmo sinadurarik ez"
 msgid "no splitting"
 msgstr "Bananketarik ez"
 
-#: src/mmg/mmg_dialog.cpp:1032
-#: src/mmg/tabs/input_extra.cpp:84
-#: src/mmg/tabs/input_extra.cpp:116
-#: src/mmg/tabs/input_extra.cpp:119
+#: src/mmg/mmg_dialog.cpp:1032 src/mmg/tabs/input_extra.cpp:84
+#: src/mmg/tabs/input_extra.cpp:116 src/mmg/tabs/input_extra.cpp:119
 msgid "none"
 msgstr "bat ere ez"
 
@@ -11499,8 +11172,7 @@ msgstr "irteera lagin maizt.: %1%"
 msgid "passthrough"
 msgstr "igaropena"
 
-#: src/mmg/jobs.cpp:559
-#: src/mmg/jobs.cpp:733
+#: src/mmg/jobs.cpp:559 src/mmg/jobs.cpp:733
 msgid "pending"
 msgstr "egiteke"
 
@@ -11556,8 +11228,7 @@ msgstr ""
 msgid "raw data"
 msgstr "raw datuak"
 
-#: src/info/wxwidgets_ui.cpp:137
-#: src/info/wxwidgets_ui.cpp:169
+#: src/info/wxwidgets_ui.cpp:137 src/info/wxwidgets_ui.cpp:169
 msgid "ready"
 msgstr "gertu"
 
@@ -11579,8 +11250,7 @@ msgstr ""
 "real_reader: 3,4 eta 5 audio idazburu bertsioak bakarrik daude sostengatuak. "
 "Bide ID %1%-ek %2% bertsioa erabiltzen du eta jauzi egingo da.\n"
 
-#: src/mmg/tabs/attachments.cpp:158
-#: src/mmg/tabs/input.cpp:194
+#: src/mmg/tabs/attachments.cpp:158 src/mmg/tabs/input.cpp:194
 msgid "remove"
 msgstr "kendu"
 
@@ -11672,8 +11342,7 @@ msgstr ""
 msgid "subtitle"
 msgstr "azpidatzia"
 
-#: src/info/mkvinfo.cpp:952
-#: src/mmg/mmg.cpp:67
+#: src/info/mkvinfo.cpp:952 src/mmg/mmg.cpp:67
 #: src/mmg/tabs/scanning_for_playlists_dlg.cpp:187
 msgid "subtitles"
 msgstr "azpidatziak"
@@ -11707,20 +11376,12 @@ msgstr "tta_reader: neurria_etiketa < 0 c'tor. %1%\n"
 msgid "und (Undetermined)"
 msgstr "und (Zehaztugabea)"
 
-#: src/common/mm_io_win.cpp:170
-#: src/common/stereo_mode.cpp:68
-#: src/info/mkvinfo.cpp:699
-#: src/info/mkvinfo.cpp:709
-#: src/info/mkvinfo.cpp:724
-#: src/info/mkvinfo.cpp:746
-#: src/info/mkvinfo.cpp:758
-#: src/info/mkvinfo.cpp:768
-#: src/info/mkvinfo.cpp:954
-#: src/input/r_matroska.cpp:98
-#: src/input/r_matroska.cpp:2251
-#: src/mmg/header_editor/value_page.cpp:150
-#: src/mmg/mmg.cpp:68
-#: src/mmg/tabs/input.cpp:566
+#: src/common/mm_io_win.cpp:170 src/common/stereo_mode.cpp:68
+#: src/info/mkvinfo.cpp:699 src/info/mkvinfo.cpp:709 src/info/mkvinfo.cpp:724
+#: src/info/mkvinfo.cpp:746 src/info/mkvinfo.cpp:758 src/info/mkvinfo.cpp:768
+#: src/info/mkvinfo.cpp:954 src/input/r_matroska.cpp:98
+#: src/input/r_matroska.cpp:2251 src/mmg/header_editor/value_page.cpp:150
+#: src/mmg/mmg.cpp:68 src/mmg/tabs/input.cpp:566
 #: src/mmg/tabs/scanning_for_playlists_dlg.cpp:187
 msgid "unknown"
 msgstr "ezezaguna"
@@ -11747,9 +11408,7 @@ msgstr ""
 "egiaztapen  hutsegitea: atalak ->CheckMandatory() faltsua da. Hau ez litzake "
 "gertatu behar. Mesedez agiritu matxura jakinarazpen bat.\n"
 
-#: src/info/mkvinfo.cpp:951
-#: src/input/r_matroska.cpp:101
-#: src/mmg/mmg.cpp:66
+#: src/info/mkvinfo.cpp:951 src/input/r_matroska.cpp:101 src/mmg/mmg.cpp:66
 #: src/mmg/tabs/scanning_for_playlists_dlg.cpp:187
 msgid "video"
 msgstr "bideoa"
@@ -11767,8 +11426,7 @@ msgid "wavpack_reader: unknown sample rate!\n"
 msgstr "wavpack_reader: lagin neurri ezezaguna!\n"
 
 #: src/mmg/header_editor/bool_value_page.cpp:44
-#: src/mmg/tabs/input_general.cpp:103
-#: src/mmg/tabs/input_general.cpp:125
+#: src/mmg/tabs/input_general.cpp:103 src/mmg/tabs/input_general.cpp:125
 msgid "yes"
 msgstr "Bai"
 
@@ -11981,4 +11639,3 @@ msgstr "Bai"
 #, fuzzy
 #~ msgid "split by parts"
 #~ msgstr "...zatika:"
-
