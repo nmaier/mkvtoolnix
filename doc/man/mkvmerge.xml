@@ -1925,8 +1925,8 @@ $ mkvmerge -o MM-complete.mkv MyMovie-with-sound.mkv MyMovie-add-audio.ogg</scre
 
   <screen>$ mkvmerge -i v.mkv
 File 'v.mkv': container: &matroska;
-Track ID 1: video (V_MS/VFW/FOURCC, DIV3)
-Track ID 2: audio (A_MPEG/L3)</screen>
+Track ID 0: video (V_MS/VFW/FOURCC, DIV3)
+Track ID 1: audio (A_MPEG/L3)</screen>
 
   <para>
    Do not confuse the track IDs that are assigned to the tracks that are placed in the output MKV file with the track IDs of the input
