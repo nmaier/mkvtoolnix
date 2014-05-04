@@ -17,6 +17,7 @@
 
 #include "common/common_pch.h"
 
+#include <boost/optional.hpp>
 #include <deque>
 
 #include <matroska/KaxAttachments.h>
@@ -421,7 +422,8 @@ protected:
   virtual void id_result_container(const std::vector<std::string> &verbose_info);
   virtual void id_result_track(int64_t track_id, const std::string &type, const std::string &info, const std::string &verbose_info = empty_string);
   virtual void id_result_track(int64_t track_id, const std::string &type, const std::string &info, const std::vector<std::string> &verbose_info);
-  virtual void id_result_attachment(int64_t attachment_id, const std::string &type, int size, const std::string &file_name = empty_string, const std::string &description = empty_string);
+  virtual void id_result_attachment(int64_t attachment_id, const std::string &type, int size, const std::string &file_name = empty_string, const std::string &description = empty_string,
+                                    boost::optional<uint64_t> id = boost::optional<uint64_t>{});
   virtual void id_result_chapters(int num_entries);
   virtual void id_result_tags(int64_t track_id, int num_entries);
 

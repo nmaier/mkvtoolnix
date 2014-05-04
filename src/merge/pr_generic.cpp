@@ -1467,8 +1467,11 @@ generic_reader_c::id_result_attachment(int64_t attachment_id,
                                        const std::string &type,
                                        int size,
                                        const std::string &file_name,
-                                       const std::string &description) {
+                                       const std::string &description,
+                                       boost::optional<uint64_t> id) {
   id_result_t result(attachment_id, type, file_name, description, size);
+  if (id)
+    result.verbose_info.push_back((boost::format("uid:%1%") % *id).str());
   m_id_results_attachments.push_back(result);
 }
 
@@ -1534,6 +1537,9 @@ generic_reader_c::display_identification_results() {
 
     if (!result.info.empty())
       mxinfo(boost::format(format_att_file_name) % id_escape_string(result.info));
+
+    if (g_identify_verbose && !result.verbose_info.empty())
+      mxinfo(boost::format(" [%1%]") % join(" ", result.verbose_info));
 
     mxinfo("\n");
   }
