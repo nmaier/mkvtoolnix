@@ -332,6 +332,9 @@ parser_c::parse_chapters() {
     auto timecode   = mpls_time_to_timecode(m_bc->get_bits(32));
     m_chapters.push_back(timecode - play_item.in_time + play_item.relative_in_time);
   }
+
+  if ((0 < num_chapters) && (timecode_c::s(5) >= (m_playlist.duration - m_chapters.back())))
+    m_chapters.pop_back();
 }
 
 std::string

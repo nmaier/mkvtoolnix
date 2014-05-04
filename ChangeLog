@@ -1,5 +1,9 @@
 2014-05-04  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mkvmerge: enhancement: The last chapter entry read from MPLS
+        files is removed if it is at most five seconds long. Patch by
+        Andrew Dvorak (see AUTHORS).
+
         * mkvmerge: enhancement: added the attachment UID to the verbose
         identification output of Matroska files.
 
