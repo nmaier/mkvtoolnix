@@ -11,9 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
-
-#include <wx/wxprec.h>
+#include "common/common_pch.h"
 
 #include <wx/wx.h>
 #include <wx/dnd.h>
@@ -23,11 +21,10 @@
 #include <wx/regex.h>
 #include <wx/statline.h>
 
-#include "common/common_pch.h"
 #include "common/extern_data.h"
+#include "common/file_types.h"
 #include "common/iso639.h"
 #include "common/stereo_mode.h"
-#include "merge/mkvmerge.h"
 #include "mmg/mmg.h"
 #include "mmg/mmg_dialog.h"
 #include "mmg/tabs/input.h"
@@ -41,7 +38,6 @@ tab_input_format::tab_input_format(wxWindow *parent,
 
   wxFlexGridSizer *siz_fg;
   wxBoxSizer *siz_all, *siz_line;
-  int i;
 
   siz_all = new wxBoxSizer(wxVERTICAL);
   siz_all->AddSpacer(TOPBOTTOMSPACING);
@@ -54,11 +50,8 @@ tab_input_format::tab_input_format(wxWindow *parent,
   rb_aspect_ratio->SetValue(true);
   siz_fg->Add(rb_aspect_ratio, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  cob_aspect_ratio = new wxMTX_COMBOBOX_TYPE(this, ID_CB_ASPECTRATIO, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
-
-  for (i = 0; NULL != predefined_aspect_ratios[i]; ++i)
-    cob_aspect_ratio->Append(predefined_aspect_ratios[i]);
-
+  cob_aspect_ratio = new wxMTX_COMBOBOX_TYPE(this, ID_CB_ASPECTRATIO, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_DROPDOWN);
+  append_combobox_items(cob_aspect_ratio, wxArrayString{8, predefined_aspect_ratios});
   cob_aspect_ratio->SetSizeHints(0, -1);
   siz_fg->Add(cob_aspect_ratio, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
@@ -84,7 +77,7 @@ tab_input_format::tab_input_format(wxWindow *parent,
   st_fourcc->Enable(false);
   siz_fg->Add(st_fourcc, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  cob_fourcc = new wxMTX_COMBOBOX_TYPE(this, ID_CB_FOURCC, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
+  cob_fourcc = new wxMTX_COMBOBOX_TYPE(this, ID_CB_FOURCC, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_DROPDOWN);
   cob_fourcc->SetSizeHints(0, -1);
   siz_fg->Add(cob_fourcc, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
@@ -92,7 +85,7 @@ tab_input_format::tab_input_format(wxWindow *parent,
   st_stereo_mode->Enable(false);
   siz_fg->Add(st_stereo_mode, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  cob_stereo_mode = new wxMTX_COMBOBOX_TYPE(this, ID_CB_STEREO_MODE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY);
+  cob_stereo_mode = new wxMTX_COMBOBOX_TYPE(this, ID_CB_STEREO_MODE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY);
   cob_stereo_mode->SetSizeHints(0, -1);
   siz_fg->Add(cob_stereo_mode, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
@@ -100,7 +93,7 @@ tab_input_format::tab_input_format(wxWindow *parent,
   st_fps->Enable(false);
   siz_fg->Add(st_fps, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  cob_fps = new wxMTX_COMBOBOX_TYPE(this, ID_CB_FPS, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
+  cob_fps = new wxMTX_COMBOBOX_TYPE(this, ID_CB_FPS, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_DROPDOWN);
   cob_fps->SetSizeHints(0, -1);
   siz_fg->Add(cob_fps, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
@@ -108,7 +101,7 @@ tab_input_format::tab_input_format(wxWindow *parent,
   st_nalu_size_length->Enable(false);
   siz_fg->Add(st_nalu_size_length, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  cob_nalu_size_length = new wxMTX_COMBOBOX_TYPE(this, ID_CB_NALU_SIZE_LENGTH, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY);
+  cob_nalu_size_length = new wxMTX_COMBOBOX_TYPE(this, ID_CB_NALU_SIZE_LENGTH, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY);
   cob_nalu_size_length->SetSizeHints(0, -1);
   siz_fg->Add(cob_nalu_size_length, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
@@ -132,7 +125,7 @@ tab_input_format::tab_input_format(wxWindow *parent,
   st_sub_charset->Enable(false);
   siz_fg->Add(st_sub_charset, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  cob_sub_charset = new wxMTX_COMBOBOX_TYPE(this, ID_CB_SUBTITLECHARSET, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+  cob_sub_charset = new wxMTX_COMBOBOX_TYPE(this, ID_CB_SUBTITLECHARSET, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_DROPDOWN | wxCB_READONLY);
   cob_sub_charset->SetSizeHints(0, -1);
   siz_fg->Add(cob_sub_charset, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
@@ -149,46 +142,65 @@ tab_input_format::tab_input_format(wxWindow *parent,
   cb_aac_is_sbr = new wxCheckBox(this, ID_CB_AACISSBR, wxEmptyString);
   cb_aac_is_sbr->SetValue(false);
 
+  cb_fix_bitstream_timing_info = new wxCheckBox(this, ID_CB_FIX_BITSTREAM_TIMING_INFO, wxEmptyString);
+  cb_fix_bitstream_timing_info->SetValue(false);
+
   siz_line = new wxBoxSizer(wxHORIZONTAL);
   siz_line->Add(cb_aac_is_sbr, 0, wxALL, STDSPACING);
+  siz_line->Add(cb_fix_bitstream_timing_info, 0, wxALL, STDSPACING);
   siz_all->Add(siz_line, 0, wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
 
   siz_all->AddSpacer(TOPBOTTOMSPACING);
 
-  SetSizer(siz_all);
+  SetSizerAndFit(siz_all);
 }
 
 void
 tab_input_format::setup_control_contents() {
   size_t i;
   int selection;
-  if (0 == cob_fourcc->GetCount())
-    for (i = 0; NULL != predefined_fourccs[i]; ++i)
-      cob_fourcc->Append(predefined_fourccs[i]);
+  if (!cob_fourcc->GetCount())
+    append_combobox_items(cob_fourcc, wxArrayString{6, predefined_fourccs});
 
-  unsigned int num_stereo_modes = stereo_mode_c::max_index() + 1;
-  if (0 == cob_stereo_mode->GetCount())
+  auto num_stereo_modes = stereo_mode_c::max_index() + 1;
+  if (!cob_stereo_mode->GetCount()) {
+    auto entries = wxArrayString{};
+    entries.Alloc(num_stereo_modes);
     for (i = 0; num_stereo_modes >= i; ++i)
-      cob_stereo_mode->Append(wxEmptyString);
+      entries.Add(wxEmptyString);
+    append_combobox_items(cob_stereo_mode, entries);
+  }
 
   selection = cob_stereo_mode->GetSelection();
   for (i = 0; num_stereo_modes > i; ++i)
     cob_stereo_mode->SetString(i + 1, wxString::Format(wxT("%s (%u; %s)"), wxU(stereo_mode_c::translate(i)).c_str(), static_cast<unsigned int>(i), wxU(stereo_mode_c::s_modes[i]).c_str()));
   cob_stereo_mode->SetSelection(selection);
 
-  if (0 == cob_fps->GetCount()) {
-    cob_fps->Append(wxEmptyString);
-    cob_fps->Append(wxT("24"));
-    cob_fps->Append(wxT("25"));
-    cob_fps->Append(wxT("30"));
-    cob_fps->Append(wxT("60000/1001"));
-    cob_fps->Append(wxT("30000/1001"));
-    cob_fps->Append(wxT("24000/1001"));
+  if (!cob_fps->GetCount()) {
+    auto entries = wxArrayString{};
+    entries.Alloc(12);
+    entries.Add(wxEmptyString);
+    entries.Add(wxT("24p"));
+    entries.Add(wxT("25p"));
+    entries.Add(wxT("30p"));
+    entries.Add(wxT("50i"));
+    entries.Add(wxT("50p"));
+    entries.Add(wxT("60i"));
+    entries.Add(wxT("60p"));
+    entries.Add(wxT("24000/1001p"));
+    entries.Add(wxT("30000/1001p"));
+    entries.Add(wxT("60000/1001i"));
+    entries.Add(wxT("60000/1001p"));
+    append_combobox_items(cob_fps, entries);
   }
 
-  if (0 == cob_nalu_size_length->GetCount())
+  if (0 == cob_nalu_size_length->GetCount()) {
+    auto entries = wxArrayString{};
+    entries.Alloc(3);
     for (i = 0; 3 > i; ++i)
-      cob_nalu_size_length->Append(wxEmptyString);
+      entries.Add(wxEmptyString);
+    append_combobox_items(cob_nalu_size_length, entries);
+  }
 
   selection = cob_nalu_size_length->GetSelection();
   cob_nalu_size_length->SetString(0, Z("Default"));
@@ -196,16 +208,13 @@ tab_input_format::setup_control_contents() {
   cob_nalu_size_length->SetString(2, Z("4 bytes"));
   cob_nalu_size_length->SetSelection(selection);
 
-  if (0 == sorted_charsets.Count()) {
-    for (i = 0; NULL != sub_charsets[i]; ++i)
-      sorted_charsets.Add(wxU(sub_charsets[i]));
-    sorted_charsets.Sort();
-  }
+  if (!sorted_charsets.Count())
+    for (auto const &sub_charset : sub_charsets)
+      sorted_charsets.Add(wxU(sub_charset));
 
   if (0 == cob_sub_charset->GetCount()) {
     cob_sub_charset->Append(wxEmptyString);
-    for (i = 0; sorted_charsets.Count() > i; ++i)
-      cob_sub_charset->Append(sorted_charsets[i]);
+    append_combobox_items(cob_sub_charset, sorted_charsets);
   }
 
   cob_sub_charset_translations.clear();
@@ -231,9 +240,7 @@ tab_input_format::translate_ui() {
   cob_stereo_mode->SetToolTip(TIP("Sets the stereo mode of the video track to this value. If left empty then the track's original stereo mode will be kept or, if "
                                   "it didn't have one, none will be set at all."));
   st_fps->SetLabel(Z("FPS:"));
-  cob_fps->SetToolTip(TIP("Sets the default duration or number of frames per second for a track. This is only possible "
-                          "for video tracks. For AVC/h.264 elementary streams this option must be given. "
-                          "This can either be a floating point number or a fraction."));
+  cob_fps->SetToolTip(TIP("Sets the default duration or number of frames per second for a track. This can either be a floating point number or a fraction."));
   st_nalu_size_length->SetLabel(Z("NALU size length:"));
   cob_nalu_size_length->SetToolTip(TIP("Forces the NALU size length to a certain number of bytes. This parameter is only available for AVC/h.264 elementary "
                                        "streams read from AVC/h.264 ES files, AVIs or Matroska files created with '--engage allow_avc_in_vwf_mode'. "
@@ -247,13 +254,25 @@ tab_input_format::translate_ui() {
                              "It is either a positive floating point number, or a fraction like e.g. 1200/1253. "
                              "Works best on video and subtitle tracks."));
   st_sub_charset->SetLabel(Z("Charset:"));
-  cob_sub_charset->SetToolTip(TIP("Selects the character set a subtitle file or chapter information was written with. Only needed for non-UTF encoded "
-                                  "subtitle files or for files with chapter information (e.g. OGM, MP4) for which mkvmerge does not detect the encoding correctly."));
+  auto tip = (boost::format("%1% %2% %3% %4%")
+              % Y("Selects the character set a subtitle file or chapter information was written with.")
+              % Y("Only needed in certain situations:")
+              % (boost::format(Y("1. for subtitle files that do not use a byte order marker (BOM) and that are not encoded in the system's current character set (%1%);"))
+                 % g_cc_local_utf8->get_charset())
+              % Y("2. for files with chapter information (e.g. OGM, MP4) for which mkvmerge does not detect the encoding correctly.")
+              ).str();
+  cob_sub_charset->SetToolTip(format_tooltip(wxU(tip)));
   st_cropping->SetLabel(Z("Cropping:"));
   tc_cropping->SetToolTip(TIP("Sets the cropping parameters. Must be comma-separated list of four numbers for the cropping to be used at the left, top, right and bottom."));
   cb_aac_is_sbr->SetLabel(Z("AAC is SBR/HE-AAC/AAC+"));
   cb_aac_is_sbr->SetToolTip(TIP("This track contains SBR AAC/HE-AAC/AAC+ data. Only needed for AAC input files, because SBR AAC cannot be detected automatically for "
                                 "these files. Not needed for AAC tracks read from MP4 or Matroska files."));
+
+  cb_fix_bitstream_timing_info->SetLabel(Z("Fix bitstream timing information"));
+  cb_fix_bitstream_timing_info->SetToolTip(TIP("Normally mkvmerge does not change the timing information (frame/field rate) stored in the video bitstream. "
+                                               "With this option that information is adjusted to match the container timing information. "
+                                               "The container timing information can come from various sources: from the command line via --default-duration, "
+                                               "the source container or derived from the bitstream."));
 
   setup_control_contents();
 }
@@ -270,15 +289,16 @@ tab_input_format::set_track_mode(mmg_track_t *t) {
   bool avc_es       = video && (t->packetizer == wxT("mpeg4_p10_es_video"));
   bool avc          = video && (t->packetizer == wxT("mpeg4_p10_video"));
   bool normal_track = video || audio_app || subs_app;
+  auto container    = t ? files[t->source]->container : FILE_TYPE_IS_UNKNOWN;
 
   ctype = ctype.Lower();
 
-  st_delay->Enable((NULL != t) && normal_track);
-  tc_delay->Enable((NULL != t) && normal_track);
-  st_stretch->Enable((NULL != t) && normal_track);
-  tc_stretch->Enable((NULL != t) && normal_track);
-  st_sub_charset->Enable(chapters_app || (subs_app && (ctype.Find(wxT("vobsub")) < 0)));
-  cob_sub_charset->Enable(chapters_app || (subs_app && (ctype.Find(wxT("vobsub")) < 0)));
+  st_delay->Enable(t && normal_track);
+  tc_delay->Enable(t && normal_track);
+  st_stretch->Enable(t && normal_track);
+  tc_stretch->Enable(t && normal_track);
+  st_sub_charset->Enable(chapters_app || (subs_app && (ctype.Find(wxT("vobsub")) < 0) && (container != FILE_TYPE_MATROSKA)));
+  cob_sub_charset->Enable(chapters_app || (subs_app && (ctype.Find(wxT("vobsub")) < 0) && (container != FILE_TYPE_MATROSKA)));
   st_fourcc->Enable(video);
   cob_fourcc->Enable(video);
   st_stereo_mode->Enable(video);
@@ -288,7 +308,7 @@ tab_input_format::set_track_mode(mmg_track_t *t) {
   st_nalu_size_length->Enable(avc || avc_es);
   cob_nalu_size_length->Enable(avc || avc_es);
 
-  bool ar_enabled = normal_track && (NULL != t) && !t->display_dimensions_selected;
+  bool ar_enabled = normal_track && t && !t->display_dimensions_selected;
   rb_aspect_ratio->Enable(video);
   cob_aspect_ratio->Enable(video && ar_enabled);
   rb_display_dimensions->Enable(video);
@@ -302,8 +322,9 @@ tab_input_format::set_track_mode(mmg_track_t *t) {
   rb_display_dimensions->SetValue(video && !ar_enabled);
 
   cb_aac_is_sbr->Enable(audio_app && ((ctype.Find(wxT("aac")) >= 0) || (ctype.Find(wxT("mp4a")) >= 0)));
+  cb_fix_bitstream_timing_info->Enable(video && (avc || avc_es));
 
-  if (NULL != t)
+  if (t)
     return;
 
   bool saved_dcvn             = input->dont_copy_values_now;
@@ -319,6 +340,7 @@ tab_input_format::set_track_mode(mmg_track_t *t) {
   tc_delay->SetValue(wxEmptyString);
   tc_stretch->SetValue(wxEmptyString);
   cb_aac_is_sbr->SetValue(false);
+  cb_fix_bitstream_timing_info->SetValue(false);
 
   input->dont_copy_values_now = saved_dcvn;
 }
@@ -329,6 +351,14 @@ tab_input_format::on_aac_is_sbr_clicked(wxCommandEvent &) {
     return;
 
   tracks[input->selected_track]->aac_is_sbr = cb_aac_is_sbr->GetValue();
+}
+
+void
+tab_input_format::on_fix_bitstream_timing_info_clicked(wxCommandEvent &) {
+  if (input->dont_copy_values_now || (input->selected_track == -1))
+    return;
+
+  tracks[input->selected_track]->fix_bitstream_timing_info = cb_fix_bitstream_timing_info->GetValue();
 }
 
 void
@@ -447,19 +477,20 @@ tab_input_format::on_display_dimensions_selected(wxCommandEvent &) {
 
 IMPLEMENT_CLASS(tab_input_format, wxPanel);
 BEGIN_EVENT_TABLE(tab_input_format, wxPanel)
-  EVT_CHECKBOX(ID_CB_AACISSBR,             tab_input_format::on_aac_is_sbr_clicked)
-  EVT_COMBOBOX(ID_CB_SUBTITLECHARSET,      tab_input_format::on_subcharset_selected)
-  EVT_COMBOBOX(ID_CB_ASPECTRATIO,          tab_input_format::on_aspect_ratio_changed)
-  EVT_COMBOBOX(ID_CB_FOURCC,               tab_input_format::on_fourcc_changed)
-  EVT_COMBOBOX(ID_CB_FPS,                  tab_input_format::on_fps_changed)
-  EVT_COMBOBOX(ID_CB_NALU_SIZE_LENGTH,     tab_input_format::on_nalu_size_length_changed)
-  EVT_COMBOBOX(ID_CB_STEREO_MODE,          tab_input_format::on_stereo_mode_changed)
-  EVT_TEXT(ID_CB_SUBTITLECHARSET,          tab_input_format::on_subcharset_selected)
-  EVT_TEXT(ID_TC_DELAY,                    tab_input_format::on_delay_changed)
-  EVT_TEXT(ID_TC_STRETCH,                  tab_input_format::on_stretch_changed)
-  EVT_TEXT(ID_TC_CROPPING,                 tab_input_format::on_cropping_changed)
-  EVT_RADIOBUTTON(ID_RB_ASPECTRATIO,       tab_input_format::on_aspect_ratio_selected)
-  EVT_RADIOBUTTON(ID_RB_DISPLAYDIMENSIONS, tab_input_format::on_display_dimensions_selected)
-  EVT_TEXT(ID_TC_DISPLAYWIDTH,             tab_input_format::on_display_width_changed)
-  EVT_TEXT(ID_TC_DISPLAYHEIGHT,            tab_input_format::on_display_height_changed)
+  EVT_CHECKBOX(ID_CB_AACISSBR,                  tab_input_format::on_aac_is_sbr_clicked)
+  EVT_CHECKBOX(ID_CB_FIX_BITSTREAM_TIMING_INFO, tab_input_format::on_fix_bitstream_timing_info_clicked)
+  EVT_COMBOBOX(ID_CB_SUBTITLECHARSET,           tab_input_format::on_subcharset_selected)
+  EVT_COMBOBOX(ID_CB_ASPECTRATIO,               tab_input_format::on_aspect_ratio_changed)
+  EVT_COMBOBOX(ID_CB_FOURCC,                    tab_input_format::on_fourcc_changed)
+  EVT_COMBOBOX(ID_CB_FPS,                       tab_input_format::on_fps_changed)
+  EVT_COMBOBOX(ID_CB_NALU_SIZE_LENGTH,          tab_input_format::on_nalu_size_length_changed)
+  EVT_COMBOBOX(ID_CB_STEREO_MODE,               tab_input_format::on_stereo_mode_changed)
+  EVT_TEXT(ID_CB_SUBTITLECHARSET,               tab_input_format::on_subcharset_selected)
+  EVT_TEXT(ID_TC_DELAY,                         tab_input_format::on_delay_changed)
+  EVT_TEXT(ID_TC_STRETCH,                       tab_input_format::on_stretch_changed)
+  EVT_TEXT(ID_TC_CROPPING,                      tab_input_format::on_cropping_changed)
+  EVT_RADIOBUTTON(ID_RB_ASPECTRATIO,            tab_input_format::on_aspect_ratio_selected)
+  EVT_RADIOBUTTON(ID_RB_DISPLAYDIMENSIONS,      tab_input_format::on_display_dimensions_selected)
+  EVT_TEXT(ID_TC_DISPLAYWIDTH,                  tab_input_format::on_display_width_changed)
+  EVT_TEXT(ID_TC_DISPLAYHEIGHT,                 tab_input_format::on_display_height_changed)
 END_EVENT_TABLE();

@@ -13,13 +13,10 @@
 
 #include "common/common_pch.h"
 
-#include <boost/regex.hpp>
-
 #if defined(HAVE_CURL_EASY_H)
-# include <boost/property_tree/ptree.hpp>
-# include <boost/property_tree/xml_parser.hpp>
 # include <sstream>
 
+# include "common/compression.h"
 # include "common/curl.h"
 #endif  // defined(HAVE_CURL_EASY_H)
 
@@ -28,7 +25,7 @@
 #include "common/strings/parsing.h"
 #include "common/version.h"
 
-#define VERSIONNAME "And so it goes"
+#define VERSIONNAME "Blue Panther"
 
 version_number_t::version_number_t()
   : valid(false)
@@ -41,7 +38,7 @@ version_number_t::version_number_t(const std::string &s)
 {
   memset(parts, 0, 5 * sizeof(unsigned int));
 
-  if (debugging_requested("version_check"))
+  if (debugging_c::requested("version_check"))
     mxinfo(boost::format("version check: Parsing %1%\n") % s);
 
   // Match the following:
@@ -65,18 +62,18 @@ version_number_t::version_number_t(const std::string &s)
                                           ")?",
                                           boost::regex::perl | boost::regex::mod_x);
 
-  boost::match_results<std::string::const_iterator> matches;
+  boost::smatch matches;
   if (!boost::regex_search(s, matches, s_version_number_re))
     return;
 
   size_t idx;
   for (idx = 1; 5 >= idx; ++idx)
     if (!matches[idx].str().empty())
-      parse_uint(matches[idx].str(), parts[idx - 1]);
+      parse_number(matches[idx].str(), parts[idx - 1]);
 
   valid = true;
 
-  if (debugging_requested("version_check"))
+  if (debugging_c::requested("version_check"))
     mxinfo(boost::format("version check: parse OK; result: %1%\n") % to_string());
 }
 
@@ -130,21 +127,29 @@ mtx_release_version_t::mtx_release_version_t()
 std::string
 get_version_info(const std::string &program,
                  version_info_flags_e flags) {
-  std::string short_version_info;
+  std::vector<std::string> info;
+
   if (!program.empty())
-    short_version_info += program + " ";
-  short_version_info += (boost::format("v%1% ('%2%')") % VERSION % VERSIONNAME).str();
-#if !defined(HAVE_BUILD_TIMESTAMP)
-  return short_version_info;
-#else  // !defined(HAVE_BUILD_TIMESTAMP)
-  if (!(flags & vif_full))
-    return short_version_info;
+    info.push_back(program);
+  info.push_back((boost::format("v%1% ('%2%')") % VERSION % VERSIONNAME).str());
 
-  if (flags & vif_untranslated)
-    return (boost::format("%1% built on %2% %3%") % short_version_info % __DATE__ % __TIME__).str();
+  if (flags & vif_architecture)
+#if defined(ARCH_64BIT)
+    info.push_back("64bit");
+#else
+    info.push_back("32bit");
+#endif
 
-  return (boost::format(Y("%1% built on %2% %3%")) % short_version_info % __DATE__ % __TIME__).str();
+#if defined(HAVE_BUILD_TIMESTAMP)
+  if (flags & vif_timestamp) {
+    if (flags & vif_untranslated)
+      info.push_back((boost::format("built on %1% %2%") % __DATE__ % __TIME__).str());
+    else
+      info.push_back((boost::format(Y("built on %1% %2%")) % __DATE__ % __TIME__).str());
+  }
 #endif  // !defined(HAVE_BUILD_TIMESTAMP)
+
+  return join(" ", info);
 }
 
 int
@@ -158,45 +163,82 @@ get_current_version() {
 }
 
 #if defined(HAVE_CURL_EASY_H)
-mtx_release_version_t
-get_latest_release_version() {
-  if (debugging_requested("version_check"))
-    mxinfo(boost::format("Update check started with URL %1%\n") % MTX_VERSION_CHECK_URL);
+static mtx::xml::document_cptr
+retrieve_and_parse_xml(std::string const &url) {
+  bool debug = debugging_c::requested("version_check|releases_info|curl");
 
-  mtx_release_version_t release;
   std::string data;
-  CURLcode result = retrieve_via_curl(MTX_VERSION_CHECK_URL, data);
+  auto result = url_retriever_c().set_timeout(10, 20).retrieve(url, data);
 
   if (0 != result) {
-    if (debugging_requested("version_check"))
-      mxinfo(boost::format("Update check CURL error: %1%\n") % static_cast<unsigned int>(result));
-    return release;
+    mxdebug_if(debug, boost::format("CURL error for %2%: %1%\n") % static_cast<unsigned int>(result) % url);
+    return mtx::xml::document_cptr();
   }
-
-  if (debugging_requested("version_check"))
-    mxinfo(boost::format("Update check OK; data length %1%\n") % data.length());
 
   try {
-    std::stringstream data_in(data);
-    boost::property_tree::ptree pt;
-    boost::property_tree::read_xml(data_in, pt);
+    data = compressor_c::create_from_file_name(url)->decompress(data);
 
-    release.latest_source              = version_number_t(pt.get("mkvtoolnix-releases.latest-source.version",      std::string("")));
-    release.latest_windows_build       = version_number_t(pt.get("mkvtoolnix-releases.latest-windows-pre.version", std::string(""))
-                                                          + " build " +
-                                                          pt.get("mkvtoolnix-releases.latest-windows-pre.build",   std::string("")));
-    release.source_download_url        =                  pt.get("mkvtoolnix-releases.latest-source.url",          std::string(""));
-    release.windows_build_download_url =                  pt.get("mkvtoolnix-releases.latest-windows-pre.url",     std::string(""));
-    release.valid                      = release.latest_source.valid;
+    mtx::xml::document_cptr doc(new pugi::xml_document);
+    std::stringstream sdata(data);
+    auto xml_result = doc->load(sdata);
 
-  } catch (boost::property_tree::ptree_error &error) {
-    release.valid = false;
+    if (xml_result) {
+      mxdebug_if(debug, boost::format("Doc loaded fine from %1%\n") % url);
+      return doc;
+
+    } else
+      mxdebug_if(debug, boost::format("Doc load error for %1%: %1% at %2%\n") % url % xml_result.description() % xml_result.offset);
+
+  } catch (mtx::compression_x &ex) {
+    mxdebug_if(debug, boost::format("Decompression exception for %2%: %1%\n") % ex.what() % url);
   }
 
-  if (debugging_requested("version_check"))
-    mxinfo(boost::format("update check: current %1% latest source %2% latest winpre %3%\n")
-           % release.current_version.to_string() % release.latest_source.to_string() % release.latest_windows_build.to_string());
+  return mtx::xml::document_cptr();
+}
+
+mtx_release_version_t
+get_latest_release_version() {
+  bool debug      = debugging_c::requested("version_check|curl");
+  std::string url = MTX_VERSION_CHECK_URL;
+  debugging_c::requested("version_check_url", &url);
+
+  mxdebug_if(debug, boost::format("Update check started with URL %1%\n") % url);
+
+  mtx_release_version_t release;
+
+  auto doc = retrieve_and_parse_xml(url + ".gz");
+  if (!doc)
+    doc = retrieve_and_parse_xml(url);
+  if (!doc)
+    return release;
+
+  release.latest_source                   = version_number_t(doc->select_single_node("/mkvtoolnix-releases/latest-source/version").node().child_value());
+  release.latest_windows_build            = version_number_t((boost::format("%1% build %2%")
+                                                             % doc->select_single_node("/mkvtoolnix-releases/latest-windows-pre/version").node().child_value()
+                                                             % doc->select_single_node("/mkvtoolnix-releases/latest-windows-pre/build").node().child_value()).str());
+  release.valid                           = release.latest_source.valid;
+  release.urls["general"]                 = doc->select_single_node("/mkvtoolnix-releases/latest-source/url").node().child_value();
+  release.urls["source_code"]             = doc->select_single_node("/mkvtoolnix-releases/latest-source/source-code-url").node().child_value();
+  release.urls["windows_pre_build"]       = doc->select_single_node("/mkvtoolnix-releases/latest-windows-pre/url").node().child_value();
+  for (auto arch : std::vector<std::string>{ "x86", "amd64" })
+    for (auto package : std::vector<std::string>{ "installer", "portable" })
+      release.urls[std::string{"windows_"} + arch + "_" + package] = doc->select_single_node((std::string{"/mkvtoolnix-releases/latest-windows-binary/"} + package + "-url/" + arch).c_str()).node().child_value();
+
+  if (debug) {
+    std::stringstream urls;
+    brng::for_each(release.urls, [&](std::pair<std::string, std::string> const &kv) { urls << " " << kv.first << ":" << kv.second; });
+    mxdebug(boost::format("update check: current %1% latest source %2% latest winpre %3% URLs%4%\n")
+            % release.current_version.to_string() % release.latest_source.to_string() % release.latest_windows_build.to_string() % urls);
+  }
 
   return release;
+}
+
+mtx::xml::document_cptr
+get_releases_info() {
+  std::string url = MTX_RELEASES_INFO_URL;
+  debugging_c::requested("releases_info_url", &url);
+
+  return retrieve_and_parse_xml(url + ".gz");
 }
 #endif  // defined(HAVE_CURL_EASY_H)

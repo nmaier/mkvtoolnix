@@ -10,8 +10,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_OS_H
-#define __MTX_COMMON_OS_H
+#ifndef MTX_COMMON_OS_H
+#define MTX_COMMON_OS_H
 
 #undef __STRICT_ANSI__
 
@@ -19,16 +19,6 @@
 
 // For PRId64 and PRIu64:
 #define __STDC_FORMAT_MACROS
-
-#if defined(HAVE_SYS_TYPES_H)
-# include <sys/types.h>
-#endif // HAVE_SYS_TYPES_H
-#if defined(HAVE_STDINT_H)
-# include <stdint.h>
-#endif // HAVE_STDINT_H
-#if defined(HAVE_INTTYPES_H)
-# include <inttypes.h>
-#endif // HAVE_INTTYPES_H
 
 #if defined(HAVE_COREC_H)
 #include "corec.h"
@@ -78,6 +68,12 @@
 #  define COMP_MSC
 #  define NOMINMAX
 # endif
+#endif
+
+#if (defined(SYS_WINDOWS) && defined(_WIN64)) || (!defined(SYS_WINDOWS) && (defined(__x86_64__) || defined(__ppc64__)))
+# define ARCH_64BIT
+#else
+# define ARCH_32BIT
 #endif
 
 #if defined(COMP_MSC)

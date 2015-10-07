@@ -98,7 +98,7 @@ random_c::generate_bytes(void *destination,
       m_tried_dev_urandom = true;
       m_dev_urandom       = mm_file_io_c::open("/dev/urandom");
     }
-    if (m_dev_urandom.is_set() && (m_dev_urandom->read(destination, num_bytes) == num_bytes))
+    if (m_dev_urandom && (m_dev_urandom->read(destination, num_bytes) == num_bytes))
       return;
   } catch(...) {
   }
@@ -106,7 +106,7 @@ random_c::generate_bytes(void *destination,
   if (!m_seeded) {
     struct timeval tv;
 
-    gettimeofday(&tv, NULL);
+    gettimeofday(&tv, nullptr);
     srand(tv.tv_usec + tv.tv_sec);
     m_seeded = true;
   }
@@ -147,7 +147,7 @@ random_c::test() {
 
 #if !defined(SYS_WINDOWS)
   m_tried_dev_urandom = true;
-  m_dev_urandom.clear();
+  m_dev_urandom.reset();
 
   for (i = 0; 16 > i; i++)
     ranges[i] = 0;
@@ -177,6 +177,6 @@ random_c::test() {
 void
 random_c::cleanup() {
 #if !defined(SYS_WINDOWS)
-  m_dev_urandom.clear();
+  m_dev_urandom.reset();
 #endif
 }

@@ -27,12 +27,14 @@
 
 #include "common/aac.h"
 #include "common/chapters/chapters.h"
+#include "common/codec.h"
+#include "common/debugging.h"
 #include "common/ebml.h"
 #include "common/endian.h"
 #include "common/hacks.h"
 #include "common/iso639.h"
+#include "common/ivf.h"
 #include "common/math.h"
-#include "common/matroska.h"
 #include "common/mpeg4_p2.h"
 #include "common/ogmstreams.h"
 #include "input/r_ogm.h"
@@ -45,12 +47,13 @@
 #include "output/p_kate.h"
 #include "output/p_mp3.h"
 #include "output/p_mpeg4_p2.h"
+#include "output/p_opus.h"
 #include "output/p_pcm.h"
 #include "output/p_textsubs.h"
 #include "output/p_theora.h"
 #include "output/p_video.h"
 #include "output/p_vorbis.h"
-#include "output/p_vp8.h"
+#include "output/p_vpx.h"
 
 #define BUFFER_SIZE 4096
 
@@ -71,9 +74,6 @@ public:
   virtual const char *get_type() {
     return ID_RESULT_TRACK_AUDIO;
   };
-  virtual std::string get_codec() {
-    return "AAC";
-  };
 };
 
 class ogm_a_ac3_demuxer_c: public ogm_demuxer_c {
@@ -86,9 +86,6 @@ public:
 
   virtual const char *get_type() {
     return ID_RESULT_TRACK_AUDIO;
-  };
-  virtual std::string get_codec() {
-    return "AC3";
   };
 };
 
@@ -103,9 +100,6 @@ public:
   virtual const char *get_type() {
     return ID_RESULT_TRACK_AUDIO;
   };
-  virtual std::string get_codec() {
-    return "MP2/MP3";
-  };
 };
 
 class ogm_a_pcm_demuxer_c: public ogm_demuxer_c {
@@ -119,10 +113,27 @@ public:
   virtual const char *get_type() {
     return ID_RESULT_TRACK_AUDIO;
   };
-  virtual std::string get_codec() {
-    return "PCM";
+};
+
+class ogm_a_opus_demuxer_c: public ogm_demuxer_c {
+protected:
+  timecode_c m_calculated_end_timecode;
+
+  static debugging_option_c ms_debug;
+
+public:
+  ogm_a_opus_demuxer_c(ogm_reader_c *p_reader);
+
+  virtual void process_page(int64_t granulepos);
+
+  virtual generic_packetizer_c *create_packetizer();
+
+  virtual const char *get_type() {
+    return ID_RESULT_TRACK_AUDIO;
   };
 };
+
+debugging_option_c ogm_a_opus_demuxer_c::ms_debug{"opus"};
 
 class ogm_a_vorbis_demuxer_c: public ogm_demuxer_c {
 public:
@@ -136,9 +147,6 @@ public:
 
   virtual const char *get_type() {
     return ID_RESULT_TRACK_AUDIO;
-  };
-  virtual std::string get_codec() {
-    return "Vorbis";
   };
 };
 
@@ -154,9 +162,6 @@ public:
 
   virtual const char *get_type() {
     return ID_RESULT_TRACK_SUBTITLES;
-  };
-  virtual std::string get_codec() {
-    return "Text";
   };
 };
 
@@ -184,14 +189,7 @@ public:
 public:
   ogm_v_avc_demuxer_c(ogm_reader_c *p_reader);
 
-  virtual std::string get_codec() {
-    return "h.264/AVC";
-  };
-
   virtual generic_packetizer_c *create_packetizer();
-
-private:
-  virtual memory_cptr extract_avcc();
 };
 
 class ogm_v_theora_demuxer_c: public ogm_demuxer_c {
@@ -203,10 +201,6 @@ public:
 
   virtual const char *get_type() {
     return ID_RESULT_TRACK_VIDEO;
-  };
-
-  virtual std::string get_codec() {
-    return "Theora";
   };
 
   virtual void initialize();
@@ -230,10 +224,6 @@ public:
     return ID_RESULT_TRACK_VIDEO;
   };
 
-  virtual std::string get_codec() {
-    return "VP8";
-  };
-
   virtual void initialize();
   virtual generic_packetizer_c *create_packetizer();
   virtual void process_page(int64_t granulepos);
@@ -250,10 +240,6 @@ public:
     return ID_RESULT_TRACK_SUBTITLES;
   };
 
-  virtual std::string get_codec() {
-    return "Kate";
-  };
-
   virtual void initialize();
   virtual generic_packetizer_c *create_packetizer();
   virtual void process_page(int64_t granulepos);
@@ -262,9 +248,9 @@ public:
 
 // ---------------------------------------------------------------------------------
 
-static counted_ptr<std::vector<std::string> >
+static std::shared_ptr<std::vector<std::string> >
 extract_vorbis_comments(const memory_cptr &mem) {
-  counted_ptr<std::vector<std::string> > comments(new std::vector<std::string>);
+  std::shared_ptr<std::vector<std::string> > comments(new std::vector<std::string>);
   mm_mem_io_c in(mem->get_buffer(), mem->get_size());
   uint32_t i, n, len;
 
@@ -326,7 +312,7 @@ ogm_reader_c::ogm_reader_c(const track_info_c &ti,
 
 void
 ogm_reader_c::read_headers() {
-  if (!ogm_reader_c::probe_file(m_in.get_object(), m_size))
+  if (!ogm_reader_c::probe_file(m_in.get(), m_size))
     throw mtx::input::invalid_format_x();
 
   ogg_sync_init(&oy);
@@ -350,10 +336,10 @@ ogm_reader_c::find_demuxer(int serialno) {
     if (sdemuxers[i]->serialno == serialno) {
       if (sdemuxers[i]->in_use)
         return sdemuxers[i];
-      return ogm_demuxer_cptr(NULL);
+      return ogm_demuxer_cptr{};
     }
 
-  return ogm_demuxer_cptr(NULL);
+  return ogm_demuxer_cptr{};
 }
 
 /*
@@ -404,15 +390,14 @@ ogm_reader_c::create_packetizer(int64_t tid) {
   if (!dmx->in_use)
     return;
 
-  m_ti.m_private_data = NULL;
-  m_ti.m_private_size = 0;
+  m_ti.m_private_data.reset();
   m_ti.m_id           = tid;
   m_ti.m_language     = dmx->language;
   m_ti.m_track_name   = dmx->title;
 
   ptzr                = dmx->create_packetizer();
 
-  if (NULL != ptzr)
+  if (ptzr)
     dmx->ptzr         = add_packetizer(ptzr);
 
   m_ti.m_language.clear();
@@ -449,7 +434,7 @@ ogm_reader_c::handle_new_stream_and_packets(ogg_page *og) {
 
   handle_new_stream(og);
   dmx = find_demuxer(ogg_page_serialno(og));
-  if (dmx.is_set())
+  if (dmx)
     process_header_packets(dmx);
 }
 
@@ -473,7 +458,7 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
   ogg_stream_pagein(&os, og);
   ogg_stream_packetout(&os, &op);
 
-  ogm_demuxer_c *dmx = NULL;
+  ogm_demuxer_c *dmx = nullptr;
 
   /*
    * Check the contents for known stream headers. This one is the
@@ -481,6 +466,9 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
    */
   if ((7 <= op.bytes) && !strncmp((char *)&op.packet[1], "vorbis", 6))
     dmx = new ogm_a_vorbis_demuxer_c(this);
+
+  else if ((8 <= op.bytes) && !memcmp(&op.packet[0], "OpusHead", 8))
+    dmx = new ogm_a_opus_demuxer_c(this);
 
   else if ((7 <= op.bytes) && !strncmp((char *)&op.packet[1], "theora", 6))
     dmx = new ogm_v_theora_demuxer_c(this);
@@ -497,7 +485,7 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
 
     else {
       dmx         = new ogm_demuxer_c(this);
-      dmx->stype  = OGM_STREAM_TYPE_A_FLAC;
+      dmx->codec  = codec_c::look_up(CT_A_FLAC);
       dmx->in_use = true;
     }
 
@@ -526,7 +514,7 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
     } else if (!strncmp(sth->streamtype, "audio", 5)) {
       memcpy(buf, (char *)sth->subtype, 4);
 
-      uint32_t codec_id = strtol(buf, (char **)NULL, 16);
+      uint32_t codec_id = strtol(buf, (char **)nullptr, 16);
 
       if (0x0001 == codec_id)
         dmx = new ogm_a_pcm_demuxer_c(this);
@@ -561,7 +549,7 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
   dmx->track_id    = sdemuxers.size();
   dmx->in_use      = (type != "unknown") && demuxing_requested(type[0], dmx->track_id);
 
-  dmx->packet_data.push_back(memory_cptr(new memory_c((unsigned char *)safememdup(op.packet, op.bytes), op.bytes, true)));
+  dmx->packet_data.push_back(memory_c::clone(op.packet, op.bytes));
 
   memcpy(&dmx->os, &os, sizeof(ogg_stream_state));
 
@@ -584,7 +572,7 @@ ogm_reader_c::process_page(ogg_page *og) {
   int64_t granulepos;
 
   dmx = find_demuxer(ogg_page_serialno(og));
-  if (!dmx.is_set() || !dmx->in_use)
+  if (!dmx || !dmx->in_use)
     return;
 
   granulepos = ogg_page_granulepos(og);
@@ -607,7 +595,7 @@ ogm_reader_c::process_header_page(ogg_page *og) {
   ogm_demuxer_cptr dmx;
 
   dmx = find_demuxer(ogg_page_serialno(og));
-  if (!dmx.is_set() ||dmx->headers_read)
+  if (!dmx ||dmx->headers_read)
     return;
 
   ogg_stream_pagein(&dmx->os, og);
@@ -707,7 +695,7 @@ ogm_reader_c::identify() {
   // Check if a video track has a TITLE comment. If yes we use this as the
   // new segment title / global file title.
   for (i = 0; i < sdemuxers.size(); i++)
-    if ((sdemuxers[i]->title != "") && (sdemuxers[i]->stype == OGM_STREAM_TYPE_V_MSCOMP)) {
+    if ((sdemuxers[i]->title != "") && sdemuxers[i]->ms_compat) {
       verbose_info.push_back(std::string("title:") + escape(sdemuxers[i]->title));
       break;
     }
@@ -720,7 +708,7 @@ ogm_reader_c::identify() {
     if (sdemuxers[i]->language != "")
       verbose_info.push_back(std::string("language:") + escape(sdemuxers[i]->language));
 
-    if ((sdemuxers[i]->title != "") && (sdemuxers[i]->stype != OGM_STREAM_TYPE_V_MSCOMP))
+    if ((sdemuxers[i]->title != "") && !sdemuxers[i]->ms_compat)
       verbose_info.push_back(std::string("track_name:") + escape(sdemuxers[i]->title));
 
     if ((0 != sdemuxers[i]->display_width) && (0 != sdemuxers[i]->display_height))
@@ -729,13 +717,13 @@ ogm_reader_c::identify() {
     id_result_track(i, sdemuxers[i]->get_type(), sdemuxers[i]->get_codec(), verbose_info);
   }
 
-  if (NULL != m_chapters)
+  if (m_chapters.get())
     id_result_chapters(count_chapter_atoms(*m_chapters));
 }
 
 void
 ogm_reader_c::handle_stream_comments() {
-  counted_ptr<std::vector<std::string> > comments;
+  std::shared_ptr<std::vector<std::string> > comments;
   std::string title;
 
   bool charset_warning_printed = false;
@@ -744,7 +732,7 @@ ogm_reader_c::handle_stream_comments() {
 
   for (i = 0; i < sdemuxers.size(); i++) {
     ogm_demuxer_cptr &dmx = sdemuxers[i];
-    if ((OGM_STREAM_TYPE_A_FLAC == dmx->stype) || (2 > dmx->packet_data.size()))
+    if (dmx->codec.is(CT_A_FLAC) || (2 > dmx->packet_data.size()))
       continue;
 
     comments = extract_vorbis_comments(dmx->packet_data[1]);
@@ -795,14 +783,14 @@ ogm_reader_c::handle_stream_comments() {
       } else if (comment[0] == "TITLE")
         title = comment[1];
 
-      else if (ba::starts_with(comment[0], "CHAPTER"))
+      else if (balg::starts_with(comment[0], "CHAPTER"))
         chapter_strings.push_back((*comments)[j]);
     }
 
     bool segment_title_set = false;
     if (title != "") {
       title = cch->utf8(title);
-      if (!g_segment_title_set && g_segment_title.empty() && (OGM_STREAM_TYPE_V_MSCOMP == dmx->stype)) {
+      if (!g_segment_title_set && g_segment_title.empty() && dmx->ms_compat) {
         g_segment_title     = title;
         g_segment_title_set = true;
         segment_title_set   = true;
@@ -811,44 +799,68 @@ ogm_reader_c::handle_stream_comments() {
       title      = "";
     }
 
-    bool chapters_set = false;
+    auto chapters_set               = false;
+    auto exception_parsing_chapters = false;
+
     if (!chapter_strings.empty() && !m_ti.m_no_chapters) {
       try {
-        counted_ptr<mm_mem_io_c> out(new mm_mem_io_c(NULL, 0, 1000));
+        std::shared_ptr<mm_mem_io_c> out(new mm_mem_io_c(nullptr, 0, 1000));
 
-        out->write_bom("UTF-8");
-        for (j = 0; j < chapter_strings.size(); j++)
-          out->puts(cch->utf8(chapter_strings[j]) + std::string("\n"));
+        if (g_identifying) {
+          // OGM comments might be written in a charset other than
+          // UTF-8. During identification we simply want to know how
+          // many chapter entries there are. As mmg's users have no
+          // way to specify the chapter charset when adding a file
+          // such charset issues may cause mkvmerge to abort or not to
+          // show any chapters at all (if "parse_chapters()"
+          // fails). So just remove all chars > 127.
+          for (auto chapter_string : chapter_strings) {
+            // auto cleaned = std::string{};
+            // balg::copy_if(chapter_string, [](char c) { return c >= 0; }, std::back_inserter(cleaned));
+            brng::remove_erase_if(chapter_string, [](char c) { return c < 0; });
+            out->puts(chapter_string + std::string{"\n"});
+          }
+
+        } else {
+          out->write_bom("UTF-8");
+          for (auto &chapter_string : chapter_strings)
+            out->puts(cch->utf8(chapter_string) + std::string{"\n"});
+        }
+
         out->set_file_name(m_ti.m_fname);
 
-        counted_ptr<mm_text_io_c> text_out(new mm_text_io_c(out.get_object(), false));
+        std::shared_ptr<mm_text_io_c> text_out(new mm_text_io_c(out.get(), false));
 
-        m_chapters   = parse_chapters(text_out.get_object(), 0, -1, 0, m_ti.m_chapter_language);
+        m_chapters   = parse_chapters(text_out.get(), 0, -1, 0, m_ti.m_chapter_language, "", true);
         chapters_set = true;
 
-        align_chapter_edition_uids(m_chapters);
+        align_chapter_edition_uids(m_chapters.get());
       } catch (...) {
+        exception_parsing_chapters = true;
       }
     }
 
-    if (    (segment_title_set || chapters_set)
-         && !charset_warning_printed
-         && (m_ti.m_chapter_charset.empty())) {
+    if (   exception_parsing_chapters
+        || (   (segment_title_set || chapters_set)
+            && !charset_warning_printed
+            && (m_ti.m_chapter_charset.empty()))) {
       mxwarn_fn(m_ti.m_fname,
                 Y("This Ogg/OGM file contains chapter or title information. Unfortunately the charset used to store this information in "
                   "the file cannot be identified unambiguously. The program assumes that your system's current charset is appropriate. This can "
                   "be overridden with the '--chapter-charset <charset>' switch.\n"));
       charset_warning_printed = true;
+
+      if (exception_parsing_chapters)
+        mxwarn_fn(m_ti.m_fname,
+                  Y("This Ogg/OGM file contains chapters but they could not be parsed. "
+                    "This can be due to the character set not being set properly for them or due to the entries not matching the expected SRT-style format.\n"));
     }
   }
 }
 
 void
 ogm_reader_c::add_available_track_ids() {
-  size_t i;
-
-  for (i = 0; i < sdemuxers.size(); i++)
-    add_available_track_id(i);
+  add_available_track_id_range(sdemuxers.size());
 }
 
 // -----------------------------------------------------------
@@ -857,7 +869,7 @@ ogm_demuxer_c::ogm_demuxer_c(ogm_reader_c *p_reader)
   : reader(p_reader)
   , m_ti(p_reader->m_ti)
   , ptzr(-1)
-  , stype(OGM_STREAM_TYPE_UNKNOWN)
+  , ms_compat{}
   , serialno(0)
   , eos(0)
   , units_processed(0)
@@ -925,7 +937,7 @@ ogm_demuxer_c::process_header_page() {
 
     if (!is_header_packet(op)) {
       if (nh_packet_data.size() != num_non_header_packets) {
-        nh_packet_data.push_back(clone_memory(op.packet, op.bytes));
+        nh_packet_data.push_back(memory_c::clone(op.packet, op.bytes));
         continue;
       }
 
@@ -937,7 +949,7 @@ ogm_demuxer_c::process_header_page() {
       return;
     }
 
-    packet_data.push_back(clone_memory(op.packet, op.bytes));
+    packet_data.push_back(memory_c::clone(op.packet, op.bytes));
 
     eos |= op.e_o_s;
   }
@@ -952,7 +964,7 @@ ogm_demuxer_c::process_header_page() {
 ogm_a_aac_demuxer_c::ogm_a_aac_demuxer_c(ogm_reader_c *p_reader)
   : ogm_demuxer_c(p_reader)
 {
-  stype = OGM_STREAM_TYPE_A_AAC;
+  codec = codec_c::look_up(CT_A_AAC);
 }
 
 generic_packetizer_c *
@@ -993,7 +1005,7 @@ ogm_a_aac_demuxer_c::create_packetizer() {
 ogm_a_ac3_demuxer_c::ogm_a_ac3_demuxer_c(ogm_reader_c *p_reader)
   : ogm_demuxer_c(p_reader)
 {
-  stype = OGM_STREAM_TYPE_A_AC3;
+  codec = codec_c::look_up(CT_A_AC3);
 }
 
 generic_packetizer_c *
@@ -1011,7 +1023,7 @@ ogm_a_ac3_demuxer_c::create_packetizer() {
 ogm_a_mp3_demuxer_c::ogm_a_mp3_demuxer_c(ogm_reader_c *p_reader)
   : ogm_demuxer_c(p_reader)
 {
-  stype = OGM_STREAM_TYPE_A_MP3;
+  codec = codec_c::look_up(CT_A_MP3);
 }
 
 generic_packetizer_c *
@@ -1029,14 +1041,13 @@ ogm_a_mp3_demuxer_c::create_packetizer() {
 ogm_a_pcm_demuxer_c::ogm_a_pcm_demuxer_c(ogm_reader_c *p_reader)
   : ogm_demuxer_c(p_reader)
 {
-  stype = OGM_STREAM_TYPE_A_PCM;
+  codec = codec_c::look_up(CT_A_PCM);
 }
 
 generic_packetizer_c *
 ogm_a_pcm_demuxer_c::create_packetizer() {
   stream_header        *sth      = (stream_header *)(packet_data[0]->get_buffer() + 1);
-  generic_packetizer_c *ptzr_obj = new pcm_packetizer_c(reader, m_ti, get_uint64_le(&sth->samples_per_unit), get_uint16_le(&sth->sh.audio.channels),
-                                                        get_uint16_le(&sth->bits_per_sample));
+  generic_packetizer_c *ptzr_obj = new pcm_packetizer_c(reader, m_ti, get_uint64_le(&sth->samples_per_unit), get_uint16_le(&sth->sh.audio.channels), get_uint16_le(&sth->bits_per_sample));
 
   show_packetizer_info(m_ti.m_id, ptzr_obj);
 
@@ -1048,7 +1059,7 @@ ogm_a_pcm_demuxer_c::create_packetizer() {
 ogm_a_vorbis_demuxer_c::ogm_a_vorbis_demuxer_c(ogm_reader_c *p_reader)
   : ogm_demuxer_c(p_reader)
 {
-  stype              = OGM_STREAM_TYPE_A_VORBIS;
+  codec              = codec_c::look_up(CT_A_VORBIS);
   num_header_packets = 3;
 }
 
@@ -1080,15 +1091,62 @@ ogm_a_vorbis_demuxer_c::process_page(int64_t /* granulepos */) {
 
 // -----------------------------------------------------------
 
+ogm_a_opus_demuxer_c::ogm_a_opus_demuxer_c(ogm_reader_c *p_reader)
+  : ogm_demuxer_c(p_reader)
+  , m_calculated_end_timecode{timecode_c::ns(0)}
+{
+  codec              = codec_c::look_up(CT_A_OPUS);
+  num_header_packets = 2;
+}
+
+generic_packetizer_c *
+ogm_a_opus_demuxer_c::create_packetizer() {
+  m_ti.m_private_data = packet_data[0];
+  auto ptzr_obj       = new opus_packetizer_c(reader, m_ti);
+
+  show_packetizer_info(m_ti.m_id, ptzr_obj);
+
+  return ptzr_obj;
+}
+
+void
+ogm_a_opus_demuxer_c::process_page(int64_t granulepos) {
+  ogg_packet op;
+
+  auto ogg_timecode = timecode_c::ns(granulepos * 1000000000 / 48000);
+
+  while (ogg_stream_packetout(&os, &op) == 1) {
+    eos |= op.e_o_s;
+
+    if ((4 <= op.bytes) && !memcmp(op.packet, "Opus", 4))
+      continue;
+
+    auto packet                = std::make_shared<packet_t>(memory_c::clone(op.packet, op.bytes));
+    auto toc                   = mtx::opus::toc_t::decode(packet->data);
+    m_calculated_end_timecode += toc.packet_duration;
+
+    if (m_calculated_end_timecode > ogg_timecode) {
+      packet->discard_padding = m_calculated_end_timecode - ogg_timecode;
+      mxdebug_if(ms_debug,
+                 boost::format("Opus discard padding calculated %1% Ogg timestamp %2% diff %3% samples %4%\n")
+                 % m_calculated_end_timecode % ogg_timecode % packet->discard_padding % (packet->discard_padding.to_ns() * 48000 / 1000000000));
+    }
+
+    reader->m_reader_packetizers[ptzr]->process(packet);
+  }
+}
+
+// -----------------------------------------------------------
+
 ogm_s_text_demuxer_c::ogm_s_text_demuxer_c(ogm_reader_c *p_reader)
   : ogm_demuxer_c(p_reader)
 {
-  stype = OGM_STREAM_TYPE_A_AAC;
+  codec = codec_c::look_up(CT_S_SRT);
 }
 
 generic_packetizer_c *
 ogm_s_text_demuxer_c::create_packetizer() {
-  generic_packetizer_c *ptzr_obj = new textsubs_packetizer_c(reader, m_ti, MKV_S_TEXTUTF8, NULL, 0, true, false);
+  generic_packetizer_c *ptzr_obj = new textsubs_packetizer_c(reader, m_ti, MKV_S_TEXTUTF8, true, false);
 
   show_packetizer_info(m_ti.m_id, ptzr_obj);
 
@@ -1123,71 +1181,20 @@ ogm_s_text_demuxer_c::process_page(int64_t granulepos) {
 ogm_v_avc_demuxer_c::ogm_v_avc_demuxer_c(ogm_reader_c *p_reader)
   : ogm_v_mscomp_demuxer_c(p_reader)
 {
-  stype                  = OGM_STREAM_TYPE_V_AVC;
+  codec                  = codec_c::look_up(CT_V_MPEG4_P10);
   num_non_header_packets = 3;
 }
 
 generic_packetizer_c *
 ogm_v_avc_demuxer_c::create_packetizer() {
-  mpeg4_p10_es_video_packetizer_c *vptzr = NULL;
+  stream_header *sth          = (stream_header *)&packet_data[0]->get_buffer()[1];
+  generic_packetizer_c *vptzr = new mpeg4_p10_es_video_packetizer_c(reader, m_ti);
 
-  try {
-    stream_header *sth  = (stream_header *)&packet_data[0]->get_buffer()[1];
+  vptzr->set_video_pixel_dimensions(get_uint32_le(&sth->sh.video.width), get_uint32_le(&sth->sh.video.height));
 
-    m_ti.m_private_data = NULL;
-    m_ti.m_private_size = 0;
-    memory_cptr avcc    = extract_avcc();
-
-    vptzr               = new mpeg4_p10_es_video_packetizer_c(reader, m_ti, avcc, get_uint32_le(&sth->sh.video.width), get_uint32_le(&sth->sh.video.height));
-
-    vptzr->enable_timecode_generation(false);
-    vptzr->set_track_default_duration(default_duration);
-
-    show_packetizer_info(m_ti.m_id, vptzr);
-
-  } catch (...) {
-    mxerror_tid(m_ti.m_fname, m_ti.m_id, Y("Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"));
-  }
+  show_packetizer_info(m_ti.m_id, vptzr);
 
   return vptzr;
-}
-
-memory_cptr
-ogm_v_avc_demuxer_c::extract_avcc() {
-  avc_es_parser_c parser;
-
-  parser.ignore_nalu_size_length_errors();
-  if (map_has_key(reader->m_ti.m_nalu_size_lengths, track_id))
-    parser.set_nalu_size_length(reader->m_ti.m_nalu_size_lengths[track_id]);
-  else if (map_has_key(reader->m_ti.m_nalu_size_lengths, -1))
-    parser.set_nalu_size_length(reader->m_ti.m_nalu_size_lengths[-1]);
-
-  unsigned char *private_data = packet_data[0]->get_buffer() + 1 + sizeof(stream_header);
-  int private_size            = packet_data[0]->get_size()   - 1 - sizeof(stream_header);
-
-  while (4 < private_size) {
-    if (get_uint32_be(private_data) == 0x00000001) {
-      parser.add_bytes(private_data, private_size);
-      break;
-    }
-
-    ++private_data;
-    --private_size;
-  }
-
-  std::vector<memory_cptr>::iterator packet(nh_packet_data.begin());
-
-  while (packet != nh_packet_data.end()) {
-    if ((*packet)->get_size()) {
-      parser.add_bytes((*packet)->get_buffer(), (*packet)->get_size());
-      if (parser.headers_parsed())
-        return parser.get_avcc();
-    }
-
-    ++packet;
-  }
-
-  throw false;
 }
 
 // -----------------------------------------------------------
@@ -1196,7 +1203,7 @@ ogm_v_mscomp_demuxer_c::ogm_v_mscomp_demuxer_c(ogm_reader_c *p_reader)
   : ogm_demuxer_c(p_reader)
   , frames_since_granulepos_change(0)
 {
-  stype = OGM_STREAM_TYPE_V_MSCOMP;
+  ms_compat = true;
 }
 
 std::string
@@ -1213,6 +1220,7 @@ ogm_v_mscomp_demuxer_c::get_codec() {
 void
 ogm_v_mscomp_demuxer_c::initialize() {
   stream_header *sth = (stream_header *)(packet_data[0]->get_buffer() + 1);
+  codec              = codec_c::look_up(get_codec());
 
   if (0 > g_video_fps)
     g_video_fps = 10000000.0 / (float)get_uint64_le(&sth->time_unit);
@@ -1236,8 +1244,7 @@ ogm_v_mscomp_demuxer_c::create_packetizer() {
   put_uint32_le(&bih.bi_size_image, get_uint32_le(&bih.bi_width) * get_uint32_le(&bih.bi_height) * 3);
   memcpy(&bih.bi_compression, sth->subtype, 4);
 
-  m_ti.m_private_data = (unsigned char *)&bih;
-  m_ti.m_private_size = sizeof(alBITMAPINFOHEADER);
+  m_ti.m_private_data = memory_c::clone(&bih, sizeof(alBITMAPINFOHEADER));
 
   double fps          = (double)10000000.0 / get_uint64_le(&sth->time_unit);
   int width           = get_uint32_le(&sth->sh.video.width);
@@ -1247,11 +1254,9 @@ ogm_v_mscomp_demuxer_c::create_packetizer() {
   if (mpeg4::p2::is_fourcc(sth->subtype))
     ptzr_obj = new mpeg4_p2_video_packetizer_c(reader, m_ti, fps, width, height, false);
   else
-    ptzr_obj = new video_packetizer_c(reader, m_ti, NULL, fps, width, height);
+    ptzr_obj = new video_packetizer_c(reader, m_ti, nullptr, fps, width, height);
 
   show_packetizer_info(m_ti.m_id, ptzr_obj);
-
-  m_ti.m_private_data = NULL;
 
   return ptzr_obj;
 }
@@ -1308,7 +1313,7 @@ ogm_v_mscomp_demuxer_c::process_page(int64_t granulepos) {
 ogm_v_theora_demuxer_c::ogm_v_theora_demuxer_c(ogm_reader_c *p_reader)
   : ogm_demuxer_c(p_reader)
 {
-  stype              = OGM_STREAM_TYPE_V_THEORA;
+  codec              = codec_c::look_up(CT_V_THEORA);
   num_header_packets = 3;
 
   memset(&theora, 0, sizeof(theora_identification_header_t));
@@ -1329,16 +1334,12 @@ ogm_v_theora_demuxer_c::initialize() {
 
 generic_packetizer_c *
 ogm_v_theora_demuxer_c::create_packetizer() {
-  memory_cptr codecprivate       = lace_memory_xiph(packet_data);
-  m_ti.m_private_data            = codecprivate->get_buffer();
-  m_ti.m_private_size            = codecprivate->get_size();
+  m_ti.m_private_data            = lace_memory_xiph(packet_data);
 
   double                fps      = (double)theora.frn / (double)theora.frd;
   generic_packetizer_c *ptzr_obj = new theora_video_packetizer_c(reader, m_ti, fps, theora.fmbw, theora.fmbh);
 
   show_packetizer_info(m_ti.m_id, ptzr_obj);
-
-  m_ti.m_private_data = NULL;
 
   return ptzr_obj;
 }
@@ -1388,7 +1389,7 @@ ogm_v_vp8_demuxer_c::ogm_v_vp8_demuxer_c(ogm_reader_c *p_reader,
   , num_header_packets_skipped(1)
   , frames_since_granulepos_change(0)
 {
-  stype              = OGM_STREAM_TYPE_V_VP8;
+  codec              = codec_c::look_up(CT_V_VP8);
   num_header_packets = 2;
 
   memcpy(&vp8_header, op.packet, sizeof(vp8_ogg_header_t));
@@ -1422,7 +1423,7 @@ ogm_v_vp8_demuxer_c::initialize() {
 
 generic_packetizer_c *
 ogm_v_vp8_demuxer_c::create_packetizer() {
-  vp8_video_packetizer_c *ptzr_obj = new vp8_video_packetizer_c(reader, m_ti);
+  auto ptzr_obj = new vpx_video_packetizer_c(reader, m_ti, CT_V_VP8);
 
   ptzr_obj->set_video_pixel_width(pixel_width);
   ptzr_obj->set_video_pixel_height(pixel_height);
@@ -1480,7 +1481,7 @@ ogm_v_vp8_demuxer_c::process_page(int64_t granulepos) {
 ogm_s_kate_demuxer_c::ogm_s_kate_demuxer_c(ogm_reader_c *p_reader)
   : ogm_demuxer_c(p_reader)
 {
-  stype              = OGM_STREAM_TYPE_S_KATE;
+  codec              = codec_c::look_up(CT_S_KATE);
   num_header_packets = 1; /* at least 1, will be updated upon reading the ID header */
 
   memset(&kate, 0, sizeof(kate_identification_header_t));
@@ -1493,21 +1494,16 @@ ogm_s_kate_demuxer_c::initialize() {
     kate_parse_identification_header(mem->get_buffer(), mem->get_size(), kate);
     num_header_packets = kate.nheaders;
   } catch (mtx::kate::header_parsing_x &e) {
-    mxerror_tid(reader->m_ti.m_fname, track_id, boost::format(Y("The Kate identifaction header could not be parsed (%1%).\n")) % e.error());
+    mxerror_tid(reader->m_ti.m_fname, track_id, boost::format(Y("The Kate identification header could not be parsed (%1%).\n")) % e.error());
   }
 }
 
 generic_packetizer_c *
 ogm_s_kate_demuxer_c::create_packetizer() {
-  memory_cptr codecprivate       = lace_memory_xiph(packet_data);
-  m_ti.m_private_data            = codecprivate->get_buffer();
-  m_ti.m_private_size            = codecprivate->get_size();
-
-  generic_packetizer_c *ptzr_obj = new kate_packetizer_c(reader, m_ti, m_ti.m_private_data, m_ti.m_private_size);
+  m_ti.m_private_data = lace_memory_xiph(packet_data);
+  auto ptzr_obj       = new kate_packetizer_c(reader, m_ti);
 
   show_packetizer_info(m_ti.m_id, ptzr_obj);
-
-  m_ti.m_private_data = NULL;
 
   return ptzr_obj;
 }

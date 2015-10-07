@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __P_DIRAC_H
-#define __P_DIRAC_H
+#ifndef MTX_P_DIRAC_H
+#define MTX_P_DIRAC_H
 
 #include "common/common_pch.h"
 
@@ -34,17 +34,16 @@ public:
   virtual int process(packet_cptr packet);
   virtual void set_headers();
 
-  virtual void flush();
-
-  virtual const std::string get_format_name(bool translate = true) {
-    return translate ? Y("Dirac") : "Dirac";
+  virtual translatable_string_c get_format_name() const {
+    return YT("Dirac");
   };
 
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);
 
 protected:
+  virtual void flush_impl();
   virtual void flush_frames();
   virtual void headers_found();
 };
 
-#endif // __P_DIRAC_H
+#endif // MTX_P_DIRAC_H

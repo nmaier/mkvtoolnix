@@ -11,8 +11,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __TAB_CHAPTERS_H
-#define __TAB_CHAPTERS_H
+#ifndef MTX_TAB_CHAPTERS_H
+#define MTX_TAB_CHAPTERS_H
+
+#include "common/common_pch.h"
 
 #include <wx/button.h>
 #include <wx/panel.h>
@@ -38,43 +40,84 @@
 #define ID_B_ADD_CHAPTERNAME              16014
 #define ID_B_REMOVE_CHAPTERNAME           16015
 #define ID_B_ADJUSTTIMECODES              16016
-#define ID_CB_CHAPTERHIDDEN               16017
-#define ID_CB_CHAPTERENABLED              16018
+#define ID_CB_FLAGHIDDEN                  16017
+#define ID_CB_FLAGENABLEDDEFAULT          16018
 #define ID_TC_UID                         16019
+#define ID_CB_FLAGORDERED                 16020
+#define ID_TC_SEGMENT_UID                 16021
+#define ID_TC_SEGMENT_EDITION_UID         16022
 
 using namespace libmatroska;
+
+class chapter_node_data_c: public wxTreeItemData {
+public:
+  bool is_atom;
+  KaxChapterAtom *chapter;
+  KaxEditionEntry *eentry;
+
+public:
+  chapter_node_data_c(KaxChapterAtom *p_chapter)
+    : is_atom{true}
+    , chapter{p_chapter}
+    , eentry{}
+  {
+  };
+
+  chapter_node_data_c(KaxEditionEntry *p_eentry)
+    : is_atom{false}
+    , chapter{}
+    , eentry{p_eentry}
+  {
+  };
+
+  EbmlMaster *
+  get() const {
+    return is_atom ? static_cast<EbmlMaster *>(chapter) : static_cast<EbmlMaster *>(eentry);
+  }
+};
+
+inline std::ostream &
+operator <<(std::ostream &out,
+            chapter_node_data_c const &node) {
+  out << "node[" << (node.is_atom ? "atom" : "edition") << "/" << node.get() << "]";
+  return out;
+}
 
 class tab_chapters: public wxPanel {
   DECLARE_CLASS(tab_chapters);
   DECLARE_EVENT_TABLE();
 public:
   wxTreeCtrl *tc_chapters;
-  wxTreeItemId tid_root;
+  wxTreeItemId tid_root, m_dragged_item;
   wxButton *b_add_chapter, *b_add_subchapter, *b_remove_chapter;
   wxButton *b_set_values, *b_adjust_timecodes;
-  wxMenu *m_chapters;
+  wxMenu *m_chapters_menu;
 
   wxTextCtrl *tc_chapter_name, *tc_start_time, *tc_end_time;
-  wxTextCtrl *tc_uid;
+  wxTextCtrl *tc_uid, *tc_segment_uid, *tc_segment_edition_uid;
   wxMTX_COMBOBOX_TYPE *cob_language_code, *cob_country_code;
   wxListBox *lb_chapter_names;
   wxButton *b_add_chapter_name, *b_remove_chapter_name;
-  wxCheckBox *cb_flag_hidden, *cb_flag_enabled;
+  wxCheckBox *cb_flag_hidden, *cb_flag_enabled_default, *cb_flag_ordered;
   bool inputs_enabled, no_update;
 
-  wxStaticText *st_start, *st_end, *st_uid, *st_name, *st_language;
+  wxStaticText *st_start, *st_end, *st_uid, *st_name, *st_language, *st_flags, *st_segment_uid, *st_segment_edition_uid;
   wxStaticText *st_country, *st_chapters;
   wxStaticBox *sb_names;
 
   wxString file_name;
   bool source_is_kax_file, source_is_simple_format;
 
-  KaxChapters *chapters;
+  wx_kax_analyzer_cptr analyzer;
 
-  wx_kax_analyzer_c *analyzer;
+  ebml_element_cptr m_chapters_cp;
+  KaxChapters *m_chapters;
+
+  ebml_dumper_c m_dumper;
+  debugging_option_c m_debug_dnd;
 
 public:
-  tab_chapters(wxWindow *parent, wxMenu *nm_chapters);
+  tab_chapters(wxWindow *parent, wxMenu *chapters_menu);
   ~tab_chapters();
 
   void on_new_chapters(wxCommandEvent &evt);
@@ -97,21 +140,24 @@ public:
   void on_set_values(wxCommandEvent &evt);
   void on_adjust_timecodes(wxCommandEvent &evt);
   void on_flag_hidden(wxCommandEvent &evt);
-  void on_flag_enabled(wxCommandEvent &evt);
-  void set_values_recursively(wxTreeItemId id, const wxString &language,
-                              bool set_language);
+  void on_flag_enabled_default(wxCommandEvent &evt);
+  void on_flag_ordered(wxCommandEvent &evt);
+  void set_values_recursively(wxTreeItemId id, wxString const &value, bool set_language);
   void set_display_values(KaxChapterDisplay *display);
   void set_timecode_values(KaxChapterAtom *atom);
   void adjust_timecodes_recursively(wxTreeItemId id, int64_t adjust_by);
+  void on_drag_begin(wxTreeEvent &evt);
+  void on_drag_end(wxTreeEvent &evt);
 
   bool copy_values(wxTreeItemId id);
   int64_t parse_time(wxString s);
   bool verify_atom_recursively(EbmlElement *e);
   bool verify(bool called_interactively = false);
   void add_recursively(wxTreeItemId &parent, EbmlMaster &master);
+  wxTreeItemId add_element_recursively(wxTreeItemId &parent, EbmlElement &element, size_t insert_before);
   wxString create_chapter_label(KaxChapterAtom &chapter);
   void fix_missing_languages(EbmlMaster &master);
-  void enable_inputs(bool enable);
+  void enable_inputs(bool enable, bool is_edition = false);
   void enable_buttons(bool enable);
   bool select_file_name();
   bool load(wxString name);
@@ -121,6 +167,16 @@ public:
 
 protected:
   void write_chapters_to_matroska_file();
+
+  void root_or_edition_selected(wxTreeEvent &evt);
+  void set_flag_enabled_default_texts(wxTreeItemId id);
+  bool copy_segment_uid(chapter_node_data_c *data);
+  bool copy_segment_edition_uid(chapter_node_data_c *data);
+  void enable_adjustment_buttons(bool enable);
+
+  bool contains_atoms() const;
+
+  KaxChapterDisplay * get_selected_chapter_display();
 };
 
-#endif // __TAB_CHAPTERS_H
+#endif // MTX_TAB_CHAPTERS_H

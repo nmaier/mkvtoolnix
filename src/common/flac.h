@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __FLAC_COMMON_H
-#define __FLAC_COMMON_H
+#ifndef MTX_FLAC_COMMON_H
+#define MTX_FLAC_COMMON_H
 
 #include "common/common_pch.h"
 
@@ -31,4 +31,4 @@ int flac_decode_headers(unsigned char *mem, int size, int num_elements, ...);
 
 #endif /* HAVE_FLAC_FORMAT_H */
 
-#endif /* __FLAC_COMMON_H */
+#endif /* MTX_FLAC_COMMON_H */

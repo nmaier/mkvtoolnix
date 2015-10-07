@@ -11,13 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
-
-#include <algorithm>
-#include <string>
-#include <vector>
-
-#include <wx/wxprec.h>
+#include "common/common_pch.h"
 
 #include <wx/wx.h>
 #include <wx/config.h>
@@ -26,8 +20,8 @@
 #include <wx/process.h>
 #include <wx/statline.h>
 
-#include "common/common_pch.h"
 #include "common/strings/editing.h"
+#include "common/strings/parsing.h"
 #include "common/translation.h"
 #include "common/wx.h"
 #include "mmg/cli_options_dlg.h"
@@ -56,29 +50,6 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
   : optdlg_base_tab(parent, options)
 {
   // Create the controls.
-  cb_autoset_output_filename = new wxCheckBox(this, ID_CB_AUTOSET_OUTPUT_FILENAME, Z("Auto-set output filename"));
-  cb_autoset_output_filename->SetToolTip(TIP("If checked mmg will automatically set the output filename "
-                                             "if it hasn't been set already. This happens when you add "
-                                             "the first file. If unset mmg will not touch the output filename."));
-
-  rb_odm_input_file = new wxRadioButton(this, ID_RB_ODM_INPUT_FILE, Z("Same directory as the first input file's"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
-  rb_odm_previous   = new wxRadioButton(this, ID_RB_ODM_PREVIOUS, Z("Use the previous output directory"));
-  rb_odm_fixed      = new wxRadioButton(this, ID_RB_ODM_FIXED, Z("Use this directory:"));
-
-  tc_output_directory       = new wxTextCtrl(this, ID_TC_OUTPUT_DIRECTORY, m_options.output_directory);
-  b_browse_output_directory = new wxButton(this, ID_B_BROWSE_OUTPUT_DIRECTORY, Z("Browse"));
-
-  tc_output_directory->SetToolTip(TIP("If left empty then mmg will set the output file name to be in the same directory as the first file added to this job. "
-                                      "Otherwise this directory will be used."));
-
-  cb_ask_before_overwriting = new wxCheckBox(this, ID_CB_ASK_BEFORE_OVERWRITING, Z("Ask before overwriting things (files, jobs)"));
-  cb_ask_before_overwriting->SetToolTip(TIP("If checked mmg will ask for "
-                                            "confirmation before overwriting "
-                                            "existing files, or before adding "
-                                            "a new job if there's an old job "
-                                            "whose description matches the "
-                                            "new one."));
-
   cb_set_delay_from_filename = new wxCheckBox(this, ID_CB_SET_DELAY_FROM_FILENAME, Z("Set the delay input field from the file name"));
   cb_set_delay_from_filename->SetToolTip(TIP("When a file is added its name is scanned. If it contains "
                                              "the word 'DELAY' followed by a number then this number "
@@ -89,6 +60,14 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
 
   cb_filenew_after_successful_mux  = new wxCheckBox(this, ID_CB_NEW_AFTER_SUCCESSFUL_MUX, Z("Clear inputs after a successful muxing run"));
 
+  wxString const clear_job_choices[] = {
+    Z("only if the run was successfull"),
+    Z("even if there were warnings"),
+    Z("always"),
+  };
+  cb_clear_job_after_run           = new wxCheckBox(this, ID_CB_CLEAR_JOB_AFTER_RUN, Z("Remove job from job queue after run:"));
+  cob_clear_job_after_run_mode     = new wxMTX_COMBOBOX_TYPE(this, ID_COB_CLEAR_JOB_AFTER_RUN_MODE, wxT("only if the run was successfull"), wxDefaultPosition, wxDefaultSize, 3, clear_job_choices, wxCB_READONLY);
+
   cb_on_top = new wxCheckBox(this, ID_CB_ON_TOP, Z("Always on top"));
 
   cb_warn_usage = new wxCheckBox(this, ID_CB_WARN_USAGE, Z("Warn about possible incorrect usage of mmg"));
@@ -96,10 +75,6 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
                                 "you're using it incorrectly. Such warnings "
                                 "are shown at least once even if you turn "
                                 "this feature off."));
-
-  cb_disable_header_removal_compression = new wxCheckBox(this, ID_CB_DISABLE_HRC, Z("Disable header removal compression for audio and video tracks by default"));
-  cb_disable_header_removal_compression->SetToolTip(TIP("If checked mmg will set the 'compression' drop down box to 'none' for all audio and video tracks by default. "
-                                                        "The user can still change the compression setting afterwards."));
 
 #if defined(HAVE_CURL_EASY_H)
   cb_check_for_updates = new wxCheckBox(this, ID_CB_CHECK_FOR_UPDATES, Z("Check online for the latest release"));
@@ -114,7 +89,7 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
 
 #if defined(HAVE_LIBINTL_H)
   wxStaticText *st_ui_language = new wxStaticText(this, -1, Z("Interface language:"));
-  cob_ui_language = new wxMTX_COMBOBOX_TYPE(this, ID_COB_UI_LANGUAGE,  wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+  cob_ui_language = new wxMTX_COMBOBOX_TYPE(this, ID_COB_UI_LANGUAGE,  wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_DROPDOWN | wxCB_READONLY);
 
   std::vector<translation_c>::iterator translation = translation_c::ms_available_translations.begin();
   wxString select_locale;
@@ -124,7 +99,7 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
     sorted_entries.push_back(locale_sorter_t(curr_entry, translation->get_locale()));
 
     if (   (select_locale.IsEmpty() && (translation->m_english_name == "English"))
-        || ba::iequals(app->m_ui_locale, translation->get_locale()))
+        || balg::iequals(app->m_ui_locale, translation->get_locale()))
       select_locale = curr_entry;
 
     ++translation;
@@ -143,31 +118,51 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
   }
 #endif  // HAVE_LIBINTL_H
 
+  auto st_default_subitle_charset = new wxStaticText(this, wxID_ANY, Z("Default subtitle charset"));
+  cob_default_subtitle_charset    = new wxMTX_COMBOBOX_TYPE(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_DROPDOWN | wxCB_READONLY);
+
+  auto st_scan_directory_for_playlists = new wxStaticText(this, -1, Z("Scan directory for other playlists:"));
+
+  wxString const scan_directory_for_playlists_choices[] = {
+    Z("always ask the user"),
+    Z("always scan for other playlists"),
+    Z("never scan for other playlists"),
+  };
+  cob_scan_directory_for_playlists = new wxMTX_COMBOBOX_TYPE(this, ID_COB_SCAN_DIRECTORY_FOR_PLAYLISTS, Z("always ask the user"), wxDefaultPosition, wxDefaultSize, 3, scan_directory_for_playlists_choices, wxCB_READONLY);
+
+  auto st_min_playlist_duration = new wxStaticText(this, -1, Z("Minimum duration for playlists in seconds:"));
+  tc_min_playlist_duration = new wxTextCtrl(this, -1, wxU(boost::format("%1%") % m_options.min_playlist_duration));
+  tc_min_playlist_duration->SetToolTip(TIP("Only playlists whose duration are at least this long are considered and offered to the user for selection."));
+  tc_min_playlist_duration->SetValidator(wxTextValidator(wxFILTER_NUMERIC));
+
   // Set the defaults.
 
-  cb_autoset_output_filename->SetValue(m_options.autoset_output_filename);
-  cb_ask_before_overwriting->SetValue(m_options.ask_before_overwriting);
   cb_on_top->SetValue(m_options.on_top);
   cb_filenew_after_add_to_jobqueue->SetValue(m_options.filenew_after_add_to_jobqueue);
   cb_filenew_after_successful_mux->SetValue(m_options.filenew_after_successful_mux);
   cb_warn_usage->SetValue(m_options.warn_usage);
   cb_gui_debugging->SetValue(m_options.gui_debugging);
   cb_set_delay_from_filename->SetValue(m_options.set_delay_from_filename);
-  cb_disable_header_removal_compression->SetValue(m_options.disable_a_v_compression);
 
-  rb_odm_input_file->SetValue(m_options.output_directory_mode == ODM_FROM_FIRST_INPUT_FILE);
-  rb_odm_previous->SetValue(m_options.output_directory_mode == ODM_PREVIOUS);
-  rb_odm_fixed->SetValue(m_options.output_directory_mode == ODM_FIXED);
+  cb_clear_job_after_run->SetValue(m_options.clear_job_after_run_mode != CJAR_NEVER);
+  set_combobox_selection(cob_clear_job_after_run_mode, std::max(static_cast<int>(m_options.clear_job_after_run_mode), 1) - 1);
+  cob_clear_job_after_run_mode->Enable(cb_clear_job_after_run->IsChecked());
 
 #if defined(HAVE_LIBINTL_H)
   set_combobox_selection(cob_ui_language, select_locale);
 #endif  // HAVE_LIBINTL_H
 
+  cob_default_subtitle_charset->Append(Z("Default"));
+  append_combobox_items(cob_default_subtitle_charset, sorted_charsets);
+
+  auto idx = sorted_charsets.Index(m_options.default_subtitle_charset);
+  cob_default_subtitle_charset->SetSelection(idx == wxNOT_FOUND ? 0 : idx + 1);
+
 #if defined(HAVE_CURL_EASY_H)
   cb_check_for_updates->SetValue(m_options.check_for_updates);
 #endif  // defined(HAVE_CURL_EASY_H)
 
-  enable_output_filename_controls(m_options.autoset_output_filename);
+  cob_scan_directory_for_playlists->SetSelection(static_cast<int>(m_options.scan_directory_for_playlists));
 
   // Create the layout.
 
@@ -189,32 +184,6 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
   siz_all->AddSpacer(5);
 #endif  // HAVE_LIBINTL_H
 
-  siz_all->Add(cb_autoset_output_filename, 0, wxLEFT, 5);
-  siz_all->AddSpacer(5);
-
-#if defined(SYS_WINDOWS)
-  int left_offset = 16;
-#else
-  int left_offset = 24;
-#endif
-
-  siz_all->Add(rb_odm_input_file, 0, wxLEFT, left_offset);
-  siz_all->AddSpacer(5);
-
-  siz_all->Add(rb_odm_previous, 0, wxLEFT, left_offset);
-  siz_all->AddSpacer(5);
-
-  siz_line = new wxBoxSizer(wxHORIZONTAL);
-  siz_line->Add(rb_odm_fixed, 0, wxALIGN_CENTER_VERTICAL, 0);
-  siz_line->Add(tc_output_directory, 1, wxALIGN_CENTER_VERTICAL | wxLEFT, 5);
-  siz_line->Add(b_browse_output_directory, 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5);
-
-  siz_all->Add(siz_line, 0, wxGROW | wxLEFT, left_offset);
-  siz_all->AddSpacer(5);
-
-  siz_all->Add(cb_ask_before_overwriting, 0, wxLEFT, 5);
-  siz_all->AddSpacer(5);
-
   siz_all->Add(cb_set_delay_from_filename, 0, wxLEFT, 5);
   siz_all->AddSpacer(5);
 
@@ -222,6 +191,13 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
   siz_all->AddSpacer(5);
 
   siz_all->Add(cb_filenew_after_successful_mux, 0, wxLEFT, 5);
+  siz_all->AddSpacer(5);
+
+  siz_line = new wxBoxSizer(wxHORIZONTAL);
+  siz_line->Add(cb_clear_job_after_run,       0, wxALIGN_CENTER_VERTICAL,                             0);
+  siz_line->Add(cob_clear_job_after_run_mode, 1, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT | wxGROW, 5);
+
+  siz_all->Add(siz_line, 0, wxLEFT | wxGROW, 5);
   siz_all->AddSpacer(5);
 
 #if defined(SYS_WINDOWS)
@@ -234,9 +210,6 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
   siz_all->Add(cb_warn_usage, 0, wxLEFT, 5);
   siz_all->AddSpacer(5);
 
-  siz_all->Add(cb_disable_header_removal_compression, 0, wxLEFT, 5);
-  siz_all->AddSpacer(5);
-
 #if defined(HAVE_CURL_EASY_H)
   siz_all->Add(cb_check_for_updates, 0, wxLEFT, 5);
   siz_all->AddSpacer(5);
@@ -245,31 +218,27 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
   siz_all->Add(cb_gui_debugging, 0, wxLEFT, 5);
   siz_all->AddSpacer(5);
 
-  SetSizer(siz_all);
+  auto siz_fg = new wxFlexGridSizer{2, 5, 5};
+  siz_fg->AddGrowableCol(1);
+
+  siz_fg->Add(st_default_subitle_charset,   0, wxALIGN_CENTER_VERTICAL);
+  siz_fg->Add(cob_default_subtitle_charset, 1, wxALIGN_CENTER_VERTICAL | wxGROW);
+
+  siz_fg->Add(st_scan_directory_for_playlists,  0, wxALIGN_CENTER_VERTICAL);
+  siz_fg->Add(cob_scan_directory_for_playlists, 1, wxALIGN_CENTER_VERTICAL | wxGROW);
+
+  siz_fg->Add(st_min_playlist_duration, 0, wxALIGN_CENTER_VERTICAL);
+  siz_fg->Add(tc_min_playlist_duration, 1, wxALIGN_CENTER_VERTICAL | wxGROW);
+
+  siz_all->Add(siz_fg, 0, wxLEFT | wxRIGHT | wxGROW, 5);
+  siz_all->AddSpacer(5);
+
+  SetSizerAndFit(siz_all);
 }
 
 void
-optdlg_mmg_tab::on_browse_output_directory(wxCommandEvent &) {
-  wxDirDialog dlg(this, Z("Choose the output directory"), tc_output_directory->GetValue());
-
-  if (dlg.ShowModal() == wxID_OK)
-    tc_output_directory->SetValue(dlg.GetPath());
-}
-
-void
-optdlg_mmg_tab::on_autoset_output_filename_selected(wxCommandEvent &) {
-  enable_output_filename_controls(cb_autoset_output_filename->IsChecked());
-}
-
-void
-optdlg_mmg_tab::enable_output_filename_controls(bool enable) {
-  bool odm_is_fixed = rb_odm_fixed->GetValue();
-
-  rb_odm_input_file->Enable(enable);
-  rb_odm_previous->Enable(enable);
-  rb_odm_fixed->Enable(enable);
-  tc_output_directory->Enable(enable && odm_is_fixed);
-  b_browse_output_directory->Enable(enable && odm_is_fixed);
+optdlg_mmg_tab::on_clear_job_after_run_pressed(wxCommandEvent &) {
+  cob_clear_job_after_run_mode->Enable(cb_clear_job_after_run->IsChecked());
 }
 
 std::string
@@ -283,27 +252,26 @@ optdlg_mmg_tab::get_selected_ui_language() {
 
 void
 optdlg_mmg_tab::save_options() {
-  m_options.output_directory              = tc_output_directory->GetValue();
-  m_options.autoset_output_filename       = cb_autoset_output_filename->IsChecked();
-  m_options.ask_before_overwriting        = cb_ask_before_overwriting->IsChecked();
   m_options.on_top                        = cb_on_top->IsChecked();
   m_options.filenew_after_add_to_jobqueue = cb_filenew_after_add_to_jobqueue->IsChecked();
   m_options.filenew_after_successful_mux  = cb_filenew_after_successful_mux->IsChecked();
   m_options.warn_usage                    = cb_warn_usage->IsChecked();
   m_options.gui_debugging                 = cb_gui_debugging->IsChecked();
   m_options.set_delay_from_filename       = cb_set_delay_from_filename->IsChecked();
-  m_options.disable_a_v_compression       = cb_disable_header_removal_compression->IsChecked();
-  m_options.output_directory_mode         = rb_odm_input_file->GetValue() ? ODM_FROM_FIRST_INPUT_FILE
-                                          : rb_odm_previous->GetValue()   ? ODM_PREVIOUS
-                                          :                                 ODM_FIXED;
+  m_options.clear_job_after_run_mode      = cb_clear_job_after_run->IsChecked() ? static_cast<clear_job_after_run_mode_e>(cob_clear_job_after_run_mode->GetSelection() + 1) : CJAR_NEVER;
 #if defined(HAVE_CURL_EASY_H)
   m_options.check_for_updates             = cb_check_for_updates->IsChecked();
 #endif  // defined(HAVE_CURL_EASY_H)
+  auto sel                                = cob_default_subtitle_charset->GetSelection();
+  m_options.default_subtitle_charset      = 0 == sel ? wxString{wxEmptyString} : sorted_charsets[sel - 1];
+  m_options.scan_directory_for_playlists  = static_cast<scan_directory_for_playlists_e>(cob_scan_directory_for_playlists->GetSelection());
+  if (!parse_number(to_utf8(tc_min_playlist_duration->GetValue()), m_options.min_playlist_duration))
+    m_options.min_playlist_duration = 0;
 
 #if defined(HAVE_LIBINTL_H)
   std::string new_ui_locale = get_selected_ui_language();
 
-  if (!ba::iequals(new_ui_locale, app->m_ui_locale)) {
+  if (!balg::iequals(new_ui_locale, app->m_ui_locale)) {
     app->m_ui_locale  = new_ui_locale;
 
     wxConfigBase *cfg = wxConfigBase::Get();
@@ -324,9 +292,5 @@ optdlg_mmg_tab::get_title() {
 
 IMPLEMENT_CLASS(optdlg_mmg_tab, optdlg_base_tab);
 BEGIN_EVENT_TABLE(optdlg_mmg_tab, optdlg_base_tab)
-  EVT_BUTTON(ID_B_BROWSE_OUTPUT_DIRECTORY,    optdlg_mmg_tab::on_browse_output_directory)
-  EVT_CHECKBOX(ID_CB_AUTOSET_OUTPUT_FILENAME, optdlg_mmg_tab::on_autoset_output_filename_selected)
-  EVT_RADIOBUTTON(ID_RB_ODM_INPUT_FILE,       optdlg_mmg_tab::on_autoset_output_filename_selected)
-  EVT_RADIOBUTTON(ID_RB_ODM_PREVIOUS,         optdlg_mmg_tab::on_autoset_output_filename_selected)
-  EVT_RADIOBUTTON(ID_RB_ODM_FIXED,            optdlg_mmg_tab::on_autoset_output_filename_selected)
+  EVT_CHECKBOX(ID_CB_CLEAR_JOB_AFTER_RUN,     optdlg_mmg_tab::on_clear_job_after_run_pressed)
 END_EVENT_TABLE();

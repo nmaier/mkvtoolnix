@@ -65,6 +65,12 @@ charset_converter_c::native(const std::string &source) {
   return source;
 }
 
+std::string const &
+charset_converter_c::get_charset()
+  const {
+  return m_charset;
+}
+
 charset_converter_cptr
 charset_converter_c::init(const std::string &charset) {
   std::string actual_charset = charset.empty() ? get_local_charset() : charset;
@@ -117,11 +123,14 @@ charset_converter_c::handle_string_with_bom(const std::string &source,
 
 // ------------------------------------------------------------
 #if defined(HAVE_ICONV_H)
+
+static iconv_t const s_iconv_t_error_value = reinterpret_cast<iconv_t>(-1);
+
 iconv_charset_converter_c::iconv_charset_converter_c(const std::string &charset)
   : charset_converter_c(charset)
   , m_is_utf8(false)
-  , m_to_utf8_handle(reinterpret_cast<iconv_t>(-1))
-  , m_from_utf8_handle(reinterpret_cast<iconv_t>(-1))
+  , m_to_utf8_handle(s_iconv_t_error_value)
+  , m_from_utf8_handle(s_iconv_t_error_value)
 {
   if (is_utf8_charset_name(charset)) {
     m_is_utf8 = true;
@@ -129,24 +138,24 @@ iconv_charset_converter_c::iconv_charset_converter_c(const std::string &charset)
   }
 
   m_to_utf8_handle = iconv_open("UTF-8", charset.c_str());
-  if (reinterpret_cast<iconv_t>(-1) == m_to_utf8_handle)
+  if (s_iconv_t_error_value == m_to_utf8_handle)
     mxwarn(boost::format(Y("Could not initialize the iconv library for the conversion from %1% to UFT-8. "
                            "Some strings will not be converted to UTF-8 and the resulting Matroska file "
                            "might not comply with the Matroska specs (error: %2%, %3%).\n"))
            % charset % errno % strerror(errno));
 
   m_from_utf8_handle = iconv_open(charset.c_str(), "UTF-8");
-  if (reinterpret_cast<iconv_t>(-1) == m_from_utf8_handle)
+  if (s_iconv_t_error_value == m_from_utf8_handle)
     mxwarn(boost::format(Y("Could not initialize the iconv library for the conversion from UFT-8 to %1%. "
                            "Some strings cannot be converted from UTF-8 and might be displayed incorrectly (error: %2%, %3%).\n"))
            % charset % errno % strerror(errno));
 }
 
 iconv_charset_converter_c::~iconv_charset_converter_c() {
-  if (reinterpret_cast<iconv_t>(-1) != m_to_utf8_handle)
+  if (s_iconv_t_error_value != m_to_utf8_handle)
     iconv_close(m_to_utf8_handle);
 
-  if (reinterpret_cast<iconv_t>(-1) != m_from_utf8_handle)
+  if (s_iconv_t_error_value != m_from_utf8_handle)
     iconv_close(m_from_utf8_handle);
 }
 
@@ -167,14 +176,14 @@ iconv_charset_converter_c::native(const std::string &source) {
 std::string
 iconv_charset_converter_c::convert(iconv_t handle,
                                    const std::string &source) {
-  if (reinterpret_cast<iconv_t>(-1) == handle)
+  if (s_iconv_t_error_value == handle)
     return source;
 
   int length        = source.length() * 4;
   char *destination = (char *)safemalloc(length + 1);
   memset(destination, 0, length + 1);
 
-  iconv(handle, NULL, 0, NULL, 0); // Reset the iconv state.
+  iconv(handle, nullptr, 0, nullptr, 0); // Reset the iconv state.
 
   size_t length_source      = length / 4;
   size_t length_destination = length;
@@ -182,7 +191,7 @@ iconv_charset_converter_c::convert(iconv_t handle,
   char *ptr_source          = source_copy;
   char *ptr_destination     = destination;
   iconv(handle, (ICONV_CONST char **)&ptr_source, &length_source, &ptr_destination, &length_destination);
-  iconv(handle, NULL, NULL, &ptr_destination, &length_destination);
+  iconv(handle, nullptr, nullptr, &ptr_destination, &length_destination);
 
   safefree(source_copy);
   std::string result = destination;
@@ -197,7 +206,7 @@ iconv_charset_converter_c::is_available(const std::string &charset) {
     return true;
 
   iconv_t handle = iconv_open("UTF-8", charset.c_str());
-  if (reinterpret_cast<iconv_t>(-1) == handle)
+  if (s_iconv_t_error_value == handle)
     return false;
 
   iconv_close(handle);
@@ -235,19 +244,19 @@ windows_charset_converter_c::native(const std::string &source) {
 }
 
 std::string
-windows_charset_converter_c::convert(UINT source_code_page,
-                                     UINT destination_code_page,
+windows_charset_converter_c::convert(unsigned int source_code_page,
+                                     unsigned int destination_code_page,
                                      const std::string &source) {
   if (source_code_page == destination_code_page)
     return source;
 
-  int num_wide_chars = MultiByteToWideChar(source_code_page, 0, source.c_str(), -1, NULL, 0);
+  int num_wide_chars = MultiByteToWideChar(source_code_page, 0, source.c_str(), -1, nullptr, 0);
   wchar_t *wbuffer   = new wchar_t[num_wide_chars];
   MultiByteToWideChar(source_code_page, 0, source.c_str(), -1, wbuffer, num_wide_chars);
 
-  int num_bytes = WideCharToMultiByte(destination_code_page, 0, wbuffer, -1, NULL, 0, NULL, NULL);
+  int num_bytes = WideCharToMultiByte(destination_code_page, 0, wbuffer, -1, nullptr, 0, nullptr, nullptr);
   char *buffer  = new char[num_bytes];
-  WideCharToMultiByte(destination_code_page, 0, wbuffer, -1, buffer, num_bytes, NULL, NULL);
+  WideCharToMultiByte(destination_code_page, 0, wbuffer, -1, buffer, num_bytes, nullptr, nullptr);
 
   std::string result = buffer;
 
@@ -259,21 +268,21 @@ windows_charset_converter_c::convert(UINT source_code_page,
 
 bool
 windows_charset_converter_c::is_available(const std::string &charset) {
-  UINT code_page = extract_code_page(charset);
+  unsigned int code_page = extract_code_page(charset);
   if (0 == code_page)
     return false;
 
   return IsValidCodePage(code_page);
 }
 
-UINT
+unsigned int
 windows_charset_converter_c::extract_code_page(const std::string &charset) {
   if (charset.substr(0, 2) != "CP")
     return 0;
 
   std::string number_as_str = charset.substr(2, charset.length() - 2);
   uint64_t number           = 0;
-  if (!parse_uint(number_as_str.c_str(), number))
+  if (!parse_number(number_as_str.c_str(), number))
     return 0;
 
   return number;
@@ -294,7 +303,7 @@ get_local_charset() {
   int i;
 
   lc_charset = nl_langinfo(CODESET);
-  if (parse_int(lc_charset, i))
+  if (parse_number(lc_charset, i))
     lc_charset = std::string("ISO") + lc_charset + std::string("-US");
 #elif HAVE_NL_LANGINFO
   lc_charset = nl_langinfo(CODESET);
@@ -328,7 +337,7 @@ Utf8ToUtf16(const char *utf8,
   unsigned ch;
 
   if (utf16len == 0) {
-    d = utf16 = NULL;
+    d = utf16 = nullptr;
     w = d - 1;
   }
 
@@ -400,19 +409,19 @@ Utf8ToUtf16(const char *utf8,
 
 char *
 win32_wide_to_multi(const wchar_t *wbuffer) {
-  int reqbuf = WideCharToMultiByte(CP_ACP, 0, wbuffer, -1, NULL, 0, NULL,
-                                   NULL);
+  int reqbuf = WideCharToMultiByte(CP_ACP, 0, wbuffer, -1, nullptr, 0, nullptr,
+                                   nullptr);
   char *buffer = new char[reqbuf];
-  WideCharToMultiByte(CP_ACP, 0, wbuffer, -1, buffer, reqbuf, NULL, NULL);
+  WideCharToMultiByte(CP_ACP, 0, wbuffer, -1, buffer, reqbuf, nullptr, nullptr);
 
   return buffer;
 }
 
 std::string
 win32_wide_to_multi_utf8(const wchar_t *wbuffer) {
-  int reqbuf   = WideCharToMultiByte(CP_UTF8, 0, wbuffer, -1, NULL, 0, NULL, NULL);
+  int reqbuf   = WideCharToMultiByte(CP_UTF8, 0, wbuffer, -1, nullptr, 0, nullptr, nullptr);
   char *buffer = new char[reqbuf];
-  WideCharToMultiByte(CP_UTF8, 0, wbuffer, -1, buffer, reqbuf, NULL, NULL);
+  WideCharToMultiByte(CP_UTF8, 0, wbuffer, -1, buffer, reqbuf, nullptr, nullptr);
 
   std::string retval = buffer;
 
@@ -423,7 +432,7 @@ win32_wide_to_multi_utf8(const wchar_t *wbuffer) {
 
 wchar_t *
 win32_utf8_to_utf16(const char *s) {
-  int wreqbuf = Utf8ToUtf16(s, -1, NULL, 0);
+  int wreqbuf = Utf8ToUtf16(s, -1, nullptr, 0);
   wchar_t *wbuffer = new wchar_t[wreqbuf];
 
   Utf8ToUtf16(s, -1, wbuffer, wreqbuf);

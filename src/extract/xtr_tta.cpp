@@ -17,7 +17,8 @@
 #include "common/checksums.h"
 #include "common/ebml.h"
 #include "common/endian.h"
-#include "common/mm_write_cache_io.h"
+#include "common/mm_io_x.h"
+#include "common/mm_write_buffer_io.h"
 #include "common/tta.h"
 #include "extract/xtr_tta.h"
 
@@ -31,7 +32,7 @@ xtr_tta_c::xtr_tta_c(const std::string &codec_id,
   , m_bps(0)
   , m_channels(0)
   , m_sfreq(0)
-  , m_temp_file_name((boost::format("mkvextract-%1%-temp-tta-%2%") % tid % time(NULL)).str())
+  , m_temp_file_name((boost::format("mkvextract-%1%-temp-tta-%2%") % tid % time(nullptr)).str())
 {
 }
 
@@ -39,9 +40,9 @@ void
 xtr_tta_c::create_file(xtr_base_c *,
                        KaxTrackEntry &track) {
   try {
-    m_out = mm_write_cache_io_c::open(m_temp_file_name, 5 * 1024 * 1024);
-  } catch (...) {
-    mxerror(boost::format(Y("Failed to create the temporary file '%1%': %2% (%3%)\n")) % m_temp_file_name % errno % strerror(errno));
+    m_out = mm_write_buffer_io_c::open(m_temp_file_name, 5 * 1024 * 1024);
+  } catch (mtx::mm_io::exception &ex) {
+    mxerror(boost::format(Y("Failed to create the temporary file '%1%': %2%\n")) % m_temp_file_name % ex);
   }
 
   m_bps      = kt_get_a_bps(track);
@@ -50,39 +51,29 @@ xtr_tta_c::create_file(xtr_base_c *,
 }
 
 void
-xtr_tta_c::handle_frame(memory_cptr &frame,
-                        KaxBlockAdditions *,
-                        int64_t,
-                        int64_t duration,
-                        int64_t,
-                        int64_t,
-                        bool,
-                        bool,
-                        bool) {
-  m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
+xtr_tta_c::handle_frame(xtr_frame_t &f) {
+  m_frame_sizes.push_back(f.frame->get_size());
+  m_out->write(f.frame);
 
-  m_frame_sizes.push_back(frame->get_size());
-  m_out->write(frame);
-
-  if (0 < duration)
-    m_previous_duration = duration;
+  if (0 < f.duration)
+    m_previous_duration = f.duration;
 }
 
 void
 xtr_tta_c::finish_file() {
-  m_out.clear();
+  m_out.reset();
 
   mm_io_cptr in;
   try {
     in = mm_file_io_c::open(m_temp_file_name);
-  } catch (...) {
-    mxerror(boost::format(Y("The temporary file '%1%' could not be opened for reading (%2%).\n")) % m_temp_file_name % strerror(errno));
+  } catch (mtx::mm_io::exception &ex) {
+    mxerror(boost::format(Y("The temporary file '%1%' could not be opened for reading: %2%.\n")) % m_temp_file_name % ex);
   }
 
   try {
-    m_out = mm_write_cache_io_c::open(m_file_name, 5 * 1024 * 1024);
-  } catch (...) {
-    mxerror(boost::format(Y("The file '%1%' could not be opened for writing (%2%).\n")) % m_file_name % strerror(errno));
+    m_out = mm_write_buffer_io_c::open(m_file_name, 5 * 1024 * 1024);
+  } catch (mtx::mm_io::exception &ex) {
+    mxerror(boost::format(Y("The file '%1%' could not be opened for writing: %2%.\n")) % m_file_name % ex);
   }
 
   tta_file_header_t tta_header;
@@ -122,6 +113,6 @@ xtr_tta_c::finish_file() {
     m_out->write(buffer, nread);
   } while (nread == 128000);
 
-  m_out.clear();
+  m_out.reset();
   unlink(m_temp_file_name.c_str());
 }

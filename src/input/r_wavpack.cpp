@@ -14,6 +14,7 @@
 
 #include "common/common_pch.h"
 
+#include "common/codec.h"
 #include "common/endian.h"
 #include "common/error.h"
 #include "input/r_wavpack.h"
@@ -94,12 +95,9 @@ wavpack_reader_c::create_packetizer(int64_t) {
   if (!demuxing_requested('a', 0) || (NPTZR() != 0))
     return;
 
-  uint16_t version_le;
-  put_uint16_le(&version_le, header.version);
-  m_ti.m_private_data = (unsigned char *)&version_le;
-  m_ti.m_private_size = sizeof(uint16_t);
+  m_ti.m_private_data = memory_c::alloc(sizeof(uint16_t));
+  put_uint16_le(m_ti.m_private_data->get_buffer(), header.version);
   add_packetizer(new wavpack_packetizer_c(this, m_ti, meta));
-  m_ti.m_private_data = NULL;
 
   show_packetizer_info(0, PTZR0);
 }
@@ -160,7 +158,7 @@ wavpack_reader_c::read(generic_packetizer_c *,
   packet_cptr packet(new packet_t(new memory_c(chunk, data_size, true)));
 
   // find the if there is a correction file data corresponding
-  if (!m_in_correc.is_set()) {
+  if (!m_in_correc) {
     PTZR0->process(packet);
     return FILE_STATUS_MOREDATA;
   }
@@ -183,7 +181,7 @@ wavpack_reader_c::read(generic_packetizer_c *,
 
     // no more correction to be found
     if (0 > data_size) {
-      m_in_correc.clear();
+      m_in_correc.reset();
       dummy_header_correc.block_samples = dummy_header.block_samples + 1;
       break;
     }
@@ -216,7 +214,7 @@ wavpack_reader_c::read(generic_packetizer_c *,
       databuffer += 4;
     }
     if (m_in_correc->read(databuffer, block_size) != static_cast<size_t>(block_size))
-      m_in_correc.clear();
+      m_in_correc.reset();
     databuffer += block_size;
   }
 
@@ -230,5 +228,5 @@ wavpack_reader_c::read(generic_packetizer_c *,
 void
 wavpack_reader_c::identify() {
   id_result_container();
-  id_result_track(0, ID_RESULT_TRACK_AUDIO, "WAVPACK");
+  id_result_track(0, ID_RESULT_TRACK_AUDIO, codec_c::get_name(CT_A_WAVPACK4, "WAVPACK"));
 }

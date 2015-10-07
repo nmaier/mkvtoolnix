@@ -8,10 +8,10 @@ class T_245srt_timecode_formats < Test
   def run
     hashes = Array.new
 
-    merge "--subtitle-charset -1:ISO-8859-5 data/textsubs/shortened_timecodes.srt"
+    merge "--subtitle-charset -1:ISO-8859-5 data/subtitles/srt/shortened_timecodes.srt"
     hashes << hash_tmp
 
-    merge "--subtitle-charset -1:ISO-8859-5 data/textsubs/timecodes_with_spaces.srt"
+    merge "--subtitle-charset -1:ISO-8859-5 data/subtitles/srt/timecodes_with_spaces.srt"
     hashes << hash_tmp
 
     return hashes.join('-')

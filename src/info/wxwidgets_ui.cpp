@@ -10,7 +10,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #ifdef HAVE_WXWIDGETS
 
@@ -28,7 +28,10 @@
 #include "common/wx.h"
 #include "info/wxwidgets_ui.h"
 #include "info/mkvinfo.h"
-#include "share/icons/32x32/mkvinfo.xpm"
+
+#if !defined(SYS_WINDOWS)
+# include "share/icons/64x64/mkvinfo.h"
+#endif
 
 using namespace libebml;
 using namespace libmatroska;
@@ -68,10 +71,12 @@ mi_app::get_ui_locale() {
 
 bool
 mi_app::OnInit() {
+  wxImage::AddHandler(new wxPNGHandler);
+
   wxConfigBase *cfg = new wxConfig(wxT("mkvmergeGUI"));
   wxConfigBase::Set(cfg);
 
-  setup(get_ui_locale());
+  setup(to_utf8(wxString{this->argv[0]}).c_str(), get_ui_locale());
 
   frame = new mi_frame(wxT("mkvinfo"), wxPoint(50, 50), wxSize(600, 400));
   frame->Show(true);
@@ -90,14 +95,14 @@ mi_frame::mi_frame(const wxString &title,
                    const wxPoint &pos,
                    const wxSize &size,
                    long style)
-  : wxFrame(NULL, -1, title, pos, size, style)
+  : wxFrame(nullptr, -1, title, pos, size, style)
   , dnd_load(new mi_dndfile)
   , show_all_elements(0 != g_options.m_verbose)
   , expand_important_elements(true)
   , file_open(false)
   , tree(new wxTreeCtrl(this, 4254))
 {
-  SetIcon(wxIcon(mkvinfo_xpm));
+  SetIcon(wx_get_png_or_icon(mkvinfo));
 
   menu_file           = new wxMenu();
   menu_options        = new wxMenu();
@@ -279,7 +284,7 @@ mi_frame::on_file_savetext(wxCommandEvent &WXUNUSED(event)) {
   if (file_dialog.ShowModal() == wxID_OK) {
     last_dir = file_dialog.GetDirectory();
     FILE *f = fopen(wxMB(file_dialog.GetPath()), "w");
-    if (NULL == f) {
+    if (!f) {
       show_error(wxString::Format(Z("Could not create the file '%s'."), file_dialog.GetPath().c_str()));
       return;
     }
@@ -411,16 +416,24 @@ ui_show_progress(int percentage,
   frame->show_progress(percentage, wxU(text.c_str()));
 }
 
+#if defined(SYS_WINDOWS)
+int
+ui_run(int,
+       char **) {
+  FreeConsole();
+  wxEntry(GetModuleHandle(0), 0, 0, 0);
+  return 0;
+}
+
+#else  // defined(SYS_WINDOWS)
 int
 ui_run(int argc,
        char **argv) {
-#if defined(SYS_WINDOWS)
-  FreeConsole();
-#endif
-
   wxEntry(argc, argv);
   return 0;
 }
+
+#endif  // defined(SYS_WINDOWS)
 
 bool
 ui_graphical_available() {

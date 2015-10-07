@@ -6,7 +6,7 @@ class T_042X_vorbis < Test
   end
 
   def run
-    return xtr_tracks_s(7)
+    xtr_tracks_s 6
   end
 end
 

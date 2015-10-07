@@ -1,13 +1,13 @@
 '\" t
 .\"     Title: mkvextract
 .\"    Author: Moritz Bunkus <moritz@bunkus.org>
-.\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
-.\"      Date: 2011-11-27
+.\" Generator: DocBook XSL Stylesheets v1.78.1 <http://docbook.sf.net/>
+.\"      Date: 2014-04-18
 .\"    Manual: User Commands
-.\"    Source: MKVToolNix 5.1.0
+.\"    Source: MKVToolNix 6.9.1
 .\"  Language: English
 .\"
-.TH "MKVEXTRACT" "1" "2011\-11\-27" "MKVToolNix 5\&.1\&.0" "User Commands"
+.TH "MKVEXTRACT" "1" "2014\-04\-18" "MKVToolNix 6\&.9\&.1" "User Commands"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -93,6 +93,22 @@ will cause
 to output a list of available translations\&.
 .RE
 .PP
+\fB\-\-debug\fR \fItopic\fR
+.RS 4
+Turn on debugging for a specific feature\&. This option is only useful for developers\&.
+.RE
+.PP
+\fB\-\-engage\fR \fIfeature\fR
+.RS 4
+Turn on experimental features\&. A list of available features can be requested with
+\fBmkvextract \-\-engage list\fR\&. These features are not meant to be used in normal situations\&.
+.RE
+.PP
+\fB\-\-gui\-mode\fR
+.RS 4
+Turns on GUI mode\&. In this mode specially\-formatted lines may be output that can tell a controlling GUI what\*(Aqs happening\&. These messages follow the format \*(Aq#GUI#message\*(Aq\&. The message may be followed by key/value pairs as in \*(Aq#GUI#message#key1=value1#key2=value2\&...\*(Aq\&. Neither the messages nor the keys are ever translated and always output in English\&.
+.RE
+.PP
 \fB\-v\fR, \fB\-\-verbose\fR
 .RS 4
 Be verbose and show all the important
@@ -113,7 +129,7 @@ Show version information and exit\&.
 \fB\-\-check\-for\-updates\fR
 .RS 4
 Checks online for new releases by downloading the URL
-http://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xml\&. Four lines will be output in
+\m[blue]\fBhttp://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xml\fR\m[]\&. Four lines will be output in
 key=value
 style: the URL from where the information was retrieved (key
 version_check_url), the currently running version (key
@@ -154,12 +170,7 @@ source\&.mkv
 .SS "Track extraction mode"
 .PP
 Syntax:
-\fBmkvextract\fR
-\fBtracks\fR
-\fIsource\-filename\fR
-[\fIoptions\fR]
-\fITID1:dest\-filename1\fR
-[\fITID2:dest\-filename2\fR \&.\&.\&.]
+\fBmkvextract \fR\fB\fBtracks\fR\fR\fB \fR\fB\fIsource\-filename\fR\fR\fB \fR\fB[\fIoptions\fR]\fR\fB \fR\fB\fITID1:dest\-filename1\fR\fR\fB \fR\fB[\fITID2:dest\-filename2\fR \&.\&.\&.]\fR
 .PP
 The following command line options are available for each track in the \*(Aqtracks\*(Aq extraction mode\&. They have to appear in front of the track specification (see below) they should be applied to\&.
 .PP
@@ -230,10 +241,7 @@ $ mkvextract tracks input\&.mkv 1:output\-two\-tracks\&.rm 2:output\-two\-tracks
 .SS "Tags extraction mode"
 .PP
 Syntax:
-\fBmkvextract\fR
-\fBtags\fR
-\fIsource\-filename\fR
-[\fIoptions\fR]
+\fBmkvextract \fR\fB\fBtags\fR\fR\fB \fR\fB\fIsource\-filename\fR\fR\fB \fR\fB[\fIoptions\fR]\fR
 .PP
 The extracted tags are written to the console unless the output is redirected (see the section about
 output redirection
@@ -241,12 +249,7 @@ for details)\&.
 .SS "Attachments extraction mode"
 .PP
 Syntax:
-\fBmkvextract\fR
-\fBattachments\fR
-\fIsource\-filename\fR
-[\fIoptions\fR]
-\fIAID1:outname1\fR
-[\fIAID2:outname2\fR \&.\&.\&.]
+\fBmkvextract \fR\fB\fBattachments\fR\fR\fB \fR\fB\fIsource\-filename\fR\fR\fB \fR\fB[\fIoptions\fR]\fR\fB \fR\fB\fIAID1:outname1\fR\fR\fB \fR\fB[\fIAID2:outname2\fR \&.\&.\&.]\fR
 .PP
 \fIAID\fR:\fIoutname\fR
 .RS 4
@@ -266,10 +269,7 @@ option\&.
 .SS "Chapters extraction mode"
 .PP
 Syntax:
-\fBmkvextract\fR
-\fBchapters\fR
-\fIsource\-filename\fR
-[\fIoptions\fR]
+\fBmkvextract \fR\fB\fBchapters\fR\fR\fB \fR\fB\fIsource\-filename\fR\fR\fB \fR\fB[\fIoptions\fR]\fR
 .PP
 \fB\-s\fR, \fB\-\-simple\fR
 .RS 4
@@ -286,10 +286,7 @@ for details)\&.
 .SS "Cue sheet extraction mode"
 .PP
 Syntax:
-\fBmkvextract\fR
-\fBcuesheet\fR
-\fIsource\-filename\fR
-[\fIoptions\fR]
+\fBmkvextract \fR\fB\fBcuesheet\fR\fR\fB \fR\fB\fIsource\-filename\fR\fR\fB \fR\fB[\fIoptions\fR]\fR
 .PP
 The extracted cue sheet is written to the console unless the output is redirected (see the section about
 output redirection
@@ -297,12 +294,7 @@ for details)\&.
 .SS "Timecode extraction mode"
 .PP
 Syntax:
-\fBmkvextract\fR
-\fBtimecodes_v2\fR
-\fIsource\-filename\fR
-[\fIoptions\fR]
-\fITID1:dest\-filename1\fR
-[\fITID2:dest\-filename2\fR \&.\&.\&.]
+\fBmkvextract \fR\fB\fBtimecodes_v2\fR\fR\fB \fR\fB\fIsource\-filename\fR\fR\fB \fR\fB[\fIoptions\fR]\fR\fB \fR\fB\fITID1:dest\-filename1\fR\fR\fB \fR\fB[\fITID2:dest\-filename2\fR \&.\&.\&.]\fR
 .PP
 The extracted timecodes are written to the console unless the output is redirected (see the section about
 output redirection
@@ -351,7 +343,6 @@ $ mkvextract tags source\&.mkv > tags\&.xml
 .RE
 .\}
 .PP
-
 \fBmkvextract\fR(1)\*(Aqs own redirection is invoked with the
 \fB\-\-redirect\-output\fR
 option\&. Example:
@@ -385,13 +376,17 @@ option because
 sometimes interpretes special characters before they\*(Aqre written into the output file resulting in broken output\&.
 .sp .5v
 .RE
+.SH "TEXT FILES AND CHARACTER SET CONVERSIONS"
+.PP
+For an in\-depth discussion about how all tools in the MKVToolNix suite handle character set conversions, input/output encoding, command line encoding and console encoding please see the identically\-named section in the
+\fBmkvmerge\fR(1)
+man page\&.
 .SH "OUTPUT FILE FORMATS"
 .PP
 The decision about the output format is based on the track type, not on the extension used for the output file name\&. The following track types are supported at the moment:
 .PP
 V_MPEG4/ISO/AVC
 .RS 4
-
 H\&.264
 /
 AVC
@@ -417,10 +412,34 @@ files\&.
 .PP
 V_REAL/*
 .RS 4
-
 RealVideo(TM)
 tracks are written to
 RealMedia(TM)
+files\&.
+.RE
+.PP
+V_THEORA
+.RS 4
+Theora(TM)
+streams will be written within an
+Ogg(TM)
+container
+.RE
+.PP
+V_VP8, V_VP9
+.RS 4
+VP8
+/
+VP9
+tracks are written to
+IVF
+files\&.
+.RE
+.PP
+A_MPEG/L2
+.RS 4
+MPEG\-1 Audio Layer II streams will be extracted to raw
+MP2
 files\&.
 .RE
 .PP
@@ -464,7 +483,6 @@ file\&.
 .PP
 A_REAL/*
 .RS 4
-
 RealAudio(TM)
 tracks are written to
 RealMedia(TM)
@@ -473,7 +491,6 @@ files\&.
 .PP
 A_TTA1
 .RS 4
-
 TrueAudio(TM)
 tracks are written to
 TTA
@@ -482,6 +499,38 @@ Matroska(TM)\*(Aqs limited timecode precision the extracted file\*(Aqs header wi
 \fIdata_length\fR
 (the total number of samples in the file) and the
 CRC\&.
+.RE
+.PP
+A_ALAC
+.RS 4
+ALAC
+tracks are written to
+CAF
+files\&.
+.RE
+.PP
+A_FLAC
+.RS 4
+FLAC
+tracks are written to raw
+FLAC
+files\&.
+.RE
+.PP
+A_WAVPACK4
+.RS 4
+WavPack(TM)
+tracks are written to
+WV
+files\&.
+.RE
+.PP
+A_OPUS
+.RS 4
+Opus(TM)
+tracks are written to
+OggOpus(TM)
+files\&.
 .RE
 .PP
 S_TEXT/UTF8
@@ -493,7 +542,6 @@ files\&.
 .PP
 S_TEXT/SSA, S_TEXT/ASS
 .RS 4
-
 SSA
 and
 ASS
@@ -504,11 +552,36 @@ files respectively\&.
 .PP
 S_KATE
 .RS 4
-
 Kate(TM)
 streams will be written within an
 Ogg(TM)
 container\&.
+.RE
+.PP
+S_VOBSUB
+.RS 4
+VobSub(TM)
+subtitles will be written as
+SUB
+files along with the respective index files, as
+IDX
+files\&.
+.RE
+.PP
+S_TEXT/USF
+.RS 4
+USF
+text subtitles will be written as
+USF
+files\&.
+.RE
+.PP
+S_HDMV/PGS
+.RS 4
+PGS
+subtitles will be written as
+SUP
+files\&.
 .RE
 .PP
 Tags
@@ -543,7 +616,6 @@ Timecodes are first sorted and then output as a timecode v2 format compliant fil
 .RE
 .SH "EXIT CODES"
 .PP
-
 \fBmkvextract\fR(1)
 exits with one of three exit codes:
 .sp
@@ -555,7 +627,6 @@ exits with one of three exit codes:
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB0\fR
 \-\- This exit codes means that extraction has completed successfully\&.
 .RE
@@ -568,7 +639,6 @@ exits with one of three exit codes:
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB1\fR
 \-\- In this case
 \fBmkvextract\fR(1)
@@ -583,7 +653,6 @@ has output at least one warning, but extraction did continue\&. A warning is pre
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB2\fR
 \-\- This exit code is used after an error occurred\&.
 \fBmkvextract\fR(1)
@@ -594,9 +663,36 @@ aborts right after outputting the error message\&. Error messages range from wro
 There are a few places in which special characters in text must or should be escaped\&. The rules for escaping are simple: each character that needs escaping is replaced with a backslash followed by another character\&.
 .PP
 The rules are: \*(Aq \*(Aq (a space) becomes \*(Aq\es\*(Aq, \*(Aq"\*(Aq (double quotes) becomes \*(Aq\e2\*(Aq, \*(Aq:\*(Aq becomes \*(Aq\ec\*(Aq, \*(Aq#\*(Aq becomes \*(Aq\eh\*(Aq and \*(Aq\e\*(Aq (a single backslash) itself becomes \*(Aq\e\e\*(Aq\&.
+.SH "ENVIRONMENT VARIABLES"
+.PP
+\fBmkvextract\fR(1)
+uses the default variables that determine the system\*(Aqs locale (e\&.g\&.
+\fILANG\fR
+and the
+\fILC_*\fR
+family)\&. Additional variables:
+.PP
+\fIMKVTOOLNIX_DEBUG\fR and its short form \fIMTX_DEBUG\fR
+.RS 4
+The content is treated as if it had been passed via the
+\fB\-\-debug\fR
+option\&.
+.RE
+.PP
+\fIMKVTOOLNIX_ENGAGE\fR and its short form \fIMTX_ENGAGE\fR
+.RS 4
+The content is treated as if it had been passed via the
+\fB\-\-engage\fR
+option\&.
+.RE
+.PP
+\fIMKVTOOLNIX_OPTIONS\fR and its short form \fIMTX_OPTIONS\fR
+.RS 4
+The content is split on white space\&. The resulting partial strings are treated as if it had been passed as command line options\&. If you need to pass special characters (e\&.g\&. spaces) then you have to escape them (see
+the section about escaping special characters in text)\&.
+.RE
 .SH "SEE ALSO"
 .PP
-
 \fBmkvmerge\fR(1),
 \fBmkvinfo\fR(1),
 \fBmkvpropedit\fR(1),

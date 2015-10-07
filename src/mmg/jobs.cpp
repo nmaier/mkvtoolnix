@@ -11,14 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
-
-#include <errno.h>
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-
-#include <wx/wxprec.h>
+#include "common/common_pch.h"
 
 #include <wx/wx.h>
 #include <wx/clipbrd.h>
@@ -47,17 +40,19 @@
 
 job_run_dialog::job_run_dialog(wxWindow *,
                                std::vector<int> &n_jobs_to_start)
-  : wxDialog(NULL, -1, Z("mkvmerge is running"), wxDefaultPosition, wxSize(400, 700), wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxMINIMIZE_BOX | wxMAXIMIZE_BOX)
+  : wxDialog(nullptr, -1, Z("mkvmerge is running"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxMINIMIZE_BOX | wxMAXIMIZE_BOX)
   , t_update(new wxTimer(this, 1))
-  , out(NULL)
-  , process(NULL)
+  , out(nullptr)
+  , process(nullptr)
   , abort(false)
   , jobs_to_start(n_jobs_to_start)
   , current_job(-1)
   , m_progress(0)
+  , m_scanning_playlists{}
 #if defined(SYS_WINDOWS)
-  , m_taskbar_progress(NULL)
+  , m_taskbar_progress(nullptr)
 #endif
+  , m_geometry_saver{this, "job_run_dialog"}
 {
   wxBoxSizer *siz_all      = new wxBoxSizer(wxVERTICAL);
   wxStaticBoxSizer *siz_sb = new wxStaticBoxSizer(new wxStaticBox(this, -1, Z("Status and progress")), wxVERTICAL);
@@ -112,7 +107,9 @@ job_run_dialog::job_run_dialog(wxWindow *,
   siz_all->Add(siz_line, 0, wxGROW | wxTOP | wxBOTTOM, 10);
   siz_all->SetSizeHints(this);
 
-  SetSizer(siz_all);
+  SetSizerAndFit(siz_all);
+
+  m_geometry_saver.set_default_size(700, 700, true).restore();
 
 #if defined(SYS_WINDOWS)
   if (get_windows_version() >= WINDOWS_VERSION_7)
@@ -151,7 +148,7 @@ job_run_dialog::start_next_job() {
     st_remaining_time_total->SetLabel(wxT("---"));
 
 #if defined(SYS_WINDOWS)
-    if (NULL != m_taskbar_progress)
+    if (m_taskbar_progress)
       m_taskbar_progress->set_state(TBPF_NOPROGRESS);
 #endif
 
@@ -163,7 +160,7 @@ job_run_dialog::start_next_job() {
   st_remaining_time->SetLabel(Z("is being estimated"));
 
 #if defined(SYS_WINDOWS)
-  if (NULL != m_taskbar_progress) {
+  if (m_taskbar_progress) {
     m_taskbar_progress->set_state(TBPF_NORMAL);
     m_taskbar_progress->set_value(current_job * 100, jobs_to_start.size() * 100);
   }
@@ -175,7 +172,7 @@ job_run_dialog::start_next_job() {
 
   mdlg->load(wxString::Format(wxT("%s/%d.mmg"), app->get_jobs_folder().c_str(), jobs[ndx].id), true);
 
-  opt_file_name.Printf(wxT("%smmg-mkvmerge-options-%d-%d"), get_temp_dir().c_str(), (int)wxGetProcessId(), (int)wxGetUTCTime());
+  opt_file_name = get_temp_settings_file_name();
 
   wxFile *opt_file;
   try {
@@ -185,9 +182,9 @@ job_run_dialog::start_next_job() {
                           opt_file_name.c_str(), errno, wxUCS(strerror(errno)));
     jobs[ndx].status = JOBS_FAILED;
     mdlg->save_job_queue();
-    if (NULL != process) {
+    if (process) {
       delete process;
-      process = NULL;
+      process = nullptr;
     }
     start_next_job();
     return;
@@ -195,6 +192,7 @@ job_run_dialog::start_next_job() {
 
   static const unsigned char utf8_bom[3] = {0xef, 0xbb, 0xbf};
   opt_file->Write(utf8_bom, 3);
+  opt_file->Write(wxT("--gui-mode\n"));
 
   mdlg->update_command_line();
   wxArrayString *arg_list = &mdlg->get_command_line_args();
@@ -232,7 +230,7 @@ job_run_dialog::start_next_job() {
 
 void
 job_run_dialog::process_input() {
-  if (NULL == process)
+  if (!process)
     return;
 
   while (process->IsInputAvailable()) {
@@ -246,7 +244,22 @@ job_run_dialog::process_input() {
 
     if (got_char && ((c == '\n') || (c == '\r') || out->Eof())) {
       wxString wx_line = wxU(line);
-      if (wx_line.Find(Z("Progress")) == 0) {
+
+      if (wx_line.Find(wxT("#GUI#begin_scanning_playlists")) == 0)
+        m_scanning_playlists = true;
+
+      else if (wx_line.Find(wxT("#GUI#end_scanning_playlists")) == 0) {
+        m_scanning_playlists         = false;
+
+        m_start_time                 = get_current_time_millis();
+        m_next_remaining_time_update = m_start_time + 8000;
+
+        if (!current_job) {
+          m_start_time_total                 = m_start_time;
+          m_next_remaining_time_update_total = m_next_remaining_time_update;
+        }
+
+      } else if (wx_line.Find(Z("Progress")) == 0) {
         int percent_pos = wx_line.Find(wxT("%"));
         if (0 < percent_pos) {
           wx_line.Remove(percent_pos);
@@ -272,19 +285,19 @@ job_run_dialog::process_input() {
 
 void
 job_run_dialog::set_progress_value(long value) {
-  m_progress = current_job * 100 + value;
+  m_progress = current_job * 100 + (m_scanning_playlists ? 0 : value);
   g_progress->SetValue(value);
   g_jobs->SetValue(m_progress);
 
 #if defined(SYS_WINDOWS)
-  if (NULL != m_taskbar_progress)
+  if (m_taskbar_progress)
     m_taskbar_progress->set_value(current_job * 100 + value, jobs_to_start.size() * 100);
 #endif
 }
 
 void
 job_run_dialog::update_remaining_time() {
-  if (0 == m_progress)
+  if (m_scanning_playlists || !m_progress)
     return;
 
   int64_t now = get_current_time_millis();
@@ -324,7 +337,7 @@ job_run_dialog::on_abort(wxCommandEvent &) {
   abort = true;
 #if defined(SYS_WINDOWS)
   wxKill(pid, wxSIGKILL);
-  if (NULL != m_taskbar_progress)
+  if (m_taskbar_progress)
     m_taskbar_progress->set_state(TBPF_ERROR);
 #else
   wxKill(pid, wxSIGTERM);
@@ -335,32 +348,44 @@ void
 job_run_dialog::on_end_process(wxProcessEvent &evt) {
   process_input();
 
-  int ndx       = jobs_to_start[current_job];
-  int exit_code = evt.GetExitCode();
+  int ndx         = jobs_to_start[current_job];
+  int exit_code   = evt.GetExitCode();
+  bool remove_job;
   wxString status;
 
   if (abort) {
     jobs[ndx].status = JOBS_ABORTED;
     status           = Z("aborted");
+    remove_job       = false;
   } else if (0 == exit_code) {
     jobs[ndx].status = JOBS_DONE;
     status           = Z("completed OK");
+    remove_job       = CJAR_NEVER != mdlg->options.clear_job_after_run_mode;
   } else if (1 == exit_code) {
     jobs[ndx].status = JOBS_DONE_WARNINGS;
     status           = Z("completed with warnings");
+    remove_job       = (CJAR_ALWAYS == mdlg->options.clear_job_after_run_mode) || (CJAR_WARNINGS == mdlg->options.clear_job_after_run_mode);
   } else {
     jobs[ndx].status = JOBS_FAILED;
     status           = Z("failed");
+    remove_job        = CJAR_ALWAYS == mdlg->options.clear_job_after_run_mode;
   }
 
   jobs[ndx].finished_on = wxGetUTCTime();
 
   add_to_log(wxString::Format(Z("Finished job ID %d on %s: status '%s'"), jobs[ndx].id, format_date_time(jobs[ndx].finished_on).c_str(), status.c_str()));
 
+  if (remove_job) {
+    jobs.erase(jobs.begin() + ndx, jobs.begin() + ndx + 1);
+    for (auto idx = 0u; jobs_to_start.size() > idx; ++idx)
+      if (jobs_to_start[idx] >= ndx)
+        jobs_to_start[idx]--;
+  }
+
   mdlg->save_job_queue();
   delete process;
-  process = NULL;
-  out     = NULL;
+  process = nullptr;
+  out     = nullptr;
 
   wxRemoveFile(opt_file_name);
 
@@ -384,6 +409,7 @@ job_log_dialog::job_log_dialog(wxWindow *parent,
                                wxString &log)
   : wxDialog(parent, -1, Z("Job output"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
   , text(log)
+  , m_geometry_saver{this, "job_log_dialog"}
 {
   wxBoxSizer *siz_all = new wxBoxSizer(wxVERTICAL);
   siz_all->Add(new wxStaticText(this, -1, Z("Output of the selected jobs:")), 0, wxALIGN_LEFT | wxLEFT | wxTOP, 10);
@@ -400,14 +426,16 @@ job_log_dialog::job_log_dialog(wxWindow *parent,
   siz_buttons->Add(1, 0, 1, wxGROW, 0);
   siz_all->Add(siz_buttons, 0, wxGROW | wxTOP | wxBOTTOM, 10);
   siz_all->SetSizeHints(this);
-  SetSizer(siz_all);
+  SetSizerAndFit(siz_all);
+
+  m_geometry_saver.set_default_size(900, 500, true).restore();
 
   ShowModal();
 }
 
 void
 job_log_dialog::on_save(wxCommandEvent &) {
-  wxFileDialog dialog(NULL, Z("Choose an output file"), last_open_dir, wxEmptyString, wxString::Format(Z("Text files (*.txt)|*.txt|%s"), ALLFILES.c_str()), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+  wxFileDialog dialog(nullptr, Z("Choose an output file"), last_open_dir, wxEmptyString, wxString::Format(Z("Text files (*.txt)|*.txt|%s"), ALLFILES.c_str()), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
   if(dialog.ShowModal() != wxID_OK)
     return;
 
@@ -422,8 +450,9 @@ job_log_dialog::on_save(wxCommandEvent &) {
 
 // ---------------------------------------------------
 
-job_dialog::job_dialog(wxWindow *parent):
-  wxDialog(parent, -1, Z("Job queue management"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxMINIMIZE_BOX | wxMAXIMIZE_BOX) {
+job_dialog::job_dialog(wxWindow *parent)
+  : wxDialog(parent, -1, Z("Job queue management"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxMINIMIZE_BOX | wxMAXIMIZE_BOX)
+  , m_geometry_saver{this, "job_dialog"} {
 
   wxBoxSizer *siz_all = new wxBoxSizer(wxVERTICAL);
   siz_all->Add(new wxStaticText(this, -1, Z("Current and past jobs:")), 0, wxALIGN_LEFT | wxALL, 10);
@@ -466,28 +495,28 @@ job_dialog::job_dialog(wxWindow *parent):
 
   wxBoxSizer *siz_b_right = new wxBoxSizer(wxVERTICAL);
   b_up = new wxButton(this, ID_JOBS_B_UP, Z("&Up"));
-  b_up->SetToolTip(TIP("Move the selected job(s) up"));
+  b_up->SetToolTip(TIP("Move the selected jobs up"));
   siz_b_right->Add(b_up, 0, wxGROW | wxLEFT | wxBOTTOM, 10);
   b_down = new wxButton(this, ID_JOBS_B_DOWN, Z("&Down"));
-  b_down->SetToolTip(TIP("Move the selected job(s) down"));
+  b_down->SetToolTip(TIP("Move the selected jobs down"));
   siz_b_right->Add(b_down, 0, wxGROW | wxLEFT | wxBOTTOM, 10);
   siz_b_right->AddSpacer(15);
 
   b_reenable = new wxButton(this, ID_JOBS_B_REENABLE, Z("&Re-enable"));
-  b_reenable->SetToolTip(TIP("Re-enable the selected job(s)"));
+  b_reenable->SetToolTip(TIP("Re-enable the selected jobs"));
   siz_b_right->Add(b_reenable, 0, wxGROW | wxLEFT | wxBOTTOM, 10);
   b_disable = new wxButton(this, ID_JOBS_B_DISABLE, Z("&Disable"));
-  b_disable->SetToolTip(TIP("Disable the selected job(s) and sets their status to 'done'"));
+  b_disable->SetToolTip(TIP("Disable the selected jobs and set their status to 'done'"));
   siz_b_right->Add(b_disable, 0, wxGROW | wxLEFT | wxBOTTOM, 10);
   siz_b_right->AddSpacer(15);
 
   b_delete = new wxButton(this, ID_JOBS_B_DELETE, Z("D&elete"));
-  b_delete->SetToolTip(TIP("Delete the selected job(s) from the job queue"));
+  b_delete->SetToolTip(TIP("Delete the selected jobs from the job queue"));
   siz_b_right->Add(b_delete, 0, wxGROW | wxLEFT | wxBOTTOM, 10);
   siz_b_right->AddSpacer(15);
 
   b_view_log = new wxButton(this, ID_JOBS_B_VIEW_LOG, Z("&View log"));
-  b_view_log->SetToolTip(TIP("View the output that mkvmerge generated during the muxing process for the selected job(s)"));
+  b_view_log->SetToolTip(TIP("View the output that mkvmerge generated during the muxing process for the selected jobs"));
   siz_b_right->Add(b_view_log, 0, wxGROW | wxLEFT, 10);
   siz_line->Add(siz_b_right, 0, 0, 0);
   siz_all->Add(siz_line, 1, wxGROW | wxLEFT | wxRIGHT, 10);
@@ -505,11 +534,13 @@ job_dialog::job_dialog(wxWindow *parent):
   siz_b_bottom->Add(b_start, 0, wxGROW | wxRIGHT, 10);
   siz_b_bottom->Add(10, 0, 0, 0, 0);
   b_start_selected = new wxButton(this, ID_JOBS_B_START_SELECTED, Z("S&tart selected"));
-  b_start_selected->SetToolTip(TIP("Start the selected job(s) regardless of their status"));
+  b_start_selected->SetToolTip(TIP("Start the selected jobs regardless of their status"));
   siz_b_bottom->Add(b_start_selected, 0, wxGROW | wxLEFT, 10);
   siz_all->Add(siz_b_bottom, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 10);
   siz_all->SetSizeHints(this);
-  SetSizer(siz_all);
+  SetSizerAndFit(siz_all);
+
+  m_geometry_saver.set_default_size(800, 500, true).restore();
 
   enable_buttons(false);
 

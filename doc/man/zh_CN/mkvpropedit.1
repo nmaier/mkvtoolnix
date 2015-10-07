@@ -1,13 +1,13 @@
 '\" t
 .\"     Title: mkvpropedit
 .\"    Author: Moritz Bunkus <moritz@bunkus.org>
-.\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
-.\"      Date: 2011-11-27
+.\" Generator: DocBook XSL Stylesheets v1.78.1 <http://docbook.sf.net/>
+.\"      Date: 2014-04-18
 .\"    Manual: 用户命令
-.\"    Source: MKVToolNix 5.1.0
+.\"    Source: MKVToolNix 6.9.1
 .\"  Language: Chinese
 .\"
-.TH "MKVPROPEDIT" "1" "2011\-11\-27" "MKVToolNix 5\&.1\&.0" "用户命令"
+.TH "MKVPROPEDIT" "1" "2014\-04\-18" "MKVToolNix 6\&.9\&.1" "用户命令"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -52,7 +52,7 @@ Matroska(TM)
 设置解析模式。参数 \*(Aq\fI模式\fR\*(Aq 可以为 \*(Aqfast（快速）\*(Aq（此项为默认值）或 \*(Aqfull（完整）\*(Aq。\*(Aqfast（快速）\*(Aq模式不解析整个文件，而是使用元定位元素确定源文件中所需元素的位置。99% 的情况下这就足够了。但如果碰到不含元定位元素或者元定位元素损坏的文件，用户可能得考虑 \*(Aqfull（完整）\*(Aq 解析模式。完整扫描文件可能要花费几分钟，而快速扫描只需要几秒钟。
 .RE
 .PP
-操作:
+轨道、剪辑信息属性处理操作:
 .PP
 \fB\-e\fR, \fB\-\-edit\fR \fI选择器\fR
 .RS 4
@@ -95,6 +95,8 @@ Matroska(TM)
 的属性。注意部分属性是必需的，不能删除。
 .RE
 .PP
+标签及章节处理操作:
+.PP
 \fB\-t\fR, \fB\-\-tags\fR \fI选择器\fR:\fI文件名\fR
 .RS 4
 用
@@ -106,7 +108,6 @@ Matroska(TM)
 \fBmkvmerge\fR(1)
 所读取的相同。
 .sp
-
 \fI选择器\fR
 必须是
 \fBall\fR、\fBglobal\fR
@@ -139,6 +140,102 @@ Matroska(TM)
 读取的 XML 及简单章节格式与
 \fBmkvmerge\fR(1)
 所读取的相同。
+.RE
+.PP
+附件处理操作:
+.PP
+\fB\-\-add\-attachment\fR \fI文件名\fR
+.RS 4
+从
+\fI文件名\fR
+添加新附件。
+.sp
+若本选项之前使用了
+\fB\-\-attachment\-name\fR
+选项，则其值将用作新附件的名称。否则附件名称将从
+\fI文件名\fR
+得出。
+.sp
+若本选项之前使用了
+\fB\-\-attachment\-mime\-type\fR
+选项，则其值将用作新附件的 MIME 类型。否则将根据
+\fI文件名\fR
+的内容自动侦测。
+.sp
+若本选项之前使用了
+\fB\-\-attachment\-description\fR
+选项，则其值将用作新附件的描述。否则将不设置描述信息。
+.RE
+.PP
+\fB\-\-replace\-attachment\fR \fI选择器\fR:\fI文件名\fR
+.RS 4
+用文件
+\fI文件名\fR
+替换与
+\fI选择器\fR
+相匹配的一或多个附件。如果有超过一个现有附件与
+\fI选择器\fR
+相匹配，则其所有内容均将被
+\fI文件名\fR
+的内容替代。
+.sp
+\fI选择器\fR
+可以有四种格式。各格式说明位于下文
+附件选择器
+段落。
+.sp
+若本选项之前使用了
+\fB\-\-attachment\-name\fR
+选项，则其值将用作新附件的替代名称。否则名称将不会变化。
+.sp
+若本选项之前使用了
+\fB\-\-attachment\-mime\-type\fR
+选项，则其值将替代附件的 MIME 类型。否则 MIME 类型将不会变化。
+.sp
+若本选项之前使用了
+\fB\-\-attachment\-description\fR
+选项，则其值将替代附件的描述。否则描述将不会变化。
+.RE
+.PP
+\fB\-\-delete\-attachment\fR \fI选择器\fR
+.RS 4
+删除与
+\fI选择器\fR
+相匹配的一或多个附件。
+.sp
+\fI选择器\fR
+可以有四种格式。各格式说明位于下文
+附件选择器
+段落。
+.RE
+.PP
+附件操作选项:
+.PP
+\fB\-\-attachment\-name\fR \fI名称\fR
+.RS 4
+设置接下来
+\fB\-\-add\-attachment\fR
+或
+\fB\-\-replace\-attachment\fR
+操作要使用的名称。
+.RE
+.PP
+\fB\-\-attachment\-mime\-type\fR \fImime 类型\fR
+.RS 4
+设置接下来
+\fB\-\-add\-attachment\fR
+或
+\fB\-\-replace\-attachment\fR
+操作要使用的 MIME 类型。
+.RE
+.PP
+\fB\-\-attachment\-description\fR \fI描述\fR
+.RS 4
+设置接下来
+\fB\-\-add\-attachment\fR
+或
+\fB\-\-replace\-attachment\fR
+操作要使用的描述。
 .RE
 .PP
 其他选项：
@@ -177,6 +274,23 @@ Matroska(TM)
 将输出可用翻译列表。
 .RE
 .PP
+\fB\-\-debug\fR \fI主题\fR
+.RS 4
+为特定功能开启调试。该选项仅对开发者有用。
+.RE
+.PP
+\fB\-\-engage\fR \fI功能\fR
+.RS 4
+开启实验性功能。可用功能列表可通过
+\fBmkvpropedit \-\-engage list\fR
+得到。这些功能在正常情况下不应该使用。
+.RE
+.PP
+\fB\-\-gui\-mode\fR
+.RS 4
+Turns on GUI mode\&. In this mode specially\-formatted lines may be output that can tell a controlling GUI what\*(Aqs happening\&. These messages follow the format \*(Aq#GUI#message\*(Aq\&. The message may be followed by key/value pairs as in \*(Aq#GUI#message#key1=value1#key2=value2\&...\*(Aq\&. Neither the messages nor the keys are ever translated and always output in English\&.
+.RE
+.PP
 \fB\-v\fR, \fB\-\-verbose\fR
 .RS 4
 使输出信息更详尽，且每当读取到重要的
@@ -197,12 +311,12 @@ Matroska(TM)
 \fB\-\-check\-for\-updates\fR
 .RS 4
 联机下载 URL
-http://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xml
-检查新版本。将以
+\m[blue]\fBhttp://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xml\fR\m[]
+以检查新版本。将以
 键=值
 的样式输出四行: 检索信息的 URL（键
 version_check_url），当前运行的版本（键
-running_version），最新版本（键
+running_version），最新版本号（键
 available_version）及其下载 URL（键
 download_url）。
 .sp
@@ -211,7 +325,7 @@ download_url）。
 此选项仅当程序附带 libcurl 支持编译时可用。
 .RE
 .PP
-\fB@\fR\fIoptions\-file\fR
+\fB@\fR\fI选项文件\fR
 .RS 4
 从文件
 \fI选项文件\fR
@@ -225,14 +339,14 @@ download_url）。
 .RS 4
 .\}
 .nf
-# Modify source\&.mkv
-source\&.mkv
-# Edit the second audio track
+# 修改 源\&.mkv
+源\&.mkv
+# 编辑第二条音频轨道
 \-\-edit
 track:a2
-# and set the title to \*(AqComments\*(Aq
+# 并设置标题为 \*(Aq评论\*(Aq
 \-\-set
-title=Comments
+name=评论
 .fi
 .if n \{\
 .RE
@@ -240,7 +354,6 @@ title=Comments
 .RE
 .SH "编辑选择器"
 .PP
-
 \fB\-\-edit\fR
 选项设置后续的
 添加,
@@ -275,6 +388,8 @@ UID
 的
 \fB\-\-identify\fR
 选项所输出的相同。
+.sp
+编号从 1 开始。
 .RE
 .PP
 \fBtrack:\fR\fIt\fR\fIn\fR
@@ -292,6 +407,8 @@ UID
 的
 \fB\-\-identify\fR
 选项所输出的相同。
+.sp
+编号从 1 开始。
 .RE
 .PP
 \fBtrack:\fR=\fIuid\fR
@@ -322,6 +439,73 @@ UID
 .SS "注"
 .PP
 由于轨道编辑选择器的特性，一些选择器所匹配的轨道头部可能是相同的。在此情况下，这些编辑选择器的所有操作将被按照在命令行给出的顺序合并运行。
+.SH "附件选择器"
+.PP
+附件选择器可与两项操作
+\fB\-\-replace\-attachment\fR
+及
+\fB\-\-delete\-attachment\fR
+一起使用。它可以有以下四种格式:
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 1.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  1." 4.2
+.\}
+按附件 ID 选择。本格式的选择器仅仅是数字，\fBmkvmerge\fR(1)
+的识别命令所输出的附件 ID。
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 2.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  2." 4.2
+.\}
+按附件 UID (唯一 ID) 选择。本格式的选择器为等号
+=
+后接数字，\fBmkvmerge\fR(1)
+的详尽识别命令所输出的附件的唯一 ID。
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 3.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  3." 4.2
+.\}
+按附件名称选择。本格式的选择器为文字
+name:
+后接现有附件名称。若本选择器与
+\fB\-\-replace\-attachment\fR
+一同使用，则名称中的冒号必须用
+\ec
+转义。
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 4.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  4." 4.2
+.\}
+按 MIME 类型选择。本格式的选择器为文字
+mime\-type:
+后接现有附件的 MIME 类型。若本选择器与
+\fB\-\-replace\-attachment\fR
+一同使用，则 MIME 类型中的冒号必须用
+\ec
+转义。
+.RE
 .SH "示例"
 .PP
 下面的示例将编辑一个名为 \*(Aq电影\&.mkv\*(Aq 的文件。示例中将设置剪辑标题并修改一条音频轨和一条字幕轨的语言代码。附注，本示例可以简写，即省去
@@ -334,7 +518,7 @@ UID
 .RS 4
 .\}
 .nf
-$ mkvpropedit movie\&.mkv \-\-edit info \-\-set "title=The movie" \-\-edit track:a1 \-\-set language=fre \-\-edit track:a2 \-\-set language=ita
+$ mkvpropedit 影片\&.mkv \-\-edit info \-\-set "title=一部影片" \-\-edit track:a1 \-\-set language=fre \-\-edit track:a2 \-\-set language=ita
 .fi
 .if n \{\
 .RE
@@ -350,7 +534,7 @@ $ mkvpropedit movie\&.mkv \-\-edit info \-\-set "title=The movie" \-\-edit track
 .RS 4
 .\}
 .nf
-$ mkvpropedit movie\&.mkv \-\-edit track:s1 \-\-set flag\-default=0 \-\-edit track:s2 \-\-set flag\-default=1
+$ mkvpropedit 影片\&.mkv \-\-edit track:s1 \-\-set flag\-default=0 \-\-edit track:s2 \-\-set flag\-default=1
 .fi
 .if n \{\
 .RE
@@ -362,7 +546,7 @@ $ mkvpropedit movie\&.mkv \-\-edit track:s1 \-\-set flag\-default=0 \-\-edit tra
 .RS 4
 .\}
 .nf
-$ mkvpropedit movie\&.mkv \-\-tags track:s2:new\-subtitle\-tags\&.xml
+$ mkvpropedit 影片\&.mkv \-\-tags track:s2:新字幕标签\&.xml
 .fi
 .if n \{\
 .RE
@@ -374,7 +558,7 @@ $ mkvpropedit movie\&.mkv \-\-tags track:s2:new\-subtitle\-tags\&.xml
 .RS 4
 .\}
 .nf
-$ mkvpropedit movie\&.mkv \-\-tags all:
+$ mkvpropedit 影片\&.mkv \-\-tags all:
 .fi
 .if n \{\
 .RE
@@ -386,7 +570,7 @@ $ mkvpropedit movie\&.mkv \-\-tags all:
 .RS 4
 .\}
 .nf
-$ mkvpropedit movie\&.mkv \-\-chapters new\-chapters\&.xml
+$ mkvpropedit 影片\&.mkv \-\-chapters 新章节\&.xml
 .fi
 .if n \{\
 .RE
@@ -398,14 +582,73 @@ $ mkvpropedit movie\&.mkv \-\-chapters new\-chapters\&.xml
 .RS 4
 .\}
 .nf
-$ mkvpropedit movie\&.mkv \-\-chapters \*(Aq\*(Aq
+$ mkvpropedit 影片\&.mkv \-\-chapters \*(Aq\*(Aq
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+将字体文件 (Arial\&.ttf) 作为附件添加:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit 影片\&.mkv \-\-add\-attachment Arial\&.ttf
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+将字体文件 (89719823\&.ttf) 作为附件添加，并提供信息，因为它真的就是 Arial:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit 影片\&.mkv \-\-attachment\-name Arial\&.ttf \-\-attachment\-description \*(AqArial 字体，TrueType 类型\*(Aq \-\-attachment\-mime\-type application/x\-truetype\-font \-\-add\-attachment 89719823\&.ttf
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+将已经附加的字体 (Comit\&.ttf) 替换为另一个 (Arial\&.ttf):
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit 影片\&.mkv \-\-attachment\-name Arial\&.ttf \-\-attachment\-description \*(AqArial 字体，TrueType 类型\*(Aq \-\-replace\-attachment name:Comic\&.ttf:Arial\&.ttf
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+删除附加的第二个文件，不论它是什么:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit 影片\&.mkv \-\-delete\-attachment 2
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+按 MIME 类型删除所有附加字体:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit 影片\&.mkv \-\-delete\-attachment mime\-type:application/x\-truetype\-font
 .fi
 .if n \{\
 .RE
 .\}
 .SH "退出代码"
 .PP
-
 \fBmkvpropedit\fR(1)
 退出时会返回以下三个退出代码中的一个：
 .sp
@@ -417,7 +660,6 @@ $ mkvpropedit movie\&.mkv \-\-chapters \*(Aq\*(Aq
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB0\fR
 \-\- 此退出代码说明已成功完成修改。
 .RE
@@ -430,7 +672,6 @@ $ mkvpropedit movie\&.mkv \-\-chapters \*(Aq\*(Aq
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB1\fR
 \-\- 这种情况下
 \fBmkvpropedit\fR(1)
@@ -445,20 +686,50 @@ $ mkvpropedit movie\&.mkv \-\-chapters \*(Aq\*(Aq
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB2\fR
 \-\- 此退出代码用于错误发生之后。
 \fBmkvpropedit\fR(1)
 在输出错误信息后即中断处理。错误信息可能是错误的命令行参数，也可能是损坏文件的读取/写入错误。
 .RE
+.SH "文本文件与字符集转换"
+.PP
+For an in\-depth discussion about how all tools in the MKVToolNix suite handle character set conversions, input/output encoding, command line encoding and console encoding please see the identically\-named section in the
+\fBmkvmerge\fR(1)
+man page\&.
 .SH "文本中特殊字符的转义"
 .PP
 有时文本中的特殊字符必须或应该转义。转义规则很简单: 用反斜杠后接一字符替换需要转义的各字符。
 .PP
-The rules are: \*(Aq \*(Aq (a space) becomes \*(Aq\es\*(Aq, \*(Aq"\*(Aq (double quotes) becomes \*(Aq\e2\*(Aq, \*(Aq:\*(Aq becomes \*(Aq\ec\*(Aq, \*(Aq#\*(Aq becomes \*(Aq\eh\*(Aq and \*(Aq\e\*(Aq (a single backslash) itself becomes \*(Aq\e\e\*(Aq\&.
+规则为: \*(Aq \*(Aq (空格) 变为 \*(Aq\es\*(Aq、\*(Aq"\*(Aq (双引号) 变为 \*(Aq\e2\*(Aq、\*(Aq:\*(Aq 变为 \*(Aq\ec\*(Aq、\*(Aq#\*(Aq 变为 \*(Aq\eh\*(Aq，而 \*(Aq\e\*(Aq (单个反斜杠) 自己则变为 \*(Aq\e\e\*(Aq。
+.SH "环境变量"
+.PP
+\fBmkvpropedit\fR(1)
+会使用决定系统区域设置的默认变量 (如
+\fILANG\fR
+与
+\fILC_*\fR
+族)。其他变量包括:
+.PP
+\fIMKVTOOLNIX_DEBUG\fR 及其缩写形式 \fIMTX_DEBUG\fR
+.RS 4
+内容将被当作通过
+\fB\-\-debug\fR
+选项传递的参数对待。
+.RE
+.PP
+\fIMKVTOOLNIX_ENGAGE\fR 及其缩写形式 \fIMTX_ENGAGE\fR
+.RS 4
+内容将被当作通过
+\fB\-\-engage\fR
+选项传递的参数对待。
+.RE
+.PP
+\fIMKVTOOLNIX_OPTIONS\fR 及其缩写形式 \fIMTX_OPTIONS\fR
+.RS 4
+内容将在空白处切割。最终得到的字符串部分将按命令行选项的格式处理。如果您需要传递特殊字符 (如空白) 则需要转义 (参见关于转义文本中特殊字符的段落)。
+.RE
 .SH "参阅"
 .PP
-
 \fBmkvmerge\fR(1),
 \fBmkvinfo\fR(1),
 \fBmkvextract\fR(1),

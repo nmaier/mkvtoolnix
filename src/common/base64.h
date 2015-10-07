@@ -10,12 +10,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_BASE64_H
-#define __MTX_COMMON_BASE64_H
+#ifndef MTX_COMMON_BASE64_H
+#define MTX_COMMON_BASE64_H
 
-#include "common/os.h"
-
-#include "common/error.h"
+#include "common/common_pch.h"
 
 namespace mtx {
   namespace base64 {
@@ -38,4 +36,4 @@ namespace mtx {
 std::string base64_encode(const unsigned char *src, int src_len, bool line_breaks = false, int max_line_len = 72);
 int base64_decode(const std::string &src, unsigned char *dst);
 
-#endif // __MTX_COMMON_BASE64_H
+#endif // MTX_COMMON_BASE64_H

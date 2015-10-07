@@ -14,6 +14,7 @@
 #include "common/common_pch.h"
 
 #include "common/byte_buffer.h"
+#include "common/codec.h"
 #include "common/endian.h"
 #include "common/error.h"
 #include "input/r_vc1.h"
@@ -22,7 +23,7 @@
 
 
 #define PROBESIZE 4
-#define READ_SIZE 1024 * 1024
+#define READ_SIZE 20 * 1024 * 1024
 
 int
 vc1_es_reader_c::probe_file(mm_io_c *in,
@@ -110,6 +111,5 @@ vc1_es_reader_c::read(generic_packetizer_c *,
 void
 vc1_es_reader_c::identify() {
   id_result_container();
-  id_result_track(0, ID_RESULT_TRACK_VIDEO, "VC1");
+  id_result_track(0, ID_RESULT_TRACK_VIDEO, codec_c::get_name(CT_V_VC1, "VC1"));
 }
-

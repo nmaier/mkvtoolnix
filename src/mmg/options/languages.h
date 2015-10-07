@@ -11,10 +11,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MMG_OPTIONS_LANGUAGES_H
-#define __MMG_OPTIONS_LANGUAGES_H
+#ifndef MTX_MMG_OPTIONS_LANGUAGES_H
+#define MTX_MMG_OPTIONS_LANGUAGES_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <wx/log.h>
 
@@ -35,4 +35,4 @@ public:
   virtual wxString get_title();
 };
 
-#endif // __MMG_OPTIONS_LANGUAGES_H
+#endif // MTX_MMG_OPTIONS_LANGUAGES_H

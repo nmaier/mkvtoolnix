@@ -8,17 +8,15 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __PROPEDIT_OPTIONS_H
-#define __PROPEDIT_OPTIONS_H
+#ifndef MTX_PROPEDIT_OPTIONS_H
+#define MTX_PROPEDIT_OPTIONS_H
 
-#include "common/os.h"
-
-#include <string>
-#include <vector>
+#include "common/common_pch.h"
 
 #include <ebml/EbmlMaster.h>
 
 #include "common/kax_analyzer.h"
+#include "propedit/attachment_target.h"
 #include "propedit/target.h"
 
 class options_c {
@@ -34,10 +32,10 @@ public:
   void validate();
   void options_parsed();
 
-  target_cptr add_target(target_c::target_type_e type);
-  target_cptr add_target(const std::string &spec);
+  target_cptr add_track_or_segmentinfo_target(std::string const &spec);
   void add_tags(const std::string &spec);
   void add_chapters(const std::string &spec);
+  void add_attachment_command(attachment_target_c::command_e command, std::string const &spec, attachment_target_c::options_t const &options);
   void set_file_name(const std::string &file_name);
   void set_parse_mode(const std::string &parse_mode);
   void dump_info() const;
@@ -48,10 +46,9 @@ public:
   void execute();
 
 protected:
-  target_cptr add_target(target_c::target_type_e type, const std::string &spec);
   void remove_empty_targets();
   void merge_targets();
 };
-typedef counted_ptr<options_c> options_cptr;
+typedef std::shared_ptr<options_c> options_cptr;
 
-#endif // __PROPEDIT_OPTIONS_H
+#endif // MTX_PROPEDIT_OPTIONS_H

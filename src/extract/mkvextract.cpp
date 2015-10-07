@@ -18,13 +18,10 @@
 
 #include "common/chapters/chapters.h"
 #include "common/command_line.h"
-#include "common/matroska.h"
 #include "common/mm_io.h"
 #include "common/strings/parsing.h"
-#include "common/tags/writer.h"
 #include "common/translation.h"
 #include "common/version.h"
-#include "common/xml/element_mapping.h"
 #include "extract/extract_cli_parser.h"
 #include "extract/mkvextract.h"
 
@@ -40,8 +37,6 @@ enum operation_mode_e {
   MODE_CUESHEET,
   MODE_TIMECODES_V2,
 };
-
-bool g_no_variable_data = false;
 
 void
 show_element(EbmlElement *l,
@@ -59,7 +54,7 @@ show_element(EbmlElement *l,
   level_buffer[level] = 0;
 
   mxinfo(boost::format("(%1%) %2%+ %3%") % NAME % level_buffer % info);
-  if (NULL != l)
+  if (l)
     mxinfo(boost::format(Y(" at %1%")) % l->GetElementPosition());
   mxinfo("\n");
 }
@@ -70,8 +65,8 @@ show_error(const std::string &error) {
 }
 
 static void
-setup() {
-  mtx_common_init();
+setup(char **argv) {
+  mtx_common_init("mkvextract", argv[0]);
 
   set_process_priority(-1);
 
@@ -82,12 +77,12 @@ setup() {
 int
 main(int argc,
      char **argv) {
-  setup();
+  setup(argv);
 
   options_c options = extract_cli_parser_c(command_line_utf8(argc, argv)).run();
 
   if (options_c::em_tracks == options.m_extraction_mode) {
-    extract_tracks(options.m_file_name, options.m_tracks);
+    extract_tracks(options.m_file_name, options.m_tracks, options.m_parse_mode);
 
     if (0 == verbose)
       mxinfo(Y("Progress: 100%\n"));

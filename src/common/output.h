@@ -11,13 +11,12 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_OUTPUT_H
-#define __MTX_COMMON_OUTPUT_H
+#ifndef MTX_COMMON_OUTPUT_H
+#define MTX_COMMON_OUTPUT_H
 
 #include "common/os.h"
 
-#include <boost/format.hpp>
-#include <string>
+#include <functional>
 
 #include <ebml/EbmlElement.h>
 
@@ -26,15 +25,18 @@
 
 using namespace libebml;
 
+typedef std::function<void(unsigned int level, std::string const &)> mxmsg_handler_t;
+void set_mxmsg_handler(unsigned int level, mxmsg_handler_t const &handler);
+
 extern bool g_suppress_info, g_suppress_warnings;
 extern std::string g_stdio_charset;
 extern charset_converter_cptr g_cc_stdio;
-extern counted_ptr<mm_io_c> g_mm_stdio;
+extern std::shared_ptr<mm_io_c> g_mm_stdio;
 
 void redirect_stdio(const mm_io_cptr &new_stdio);
 bool stdio_redirected();
 
-void init_cc_stdio();
+void init_common_output(bool no_charset_detection);
 void set_cc_stdio(const std::string &charset);
 
 void mxmsg(unsigned int level, std::string message);
@@ -47,6 +49,9 @@ mxmsg(unsigned int level,
 void mxinfo(const std::string &info);
 inline void mxinfo(const boost::format &info) {
   mxinfo(info.str());
+}
+inline void mxinfo(char const *info) {
+  mxinfo(std::string{info});
 }
 void mxinfo(const std::wstring &info);
 void mxinfo(const boost::wformat &info);
@@ -65,18 +70,7 @@ mxerror(const boost::format &error) {
 
 #define mxverb(level, message)        \
   if (verbose >= level)               \
-    mxmsg(MXMSG_INFO, message);
-
-
-#define mxdebug(msg) \
-  { \
-    mxmsg(MXMSG_DEBUG, boost::format("%1%:%2%: ") % __FILE__ % __LINE__); \
-    mxmsg(MXMSG_INFO,  msg); \
-  }
-#define mxdebug_if(condition, msg) \
-  if (condition) {                 \
-    mxdebug(msg);                  \
-  }
+    mxinfo(message);
 
 void mxinfo_fn(const std::string &file_name, const std::string &info);
 inline void
@@ -141,10 +135,7 @@ mxverb_tid(unsigned int level,
 }
 
 extern const std::string empty_string;
-void mxhexdump(unsigned int level, const void *buffer_to_dump, size_t lenth, const std::string &prefix = empty_string);
-
-void dump_ebml_elements(EbmlElement *element, bool with_values = false, unsigned int level = 0);
 
 std::string fourcc_to_string(uint32_t fourcc);
 
-#endif  // __MTX_COMMON_OUTPUT_H
+#endif  // MTX_COMMON_OUTPUT_H

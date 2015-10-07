@@ -6,7 +6,7 @@ class T_220ass_with_comments_at_start < Test
   end
 
   def run
-    merge("\"data/textsubs/You're Under Arrest Movie 1.ass\"")
+    merge("\"data/ssa-ass/You're Under Arrest Movie 1.ass\"")
     return hash_tmp
   end
 end

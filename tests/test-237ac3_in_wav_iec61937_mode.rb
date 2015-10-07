@@ -6,7 +6,7 @@ class T_237ac3_in_wav_iec61937_mode < Test
   end
 
   def run
-    merge("data/simple/shortsample.ac3.wav")
+    merge("data/ac3/shortsample.ac3.wav")
     return hash_tmp
   end
 end

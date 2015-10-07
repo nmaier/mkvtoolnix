@@ -11,12 +11,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_TAG_COMMON_H
-#define __MTX_COMMON_TAG_COMMON_H
+#ifndef MTX_COMMON_TAG_COMMON_H
+#define MTX_COMMON_TAG_COMMON_H
 
-#include "common/os.h"
-
-#include <string>
+#include "common/common_pch.h"
 
 namespace libmatroska {
   class KaxTags;
@@ -32,6 +30,8 @@ namespace libebml {
 
 using namespace libebml;
 using namespace libmatroska;
+
+typedef std::shared_ptr<KaxTags> kax_tags_cptr;
 
 void fix_mandatory_tag_elements(EbmlElement *e);
 void remove_track_uid_tag_targets(EbmlMaster *tag);
@@ -55,4 +55,4 @@ int count_simple_tags(EbmlMaster &master);
 
 void convert_old_tags(KaxTags &tags);
 
-#endif // __MTX_COMMON_TAG_COMMON_H
+#endif // MTX_COMMON_TAG_COMMON_H

@@ -1,5 +1,5 @@
-#ifndef __MMG_TASKBAR_PROGRESS_H
-#define __MMG_TASKBAR_PROGRESS_H
+#ifndef MTX_MMG_TASKBAR_PROGRESS_H
+#define MTX_MMG_TASKBAR_PROGRESS_H
 
 #include "common/os.h"
 
@@ -26,7 +26,7 @@ protected:
   ITaskbarList3 *m_interface;
 
 public:
-  taskbar_progress_c(wxWindow *window = NULL);
+  taskbar_progress_c(wxWindow *window = nullptr);
   virtual ~taskbar_progress_c();
   virtual void set_value(ULONGLONG completed, ULONGLONG total);
   virtual void set_state(TBPFLAG state);
@@ -38,4 +38,4 @@ protected:
 
 #endif  // defined(SYS_WINDOWS)
 
-#endif  // __MMG_TASKBAR_PROGRESS_H
+#endif  // MTX_MMG_TASKBAR_PROGRESS_H

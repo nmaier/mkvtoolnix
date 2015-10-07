@@ -17,7 +17,8 @@
 
 #include "common/ebml.h"
 #include "common/endian.h"
-#include "common/mm_write_cache_io.h"
+#include "common/mm_io_x.h"
+#include "common/mm_write_buffer_io.h"
 #include "extract/xtr_wav.h"
 
 xtr_wav_c::xtr_wav_c(const std::string &codec_id,
@@ -33,9 +34,11 @@ xtr_wav_c::create_file(xtr_base_c *master,
                        KaxTrackEntry &track) {
   init_content_decoder(track);
 
-  int channels = kt_get_a_channels(track);
-  int sfreq    = (int)kt_get_a_sfreq(track);
-  int bps      = kt_get_a_bps(track);
+  auto channels    = kt_get_a_channels(track);
+  auto sfreq       = static_cast<int>(kt_get_a_sfreq(track));
+  auto bps         = kt_get_a_bps(track);
+  auto block_align = bps * channels / boost::math::gcd(8, bps);
+
 
   if (-1 == bps)
     mxerror(boost::format(Y("Track %1% with the CodecID '%2%' is missing the \"bits per second (bps)\" element and cannot be extracted.\n")) % m_tid % m_codec_id);
@@ -52,7 +55,7 @@ xtr_wav_c::create_file(xtr_base_c *master,
   put_uint16_le(&m_wh.common.wChannels,        channels);
   put_uint32_le(&m_wh.common.dwSamplesPerSec,  sfreq);
   put_uint32_le(&m_wh.common.dwAvgBytesPerSec, channels * sfreq * bps / 8);
-  put_uint16_le(&m_wh.common.wBlockAlign,       4);
+  put_uint16_le(&m_wh.common.wBlockAlign,      block_align);
   put_uint16_le(&m_wh.common.wBitsPerSample,   bps);
 
   m_out->write(&m_wh, sizeof(wave_header));
@@ -76,7 +79,6 @@ xtr_wavpack4_c::xtr_wavpack4_c(const std::string &codec_id,
   : xtr_base_c(codec_id, tid, tspec)
   , m_number_of_samples(0)
   , m_extract_blockadd_level(tspec.extract_blockadd_level)
-  , m_corr_out(NULL)
 {
 }
 
@@ -87,11 +89,11 @@ xtr_wavpack4_c::create_file(xtr_base_c *master,
 
   init_content_decoder(track);
 
-  KaxCodecPrivate *priv = FINDFIRST(&track, KaxCodecPrivate);
+  KaxCodecPrivate *priv = FindChild<KaxCodecPrivate>(&track);
   if (priv)
     mpriv = decode_codec_private(priv);
 
-  if ((NULL == priv) || (2 > mpriv->get_size()))
+  if (!priv || (2 > mpriv->get_size()))
     mxerror(boost::format(Y("Track %1% with the CodecID '%2%' is missing the \"codec private\" element and cannot be extracted.\n")) % m_tid % m_codec_id);
   memcpy(m_version, mpriv->get_buffer(), 2);
 
@@ -108,25 +110,15 @@ xtr_wavpack4_c::create_file(xtr_base_c *master,
     corr_name += "wvc";
 
     try {
-      m_corr_out = mm_write_cache_io_c::open(corr_name, 5 * 1024 * 1024);
-    } catch (...) {
-      mxerror(boost::format(Y("The file '%1%' could not be opened for writing (%2%).\n")) % corr_name % strerror(errno));
+      m_corr_out = mm_write_buffer_io_c::open(corr_name, 5 * 1024 * 1024);
+    } catch (mtx::mm_io::exception &ex) {
+      mxerror(boost::format(Y("The file '%1%' could not be opened for writing: %2%.\n")) % corr_name % ex);
     }
   }
 }
 
 void
-xtr_wavpack4_c::handle_frame(memory_cptr &frame,
-                             KaxBlockAdditions *additions,
-                             int64_t,
-                             int64_t,
-                             int64_t,
-                             int64_t,
-                             bool,
-                             bool,
-                             bool) {
-  m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
-
+xtr_wavpack4_c::handle_frame(xtr_frame_t &f) {
   // build the main header
 
   binary wv_header[32];
@@ -140,8 +132,8 @@ xtr_wavpack4_c::handle_frame(memory_cptr &frame,
   wv_header[15] = 0xFF;
   put_uint32_le(&wv_header[16], m_number_of_samples); // block_index
 
-  const binary *mybuffer  = frame->get_buffer();
-  int data_size           = frame->get_size();
+  const binary *mybuffer  = f.frame->get_buffer();
+  int data_size           = f.frame->get_size();
   m_number_of_samples    += get_uint32_le(mybuffer);
 
   // rest of the header:
@@ -181,14 +173,14 @@ xtr_wavpack4_c::handle_frame(memory_cptr &frame,
   }
 
   // support hybrid mode data
-  if (m_corr_out.is_set() && (NULL != additions)) {
-    KaxBlockMore *block_more = FINDFIRST(additions, KaxBlockMore);
+  if (m_corr_out && (f.additions)) {
+    KaxBlockMore *block_more = FindChild<KaxBlockMore>(f.additions);
 
-    if (NULL == block_more)
+    if (!block_more)
       return;
 
-    KaxBlockAdditional *block_addition = FINDFIRST(block_more, KaxBlockAdditional);
-    if (NULL == block_addition)
+    KaxBlockAdditional *block_addition = FindChild<KaxBlockAdditional>(block_more);
+    if (!block_addition)
       return;
 
     data_size = block_addition->GetSize();
@@ -224,7 +216,7 @@ xtr_wavpack4_c::finish_file() {
   m_out->setFilePointer(12);
   m_out->write_uint32_le(m_number_of_samples);
 
-  if (m_corr_out.is_set()) {
+  if (m_corr_out) {
     m_corr_out->setFilePointer(12);
     m_corr_out->write_uint32_le(m_number_of_samples);
   }

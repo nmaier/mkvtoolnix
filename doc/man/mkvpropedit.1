@@ -1,13 +1,13 @@
 '\" t
 .\"     Title: mkvpropedit
 .\"    Author: Moritz Bunkus <moritz@bunkus.org>
-.\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
-.\"      Date: 2011-11-27
+.\" Generator: DocBook XSL Stylesheets v1.78.1 <http://docbook.sf.net/>
+.\"      Date: 2014-04-18
 .\"    Manual: User Commands
-.\"    Source: MKVToolNix 5.1.0
+.\"    Source: MKVToolNix 6.9.1
 .\"  Language: English
 .\"
-.TH "MKVPROPEDIT" "1" "2011\-11\-27" "MKVToolNix 5\&.1\&.0" "User Commands"
+.TH "MKVPROPEDIT" "1" "2014\-04\-18" "MKVToolNix 6\&.9\&.1" "User Commands"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -52,7 +52,7 @@ parameter does not have to be supplied\&.
 Sets the parse mode\&. The parameter \*(Aq\fImode\fR\*(Aq can either be \*(Aqfast\*(Aq (which is also the default) or \*(Aqfull\*(Aq\&. The \*(Aqfast\*(Aq mode does not parse the whole file but uses the meta seek elements for locating the required elements of a source file\&. In 99% of all cases this is enough\&. But for files that do not contain meta seek elements or which are damaged the user might have to set the \*(Aqfull\*(Aq parse mode\&. A full scan of a file can take a couple of minutes while a fast scan only takes seconds\&.
 .RE
 .PP
-Actions:
+Actions that deal with track and segment info properties:
 .PP
 \fB\-e\fR, \fB\-\-edit\fR \fIselector\fR
 .RS 4
@@ -96,6 +96,8 @@ Deletes all occurrences of the property
 \fIname\fR\&. Note that some properties are required and cannot be deleted\&.
 .RE
 .PP
+Actions that deal with tags and chapters:
+.PP
 \fB\-t\fR, \fB\-\-tags\fR \fIselector\fR:\fIfilename\fR
 .RS 4
 Add or replace tags in the file with the ones from
@@ -115,15 +117,13 @@ must be one of the words
 \fBglobal\fR
 or
 \fBtrack\fR\&. For
-\fBall\fR
-\fBmkvpropedit\fR(1)
+\fBall\fR\fBmkvpropedit\fR(1)
 will replace or remove all tags in a file\&. With
 \fBglobal\fR
 only global tags will be replaced or removed\&.
 .sp
 With
-\fBtrack\fR
-\fBmkvpropedit\fR(1)
+\fBtrack\fR\fBmkvpropedit\fR(1)
 will replace tags for a specific track\&. Additionally the tags read from
 filename
 will be assigned to the same track\&. The track is specified in the same way
@@ -143,6 +143,96 @@ is empty\&.
 reads the same XML and simple chapter formats that
 \fBmkvmerge\fR(1)
 reads as well\&.
+.RE
+.PP
+Actions for handling attachments:
+.PP
+\fB\-\-add\-attachment\fR \fIfilename\fR
+.RS 4
+Adds a new attachment from
+\fIfilename\fR\&.
+.sp
+If the option
+\fB\-\-attachment\-name\fR
+has been used prior to this option then its value is used as the new attachment\*(Aqs name\&. Otherwise it is derived from
+\fIfilename\fR\&.
+.sp
+If the option
+\fB\-\-attachment\-mime\-type\fR
+has been used prior to this option then its value is used as the new attachment\*(Aqs MIME type\&. Otherwise it is auto\-detected from the content of
+\fIfilename\fR\&.
+.sp
+If the option
+\fB\-\-attachment\-description\fR
+has been used prior to this option then its value is used as the new attachment\*(Aqs description\&. Otherwise no description will be set\&.
+.RE
+.PP
+\fB\-\-replace\-attachment\fR \fIselector\fR:\fIfilename\fR
+.RS 4
+Replaces one or more attachments that match
+\fIselector\fR
+with the file
+\fIfilename\fR\&. If more than one existing attachment matches
+\fIselector\fR
+then all of their contents will be replaced by the content of
+\fIfilename\fR\&.
+.sp
+The
+\fIselector\fR
+can have one of four forms\&. They\*(Aqre exlained below in the section
+attachment selectors\&.
+.sp
+If the option
+\fB\-\-attachment\-name\fR
+has been used prior to this option then its value is used as the replaced attachment\*(Aqs name\&. Otherwise the name is not changed\&.
+.sp
+If the option
+\fB\-\-attachment\-mime\-type\fR
+has been used prior to this option then its value is used as the replaced attachment\*(Aqs MIME type\&. Otherwise the MIME type is not changed\&.
+.sp
+If the option
+\fB\-\-attachment\-description\fR
+has been used prior to this option then its value is used as the replaced attachment\*(Aqs description\&. Otherwise no description is not changed\&.
+.RE
+.PP
+\fB\-\-delete\-attachment\fR \fIselector\fR
+.RS 4
+Deletes one or more attachments that match
+\fIselector\fR\&.
+.sp
+The
+\fIselector\fR
+can have one of four forms\&. They\*(Aqre exlained below in the section
+attachment selectors\&.
+.RE
+.PP
+Options for attachment actions:
+.PP
+\fB\-\-attachment\-name\fR \fIname\fR
+.RS 4
+Sets the name to use for the following
+\fB\-\-add\-attachment\fR
+or
+\fB\-\-replace\-attachment\fR
+operation\&.
+.RE
+.PP
+\fB\-\-attachment\-mime\-type\fR \fImime\-type\fR
+.RS 4
+Sets the MIME type to use for the following
+\fB\-\-add\-attachment\fR
+or
+\fB\-\-replace\-attachment\fR
+operation\&.
+.RE
+.PP
+\fB\-\-attachment\-description\fR \fIdescription\fR
+.RS 4
+Sets the description to use for the following
+\fB\-\-add\-attachment\fR
+or
+\fB\-\-replace\-attachment\fR
+operation\&.
 .RE
 .PP
 Other options:
@@ -182,6 +272,22 @@ will cause
 to output a list of available translations\&.
 .RE
 .PP
+\fB\-\-debug\fR \fItopic\fR
+.RS 4
+Turn on debugging for a specific feature\&. This option is only useful for developers\&.
+.RE
+.PP
+\fB\-\-engage\fR \fIfeature\fR
+.RS 4
+Turn on experimental features\&. A list of available features can be requested with
+\fBmkvpropedit \-\-engage list\fR\&. These features are not meant to be used in normal situations\&.
+.RE
+.PP
+\fB\-\-gui\-mode\fR
+.RS 4
+Turns on GUI mode\&. In this mode specially\-formatted lines may be output that can tell a controlling GUI what\*(Aqs happening\&. These messages follow the format \*(Aq#GUI#message\*(Aq\&. The message may be followed by key/value pairs as in \*(Aq#GUI#message#key1=value1#key2=value2\&...\*(Aq\&. Neither the messages nor the keys are ever translated and always output in English\&.
+.RE
+.PP
 \fB\-v\fR, \fB\-\-verbose\fR
 .RS 4
 Be verbose and show all the important
@@ -202,7 +308,7 @@ Show version information and exit\&.
 \fB\-\-check\-for\-updates\fR
 .RS 4
 Checks online for new releases by downloading the URL
-http://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xml\&. Four lines will be output in
+\m[blue]\fBhttp://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xml\fR\m[]\&. Four lines will be output in
 key=value
 style: the URL from where the information was retrieved (key
 version_check_url), the currently running version (key
@@ -236,7 +342,7 @@ source\&.mkv
 track:a2
 # and set the title to \*(AqComments\*(Aq
 \-\-set
-title=Comments
+name=Comments
 .fi
 .if n \{\
 .RE
@@ -277,6 +383,8 @@ is a number then the
 \fBmkvmerge\fR(1)\*(Aqs
 \fB\-\-identify\fR
 option outputs\&.
+.sp
+Numbering starts at 1\&.
 .RE
 .PP
 \fBtrack:\fR\fIt\fR\fIn\fR
@@ -292,6 +400,8 @@ must be one of these four characters: \*(Aqa\*(Aq for an audio track, \*(Aqb\*(A
 \fBmkvmerge\fR(1)\*(Aqs
 \fB\-\-identify\fR
 option outputs\&.
+.sp
+Numbering starts at 1\&.
 .RE
 .PP
 \fBtrack:\fR=\fIuid\fR
@@ -318,6 +428,70 @@ then the track whose track number element equals this
 .SS "Notes"
 .PP
 Due to the nature of the track edit selectors it is possible that several selectors actually match the same track headers\&. In such cases all actions for those edit selectors will be combined and executed in the order in which they\*(Aqre given on the command line\&.
+.SH "ATTACHMENT SELECTORS"
+.PP
+An attachment selector is used with the two actions
+\fB\-\-replace\-attachment\fR
+and
+\fB\-\-delete\-attachment\fR\&. It can have one of the following four forms:
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 1.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  1." 4.2
+.\}
+Selection by attachment ID\&. In this form the selector is simply a number, the attachment\*(Aqs ID as output by
+\fBmkvmerge\fR(1)\*(Aqs identification command\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 2.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  2." 4.2
+.\}
+Selection by attachment UID (unique ID)\&. In this form the selector is the equal sign
+=
+followed by a number, the attachment\*(Aqs unique ID as output by
+\fBmkvmerge\fR(1)\*(Aqs verbose identification command\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 3.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  3." 4.2
+.\}
+Selection by attachment name\&. In this form the selector is the literal word
+name:
+followed by the existing attachment\*(Aqs name\&. If this selector is used with
+\fB\-\-replace\-attachment\fR
+then colons within the name to match must be escaped as
+\ec\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 4.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  4." 4.2
+.\}
+Selection by MIME type\&. In this form the selector is the literal word
+mime\-type:
+followed by the existing attachment\*(Aqs MIME type\&. If this selector is used with
+\fB\-\-replace\-attachment\fR
+then colons within the MIME type to match must be escaped as
+\ec\&.
+.RE
 .SH "EXAMPLES"
 .PP
 The following example edits a file called \*(Aqmovie\&.mkv\*(Aq\&. It sets the segment title and modifies the language code of an audio and a subtitle track\&. Note that this example can be shortened by leaving out the first
@@ -397,9 +571,68 @@ $ mkvpropedit movie\&.mkv \-\-chapters \*(Aq\*(Aq
 .if n \{\
 .RE
 .\}
+.PP
+Adding a font file (Arial\&.ttf) as an attachment:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit movie\&.mkv \-\-add\-attachment Arial\&.ttf
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Adding a font file (89719823\&.ttf) as an attachment and providing some information as it really is just Arial:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit movie\&.mkv \-\-attachment\-name Arial\&.ttf \-\-attachment\-description \*(AqThe Arial font as a TrueType font\*(Aq \-\-attachment\-mime\-type application/x\-truetype\-font \-\-add\-attachment 89719823\&.ttf
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Replacing one attached font (Comit\&.ttf) file with another one (Arial\&.ttf):
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit movie\&.mkv \-\-attachment\-name Arial\&.ttf \-\-attachment\-description \*(AqThe Arial font as a TrueType font\*(Aq \-\-replace\-attachment name:Comic\&.ttf:Arial\&.ttf
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Deleting the second attached file, whatever it may be:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit movie\&.mkv \-\-delete\-attachment 2
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Deleting all attached fonts by MIME type:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit movie\&.mkv \-\-delete\-attachment mime\-type:application/x\-truetype\-font
+.fi
+.if n \{\
+.RE
+.\}
 .SH "EXIT CODES"
 .PP
-
 \fBmkvpropedit\fR(1)
 exits with one of three exit codes:
 .sp
@@ -411,7 +644,6 @@ exits with one of three exit codes:
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB0\fR
 \-\- This exit codes means that the modification has completed successfully\&.
 .RE
@@ -424,7 +656,6 @@ exits with one of three exit codes:
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB1\fR
 \-\- In this case
 \fBmkvpropedit\fR(1)
@@ -439,20 +670,51 @@ has output at least one warning, but the modification did continue\&. A warning 
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB2\fR
 \-\- This exit code is used after an error occurred\&.
 \fBmkvpropedit\fR(1)
 aborts right after outputting the error message\&. Error messages range from wrong command line arguments over read/write errors to broken files\&.
 .RE
+.SH "TEXT FILES AND CHARACTER SET CONVERSIONS"
+.PP
+For an in\-depth discussion about how all tools in the MKVToolNix suite handle character set conversions, input/output encoding, command line encoding and console encoding please see the identically\-named section in the
+\fBmkvmerge\fR(1)
+man page\&.
 .SH "ESCAPING SPECIAL CHARS IN TEXT"
 .PP
 There are a few places in which special characters in text must or should be escaped\&. The rules for escaping are simple: each character that needs escaping is replaced with a backslash followed by another character\&.
 .PP
 The rules are: \*(Aq \*(Aq (a space) becomes \*(Aq\es\*(Aq, \*(Aq"\*(Aq (double quotes) becomes \*(Aq\e2\*(Aq, \*(Aq:\*(Aq becomes \*(Aq\ec\*(Aq, \*(Aq#\*(Aq becomes \*(Aq\eh\*(Aq and \*(Aq\e\*(Aq (a single backslash) itself becomes \*(Aq\e\e\*(Aq\&.
+.SH "ENVIRONMENT VARIABLES"
+.PP
+\fBmkvpropedit\fR(1)
+uses the default variables that determine the system\*(Aqs locale (e\&.g\&.
+\fILANG\fR
+and the
+\fILC_*\fR
+family)\&. Additional variables:
+.PP
+\fIMKVTOOLNIX_DEBUG\fR and its short form \fIMTX_DEBUG\fR
+.RS 4
+The content is treated as if it had been passed via the
+\fB\-\-debug\fR
+option\&.
+.RE
+.PP
+\fIMKVTOOLNIX_ENGAGE\fR and its short form \fIMTX_ENGAGE\fR
+.RS 4
+The content is treated as if it had been passed via the
+\fB\-\-engage\fR
+option\&.
+.RE
+.PP
+\fIMKVTOOLNIX_OPTIONS\fR and its short form \fIMTX_OPTIONS\fR
+.RS 4
+The content is split on white space\&. The resulting partial strings are treated as if it had been passed as command line options\&. If you need to pass special characters (e\&.g\&. spaces) then you have to escape them (see
+the section about escaping special characters in text)\&.
+.RE
 .SH "SEE ALSO"
 .PP
-
 \fBmkvmerge\fR(1),
 \fBmkvinfo\fR(1),
 \fBmkvextract\fR(1),

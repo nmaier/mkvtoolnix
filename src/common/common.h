@@ -11,16 +11,57 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_COMMON_H
-#define __MTX_COMMON_COMMON_H
+#ifndef MTX_COMMON_COMMON_H
+#define MTX_COMMON_COMMON_H
 
 #undef min
 #undef max
+
+#include <type_traits>
+
 #undef __STRICT_ANSI__
 
-#include <boost/format.hpp>
-#include <boost/regex.hpp>
+#include <algorithm>
+#include <functional>
+#include <memory>
+#include <stdexcept>
 #include <string>
+#include <vector>
+
+#include <cassert>
+#include <cstring>
+
+#if defined(HAVE_SYS_TYPES_H)
+# include <sys/types.h>
+#endif // HAVE_SYS_TYPES_H
+#if defined(HAVE_STDINT_H)
+# include <stdint.h>
+#endif // HAVE_STDINT_H
+#if defined(HAVE_INTTYPES_H)
+# include <inttypes.h>
+#endif // HAVE_INTTYPES_H
+
+#include <boost/algorithm/string.hpp>
+#include <boost/filesystem.hpp>
+#include <boost/format.hpp>
+#include <boost/function.hpp>
+#include <boost/logic/tribool.hpp>
+#include <boost/math/common_factor.hpp>
+#include <boost/range.hpp>
+#include <boost/range/adaptor/filtered.hpp>
+#include <boost/range/adaptor/indexed.hpp>
+#include <boost/range/adaptor/map.hpp>
+#include <boost/range/algorithm_ext.hpp>
+#include <boost/range/algorithm.hpp>
+#include <boost/range/numeric.hpp>
+#include <boost/rational.hpp>
+#include <boost/regex.hpp>
+#include <boost/system/error_code.hpp>
+
+namespace balg  = boost::algorithm;
+namespace badap = boost::adaptors;
+namespace bfs   = boost::filesystem;
+namespace brng  = boost::range;
 
 #include "common/os.h"
 
@@ -46,14 +87,19 @@
 #endif
 
 #include "common/debugging.h"
+#include "common/error.h"
+#include "common/memory.h"
+#include "common/mm_io.h"
 #include "common/output.h"
-#include "common/smart_pointers.h"
 
 namespace libebml {
-  class EbmlBinary;
+class EbmlBinary;
 };
 
+namespace libmatroska { };
+
 using namespace libebml;
+using namespace libmatroska;
 
 #define BUGMSG Y("This should not have happened. Please contact the author " \
                  "Moritz Bunkus <moritz@bunkus.org> with this error/warning " \
@@ -88,6 +134,7 @@ extern unsigned int verbose;
 #define mxfind2(it, value, cont) ((it = std::find((cont).begin(), (cont).end(), value)) != (cont).end())
 #define map_has_key(m, k)        ((m).end() != (m).find(k))
 
-void mtx_common_init();
+void mtx_common_init(std::string const &program_name, char const *argv0);
+std::string const &get_program_name();
 
-#endif // __MTX_COMMON_COMMON_H
+#endif // MTX_COMMON_COMMON_H

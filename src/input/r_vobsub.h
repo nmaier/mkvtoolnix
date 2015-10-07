@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __R_VOBSUB_H
-#define __R_VOBSUB_H
+#ifndef MTX_R_VOBSUB_H
+#define MTX_R_VOBSUB_H
 
 #include "common/common_pch.h"
 
@@ -58,7 +58,7 @@ class vobsub_reader_c: public generic_reader_c {
 private:
   mm_text_io_cptr m_idx_file;
   mm_file_io_cptr m_sub_file;
-  int version, ifo_data_size;
+  int version;
   int64_t num_indices, indices_processed, delay;
   std::string idx_data;
 
@@ -71,8 +71,8 @@ public:
   vobsub_reader_c(const track_info_c &ti, const mm_io_cptr &in);
   virtual ~vobsub_reader_c();
 
-  virtual const std::string get_format_name(bool translate = true) {
-    return translate ? Y("VobSub") : "VobSub";
+  virtual translatable_string_c get_format_name() const {
+    return YT("VobSub");
   }
 
   virtual void read_headers();
@@ -96,4 +96,4 @@ protected:
   virtual int extract_one_spu_packet(int64_t track_id);
 };
 
-#endif  // __R_VOBSUB_H
+#endif  // MTX_R_VOBSUB_H

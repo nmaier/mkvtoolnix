@@ -11,11 +11,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_FILE_TYPES_H
-#define __MTX_COMMON_FILE_TYPES_H
+#ifndef MTX_COMMON_FILE_TYPES_H
+#define MTX_COMMON_FILE_TYPES_H
 
-#include <string>
-#include <vector>
+#include "common/common_pch.h"
 
 /* file types */
 enum file_type_e {
@@ -27,12 +26,13 @@ enum file_type_e {
   FILE_TYPE_AVI,
   FILE_TYPE_CDXA,
   FILE_TYPE_CHAPTERS,
-  FILE_TYPE_COREPICTURE,
+  FILE_TYPE_COREAUDIO,
   FILE_TYPE_DIRAC,
   FILE_TYPE_DTS,
   FILE_TYPE_DV,
   FILE_TYPE_FLAC,
   FILE_TYPE_FLV,
+  FILE_TYPE_HEVC_ES,
   FILE_TYPE_HDSUB,
   FILE_TYPE_IVF,
   FILE_TYPE_MATROSKA,
@@ -70,4 +70,4 @@ struct file_type_t {
   static std::vector<file_type_t> &get_supported();
 };
 
-#endif // __MTX_COMMON_FILE_TYPES_H
+#endif // MTX_COMMON_FILE_TYPES_H

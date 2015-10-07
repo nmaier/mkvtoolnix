@@ -1,9 +1,7 @@
 # boost's headers must be present.
 AX_BOOST_BASE([1.46.0])
 
-# boost::system can be absend for older versions. However, the test
-# for boost::filesystem might fail if boost::system is not available
-# with newer versions.
+# boost::system must be present.
 AX_BOOST_SYSTEM()
 
 # boost::filesystem must be present.
@@ -20,6 +18,26 @@ if test x"$ax_cv_boost_regex" != "xyes"; then
   AC_MSG_ERROR(The Boost Regex Library was not found.)
 fi
 
-AX_BOOST_CHECK_HEADERS([boost/property_tree/ptree.hpp],,[
-  AC_MSG_ERROR([Boost's property tree library is required but wasn't found])
+if test x"$ax_cv_boost_system" != "xyes"; then
+  AC_MSG_ERROR(The Boost System Library was not found.)
+fi
+
+AX_BOOST_CHECK_HEADERS([boost/rational.hpp],,[
+  AC_MSG_ERROR([Boost's rational library is required but wasn't found])
+])
+
+AX_BOOST_CHECK_HEADERS([boost/logic/tribool.hpp],,[
+  AC_MSG_ERROR([Boost's Tribool library is required but wasn't found])
+])
+
+AX_BOOST_CHECK_HEADERS([boost/lexical_cast.hpp],,[
+  AC_MSG_ERROR([Boost's lexical_cast library is required but wasn't found])
+])
+
+AX_BOOST_CHECK_HEADERS([boost/range.hpp],,[
+  AC_MSG_ERROR([Boost's Range library is required but wasn't found])
+])
+
+AX_BOOST_CHECK_HEADERS([boost/variant.hpp],,[
+  AC_MSG_ERROR([Boost's variant library is required but wasn't found])
 ])

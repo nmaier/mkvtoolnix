@@ -14,8 +14,8 @@
 
 #include "common/common_pch.h"
 
-#include "common/matroska.h"
-#include "merge/pr_generic.h"
+#include "common/codec.h"
+#include "merge/connection_checks.h"
 #include "output/p_pcm.h"
 
 using namespace libmatroska;
@@ -25,18 +25,15 @@ pcm_packetizer_c::pcm_packetizer_c(generic_reader_c *p_reader,
                                    int samples_per_sec,
                                    int channels,
                                    int bits_per_sample,
-                                   bool big_endian,
-                                   bool ieee_float)
+                                   pcm_format_e format)
   : generic_packetizer_c(p_reader, p_ti)
-  , m_packetno(0)
-  , m_bytes_per_second(channels * bits_per_sample * samples_per_sec / 8)
   , m_samples_per_sec(samples_per_sec)
   , m_channels(channels)
   , m_bits_per_sample(bits_per_sample)
   , m_packet_size(0)
+  , m_min_packet_size{static_cast<size_t>(samples_per_sec * channels * bits_per_sample * 4 / 1000 / 8)} // Minimum: 4ms of samples if we should pass it through unmodified
   , m_samples_output(0)
-  , m_big_endian(big_endian)
-  , m_ieee_float(ieee_float)
+  , m_format{format}
   , m_s2tc(1000000000ll, m_samples_per_sec)
 {
 
@@ -64,16 +61,8 @@ pcm_packetizer_c::~pcm_packetizer_c() {
 
 void
 pcm_packetizer_c::set_headers() {
-  if (m_ieee_float)
-    set_codec_id(MKV_A_PCM_FLOAT);
-
-  else if (big_endian)
-    set_codec_id(MKV_A_PCM_BE);
-
-  else
-    set_codec_id(MKV_A_PCM);
-
-  set_audio_sampling_freq((float)m_samples_per_sec);
+  set_codec_id(ieee_float == m_format ? MKV_A_PCM_FLOAT : MKV_A_PCM);
+  set_audio_sampling_freq(static_cast<double>(m_samples_per_sec));
   set_audio_channels(m_channels);
   set_audio_bit_depth(m_bits_per_sample);
 
@@ -82,10 +71,13 @@ pcm_packetizer_c::set_headers() {
 
 int
 pcm_packetizer_c::process(packet_cptr packet) {
+  if (packet->has_timecode() && (packet->data->get_size() >= m_min_packet_size))
+    return process_packaged(packet);
+
   m_buffer.add(packet->data->get_buffer(), packet->data->get_size());
 
   while (m_buffer.get_size() >= m_packet_size) {
-    add_packet(new packet_t(clone_memory(m_buffer.get_buffer(), m_packet_size), m_samples_output * m_s2tc, m_samples_per_packet * m_s2tc));
+    add_packet(new packet_t(memory_c::clone(m_buffer.get_buffer(), m_packet_size), m_samples_output * m_s2tc, m_samples_per_packet * m_s2tc));
 
     m_buffer.remove(m_packet_size);
     m_samples_output += m_samples_per_packet;
@@ -94,25 +86,34 @@ pcm_packetizer_c::process(packet_cptr packet) {
   return FILE_STATUS_MOREDATA;
 }
 
+int
+pcm_packetizer_c::process_packaged(packet_cptr packet) {
+  int64_t samples_here = m_buffer.get_size() * 8 / m_channels / m_bits_per_sample;
+  m_samples_output     = packet->timecode / m_s2tc + samples_here;
+
+  add_packet(new packet_t(packet->data, packet->timecode, samples_here * m_s2tc));
+
+  return FILE_STATUS_MOREDATA;
+}
+
 void
-pcm_packetizer_c::flush() {
+pcm_packetizer_c::flush_impl() {
   uint32_t size = m_buffer.get_size();
-  if (0 < size) {
-    int64_t samples_here = size * 8 / m_channels / m_bits_per_sample;
-    add_packet(new packet_t(clone_memory(m_buffer.get_buffer(), size), m_samples_output * m_s2tc, samples_here * m_s2tc));
+  if (0 >= size)
+    return;
 
-    m_samples_output += samples_here;
-    m_buffer.remove(size);
-  }
+  int64_t samples_here = size * 8 / m_channels / m_bits_per_sample;
+  add_packet(new packet_t(memory_c::clone(m_buffer.get_buffer(), size), m_samples_output * m_s2tc, samples_here * m_s2tc));
 
-  generic_packetizer_c::flush();
+  m_samples_output += samples_here;
+  m_buffer.remove(size);
 }
 
 connection_result_e
 pcm_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                  std::string &error_message) {
   pcm_packetizer_c *psrc = dynamic_cast<pcm_packetizer_c *>(src);
-  if (NULL == psrc)
+  if (!psrc)
     return CAN_CONNECT_NO_FORMAT;
 
   connect_check_a_samplerate(m_samples_per_sec, psrc->m_samples_per_sec);

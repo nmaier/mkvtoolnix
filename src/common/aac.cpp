@@ -16,30 +16,196 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "common/bit_cursor.h"
 #include "common/aac.h"
-#include "common/matroska.h"
+#include "common/bit_cursor.h"
+#include "common/codec.h"
+#include "common/strings/formatting.h"
 
 const int g_aac_sampling_freq[16] = {96000, 88200, 64000, 48000, 44100, 32000,
                                      24000, 22050, 16000, 12000, 11025,  8000,
-                                         0,     0,     0,     0}; // filling
+                                      7350,     0,     0,     0}; // filling
 
-aac_header_t::aac_header_t() {
-  memset(this, 0, sizeof(aac_header_t));
+aac_header_c::aac_header_c()
+  : object_type{}
+  , extension_object_type{}
+  , profile{}
+  , sample_rate{}
+  , output_sample_rate{}
+  , bit_rate{}
+  , channels{}
+  , bytes{}
+  , id{}
+  , header_bit_size{}
+  , header_byte_size{}
+  , data_byte_size{}
+  , is_sbr{}
+  , is_valid{}
+{
 }
 
 std::string
-aac_header_t::to_string()
+aac_header_c::to_string()
   const {
   return (boost::format("sample_rate: %1%; bit_rate: %2%; channels: %3%; bytes: %4%; id: %5%; profile: %6%; header_bit_size: %7%; header_byte_size: %8%; data_byte_size: %9%")
           % sample_rate % bit_rate % channels % bytes % id % profile % header_bit_size % header_byte_size % data_byte_size).str();
 }
 
+int
+aac_header_c::read_object_type() {
+  int object_type = m_bc->get_bits(5);
+  return 31 == object_type ? 32 + m_bc->get_bits(6) : object_type;
+}
+
+int
+aac_header_c::read_sample_rate() {
+  int idx = m_bc->get_bits(4);
+  return 0x0f == idx ? m_bc->get_bits(24) : g_aac_sampling_freq[idx];
+}
+
+aac_header_c
+aac_header_c::from_audio_specific_config(const unsigned char *data,
+                                         int size) {
+  aac_header_c header;
+  header.parse(data, size);
+  return header;
+}
+
+void
+aac_header_c::read_ga_specific_config() {
+  m_bc->skip_bit();             // frame_length_flag
+  if (m_bc->get_bit())          // depends_on_core_coder
+    m_bc->skip_bits(14);        // core_coder_delay
+  bool extension_flag = m_bc->get_bit();
+
+  if (!channels)
+    read_program_config_element();
+
+  if ((6 == object_type) || (20 == object_type))
+    m_bc->skip_bits(3);         // layer_nr
+
+  if (!extension_flag)
+    return;
+
+  if (22 == object_type)
+    m_bc->skip_bits(5 + 11);    // num_of_sub_frame, layer_length
+
+  if ((17 == object_type) || (19 == object_type) || (20 == object_type) || (23 == object_type))
+    m_bc->skip_bits(1 + 1 + 1); // aac_section_data_resilience_flag, aac_scalefactor_data_resilience_flag, aac_spectral_data_resilience_flag
+
+  m_bc->skip_bit();             // extension_flag3
+}
+
+void
+aac_header_c::read_error_protection_specific_config() {
+  mxerror(boost::format("aac_error_proection_specific_config. %1%\n") % BUGMSG);
+}
+
+void
+aac_header_c::read_program_config_element() {
+  m_bc->skip_bits(4);           // element_instance_tag
+  object_type        = m_bc->get_bits(2);
+  sample_rate        = g_aac_sampling_freq[m_bc->get_bits(4)];
+  int num_front_chan = m_bc->get_bits(4);
+  int num_side_chan  = m_bc->get_bits(4);
+  int num_back_chan  = m_bc->get_bits(4);
+  int num_lfe_chan   = m_bc->get_bits(2);
+  int num_assoc_data = m_bc->get_bits(3);
+  int num_valid_cc   = m_bc->get_bits(4);
+
+  if (m_bc->get_bit())          // mono_mixdown_present_flag
+    m_bc->skip_bits(4);         // mono_mixdown_element_number
+  if (m_bc->get_bit())          // stereo_mixdown_present_flag
+    m_bc->skip_bits(4);         // stereo_mixdown_element_number
+  if (m_bc->get_bit())          // matrix_mixdown_idx_present_flag
+    m_bc->skip_bits(2 + 1);     // matrix_mixdown_idx, pseudo_surround_enable
+
+  channels = num_front_chan + num_side_chan + num_back_chan + num_lfe_chan;
+
+  for (int idx = 0; idx < (num_front_chan + num_side_chan + num_back_chan); ++idx) {
+    if (m_bc->get_bit())        // *_element_is_cpe
+      ++channels;
+    m_bc->skip_bits(4);         // *_element_tag_select
+  }
+  m_bc->skip_bits(num_lfe_chan   *      4);  //                       lfe_element_tag_select
+  m_bc->skip_bits(num_assoc_data *      4);  //                       assoc_data_element_tag_select
+  m_bc->skip_bits(num_valid_cc   * (1 + 4)); // cc_element_is_ind_sw, valid_cc_element_tag_select
+
+  m_bc->byte_align();
+  m_bc->skip_bits(m_bc->get_bits(8) * 8);    // comment_field_bytes, comment_field_data
+}
+
+void
+aac_header_c::parse(const unsigned char *data,
+                    int size) {
+  static debugging_option_c s_debug{"parse_aac_data|aac_full"};
+
+  if (size < 2)
+    return;
+
+  mxdebug_if(s_debug, boost::format("parse_aac_data: size %1%, data: %2%\n") % size % to_hex(data, size));
+
+  try {
+    m_bc        = std::make_shared<bit_reader_c>(data, size);
+    object_type = read_object_type();
+
+    if (!object_type)
+      return;
+
+    is_sbr      = false;
+    profile     = object_type - 1;
+    sample_rate = read_sample_rate();
+    channels    = m_bc->get_bits(4);
+
+    if (5 == object_type) {
+      is_sbr                = true;
+      output_sample_rate    = read_sample_rate();
+      extension_object_type = object_type;
+      object_type           = read_object_type();
+    }
+
+    if (   ( 1 == object_type) || ( 2 == object_type) || ( 3 == object_type) || ( 4 == object_type) || ( 6 == object_type) || ( 7 == object_type)
+        || (17 == object_type) || (19 == object_type) || (20 == object_type) || (21 == object_type) || (22 == object_type) || (23 == object_type))
+      read_ga_specific_config();
+    else
+      mxerror(boost::format("aac_object_type_not_ga_specific. %1%\n") % BUGMSG);
+
+    if ((17 == object_type) || ((19 <= object_type) && (27 >= object_type))) {
+      int ep_config = m_bc->get_bits(2);
+      if ((2 == ep_config) || (3 == ep_config))
+        read_error_protection_specific_config();
+      if (3 == ep_config)
+        m_bc->skip_bit();       // direct_mapping
+    }
+
+    if ((5 != extension_object_type) && (m_bc->get_remaining_bits() >= 16)) {
+      int sync_extension_type = m_bc->get_bits(11);
+      if (0x2b7 == sync_extension_type) {
+        extension_object_type = read_object_type();
+        if (5 == extension_object_type) {
+          is_sbr = m_bc->get_bit();
+          if (is_sbr)
+            output_sample_rate = read_sample_rate();
+        }
+      }
+    }
+
+    is_valid = true;
+
+    if (sample_rate <= 24000) {
+      output_sample_rate = 2 * sample_rate;
+      is_sbr             = true;
+    }
+
+  } catch (mtx::exception &ex) {
+    mxdebug_if(s_debug, boost::format("parse_aac_data: exception: %1%\n") % ex);
+  }
+}
+
 static bool
 parse_aac_adif_header_internal(const unsigned char *buf,
                                int size,
-                               aac_header_t *aac_header) {
-  bit_cursor_c bc(buf, size);
+                               aac_header_c *aac_header) {
+  bit_reader_c bc(buf, size);
 
   int profile             = 0;
   int sfreq_index         = 0;
@@ -108,7 +274,7 @@ parse_aac_adif_header_internal(const unsigned char *buf,
 bool
 parse_aac_adif_header(const unsigned char *buf,
                       int size,
-                      aac_header_t *aac_header) {
+                      aac_header_c *aac_header) {
   try {
     return parse_aac_adif_header_internal(buf, size, aac_header);
   } catch (...) {
@@ -119,9 +285,9 @@ parse_aac_adif_header(const unsigned char *buf,
 static bool
 is_adts_header(const unsigned char *buf,
                int size,
-               aac_header_t *aac_header,
+               aac_header_c *aac_header,
                bool emphasis_present) {
-  bit_cursor_c bc(buf, size);
+  bit_reader_c bc(buf, size);
 
   if (bc.get_bits(12) != 0xfff)            // ADTS header
     return false;
@@ -138,8 +304,11 @@ is_adts_header(const unsigned char *buf,
   if ((0 == id) && emphasis_present)
     bc.skip_bits(2);            // emphasis, MPEG-4 only
   bc.skip_bits(1 + 1);          // copyright_id_bit & copyright_id_start
-  int frame_length = bc.get_bits(13);
-  if (0 == frame_length)
+
+  int frame_length    = bc.get_bits(13);
+  int header_bit_size = (((0 == id) && emphasis_present) ? 58 : 56) + (!protection_absent ? 16 : 0);
+
+  if (header_bit_size >= frame_length * 8)
     return false;
 
   bc.skip_bits(11);             // adts_buffer_fullness
@@ -153,17 +322,17 @@ is_adts_header(const unsigned char *buf,
   aac_header->bytes            = frame_length;
   aac_header->channels         = channels > 6 ? 2 : channels;
   aac_header->bit_rate         = 1024;
-  aac_header->header_bit_size  = (((0 == id) && emphasis_present) ? 58 : 56) + (!protection_absent ? 16 : 0);
+  aac_header->header_bit_size  = header_bit_size;
   aac_header->header_byte_size = (aac_header->header_bit_size + 7) / 8;
   aac_header->data_byte_size   = aac_header->bytes - aac_header->header_bit_size / 8;
 
-  return true;
+  return aac_header->header_bit_size != 0;
 }
 
 int
 find_aac_header(const unsigned char *buf,
                 int size,
-                aac_header_t *aac_header,
+                aac_header_c *aac_header,
                 bool emphasis_present) {
   try {
     int bpos = 0;
@@ -197,32 +366,15 @@ parse_aac_data(const unsigned char *data,
                int &sample_rate,
                int &output_sample_rate,
                bool &sbr) {
-  if (size < 2)
+  auto h = aac_header_c::from_audio_specific_config(data, size);
+  if (!h.is_valid)
     return false;
 
-  mxverb(4, boost::format("parse_aac_data: size %1%, data: 0x") % size);
-  int i;
-  for (i = 0; i < size; i++)
-    mxverb(4, boost::format("%|1$02x| ") % static_cast<unsigned int>(data[i]));
-  mxverb(4, "\n");
-
-  profile = data[0] >> 3;
-  if (0 == profile)
-    return false;
-  --profile;
-
-  sample_rate = g_aac_sampling_freq[((data[0] & 0x07) << 1) | (data[1] >> 7)];
-  channels    = (data[1] & 0x7f) >> 3;
-  if ((5 == profile) && (5 <= size)) {
-    output_sample_rate = g_aac_sampling_freq[(data[4] & 0x7f) >> 3];
-    sbr                = true;
-
-  } else if (sample_rate <= 24000) {
-    output_sample_rate = 2 * sample_rate;
-    sbr                = true;
-
-  } else
-    sbr                = false;
+  profile            = h.profile;
+  channels           = h.channels;
+  sample_rate        = h.sample_rate;
+  output_sample_rate = h.output_sample_rate;
+  sbr                = h.is_sbr;
 
   return true;
 }
@@ -287,7 +439,7 @@ int
 find_consecutive_aac_headers(const unsigned char *buf,
                              int size,
                              int num) {
-  aac_header_t aac_header, new_header;
+  aac_header_c aac_header, new_header;
 
   int base = 0;
   int pos  = find_aac_header(&buf[base], size - base, &aac_header, false);
@@ -337,8 +489,8 @@ find_consecutive_aac_headers(const unsigned char *buf,
 }
 
 bool
-operator ==(const aac_header_t &h1,
-            const aac_header_t &h2) {
+operator ==(const aac_header_c &h1,
+            const aac_header_c &h2) {
   return (h1.sample_rate == h2.sample_rate)
       && (h1.bit_rate    == h2.bit_rate)
       && (h1.channels    == h2.channels)

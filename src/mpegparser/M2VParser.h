@@ -20,8 +20,10 @@
 
  **/
 
-#ifndef __M2VPARSER_H__
-#define __M2VPARSER_H__
+#ifndef MTX_M2VPARSER_H
+#define MTX_M2VPARSER_H
+
+#include "common/common_pch.h"
 
 #include "MPEGVideoBuffer.h"
 #include <stdio.h>
@@ -87,7 +89,6 @@ private:
   uint8_t mpegVersion;
   MPEG2ParserState_e parserState;
   MPEGVideoBuffer * mpgBuf;
-  bool bFrameMissingReferenceWarning;
   std::list<int64_t> m_timecodes;
 
   int32_t InitParser();
@@ -148,4 +149,4 @@ public:
 };
 
 
-#endif //__M2VPARSER_H__
+#endif //MTX_M2VPARSER_H

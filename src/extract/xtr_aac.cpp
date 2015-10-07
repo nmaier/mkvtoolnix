@@ -13,8 +13,8 @@
 #include "common/common_pch.h"
 
 #include "common/aac.h"
+#include "common/codec.h"
 #include "common/ebml.h"
-#include "common/matroska.h"
 #include "extract/xtr_aac.h"
 
 xtr_aac_c::xtr_aac_c(const std::string &codec_id,
@@ -37,8 +37,8 @@ xtr_aac_c::create_file(xtr_base_c *master,
   int sfreq  = (int)kt_get_a_sfreq(track);
 
   if (m_codec_id == MKV_A_AAC) {
-    KaxCodecPrivate *priv = FINDFIRST(&track, KaxCodecPrivate);
-    if (NULL == priv)
+    KaxCodecPrivate *priv = FindChild<KaxCodecPrivate>(&track);
+    if (!priv)
       mxerror(boost::format(Y("Track %1% with the CodecID '%2%' is missing the \"codec private\" element and cannot be extracted.\n")) % m_tid % m_codec_id);
 
     int output_sfreq = 0;
@@ -64,7 +64,7 @@ xtr_aac_c::create_file(xtr_base_c *master,
     if (!strcmp(&m_codec_id[12], "MAIN"))
       m_profile = 0;
     else if (   !strcmp(&m_codec_id[12], "LC")
-             || (strstr(&m_codec_id[12], "SBR") != NULL))
+             ||  strstr(&m_codec_id[12], "SBR"))
       m_profile = 1;
     else if (!strcmp(&m_codec_id[12], "SSR"))
       m_profile = 2;
@@ -105,17 +105,7 @@ xtr_aac_c::create_file(xtr_base_c *master,
 #endif
 
 void
-xtr_aac_c::handle_frame(memory_cptr &frame,
-                        KaxBlockAdditions *,
-                        int64_t,
-                        int64_t,
-                        int64_t,
-                        int64_t,
-                        bool,
-                        bool,
-                        bool) {
-  m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
-
+xtr_aac_c::handle_frame(xtr_frame_t &f) {
   // Recreate the ADTS headers. What a fun. Like runing headlong into
   // a solid wall. But less painful. Well such is life, you know.
   // But then again I've just seen a beautiful girl walking by my
@@ -156,7 +146,7 @@ xtr_aac_c::handle_frame(memory_cptr &frame,
   // copyright id start, 1 bit = 0 (ASSUMPTION!)
 
   // frame length, 13 bits
-  int len  = frame->get_size() + 7;
+  int len  = f.frame->get_size() + 7;
   adts[3] |= len >> 11;
   adts[4]  = (len >> 3) & 0xff;
   adts[5]  = (len & 7) << 5;
@@ -169,5 +159,5 @@ xtr_aac_c::handle_frame(memory_cptr &frame,
 
   // Write the ADTS header and the data itself.
   m_out->write(adts, 56 / 8);
-  m_out->write(frame);
+  m_out->write(f.frame);
 }

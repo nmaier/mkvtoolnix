@@ -11,105 +11,34 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_MM_IO_H
-#define __MTX_COMMON_MM_IO_H
+#ifndef MTX_COMMON_MM_IO_H
+#define MTX_COMMON_MM_IO_H
 
 #include "common/common_pch.h"
 
 #include <stack>
-#if HAVE_POSIX_FADVISE
-# include <unistd.h>
-# include <sys/stat.h>
-# include <sys/types.h>
-#endif
 
 #include <ebml/IOCallback.h>
 
-#include "common/error.h"
-#include "common/memory.h"
-#include "common/smart_pointers.h"
-
 using namespace libebml;
 
-namespace mtx {
-  namespace mm_io {
-    class exception: public mtx::exception {
-    public:
-      virtual const char *what() const throw() {
-        return "unspecified I/O error";
-      }
-    };
-
-    class end_of_file_x: public exception {
-    public:
-      virtual const char *what() const throw() {
-        return "end of file error";
-      }
-    };
-
-    class seek_x: public exception {
-    public:
-      virtual const char *what() const throw() {
-        return "seek in file error";
-      }
-    };
-
-    class open_x: public exception {
-    public:
-      virtual const char *what() const throw() {
-        return "open file error";
-      }
-    };
-
-    class wrong_read_write_access_x: public exception {
-    public:
-      virtual const char *what() const throw() {
-        return "write operation to read-only file or vice versa";
-      }
-    };
-
-    class insufficient_space_x: public exception {
-    public:
-      virtual const char *what() const throw() {
-        return "insufficient space for write operation";
-      }
-    };
-
-    class create_directory_x: public exception {
-    protected:
-      std::string m_path, m_error;
-      int m_error_number;
-    public:
-      create_directory_x(const std::string &path, const std::string &error, int error_number)
-        : m_path(path)
-        , m_error(error)
-        , m_error_number(error_number)
-      {
-      }
-      virtual ~create_directory_x() throw() { }
-
-      virtual const char *what() const throw() {
-        return "create_directory() failed";
-      }
-      virtual std::string error() const throw() {
-        return (boost::format(Y("mkdir(%1%) failed; errno = %2% (%3%)")) % m_path % m_error_number % m_error).str();
-      }
-    };
-  }
-}
-
 class mm_io_c;
-typedef counted_ptr<mm_io_c> mm_io_cptr;
+typedef std::shared_ptr<mm_io_c> mm_io_cptr;
+
+class charset_converter_c;
+typedef std::shared_ptr<charset_converter_c> charset_converter_cptr;
 
 class mm_io_c: public IOCallback {
 protected:
-  bool m_dos_style_newlines;
+  bool m_dos_style_newlines, m_bom_written;
   std::stack<int64_t> m_positions;
   int64_t m_current_position, m_cached_size;
+  charset_converter_cptr m_string_output_converter;
 
 public:
   mm_io_c()
     : m_dos_style_newlines(false)
+    , m_bom_written{}
     , m_current_position(0)
     , m_cached_size(-1)
   {
@@ -119,6 +48,7 @@ public:
   virtual uint64 getFilePointer() = 0;
   virtual void setFilePointer(int64 offset, seek_mode mode = seek_beginning) = 0;
   virtual bool setFilePointer2(int64 offset, seek_mode mode = seek_beginning);
+  virtual memory_cptr read(size_t size);
   virtual uint32 read(void *buffer, size_t size);
   virtual uint32_t read(std::string &buffer, size_t size, size_t offset = 0);
   virtual uint32_t read(memory_cptr &buffer, size_t size, int offset = 0);
@@ -128,9 +58,12 @@ public:
   virtual uint32_t read_uint32_le();
   virtual uint64_t read_uint64_le();
   virtual uint16_t read_uint16_be();
+  virtual int32_t read_int24_be();
   virtual uint32_t read_uint24_be();
   virtual uint32_t read_uint32_be();
   virtual uint64_t read_uint64_be();
+  virtual double read_double();
+  virtual unsigned int read_mp4_descriptor_len();
   virtual int write_uint8(unsigned char value);
   virtual int write_uint16_le(uint16_t value);
   virtual int write_uint32_le(uint32_t value);
@@ -138,8 +71,10 @@ public:
   virtual int write_uint16_be(uint16_t value);
   virtual int write_uint32_be(uint32_t value);
   virtual int write_uint64_be(uint64_t value);
+  virtual int write_double(double value);
   virtual void skip(int64 numbytes);
   virtual size_t write(const void *buffer, size_t size);
+  virtual size_t write(std::string const &buffer);
   virtual size_t write(const memory_cptr &buffer, size_t size = UINT_MAX, size_t offset = 0);
   virtual bool eof() = 0;
   virtual void flush() {
@@ -157,6 +92,7 @@ public:
     return puts(format.str());
   }
   virtual bool write_bom(const std::string &charset);
+  virtual bool bom_written() const;
   virtual int getch();
 
   virtual void save_pos(int64_t new_pos = -1);
@@ -166,35 +102,21 @@ public:
 
   virtual void close() = 0;
 
+  virtual void set_string_output_converter(charset_converter_cptr const &converter) {
+    m_string_output_converter = converter;
+  }
+
   virtual void use_dos_style_newlines(bool yes) {
     m_dos_style_newlines = yes;
+  }
+
+  virtual void enable_buffering(bool /* enable */) {
   }
 
 protected:
   virtual uint32 _read(void *buffer, size_t size) = 0;
   virtual size_t _write(const void *buffer, size_t size) = 0;
 };
-
-#if HAVE_POSIX_FADVISE
-struct file_id_t {
-  bool m_initialized;
-  dev_t m_dev;
-  ino_t m_ino;
-
-  file_id_t()
-    : m_initialized(false)
-    , m_dev(0)
-    , m_ino(0)
-  {
-  }
-
-  void initialize(const struct stat &st) {
-    m_dev         = st.st_dev;
-    m_ino         = st.st_ino;
-    m_initialized = true;
-  }
-};
-#endif
 
 class mm_file_io_c: public mm_io_c {
 protected:
@@ -204,19 +126,13 @@ protected:
 #if defined(SYS_WINDOWS)
   bool m_eof;
 #endif
-#if HAVE_POSIX_FADVISE
-  file_id_t m_file_id;
-  unsigned long m_read_count, m_write_count;
-  static bool ms_use_posix_fadvise;
-  bool m_use_posix_fadvise_here;
-  std::string m_canonicalized_file_name;
-#endif
 
 public:
   mm_file_io_c(const std::string &path, const open_mode mode = MODE_READ);
   virtual ~mm_file_io_c();
 
   static void prepare_path(const std::string &path);
+  static memory_cptr slurp(std::string const &file_name);
 
   virtual uint64 getFilePointer();
 #if defined(SYS_WINDOWS)
@@ -232,10 +148,6 @@ public:
 
   virtual int truncate(int64_t pos);
 
-#if HAVE_POSIX_FADVISE
-  void setup_fadvise(const std::string &local_path);
-#endif
-
   static void setup();
   static void cleanup();
   static mm_io_cptr open(const std::string &path, const open_mode mode = MODE_READ);
@@ -245,7 +157,7 @@ protected:
   virtual size_t _write(const void *buffer, size_t size);
 };
 
-typedef counted_ptr<mm_file_io_c> mm_file_io_cptr;
+typedef std::shared_ptr<mm_file_io_c> mm_file_io_cptr;
 
 class mm_proxy_io_c: public mm_io_c {
 protected:
@@ -275,31 +187,37 @@ public:
   virtual std::string get_file_name() const {
     return m_proxy_io->get_file_name();
   }
+  virtual mm_io_c *get_proxied() const {
+    return m_proxy_io;
+  }
 
 protected:
   virtual uint32 _read(void *buffer, size_t size);
   virtual size_t _write(const void *buffer, size_t size);
 };
 
-typedef counted_ptr<mm_proxy_io_c> mm_proxy_io_cptr;
+typedef std::shared_ptr<mm_proxy_io_c> mm_proxy_io_cptr;
 
 class mm_null_io_c: public mm_io_c {
 protected:
   int64_t m_pos;
+  std::string m_file_name;
 
 public:
-  mm_null_io_c();
+  mm_null_io_c(std::string const &file_name);
 
   virtual uint64 getFilePointer();
   virtual void setFilePointer(int64 offset, seek_mode mode = seek_beginning);
   virtual void close();
+  virtual bool eof();
+  virtual std::string get_file_name() const;
 
 protected:
   virtual uint32 _read(void *buffer, size_t size);
   virtual size_t _write(const void *buffer, size_t size);
 };
 
-typedef counted_ptr<mm_null_io_c> mm_null_io_cptr;
+typedef std::shared_ptr<mm_null_io_c> mm_null_io_cptr;
 
 class mm_mem_io_c: public mm_io_c {
 protected:
@@ -312,6 +230,7 @@ protected:
 public:
   mm_mem_io_c(unsigned char *mem, uint64_t mem_size, int increase);
   mm_mem_io_c(const unsigned char *mem, uint64_t mem_size);
+  mm_mem_io_c(memory_c const &mem);
   ~mm_mem_io_c();
 
   virtual uint64 getFilePointer();
@@ -325,14 +244,16 @@ public:
     m_file_name = file_name;
   }
 
+  virtual unsigned char *get_buffer() const;
   virtual unsigned char *get_and_lock_buffer();
+  virtual std::string get_content() const;
 
 protected:
   virtual uint32 _read(void *buffer, size_t size);
   virtual size_t _write(const void *buffer, size_t size);
 };
 
-typedef counted_ptr<mm_mem_io_c> mm_mem_io_cptr;
+typedef std::shared_ptr<mm_mem_io_c> mm_mem_io_cptr;
 
 enum byte_order_e {BO_UTF8, BO_UTF16_LE, BO_UTF16_BE, BO_UTF32_LE, BO_UTF32_BE, BO_NONE};
 
@@ -348,7 +269,12 @@ public:
   virtual void setFilePointer(int64 offset, seek_mode mode=seek_beginning);
   virtual std::string getline();
   virtual int read_next_char(char *buffer);
-  virtual byte_order_e get_byte_order();
+  virtual byte_order_e get_byte_order() const {
+    return m_byte_order;
+  }
+  virtual unsigned int get_byte_order_length() const {
+    return m_bom_len;
+  }
   virtual void set_byte_order(byte_order_e byte_order) {
     m_byte_order = byte_order;
   }
@@ -361,7 +287,7 @@ public:
   static bool detect_byte_order_marker(const unsigned char *buffer, unsigned int size, byte_order_e &byte_order, unsigned int &bom_length);
 };
 
-typedef counted_ptr<mm_text_io_c> mm_text_io_cptr;
+typedef std::shared_ptr<mm_text_io_c> mm_text_io_cptr;
 
 class mm_stdio_c: public mm_io_c {
 public:
@@ -378,11 +304,16 @@ public:
   }
   virtual void flush();
 
+#if defined(SYS_WINDOWS)
+  virtual void set_string_output_converter(charset_converter_cptr const &) {
+  }
+#endif
+
 protected:
   virtual uint32 _read(void *buffer, size_t size);
   virtual size_t _write(const void *buffer, size_t size);
 };
 
-typedef counted_ptr<mm_stdio_c> mm_stdio_cptr;
+typedef std::shared_ptr<mm_stdio_c> mm_stdio_cptr;
 
-#endif // __MTX_COMMON_MM_IO_H
+#endif // MTX_COMMON_MM_IO_H

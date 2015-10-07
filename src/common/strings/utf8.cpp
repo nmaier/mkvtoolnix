@@ -16,7 +16,7 @@
    'using namespace libebml'.
 */
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <string>
 #include <utf8.h>
@@ -27,7 +27,7 @@ std::wstring
 to_wide(const std::string &source) {
   std::wstring destination;
 
-  utf8::utf8to32(source.begin(), source.end(), back_inserter(destination));
+  ::utf8::utf8to32(source.begin(), source.end(), back_inserter(destination));
 
   return destination;
 }
@@ -36,7 +36,7 @@ std::string
 to_utf8(const std::wstring &source) {
   std::string destination;
 
-  utf8::utf32to8(source.begin(), source.end(), back_inserter(destination));
+  ::utf8::utf32to8(source.begin(), source.end(), back_inserter(destination));
 
   return destination;
 }

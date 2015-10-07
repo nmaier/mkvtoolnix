@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "/usr/share/xml/docbook/schema/dtd/4.5/docbookx.dtd"
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd"
 [
 <!ENTITY product "mkvmerge">
-<!ENTITY version "5.1.0">
-<!ENTITY date "2011-11-27">
+<!ENTITY version "6.9.1">
+<!ENTITY date "2014-04-18">
 
 <!ENTITY mkvmerge "<citerefentry><refentrytitle>mkvmerge</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
 <!ENTITY mkvinfo "<citerefentry><refentrytitle>mkvinfo</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
@@ -140,6 +140,10 @@
        Read segment information from a <abbrev>XML</abbrev> file. This file can contain the segment family <abbrev>UID</abbrev>, segment
        <abbrev>UID</abbrev>, previous and next segment <abbrev>UID</abbrev> elements. An example file and a <abbrev>DTD</abbrev> are included
        in the MKVToolNix distribution.
+      </para>
+
+      <para>
+       See the section about <link linkend="mkvmerge.segmentinfo">segment info XML files</link> below for details.
       </para>
      </listitem>
     </varlistentry>
@@ -343,7 +347,7 @@
      </listitem>
     </varlistentry>
 
-    <varlistentry>
+    <varlistentry id="mkvmerge.description.timecode_scale">
      <term><option>--timecode-scale</option> <parameter>factor</parameter></term>
      <listitem>
       <para>
@@ -367,7 +371,7 @@
   </refsect2>
 
   <refsect2>
-   <title>File splitting, linking and appending (more global options)</title>
+   <title>File splitting, linking, appending and concatenation (more global options)</title>
 
    <variablelist>
     <varlistentry id="mkvmerge.description.split">
@@ -381,7 +385,7 @@
       </para>
 
       <para>
-       At the moment &mkvmerge; supports three different modes.
+       At the moment &mkvmerge; supports four different modes.
       </para>
 
       <orderedlist>
@@ -459,7 +463,230 @@
          The '<literal>timecodes:</literal>' prefix must not be omitted.
         </para>
        </listitem>
+
+       <listitem>
+        <para>
+         Keeping specific parts by specifying timecode ranges while discarding others.
+        </para>
+
+        <para>
+         Syntax: <option>--split</option> <literal>parts:</literal><parameter>start1</parameter>-<parameter>end1</parameter><optional>,<optional>+</optional><parameter>start2</parameter>-<parameter>end2</parameter><optional>,<optional>+</optional><parameter>start3</parameter>-<parameter>end3</parameter>...</optional></optional>
+        </para>
+
+        <para>
+         Examples:
+         <orderedlist>
+          <listitem><para><code>--split parts:00:01:20-00:02:45,00:05:50-00:10:30</code></para></listitem>
+          <listitem><para><code>--split parts:00:01:20-00:02:45,+00:05:50-00:10:30</code></para></listitem>
+          <listitem><para><code>--split parts:-00:02:45,00:05:50-</code></para></listitem>
+         </orderedlist>
+        </para>
+
+        <para>
+         The <literal>parts</literal> mode tells &mkvmerge; to keep certain ranges of timecodes while discarding others. The ranges to keep
+         have to be listed after the <literal>parts:</literal> keyword and be separated by commas. A range itself consists of a start and an
+         end timecode in the same format the other variations of <parameter>--split</parameter> accept (e.g. both
+         <literal>00:01:20</literal> and <literal>80s</literal> refer to the same timecode).
+        </para>
+
+        <para>
+         If a start timecode is left out then it defaults to the previous range's end timecode. If there was no previous range then it
+         defaults to the start of the file (see example 3).
+        </para>
+
+        <para>
+         If an end timecode is left out then it defaults to the end of the source files which basically tells &mkvmerge; to keep the rest (see
+         example 3).
+        </para>
+
+        <para>
+         Normally each range will be written to a new file. This can be changed so that consecutive ranges are written to the same file. For
+         that the user has to prefix the start timecode with a <literal>+</literal>. This tells &mkvmerge; not to create a new file and
+         instead append the range to the same file the previous range was written to. Timecodes will be adjusted so that there will be no
+         gap in the output file even if there was a gap in the two ranges in the input file.
+        </para>
+
+        <para>
+         In example 1 &mkvmerge; will create two files. The first will contain the content starting from <literal>00:01:20</literal> until
+         <literal>00:02:45</literal>. The second file will contain the content starting from <literal>00:05:50</literal> until
+         <literal>00:10:30</literal>.
+        </para>
+
+        <para>
+         In example 2 &mkvmerge; will create only one file. This file will contain both the content starting from <literal>00:01:20</literal>
+         until <literal>00:02:45</literal> and the content starting from <literal>00:05:50</literal> until <literal>00:10:30</literal>.
+        </para>
+
+        <para>
+         In example 3 &mkvmerge; will create two files. The first will contain the content from the start of the source files until
+         <literal>00:02:45</literal>. The second file will contain the content starting from <literal>00:05:50</literal> until the end of
+         the source files.
+        </para>
+
+        <note>
+          <para>
+            Note that &mkvmerge; only makes decisions about splitting at key frame positions. This applies to both the start and the end of
+            each range. So even if an end timecode is between two key frames &mkvmerge; will continue outputting the frames up to but
+            excluding the following key frame.
+          </para>
+        </note>
+       </listitem>
+
+       <listitem>
+        <para>
+         Keeping specific parts by specifying frame/field number ranges while discarding others.
+        </para>
+
+        <para>
+         Syntax: <option>--split</option> <literal>parts-frames:</literal><parameter>start1</parameter>-<parameter>end1</parameter><optional>,<optional>+</optional><parameter>start2</parameter>-<parameter>end2</parameter><optional>,<optional>+</optional><parameter>start3</parameter>-<parameter>end3</parameter>...</optional></optional>
+        </para>
+
+        <para>
+         Examples:
+         <orderedlist>
+          <listitem><para><code>--split parts-frames:137-258,548-1211</code></para></listitem>
+          <listitem><para><code>--split parts-frames:733-912,+1592-2730</code></para></listitem>
+          <listitem><para><code>--split parts-frames:-430,2512-</code></para></listitem>
+         </orderedlist>
+        </para>
+
+        <para>
+         The <literal>parts-frames</literal> mode tells &mkvmerge; to keep certain ranges of frame/field numbers while discarding
+         others. The ranges to keep have to be listed after the <literal>parts-frames:</literal> keyword and be separated by commas. A range
+         itself consists of a start and an end frame/field number. Numbering starts at 1.
+        </para>
+
+        <para>
+         If a start number is left out then it defaults to the previous range's end number. If there was no previous range then it defaults
+         to the start of the file (see example 3).
+        </para>
+
+        <para>
+         If an end number is left out then it defaults to the end of the source files which basically tells &mkvmerge; to keep the rest (see
+         example 3).
+        </para>
+
+        <para>
+         Normally each range will be written to a new file. This can be changed so that consecutive ranges are written to the same file. For
+         that the user has to prefix the start number with a <literal>+</literal>. This tells &mkvmerge; not to create a new file and
+         instead append the range to the same file the previous range was written to. Timecodes will be adjusted so that there will be no
+         gap in the output file even if there was a gap in the two ranges in the input file.
+        </para>
+
+        <note>
+          <para>
+            Note that &mkvmerge; only makes decisions about splitting at key frame positions. This applies to both the start and the end of
+            each range. So even if an end frame/field number is between two key frames &mkvmerge; will continue outputting the frames up to
+            but excluding the following key frame.
+          </para>
+        </note>
+
+        <para>
+         In example 1 &mkvmerge; will create two files. The first will contain the content starting from the first key frame at or after
+         <literal>137</literal> up to but excluding the first key frame at or after <literal>258</literal>. The second file will contain the
+         content starting from <literal>548</literal> until <literal>1211</literal>.
+        </para>
+
+        <para>
+         In example 2 &mkvmerge; will create only one file. This file will contain both the content starting from <literal>733</literal>
+         until <literal>912</literal> and the content starting from <literal>1592</literal> until <literal>2730</literal>.
+        </para>
+
+        <para>
+         In example 3 &mkvmerge; will create two files. The first will contain the content from the start of the source files until
+         <literal>430</literal>. The second file will contain the content starting from <literal>2512</literal> until the end of the source
+         files.
+        </para>
+
+        <para>
+          This mode considers only the first video track that is output.  If no video track is output no splitting will occur.
+        </para>
+
+        <note>
+          <para>
+            The numbers given with this argument are interpreted based on the number of &matroska; blocks that are output.  A single &matroska;
+            block contains either a full frame (for progressive content) or a single field (for interlaced content).  mkvmerge does not
+            distinguish between those two and simply counts the number of blocks.  For example: If one wanted to split after the 25th full
+            frame with interlaced content one would have to use <literal>50</literal> (two fields per full frame) as the split point.
+          </para>
+        </note>
+       </listitem>
+
+       <listitem>
+        <para>
+         Splitting after specific frames/fields.
+        </para>
+
+        <para>
+         Syntax: <option>--split</option> <literal>frames:</literal><parameter>A</parameter><optional>,<parameter>B</parameter><optional>,<parameter>C</parameter>...</optional></optional>
+        </para>
+
+        <para>
+         Example: <code>--split frames:120,237,891</code>
+        </para>
+
+        <para>
+         The parameters <parameter>A</parameter>, <parameter>B</parameter>, <parameter>C</parameter> etc must all be positive integers.
+         Numbering starts at 1.  The list of frame/field numbers is separated by commas.  After the input stream has reached the current
+         split point's frame/field number a new file is created.  Then the next split point given in this list is used.
+        </para>
+
+        <para>
+         The '<literal>frames:</literal>' prefix must not be omitted.
+        </para>
+
+        <para>
+          This mode considers only the first video track that is output.  If no video track is output no splitting will occur.
+        </para>
+
+        <note>
+          <para>
+            The numbers given with this argument are interpreted based on the number of &matroska; blocks that are output.  A single &matroska;
+            block contains either a full frame (for progressive content) or a single field (for interlaced content).  mkvmerge does not
+            distinguish between those two and simply counts the number of blocks.  For example: If one wanted to split after the 25th full
+            frame with interlaced content one would have to use <literal>50</literal> (two fields per full frame) as the split point.
+          </para>
+        </note>
+       </listitem>
+
+       <listitem>
+        <para>
+         Splitting before specific chapters.
+        </para>
+
+        <para>
+         Syntax: <option>--split</option> <literal>chapters:all</literal> or <option>--split</option>
+         <literal>chapters:</literal><parameter>A</parameter><optional>,<parameter>B</parameter><optional>,<parameter>C</parameter>...</optional></optional>
+        </para>
+
+        <para>
+         Example: <code>--split chapters:5,8</code>
+        </para>
+
+        <para>
+         The parameters <parameter>A</parameter>, <parameter>B</parameter>, <parameter>C</parameter> etc must all be positive integers.
+         Numbering starts at 1.  The list of chapter numbers is separated by commas.  Splitting will occur right before the first key frame
+         whose timecode is equal to or bigger than the start timecode for the chapters whose numbers are listed.  A chapter starting at 0s
+         is never considered for splitting and discarded silently.
+        </para>
+
+        <para>
+          The keyword <literal>all</literal> can be used instead of listing all chapter numbers manually.
+        </para>
+
+        <para>
+         The '<literal>chapters:</literal>' prefix must not be omitted.
+        </para>
+
+        <note>
+          <para>
+            The &matroska; file format supports arbitrary deeply nested chapter structures called 'edition entries' and 'chapter atoms'.
+            However, this mode only considers the top-most level of chapters across all edition entries.
+          </para>
+        </note>
+       </listitem>
       </orderedlist>
+
       <para>
        For this splitting mode the output filename is treated differently than for the normal operation. It may contain a
        <function>printf</function> like expression '<code>%d</code>' including an optional field width,
@@ -561,13 +788,13 @@ $ mkvmerge -o full.mkv file1.mkv +file2.mkv</screen>
      </listitem>
     </varlistentry>
 
-    <varlistentry>
+    <varlistentry id="mkvmerge.description.prevent_concatenation">
      <term><option>=</option></term>
      <listitem>
       <para>
-       Normally mkvmerge looks for files in the same directory as an input file that have the same base name and only differ in their running
-       number (e.g. 'VTS_01_1.VOB', 'VTS_01_2.VOB', 'VTS_01_3.VOB' etc). This option, a single '=', causes mkvmerge not to look for those
-       additional files.
+       Normally &mkvmerge; looks for files in the same directory as an input file that have the same base name and only differ in their
+       running number (e.g. 'VTS_01_1.VOB', 'VTS_01_2.VOB', 'VTS_01_3.VOB' etc) and treats all of those files as if they were concatenated
+       into a single big file. This option, a single '=', causes mkvmerge not to look for those additional files.
       </para>
 
       <para>
@@ -578,7 +805,56 @@ $ mkvmerge -o full.mkv file1.mkv +file2.mkv</screen>
 $ mkvmerge -o full.mkv =file1.mkv</screen>
      </listitem>
     </varlistentry>
+
+    <varlistentry id="mkvmerge.description.concatenation">
+     <term><option>(</option> <parameter>file1</parameter> <parameter>file2</parameter> <option>)</option></term>
+     <listitem>
+      <para>
+       If multiple file names are contained in a pair of parenthesis then those files will be treated as if they were concatenated into a
+       single big file consisting of the content of each of the files one after the other.
+      </para>
+
+      <para>
+       This can be used for e.g. VOB files coming from a DVD or MPEG transport streams. It cannot be used if each file contains its own set
+       of headers which is usually the case with stand-alone files like AVI or MP4.
+      </para>
+
+      <para>
+       Putting a file name into parenthesis also prevents &mkvmerge; from looking for additional files with the same base name as described
+       in <link linkend="mkvmerge.description.prevent_concatenation">option <option>=</option></link>. Therefore these two command lines are
+       equivalent:
+      </para>
+
+      <screen>$ mkvmerge -o out.mkv = file.mkv
+$ mkvmerge -o out.mkv '(' file.mkv ')'</screen>
+
+      <para>
+       Several things should be noted:
+      </para>
+
+      <orderedlist>
+       <listitem>
+        <para>
+         There must be spaces both after the opening and before the closing parenthesis.
+        </para>
+       </listitem>
+
+       <listitem>
+        <para>
+         Every parameter between parenthesis is interpreted as a file name. Therefore all options applying to this logical file must be listed before the opening parenthesis.
+        </para>
+       </listitem>
+
+       <listitem>
+        <para>
+         Some shells treat parenthesis as special characters. Hence you must escape or quote them as shown in the example above.
+        </para>
+       </listitem>
+      </orderedlist>
+     </listitem>
+    </varlistentry>
    </variablelist>
+
   </refsect2>
 
   <refsect2>
@@ -1002,27 +1278,42 @@ $ mkvmerge -o full.mkv =file1.mkv</screen>
      </listitem>
     </varlistentry>
 
-    <varlistentry>
+    <varlistentry id="mkvmerge.description.default_duration">
      <term><option>--default-duration</option> <parameter>TID:x</parameter></term>
      <listitem>
       <para>
        Forces the default duration of a given track to the specified value.  Also modifies the track's timecodes to match the default
        duration.  The argument <parameter>x</parameter> must be postfixed with '<literal>s</literal>', '<literal>ms</literal>',
-       '<literal>us</literal>', '<literal>ns</literal>' or '<literal>fps</literal>' to specify the default duration in seconds, milliseconds,
-       microseconds, nanoseconds or 'frames per second' respectively.  The number <parameter>x</parameter> itself can be a floating point
-       number or a fraction.
+       '<literal>us</literal>', '<literal>ns</literal>', '<literal>fps</literal>', '<literal>p</literal>' or '<literal>i</literal>' to
+       specify the default duration in seconds, milliseconds, microseconds, nanoseconds, 'frames per second', 'progressive frames per
+       second' or 'interlaced frames per second' respectively. The number <parameter>x</parameter> itself can be a floating point number or
+       a fraction.
       </para>
 
       <para>
-       If the default duration is not forced then mkvmerge will try to derive the track's default duration from the container and/or codec
-       used.  One case in which this option is of use is when adding <foreignphrase>AVC/h.264</foreignphrase> elementary streams because
-       these do not contain information about their number of frames or a default duration for each frame.  For such files &mkvmerge; will
-       assume a default duration of '<literal>25fps</literal>' unless overridden.
+       If the default duration is not forced then mkvmerge will try to derive the track's default duration from the container and/or the
+       encoded bitstream for certain track types, e.g. AVC/h.264 or MPEG-2.
       </para>
 
       <para>
        This option can also be used to change the <abbrev>FPS</abbrev> of video tracks without having to use an external timecode file.
       </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry id="mkvmerge.description.fix_bitstream_timing_information">
+     <term><option>--fix-bitstream-timing-information</option> <parameter>TID<optional>:0|1</optional></parameter></term>
+     <listitem>
+      <para>
+       Normally &mkvmerge; does not change the timing information (frame/field rate) stored in the video bitstream. With this option that
+       information is adjusted to match the container timing information. The container timing information can come from various sources:
+       from the command line (see option <link linkend="mkvmerge.description.default_duration"><option>--default-duration</option></link>),
+       the source container or derived from the bitstream.
+      </para>
+
+      <note>
+       <para>This has only been implemented for AVC/h.264 video tracks so far.</para>
+      </note>
      </listitem>
     </varlistentry>
 
@@ -1246,6 +1537,9 @@ $ mkvmerge -o full.mkv =file1.mkv</screen>
        <citerefentry><refentrytitle>nice</refentrytitle><manvolnum>2</manvolnum></citerefentry> function. Therefore only the super user can
        use '<literal>higher</literal>' and '<literal>highest</literal>'. On Windows all values are useable for every user.
       </para>
+
+      <para>Selecting '<literal>lowest</literal>' also causes &mkvmerge; to select idle I/O priority in addition to the lowest possible
+      process priority.</para>
      </listitem>
     </varlistentry>
 
@@ -1295,39 +1589,44 @@ $ mkvmerge -o full.mkv =file1.mkv</screen>
      </listitem>
     </varlistentry>
 
+    <varlistentry id="mkvmerge.description.debug">
+     <term><option>--debug</option> <parameter>topic</parameter></term>
+     <listitem>
+      <para>
+       Turn on debugging for a specific feature. This option is only useful for developers.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry id="mkvmerge.description.engage">
+     <term><option>--engage</option> <parameter>feature</parameter></term>
+     <listitem>
+      <para>
+       Turn on experimental features. A list of available features can be requested with <command>mkvmerge --engage list</command>. These
+       features are not meant to be used in normal situations.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry id="mkvmerge.description.gui_mode">
+     <term><option>--gui-mode</option></term>
+     <listitem>
+      <para>
+       Turns on GUI mode. In this mode specially-formatted lines may be output that can tell a controlling GUI what's happening. These
+       messages follow the format '<literal>#GUI#message</literal>'. The message may be followed by key/value pairs as in
+       '<literal>#GUI#message#key1=value1#key2=value2…</literal>'. Neither the messages nor the keys are ever translated and always output
+       in English.
+      </para>
+     </listitem>
+    </varlistentry>
+
     <varlistentry>
      <term><option>@</option><parameter>options-file</parameter></term>
      <listitem>
       <para>
-       Reads additional command line arguments from the file <parameter>options-file</parameter>.  Lines whose first non-whitespace character
-       is a hash mark ('<literal>#</literal>') are treated as comments and ignored. White spaces at the start and end of a line will be
-       stripped. Each line must contain exactly one option.
+       Reads additional command line arguments from the file <parameter>options-file</parameter>. See the section about <link
+       linkend="mkvmerge.option_files">option files</link> for further information.
       </para>
-
-      <para>
-       Several chars can be escaped, e.g. if you need to start a non-comment line with '#'. The rules are described in <link
-       linkend="mkvmerge.escaping">the section about escaping text</link>.
-      </para>
-
-      <para>
-       Note that backslashes must always be escaped. Hash marks ('#') must be escaped if they should not start a comment.
-      </para>
-
-      <para>
-       The command line '<command>mkvmerge -o "my file.mkv" -A "a movie.avi" sound.ogg</command>' could be converted into the following
-       option file:
-      </para>
-
-      <programlisting># Write to the file "c:\Matroska\my file.mkv" on Windows.
--o
-c:\\Matroska\\my file.mkv
-# Set the title to '#65'.
---title
-\h65
-# Only take the video from "a movie.avi".
--A
-a movie.avi
-sound.ogg</programlisting>
      </listitem>
     </varlistentry>
 
@@ -1387,8 +1686,9 @@ sound.ogg</programlisting>
      <term><option>--check-for-updates</option></term>
      <listitem>
       <para>
-       Checks online for new releases by downloading the URL <uri>http://mkvtoolnix-releases.bunkus.org/latest-release.xml</uri>. Four lines
-       will be output in <literal>key=value</literal> style: the URL from where the information was retrieved (key
+       Checks online for new releases by downloading the URL <ulink
+       url="http://mkvtoolnix-releases.bunkus.org/latest-release.xml">http://mkvtoolnix-releases.bunkus.org/latest-release.xml</ulink>. Four
+       lines will be output in <literal>key=value</literal> style: the URL from where the information was retrieved (key
        <literal>version_check_url</literal>), the currently running version (key <literal>running_version</literal>), the latest release's
        version (key <literal>available_version</literal>) and the download URL (key <literal>download_url</literal>).
       </para>
@@ -1625,8 +1925,8 @@ $ mkvmerge -o MM-complete.mkv MyMovie-with-sound.mkv MyMovie-add-audio.ogg</scre
 
   <screen>$ mkvmerge -i v.mkv
 File 'v.mkv': container: &matroska;
-Track ID 1: video (V_MS/VFW/FOURCC, DIV3)
-Track ID 2: audio (A_MPEG/L3)</screen>
+Track ID 0: video (V_MS/VFW/FOURCC, DIV3)
+Track ID 1: audio (A_MPEG/L3)</screen>
 
   <para>
    Do not confuse the track IDs that are assigned to the tracks that are placed in the output MKV file with the track IDs of the input
@@ -1652,12 +1952,6 @@ Track ID 2: audio (A_MPEG/L3)</screen>
 
    <listitem>
     <para>
-     <abbrev>MP4</abbrev> files: As output from x264, the video track has the ID 1.
-    </para>
-   </listitem>
-
-   <listitem>
-    <para>
      <abbrev>AAC</abbrev>, <abbrev>AC3</abbrev>, <abbrev>MP3</abbrev>, <abbrev>SRT</abbrev> and <abbrev>WAV</abbrev> files: The one 'track'
      in that file gets the ID 0.
     </para>
@@ -1665,13 +1959,7 @@ Track ID 2: audio (A_MPEG/L3)</screen>
 
    <listitem>
     <para>
-     Ogg/<abbrev>OGM</abbrev> files: The track IDs are assigned in order the tracks are found in the file starting at 0.
-    </para>
-   </listitem>
-
-   <listitem>
-    <para>
-     &matroska; files: The track's ID is the track number as reported by &mkvinfo;. It is <emphasis>not</emphasis> the track UID.
+     Most other files: The track IDs are assigned in order the tracks are found in the file starting at 0.
     </para>
    </listitem>
   </itemizedlist>
@@ -1696,83 +1984,171 @@ Track ID 2: audio (A_MPEG/L3)</screen>
    </para>
   </note>
 
+  <refsect2 id="mkvmerge.text_files_and_charsets.introduction">
+   <title>Introduction</title>
+   <para>
+    All text in a &matroska; file is encoded in UTF-8. This means that &mkvmerge; has to convert every text file it reads as well as every
+    text given on the command line from one character set into UTF-8. In return this also means that &mkvmerge;'s output has to be converted
+    back to that character set from UTF-8, e.g. if a non-English translation is used with <link
+    linkend="mkvmerge.description.ui_language"><option>--ui-language</option></link> or for text originating from a &matroska; file.
+   </para>
+
+   <para>
+    &mkvmerge; does this conversion automatically based on the presence of a <foreignphrase>byte order marker</foreignphrase> (short:
+    <abbrev>BOM</abbrev>) or the system's current locale. How the character set is inferred from the locale depends on the operating system
+    that &mkvmerge; is run on.
+   </para>
+  </refsect2>
+
+  <refsect2 id="mkvmerge.text_files_and_charsets.byte_order_markers">
+   <title>Byte order markers (BOM)</title>
+
+   <para>
+    Text files that start with a BOM are already encoded in one representation of UTF. &mkvmerge; supports the following five modes: UTF-8,
+    UTF-16 Little and Big Endian, UTF-32 Little and Big Endian. Text files with a BOM are automatically converted to UTF-8. Any of the
+    parameters that would otherwise set the character set for such a file (e.g. <link
+    linkend="mkvmerge.description.sub_charset"><option>--sub-charset</option></link>) is silently ignored.
+   </para>
+  </refsect2>
+
+  <refsect2 id="mkvmerge.text_files_and_charsets.unix">
+   <title>Linux and Unix-like systems including Mac OS</title>
+
+   <para>
+    On Unix-like systems &mkvmerge; uses the <citerefentry><refentrytitle>setlocale</refentrytitle><manvolnum>3</manvolnum></citerefentry>
+    system call which in turn uses the environment variables <varname>LANG</varname>, <varname>LC_ALL</varname> and
+    <varname>LC_CYPE</varname>. The resulting character set is often one of UTF-8 or the ISO-8859-* family and is used for all text file
+    operations and for encoding strings on the command line and for output to the console.
+   </para>
+  </refsect2>
+
+  <refsect2 id="mkvmerge.text_files_and_charsets.windows">
+   <title>Windows</title>
+
+   <para>
+    On Windows the default character set used for converting text files is determined by a call to the <function>GetACP()</function> system
+    call.
+   </para>
+
+   <para>
+    Reading the command line is done with the <function>GetCommandLineW()</function> function which already returns a Unicode
+    string. Therefore the option <option>--command-line-charset</option> is ignored on Windows.
+   </para>
+
+   <para>
+    Output to the console consists of three scenarios:
+   </para>
+
+   <orderedlist>
+    <listitem>
+     <para>
+      If the output is redirected with the option <link
+      linkend="mkvmerge.description.redirect_output"><option>--redirect-output</option></link> then the default charset is UTF-8. This can
+      be changed with <link linkend="mkvmerge.description.output_charset"><option>--output-charset</option></link>.
+     </para>
+
+     <para>
+      If the output is redirected with <command>cmd.exe</command> itself, e.g. with <literal>mkvinfo file.mkv &gt; info.txt</literal>, then
+      the charset is always UTF-8 and cannot be changed.
+     </para>
+
+     <para>
+      Otherwise (when writing directly to the console) the Windows function <function>WriteConsoleW()</function> is used and the option
+      <link linkend="mkvmerge.description.output_charset"><option>--output-charset</option></link> is ignored. The console should be able to
+      output all Unicode characters for which the corresponding language support is installed (e.g. Chinese characters might not be
+      displayed on English Windows versions).
+     </para>
+    </listitem>
+   </orderedlist>
+  </refsect2>
+
+  <refsect2 id="mkvmerge.text_files_and_charsets.options">
+   <title>Command line options</title>
+
+   <para>
+    The following options exist that allow specifying the character sets:
+   </para>
+
+   <itemizedlist>
+    <listitem>
+     <para>
+      <link linkend="mkvmerge.description.sub_charset"><option>--sub-charset</option></link> for text subtitle files and for text subtitle
+      tracks stored in container formats for which the character set cannot be determined unambiguously (e.g. Ogg files),
+     </para>
+    </listitem>
+
+    <listitem>
+     <para>
+      <link linkend="mkvmerge.description.chapter_charset"><option>--chapter-charset</option></link> for chapter text files and for chapters
+      and file titles stored in container formats for which the character set cannot be determined unambiguously (e.g. Ogg files for chapter
+      information, track and file titles etc; MP4 files for chapter information),
+     </para>
+    </listitem>
+
+    <listitem>
+     <para>
+      <link linkend="mkvmerge.description.command_line_charset"><option>--command-line-charset</option></link> for all strings on the command
+      line,
+     </para>
+    </listitem>
+
+    <listitem>
+     <para>
+      <link linkend="mkvmerge.description.output_charset"><option>--output-charset</option></link> for all strings written to the console or
+      to a file if the output has been redirected with the <link
+      linkend="mkvmerge.description.redirect_output"><option>--redirect-output</option></link> option. On non-Windows systems the default for
+      the output charset is the system's current charset. On Windows it defaults to UTF-8 both for redirecting with <link
+      linkend="mkvmerge.description.redirect_output"><option>--redirect-output</option></link> and with <command>cmd.exe</command> itself,
+      e.g. <literal>mkvinfo file.mkv &gt; info.txt</literal>.
+     </para>
+    </listitem>
+   </itemizedlist>
+  </refsect2>
+ </refsect1>
+
+ <refsect1 id="mkvmerge.option_files">
+  <title>Option files</title>
+
   <para>
-   All text in a &matroska; file is encoded in UTF-8. This means that &mkvmerge; has to convert every text file it reads as well as every
-   text given on the command line from one character set into UTF-8. In return this also means that &mkvmerge;'s output has to be converted
-   back to that character set from UTF-8, e.g. if a non-English translation is used with <link
-   linkend="mkvmerge.description.ui_language"><option>--ui-language</option></link> or for text originating from a &matroska; file.
+   An option file is a file &mkvmerge; can read additional command line arguments from. This can be used in order to circumvent certain
+   limitations of the shell or the operating system when executing external programs like a limited command line length.
   </para>
 
   <para>
-   &mkvmerge; does this conversion automatically based on the presence of a <foreignphrase>byte order marker</foreignphrase> (short:
-   <abbrev>BOM</abbrev>) or the system's current locale. How the character set is inferred from the locale depends on the operating system
-   that &mkvmerge; is run on.
+   There are several rules regarding option files. Lines whose first non-whitespace character is a hash mark ('<literal>#</literal>') are
+   treated as comments and ignored. White spaces at the start and end of a line will be stripped. Each line must contain exactly one
+   option.
   </para>
 
   <para>
-   Text files that start with a BOM are already encoded in one representation of UTF. &mkvmerge; supports the following five modes: UTF-8,
-   UTF-16 Little and Big Endian, UTF-32 Little and Big Endian. Text files with a BOM are automatically converted to UTF-8. Any of the
-   parameters that would otherwise set the character set for such a file (e.g. <link
-   linkend="mkvmerge.description.sub_charset"><option>--sub-charset</option></link>) is silently ignored.
+   A line not containing anything is also ignored. An empty argument is represented by the line '<literal>#EMPTY#</literal>'.
   </para>
 
   <para>
-   On Unix-like systems &mkvmerge; uses the <citerefentry><refentrytitle>setlocale</refentrytitle><manvolnum>3</manvolnum></citerefentry>
-   system call which in turn uses the environment variables <varname>LANG</varname>, <varname>LC_ALL</varname> and
-   <varname>LC_CYPE</varname>. The resulting character set is often one of UTF-8 or the ISO-8859-* family and is used for all text file
-   operations and for encoding strings on the command line and for output to the console.
+   Several chars can be escaped, e.g. if you need to start a non-comment line with '#'. The rules are described in <link
+   linkend="mkvmerge.escaping">the section about escaping text</link>.
   </para>
 
   <para>
-   On Windows there are actually two different character sets that &mkvmerge; uses due to the way the Windows shell program
-   <command>cmd.exe</command> is implemented. The first character set is determined by a call to the <function>GetACP()</function> system
-   call. This character set is used as the default for text file conversions and for all elements displayed by the <abbrev>GUI</abbrev>
-   programs in the MKVToolNix package.
+   Note that backslashes must always be escaped. Hash marks ('#') must be escaped if they should not start a comment.
   </para>
 
   <para>
-   Another charset may be used if <command>cmd.exe</command> is used. However, reading the command line is done with the
-   <function>GetCommandLineW()</function> function which already returns a Unicode string. Therefore the option
-   <option>--command-line-charset</option> is ignored on Windows.  Output to the console is done with the
-   <function>WriteConsoleW()</function> function. Therefore the option <option>--output-charset</option> is only used on Windows if the
-   output is redirected with <option>--redirect-output</option>.
+   The command line '<command>mkvmerge -o "my file.mkv" -A "a movie.avi" sound.ogg</command>' could be converted into the following
+   option file:
   </para>
 
-  <para>
-   The following options exist that allow specifying the character sets:
-  </para>
+  <programlisting># Write to the file "c:\Matroska\my file.mkv" on Windows.
+-o
+c:\\Matroska\\my file.mkv
+# Set the title to '#65'.
+--title
+\h65
+# Only take the video from "a movie.avi".
+-A
+a movie.avi
+sound.ogg</programlisting>
 
-  <itemizedlist>
-   <listitem>
-    <para>
-     <link linkend="mkvmerge.description.sub_charset"><option>--sub-charset</option></link> for text subtitle files and for text subtitle
-     tracks stored in container formats for which the character set cannot be determined unambiguously (e.g. Ogg files),
-    </para>
-   </listitem>
-
-   <listitem>
-    <para>
-     <link linkend="mkvmerge.description.chapter_charset"><option>--chapter-charset</option></link> for chapter text files and for chapters
-     and file titles stored in container formats for which the character set cannot be determined unambiguously (e.g. Ogg files for chapter
-     information, track and file titles etc; MP4 files for chapter information),
-    </para>
-   </listitem>
-
-   <listitem>
-    <para>
-     <link linkend="mkvmerge.description.command_line_charset"><option>--command-line-charset</option></link> for all strings on the command
-     line,
-    </para>
-   </listitem>
-
-   <listitem>
-    <para>
-     <link linkend="mkvmerge.description.output_charset"><option>--output-charset</option></link> for all strings written to the console or
-     to a file if the output has been redirected with the <link
-     linkend="mkvmerge.description.redirect_output"><option>--redirect-output</option></link> option.
-    </para>
-   </listitem>
-  </itemizedlist>
  </refsect1>
 
  <refsect1 id="mkvmerge.escaping">
@@ -1790,10 +2166,10 @@ Track ID 2: audio (A_MPEG/L3)</screen>
  <refsect1 id="mkvmerge.subtitles">
   <title>Subtitles</title>
   <para>
-   There are several text subtitle formats that can be embedded into &matroska;.  At the moment &mkvmerge; supports only text, VobSub and Kate
-   subtitle formats. Text subtitles must be recoded to UTF-8 so that they can be displayed correctly by a player (see the section about
-   <link linkend="mkvmerge.text_files_and_charsets"> text files and character sets</link> for an explanation how &mkvmerge; converts between
-   character sets). Kate subtitles are already encoded in UTF-8 and do not have to be re-encoded.
+   There are several text and bitmap subtitle formats that can be embedded into &matroska;. Text subtitles must be recoded to UTF-8 so that
+   they can be displayed correctly by a player (see the section about <link linkend="mkvmerge.text_files_and_charsets"> text files and
+   character sets</link> for an explanation how &mkvmerge; converts between character sets). Kate subtitles are already encoded in UTF-8 and
+   do not have to be re-encoded.
   </para>
 
   <para>
@@ -1815,6 +2191,12 @@ Track ID 2: audio (A_MPEG/L3)</screen>
 
    <listitem>
     <para>
+     Universal Subtitle Format (USF) files
+    </para>
+   </listitem>
+
+   <listitem>
+    <para>
      OggKate streams
     </para>
    </listitem>
@@ -1822,6 +2204,12 @@ Track ID 2: audio (A_MPEG/L3)</screen>
    <listitem>
     <para>
      VobSub bitmap subtitle files
+    </para>
+   </listitem>
+
+   <listitem>
+    <para>
+     PGS bitmap subtitle files as found on BluRay discs
     </para>
    </listitem>
   </itemizedlist>
@@ -1919,7 +2307,7 @@ Track ID 2: audio (A_MPEG/L3)</screen>
    chapter format which supports all of &matroska;'s chapter functionality.
   </para>
 
-  <refsect2>
+  <refsect2 id="mkvmerge.chapters.simple">
    <title>The simple chapter format</title>
 
    <para>
@@ -1946,7 +2334,7 @@ CHAPTER03NAME=Baby rocks the house</screen>
    </para>
   </refsect2>
 
-  <refsect2>
+  <refsect2 id="mkvmerge.chapters.xml">
    <title>The &xml; based chapter format</title>
    <para>
     The &xml; based chapter format looks like this example:
@@ -1988,6 +2376,39 @@ CHAPTER03NAME=Baby rocks the house</screen>
    <para>
     The mkvtoolnix distribution contains some sample files in the <filename>doc</filename> subdirectory which can be used as a basis.
    </para>
+
+   <para>
+    The following lists the supported XML tags, their data types and, where appropriate, the valid range for their values:
+   </para>
+
+   <screen>Chapters (master)
+  EditionEntry (master)
+    EditionUID (unsigned integer, valid range: 1 &lt;= value)
+    EditionFlagHidden (unsigned integer, valid range: 0 &lt;= value &lt;= 1)
+    EditionFlagDefault (unsigned integer, valid range: 0 &lt;= value &lt;= 1)
+    EditionFlagOrdered (unsigned integer, valid range: 0 &lt;= value &lt;= 1)
+    ChapterAtom (master)
+      ChapterAtom (master)
+      ChapterUID (unsigned integer, valid range: 1 &lt;= value)
+      ChapterTimeStart (unsigned integer)
+      ChapterTimeEnd (unsigned integer)
+      ChapterFlagHidden (unsigned integer, valid range: 0 &lt;= value &lt;= 1)
+      ChapterFlagEnabled (unsigned integer, valid range: 0 &lt;= value &lt;= 1)
+      ChapterSegmentUID (binary, valid range: 1 &lt;= length in bytes)
+      ChapterSegmentEditionUID (unsigned integer, valid range: 1 &lt;= value)
+      ChapterPhysicalEquiv (unsigned integer)
+      ChapterTrack (master)
+        ChapterTrackNumber (unsigned integer, valid range: 1 &lt;= value)
+      ChapterDisplay (master)
+        ChapterString (UTF-8 string)
+        ChapterLanguage (UTF-8 string)
+        ChapterCountry (UTF-8 string)
+      ChapterProcess (master)
+        ChapterProcessCodecID (unsigned integer)
+        ChapterProcessPrivate (binary)
+        ChapterProcessCommand (master)
+          ChapterProcessTime (unsigned integer)
+          ChapterProcessData (binary)</screen>
   </refsect2>
 
   <refsect2>
@@ -2023,7 +2444,7 @@ CHAPTER03NAME=Baby rocks the house</screen>
    </para>
   </refsect2>
 
-  <refsect2>
+  <refsect2 id="mkvmerge.tags.scope">
    <title>Scope of the tags</title>
 
    <para>
@@ -2052,7 +2473,7 @@ CHAPTER03NAME=Baby rocks the house</screen>
    </para>
   </refsect2>
 
-  <refsect2>
+  <refsect2 id="mkvmerge.tags.example">
    <title>Example</title>
    <para>
     Let's say that you want to add tags to a video track read from an <abbrev>AVI</abbrev>. <command>mkvmerge --identify file.avi</command>
@@ -2063,7 +2484,7 @@ CHAPTER03NAME=Baby rocks the house</screen>
    <screen>$ mkvmerge -o file.mkv --tags 0:tags.xml file.avi</screen>
   </refsect2>
 
-  <refsect2>
+  <refsect2 id="mkvmerge.tags.file_format">
    <title>Tag file format</title>
    <para>
     &mkvmerge; supports a &xml; based tag file format. The format is very closely modeled after <ulink
@@ -2085,7 +2506,7 @@ CHAPTER03NAME=Baby rocks the house</screen>
    </itemizedlist>
   </refsect2>
 
-  <refsect2>
+  <refsect2 id="mkvmerge.tags.data_types">
    <title>Data types</title>
    <para>
     The new &matroska; tagging system only knows two data types, a UTF-8 string and a binary type. The first is used for the tag's name and
@@ -2109,6 +2530,69 @@ CHAPTER03NAME=Baby rocks the house</screen>
     support this system anymore these types aren't described here.
    </para>
   </refsect2>
+
+  <refsect2 id="mkvmerge.tags.xml">
+   <title>Known tags for the XML file format</title>
+
+   <para>
+    The following lists the supported XML tags, their data types and, where appropriate, the valid range for their values:
+   </para>
+
+   <screen>Tags (master)
+  Tag (master)
+    Targets (master)
+      TargetTypeValue (unsigned integer)
+      TargetType (UTF-8 string)
+      TrackUID (unsigned integer)
+      EditionUID (unsigned integer)
+      ChapterUID (unsigned integer)
+      AttachmentUID (unsigned integer)
+    Simple (master)
+      Simple (master)
+      Name (UTF-8 string)
+      TagLanguage (UTF-8 string)
+      DefaultLanguage (unsigned integer)
+      String (UTF-8 string)
+      Binary (binary)</screen>
+  </refsect2>
+ </refsect1>
+
+ <refsect1 id="mkvmerge.segmentinfo">
+  <title>The segment info XML files</title>
+
+  <para>
+   With a segment info XML file it is possible to set certain values in the &quot;segment information&quot; header field of a &matroska;
+   file. All of these values cannot be set via other command line options.
+  </para>
+
+  <para>
+   Other &quot;segment information&quot; header fields can be set via command line options but not via the XML file. This includes e.g. the
+   <option><link linkend="mkvmerge.description.title">--title</link></option> and the <option><link
+   linkend="mkvmerge.description.timecode_scale">--timecode-scale</link></option> options.
+  </para>
+
+  <para>
+   There are other elements that can be set neither via command line options nor via the XML files. These include the following elements:
+   <varname>DateUTC</varname> (also known as the &quot;muxing date&quot;), <varname>MuxingApp</varname>, <varname>WritingApp</varname>
+   and <varname>Duration</varname>. They're always set by &mkvmerge; itself.
+  </para>
+
+   <para>
+    The following lists the supported XML tags, their data types and, where appropriate, the valid range for their values:
+   </para>
+
+   <screen>Info (master)
+  SegmentUID (binary, valid range: length in bytes == 16)
+  SegmentFilename (UTF-8 string)
+  PreviousSegmentUID (binary, valid range: length in bytes == 16)
+  PreviousSegmentFilename (UTF-8 string)
+  NextSegmentUID (binary, valid range: length in bytes == 16)
+  NextSegmentFilename (UTF-8 string)
+  SegmentFamily (binary, valid range: length in bytes == 16)
+  ChapterTranslate (master)
+    ChapterTranslateEditionUID (unsigned integer)
+    ChapterTranslateCodec (unsigned integer)
+    ChapterTranslateID (binary)</screen>
  </refsect1>
 
  <refsect1 id="mkvmerge.file_layout">
@@ -2142,7 +2626,7 @@ CHAPTER03NAME=Baby rocks the house</screen>
   </itemizedlist>
 
   <para>
-   The shortest possible Matroska file would look like this:
+   The shortest possible &matroska; file would look like this:
   </para>
 
   <para>
@@ -2260,6 +2744,42 @@ gap, 10.050
     </para>
    </listitem>
   </itemizedlist>
+ </refsect1>
+
+ <refsect1 id="mkvmerge.environment_variables">
+  <title>Environment variables</title>
+
+  <para>
+   &mkvmerge; uses the default variables that determine the system's locale (e.g. <varname>LANG</varname> and the <varname>LC_*</varname>
+   family). Additional variables:
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term><varname>MKVTOOLNIX_DEBUG</varname> and its short form <varname>MTX_DEBUG</varname></term>
+    <listitem>
+     <para>The content is treated as if it had been passed via the <link
+     linkend="mkvmerge.description.debug"><option>--debug</option></link> option.</para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><varname>MKVTOOLNIX_ENGAGE</varname> and its short form <varname>MTX_ENGAGE</varname></term>
+    <listitem>
+     <para>The content is treated as if it had been passed via the <link
+     linkend="mkvmerge.description.engage"><option>--engage</option></link> option.</para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><varname>MKVTOOLNIX_OPTIONS</varname> and its short form <varname>MTX_OPTIONS</varname></term>
+    <listitem>
+     <para>The content is split on white space. The resulting partial strings are treated as if it had been passed as command line
+     options. If you need to pass special characters (e.g. spaces) then you have to escape them (see <link linkend="mkvmerge.escaping">the
+     section about escaping special characters in text</link>).</para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
  </refsect1>
 
  <refsect1 id="mkvmerge.seealso">

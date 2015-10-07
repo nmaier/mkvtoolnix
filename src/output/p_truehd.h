@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __P_TRUEHD_H
-#define __P_TRUEHD_H
+#ifndef MTX_P_TRUEHD_H
+#define MTX_P_TRUEHD_H
 
 #include "common/common_pch.h"
 
@@ -37,11 +37,9 @@ public:
   virtual int process(packet_cptr packet);
   virtual void handle_frames();
   virtual void set_headers();
-  virtual void flush();
-  virtual void flush_frames();
 
-  virtual const std::string get_format_name(bool translate = true) {
-    return translate ? Y("TrueHD") : "TrueHD";
+  virtual translatable_string_c get_format_name() const {
+    return YT("TrueHD");
   }
 
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);
@@ -49,8 +47,10 @@ public:
 protected:
   virtual void adjust_header_values(truehd_frame_cptr &frame);
 
+  virtual void flush_impl();
+  virtual void flush_frames();
   virtual void flush_frames_merged();
   virtual void flush_frames_separate();
 };
 
-#endif // __P_TRUEHD_H
+#endif // MTX_P_TRUEHD_H

@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __P_MPEG4_P2_H
-#define __P_MPEG4_P2_H
+#ifndef MTX_P_MPEG4_P2_H
+#define MTX_P_MPEG4_P2_H
 
 #include "common/common_pch.h"
 
@@ -60,15 +60,15 @@ public:
   virtual ~mpeg4_p2_video_packetizer_c();
 
   virtual int process(packet_cptr packet);
-  virtual void flush();
 
-  virtual const std::string get_format_name(bool translate = true) {
-    return translate ? Y("MPEG-4") : "MPEG-4";
+  virtual translatable_string_c get_format_name() const {
+    return YT("MPEG-4");
   }
 
 protected:
   virtual int process_native(packet_cptr packet);
   virtual int process_non_native(packet_cptr packet);
+  virtual void flush_impl();
   virtual void flush_frames(bool end_of_file);
   virtual void extract_aspect_ratio(const unsigned char *buffer, int size);
   virtual void extract_size(const unsigned char *buffer, int size);
@@ -78,4 +78,4 @@ protected:
   virtual void get_next_timecode_and_duration(int64_t &timecode, int64_t &duration);
 };
 
-#endif  // __P_MPEG4_P2_H
+#endif  // MTX_P_MPEG4_P2_H

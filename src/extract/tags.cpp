@@ -28,7 +28,8 @@
 #include "common/ebml.h"
 #include "common/kax_analyzer.h"
 #include "common/mm_io.h"
-#include "common/tags/writer.h"
+#include "common/mm_io_x.h"
+#include "common/xml/ebml_tags_converter.h"
 #include "extract/mkvextract.h"
 
 using namespace libmatroska;
@@ -41,25 +42,19 @@ extract_tags(const std::string &file_name,
   // open input file
   try {
     analyzer = kax_analyzer_cptr(new kax_analyzer_c(file_name));
-    if (!analyzer->process(parse_mode, MODE_READ))
+    if (!analyzer->process(parse_mode, MODE_READ, true))
       throw false;
-  } catch (...) {
-    show_error(boost::format(Y("The file '%1%' could not be opened for reading (%2%).")) % file_name % strerror(errno));
+  } catch (mtx::mm_io::exception &ex) {
+    show_error(boost::format(Y("The file '%1%' could not be opened for reading: %2%.\n")) % file_name % ex);
     return;
   }
 
-  EbmlMaster *m = analyzer->read_all(EBML_INFO(KaxTags));
-  if (NULL != m) {
-    KaxTags *tags = dynamic_cast<KaxTags *>(m);
-    assert(NULL != tags);
+  ebml_master_cptr m = analyzer->read_all(EBML_INFO(KaxTags));
+  if (!m)
+    return;
 
-    g_mm_stdio->write_bom("UTF-8");
-    g_mm_stdio->puts("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n"
-                     "<!DOCTYPE Tags SYSTEM \"matroskatags.dtd\">\n\n"
-                     "<Tags>\n");
-    write_tags_xml(*tags, g_mm_stdio.get_object());
-    g_mm_stdio->puts("</Tags>\n");
+  KaxTags *tags = dynamic_cast<KaxTags *>(m.get());
+  assert(tags);
 
-    delete tags;
-  }
+  mtx::xml::ebml_tags_converter_c::write_xml(*tags, *g_mm_stdio);
 }

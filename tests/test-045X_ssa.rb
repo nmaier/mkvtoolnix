@@ -6,7 +6,7 @@ class T_045X_ssa < Test
   end
 
   def run
-    return xtr_tracks_s(10)
+    xtr_tracks_s 9
   end
 end
 

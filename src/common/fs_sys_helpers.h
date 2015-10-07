@@ -10,16 +10,12 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_FS_SYS_HELPERS_H
-#define __MTX_COMMON_FS_SYS_HELPERS_H
+#ifndef MTX_COMMON_FS_SYS_HELPERS_H
+#define MTX_COMMON_FS_SYS_HELPERS_H
 
-#include "common/os.h"
-
-#include "common/mm_io.h"
+#include "common/common_pch.h"
 
 int64_t get_current_time_millis();
-std::string get_application_data_folder();
-std::string get_installation_path();
 
 #if defined(SYS_WINDOWS)
 
@@ -40,5 +36,14 @@ std::string get_environment_variable(const std::string &key);
 unsigned int get_windows_version();
 
 #endif
+
+namespace mtx {
+
+int system(std::string const &command);
+void determine_path_to_current_executable(std::string const &argv0);
+bfs::path get_application_data_folder();
+bfs::path const &get_installation_path();
+
+}
 
 #endif

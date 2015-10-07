@@ -10,7 +10,7 @@
    \author Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <string>
 #include <vector>
@@ -32,7 +32,6 @@
 #include "common/ebml.h"
 #include "common/property_element.h"
 #include "common/translation.h"
-#include "common/xml/element_mapping.h"
 
 std::map<uint32_t, std::vector<property_element_c> > property_element_c::s_properties;
 std::map<uint32_t, std::vector<property_element_c> > property_element_c::s_composed_properties;
@@ -53,8 +52,8 @@ property_element_c::property_element_c(const std::string &name,
 }
 
 property_element_c::property_element_c()
-  : m_callbacks(NULL)
-  , m_sub_master_callbacks(NULL)
+  : m_callbacks(nullptr)
+  , m_sub_master_callbacks(nullptr)
   , m_type(EBMLT_SKIP)
 {
 }
@@ -63,20 +62,20 @@ bool
 property_element_c::is_valid()
   const
 {
-  return !m_name.empty() && (NULL != m_callbacks) && (EBMLT_SKIP != m_type);
+  return !m_name.empty() && (m_callbacks) && (EBMLT_SKIP != m_type);
 }
 
 void
 property_element_c::derive_type() {
   EbmlElement *e = &m_callbacks->Create();
 
-  m_type = NULL != dynamic_cast<EbmlBinary *>(e)        ? EBMLT_BINARY
-         : NULL != dynamic_cast<EbmlFloat *>(e)         ? EBMLT_FLOAT
-         : NULL != dynamic_cast<EbmlSInteger *>(e)      ? EBMLT_INT
-         : NULL != dynamic_cast<EbmlString *>(e)        ? EBMLT_STRING
-         : NULL != dynamic_cast<EbmlUInteger *>(e)      ? EBMLT_UINT
-         : NULL != dynamic_cast<EbmlUnicodeString *>(e) ? EBMLT_USTRING
-         :                                                EBMLT_SKIP;
+  m_type = dynamic_cast<EbmlBinary *>(e)        ? EBMLT_BINARY
+         : dynamic_cast<EbmlFloat *>(e)         ? EBMLT_FLOAT
+         : dynamic_cast<EbmlSInteger *>(e)      ? EBMLT_INT
+         : dynamic_cast<EbmlString *>(e)        ? EBMLT_STRING
+         : dynamic_cast<EbmlUInteger *>(e)      ? EBMLT_UINT
+         : dynamic_cast<EbmlUnicodeString *>(e) ? EBMLT_USTRING
+         :                                        EBMLT_SKIP;
 
   if (EBMLT_SKIP == m_type)
     mxerror(boost::format("property_element_c::derive_type(): programming error: unknown type for EBML ID %|1$08x|\n") % m_callbacks->GlobalId.Value);
@@ -91,7 +90,7 @@ property_element_c::derive_type() {
 
 void
 property_element_c::init_tables() {
-  const EbmlCallbacks *sub_master_callbacks = NULL;
+  const EbmlCallbacks *sub_master_callbacks = nullptr;
 
   s_properties.clear();
 
@@ -125,8 +124,6 @@ property_element_c::init_tables() {
   ELE("max-cache",            KaxTrackMaxCache::ClassInfos,        Y("Maximum cache"),         Y("The maximum number of frames a player\nshould be able to cache during playback.\n"
                                                                                                  "If set to 0, the reference pseudo-cache system\nis not used."));
   ELE("default-duration",     KaxTrackDefaultDuration::ClassInfos, Y("Default duration"),      Y("Number of nanoseconds (not scaled) per frame."));
-  ELE("track-timecode-scale", KaxTrackTimecodeScale::ClassInfos,   Y("Timecode scaling"),      Y("The scale to apply on this track to work at normal\nspeed in relation with other tracks "
-                                                                                                 "(mostly used\nto adjust video speed when the audio length differs)."));
   ELE("name",                 KaxTrackName::ClassInfos,            Y("Name"),                  Y("A human-readable track name."));
   ELE("language",             KaxTrackLanguage::ClassInfos,        Y("Language"),              Y("Specifies the language of the track in the\nMatroska languages form."));
   ELE("codec-id",             KaxCodecID::ClassInfos,              Y("Codec ID"),              Y("An ID corresponding to the codec."));
@@ -139,14 +136,14 @@ property_element_c::init_tables() {
   ELE("pixel-height",      KaxVideoPixelHeight::ClassInfos,     Y("Video pixel height"),      Y("Height of the encoded video frames in pixels."));
   ELE("display-width",     KaxVideoDisplayWidth::ClassInfos,    Y("Video display width"),     Y("Width of the video frames to display."));
   ELE("display-height",    KaxVideoDisplayHeight::ClassInfos,   Y("Video display height"),    Y("Height of the video frames to display."));
-  ELE("display-unit",      KaxVideoDisplayUnit::ClassInfos,     Y("Video display unit"),      Y("Type of the unit for DisplayWidth/Height\n(0: pixels, 1: centimeters, 2: inches)."));
+  ELE("display-unit",      KaxVideoDisplayUnit::ClassInfos,     Y("Video display unit"),      Y("Type of the unit for DisplayWidth/Height\n(0: pixels, 1: centimeters, 2: inches, 3: aspect ratio)."));
   ELE("pixel-crop-left",   KaxVideoPixelCropLeft::ClassInfos,   Y("Video crop left"),         Y("The number of video pixels to remove\non the left of the image."));
   ELE("pixel-crop-top",    KaxVideoPixelCropTop::ClassInfos,    Y("Video crop top"),          Y("The number of video pixels to remove\non the top of the image."));
   ELE("pixel-crop-right",  KaxVideoPixelCropRight::ClassInfos,  Y("Video crop right"),        Y("The number of video pixels to remove\non the right of the image."));
   ELE("pixel-crop-bottom", KaxVideoPixelCropBottom::ClassInfos, Y("Video crop bottom"),       Y("The number of video pixels to remove\non the bottom of the image."));
   ELE("aspect-ratio-type", KaxVideoAspectRatio::ClassInfos,     Y("Video aspect ratio type"), Y("Specify the possible modifications to the aspect ratio\n"
                                                                                                 "(0: free resizing, 1: keep aspect ratio, 2: fixed)."));
-  ELE("stereo-mode",       KaxVideoStereoMode::ClassInfos,      Y("Video stereo mode"),       Y("Stereo-3D video mode (0: mono, 1: right eye,\n2: left eye, 3: both eyes)."));
+  ELE("stereo-mode",       KaxVideoStereoMode::ClassInfos,      Y("Video stereo mode"),       Y("Stereo-3D video mode (0 - 11, see documentation)."));
 
   sub_master_callbacks = &KaxTrackAudio::ClassInfos;
 
@@ -170,7 +167,7 @@ property_element_c::get_table_for(const EbmlCallbacks &master_callbacks,
   if (full_table)
     return src_map_it->second;
 
-  uint32_t element_id = NULL == sub_master_callbacks ? master_callbacks.GlobalId.Value : sub_master_callbacks->GlobalId.Value;
+  uint32_t element_id = !sub_master_callbacks ? master_callbacks.GlobalId.Value : sub_master_callbacks->GlobalId.Value;
   std::map<uint32_t, std::vector<property_element_c> >::iterator composed_map_it = s_composed_properties.find(element_id);
   if (s_composed_properties.end() != composed_map_it)
     return composed_map_it->second;
@@ -179,7 +176,7 @@ property_element_c::get_table_for(const EbmlCallbacks &master_callbacks,
   std::vector<property_element_c> &table = s_composed_properties[element_id];
 
   for (auto &property : src_map_it->second)
-    if ((NULL == property.m_sub_master_callbacks) || ((NULL != sub_master_callbacks) && (sub_master_callbacks->GlobalId == property.m_sub_master_callbacks->GlobalId)))
+    if (!property.m_sub_master_callbacks || (sub_master_callbacks && (sub_master_callbacks->GlobalId == property.m_sub_master_callbacks->GlobalId)))
       table.push_back(property);
 
   return table;

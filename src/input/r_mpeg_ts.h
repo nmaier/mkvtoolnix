@@ -12,15 +12,14 @@
    and Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __R_MPEG_TS_H
-#define __R_MPEG_TS_H
+#ifndef MTX_R_MPEG_TS_H
+#define MTX_R_MPEG_TS_H
 
 #include "common/common_pch.h"
 
-#include <boost/filesystem.hpp>
-
 #include "common/aac.h"
 #include "common/byte_buffer.h"
+#include "common/codec.h"
 #include "common/endian.h"
 #include "common/dts.h"
 #include "common/mm_io.h"
@@ -28,8 +27,6 @@
 #include "common/truehd.h"
 #include "merge/pr_generic.h"
 #include "mpegparser/M2VParser.h"
-
-namespace bfs = boost::filesystem;
 
 enum mpeg_ts_input_type_e {
   INPUT_PROBE = 0,
@@ -271,7 +268,7 @@ public:
 
   bool processed;
   mpeg_ts_pid_type_e type;          //can be PAT_TYPE, PMT_TYPE, ES_VIDEO_TYPE, ES_AUDIO_TYPE, ES_SUBT_TYPE, ES_UNKNOWN
-  uint32_t fourcc;
+  codec_c codec;
   uint16_t pid;
   bool data_ready;
   int pes_payload_size;             // size of the current PID payload in bytes
@@ -281,20 +278,20 @@ public:
   bool probed_ok;
   int ptzr;                         // the actual packetizer instance
 
-  int64_t timecode, m_previous_timecode;
+  timecode_c m_timecode, m_previous_timecode, m_previous_valid_timecode, m_timecode_wrap_add;
 
   // video related parameters
   bool v_interlaced;
   int v_version, v_width, v_height, v_dwidth, v_dheight;
   double v_frame_rate, v_aspect_ratio;
-  memory_cptr v_avcc, raw_seq_hdr;
+  memory_cptr raw_seq_hdr;
 
   // audio related parameters
   int a_channels, a_sample_rate, a_bits_per_sample, a_bsid;
   dts_header_t a_dts_header;
-  aac_header_t m_aac_header;
+  aac_header_c m_aac_header;
 
-  bool m_apply_dts_timecode_fix, m_use_dts;
+  bool m_apply_dts_timecode_fix, m_use_dts, m_timecodes_wrapped;
 
   // general track parameters
   std::string language;
@@ -303,13 +300,14 @@ public:
   byte_buffer_cptr m_probe_data;
   mpeg4::p10::avc_es_parser_cptr m_avc_parser;
   truehd_parser_cptr m_truehd_parser;
-  counted_ptr<M2VParser> m_m2v_parser;
+  std::shared_ptr<M2VParser> m_m2v_parser;
+
+  bool m_debug_delivery, m_debug_timecode_wrapping;
 
   mpeg_ts_track_c(mpeg_ts_reader_c &p_reader)
     : reader(p_reader)
     , processed(false)
     , type(ES_UNKNOWN)
-    , fourcc(0)
     , pid(0)
     , data_ready(false)
     , pes_payload_size(0)
@@ -317,8 +315,7 @@ public:
     , continuity_counter(0)
     , probed_ok(false)
     , ptzr(-1)
-    , timecode(-1)
-    , m_previous_timecode(-1)
+    , m_timecode_wrap_add{timecode_c::ns(0)}
     , v_interlaced(false)
     , v_version(0)
     , v_width(0)
@@ -333,6 +330,9 @@ public:
     , a_bsid(0)
     , m_apply_dts_timecode_fix(false)
     , m_use_dts(false)
+    , m_timecodes_wrapped{false}
+    , m_debug_delivery(false)
+    , m_debug_timecode_wrapping{}
   {
   }
 
@@ -348,16 +348,22 @@ public:
   int new_stream_a_ac3();
   int new_stream_a_dts();
   int new_stream_a_truehd();
+
+  void set_pid(uint16_t new_pid);
+
+  void handle_timecode_wrap(timecode_c &pts, timecode_c &dts);
+  bool detect_timecode_wrap(timecode_c &timecode);
+  void adjust_timecode_for_wrap(timecode_c &timecode);
 };
 
-typedef counted_ptr<mpeg_ts_track_c> mpeg_ts_track_ptr;
+typedef std::shared_ptr<mpeg_ts_track_c> mpeg_ts_track_ptr;
 
 class mpeg_ts_reader_c: public generic_reader_c {
 protected:
   bool PAT_found, PMT_found;
   int16_t PMT_pid;
   int es_to_process;
-  int64_t m_global_timecode_offset;
+  timecode_c m_global_timecode_offset, m_stream_timecode;
 
   mpeg_ts_input_type_e input_status; // can be INPUT_PROBE, INPUT_READ
   int track_buffer_ready;
@@ -367,7 +373,9 @@ protected:
   std::vector<mpeg_ts_track_ptr> tracks;
   std::map<generic_packetizer_c *, mpeg_ts_track_ptr> m_ptzr_to_track_map;
 
-  bool m_dont_use_audio_pts, m_debug_resync, m_debug_pat_pmt, m_debug_aac;
+  std::vector<timecode_c> m_chapter_timecodes;
+
+  debugging_option_c m_dont_use_audio_pts, m_debug_resync, m_debug_pat_pmt, m_debug_aac, m_debug_timecode_wrapping, m_debug_clpi;
 
   int m_detected_packet_size;
 
@@ -380,8 +388,8 @@ public:
 
   static bool probe_file(mm_io_c *in, uint64_t size);
 
-  virtual const std::string get_format_name(bool translate = true) {
-    return translate ? Y("MPEG transport stream") : "MPEG transport stream";
+  virtual translatable_string_c get_format_name() const {
+    return YT("MPEG transport stream");
   }
 
   virtual void read_headers();
@@ -393,14 +401,14 @@ public:
 
   virtual bool parse_packet(unsigned char *buf);
 
-  static int64_t read_timestamp(unsigned char *p);
-  static int detect_packet_size(mm_io_c &in, uint64_t size);
+  static timecode_c read_timecode(unsigned char *p);
+  static int detect_packet_size(mm_io_c *in, uint64_t size);
 
 private:
   int parse_pat(unsigned char *pat);
   int parse_pmt(unsigned char *pmt);
   bool parse_start_unit_packet(mpeg_ts_track_ptr &track, mpeg_ts_packet_header_t *ts_packet_header, unsigned char *&ts_payload, unsigned char &ts_payload_size);
-  void probe_packet_complete(mpeg_ts_track_ptr &track, int tidx);
+  void probe_packet_complete(mpeg_ts_track_ptr &track);
 
   file_status_e finish();
   int send_to_packetizer(mpeg_ts_track_ptr &track);
@@ -412,9 +420,11 @@ private:
   bfs::path find_clip_info_file();
   void parse_clip_info_file();
 
+  void process_chapter_entries();
+
   bool resync(int64_t start_at);
 
   friend class mpeg_ts_track_c;
 };
 
-#endif  // __R_MPEG_TS_H
+#endif  // MTX_R_MPEG_TS_H

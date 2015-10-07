@@ -14,6 +14,7 @@
 #include "common/common_pch.h"
 
 #include "common/byte_buffer.h"
+#include "common/codec.h"
 #include "common/endian.h"
 #include "common/error.h"
 #include "input/r_dirac.h"
@@ -110,5 +111,5 @@ dirac_es_reader_c::read(generic_packetizer_c *,
 void
 dirac_es_reader_c::identify() {
   id_result_container();
-  id_result_track(0, ID_RESULT_TRACK_VIDEO, "Dirac");
+  id_result_track(0, ID_RESULT_TRACK_VIDEO, codec_c::get_name(CT_V_DIRAC, "Dirac"));
 }

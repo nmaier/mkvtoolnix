@@ -12,8 +12,8 @@
    Modified by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __R_VOBBTN_H
-#define __R_VOBBTN_H
+#ifndef MTX_R_VOBBTN_H
+#define MTX_R_VOBBTN_H
 
 #include "common/common_pch.h"
 
@@ -32,8 +32,8 @@ public:
   vobbtn_reader_c(const track_info_c &ti, const mm_io_cptr &in);
   virtual ~vobbtn_reader_c();
 
-  virtual const std::string get_format_name(bool translate = true) {
-    return translate ? Y("VobBtn") : "VobBtn";
+  virtual translatable_string_c get_format_name() const {
+    return YT("VobBtn");
   }
 
   virtual void read_headers();
@@ -44,4 +44,4 @@ public:
   static int probe_file(mm_io_c *in, uint64_t size);
 };
 
-#endif  // __R_VOBBTN_H
+#endif  // MTX_R_VOBBTN_H

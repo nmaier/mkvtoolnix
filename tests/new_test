@@ -5,26 +5,33 @@ if [ "$1" = "" ]; then
   exit 1
 fi
 
-name="${1%.rb}"
-max_num=$(ls | grep test- | sort -r | head -n 1 | cut -c 6-8)
-let next_num=$max_num+1
+name="${${1%.rb}//-/_}"
+max_num=(test*(.On[1]))
+let next_num=${max_num[1][6,8]}+1
 
 new_file="test-${next_num}${name}.rb"
 
 cat > "$new_file" <<EOF
 #!/usr/bin/ruby -w
 
-class T_${next_num}${name} < Test
-  def description
-    "INSERT DESCRIPTION"
-  end
+# T_${next_num}${name}
+describe "FIXTHIS"
 
-  def run
-    # INSERT COMMANDS
-    hash_tmp
-  end
+setup do
+  # FIXTHIS
 end
 
+cleanup do
+  # FIXTHIS
+end
+
+test_merge "data/FIXTHIS"
+test_merge "data/FIXTHIS", :args => "FIXTHIS"
+
+test "data/FIXTHIS" do
+  # INSERT COMMANDS
+  hash_tmp
+end
 EOF
 
 echo "New file is $new_file"

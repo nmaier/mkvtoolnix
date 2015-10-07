@@ -11,31 +11,21 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_LOCALE_H
-#define __MTX_COMMON_LOCALE_H
+#ifndef MTX_COMMON_LOCALE_H
+#define MTX_COMMON_LOCALE_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #if defined(HAVE_ICONV_H)
 # include <iconv.h>
-#endif
-
-#if defined(SYS_WINDOWS)
-# include <windows.h>
 #endif
 
 #if !defined(HAVE_ICONV_H) && !defined(SYS_WINDOWS)
 # error Build requires either <iconv.h> or Windows APIs.
 #endif
 
-#include <map>
-#include <string>
-#include <vector>
-
-#include "common/smart_pointers.h"
-
 class charset_converter_c;
-typedef counted_ptr<charset_converter_c> charset_converter_cptr;
+typedef std::shared_ptr<charset_converter_c> charset_converter_cptr;
 
 class charset_converter_c {
 protected:
@@ -50,6 +40,7 @@ public:
   virtual std::string utf8(const std::string &source);
   virtual std::string native(const std::string &source);
   virtual void enable_byte_order_marker_detection(bool enable);
+  std::string const &get_charset() const;
 
 protected:
   bool handle_string_with_bom(const std::string &source, std::string &recoded);
@@ -87,7 +78,7 @@ private:                        // Static functions
 class windows_charset_converter_c: public charset_converter_c {
 private:
   bool m_is_utf8;
-  UINT m_code_page;
+  unsigned int m_code_page;
 
 public:
   windows_charset_converter_c(const std::string &charset);
@@ -100,8 +91,8 @@ public:                         // Static functions
   static bool is_available(const std::string &charset);
 
 private:                        // Static functions
-  static std::string convert(UINT source_code_page, UINT destination_code_page, const std::string &source);
-  static UINT extract_code_page(const std::string &charset);
+  static std::string convert(unsigned int source_code_page, unsigned int destination_code_page, const std::string &source);
+  static unsigned int extract_code_page(const std::string &charset);
 };
 
 unsigned Utf8ToUtf16(const char *utf8, int utf8len, wchar_t *utf16, unsigned utf16len);
@@ -117,4 +108,4 @@ std::string get_local_console_charset();
 
 std::vector<std::string> command_line_utf8(int argc, char **argv);
 
-#endif  // __MTX_COMMON_LOCALE_H
+#endif  // MTX_COMMON_LOCALE_H

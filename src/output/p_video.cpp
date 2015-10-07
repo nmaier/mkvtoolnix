@@ -13,13 +13,13 @@
 
 #include "common/common_pch.h"
 
+#include "common/codec.h"
 #include "common/debugging.h"
 #include "common/endian.h"
 #include "common/hacks.h"
 #include "common/math.h"
-#include "common/matroska.h"
 #include "common/mpeg4_p2.h"
-#include "merge/output_control.h"
+#include "merge/connection_checks.h"
 #include "output/p_video.h"
 
 #include <avilib.h>
@@ -39,37 +39,34 @@ video_packetizer_c::video_packetizer_c(generic_reader_c *p_reader,
   , m_frames_output(0)
   , m_ref_timecode(-1)
   , m_duration_shift(0)
-  , m_rederive_frame_types(debugging_requested("rederive_frame_types"))
+  , m_rederive_frame_types(debugging_c::requested("rederive_frame_types"))
   , m_codec_type(video_packetizer_c::ct_unknown)
 {
-  if (get_cue_creation() == CUE_STRATEGY_UNSPECIFIED)
-    set_cue_creation(CUE_STRATEGY_IFRAMES);
-
   set_track_type(track_video);
 
-  if (NULL != codec_id)
+  if (codec_id)
     set_codec_id(codec_id);
   else
     set_codec_id(MKV_V_MSCOMP);
 
-  set_codec_private(m_ti.m_private_data, m_ti.m_private_size);
+  set_codec_private(m_ti.m_private_data);
   check_fourcc();
 }
 
 void
 video_packetizer_c::check_fourcc() {
   if (   (m_hcodec_id                != MKV_V_MSCOMP)
-      || (NULL                       == m_ti.m_private_data)
-      || (sizeof(alBITMAPINFOHEADER) >  m_ti.m_private_size))
+      || !m_ti.m_private_data
+      || (sizeof(alBITMAPINFOHEADER) >  m_ti.m_private_data->get_size()))
     return;
 
   if (!m_ti.m_fourcc.empty()) {
-    memcpy(&((alBITMAPINFOHEADER *)m_ti.m_private_data)->bi_compression, m_ti.m_fourcc.c_str(), 4);
-    set_codec_private(m_ti.m_private_data, m_ti.m_private_size);
+    memcpy(&reinterpret_cast<alBITMAPINFOHEADER *>(m_ti.m_private_data->get_buffer())->bi_compression, m_ti.m_fourcc.c_str(), 4);
+    set_codec_private(m_ti.m_private_data);
   }
 
   char fourcc[5];
-  memcpy(fourcc, &((alBITMAPINFOHEADER *)m_ti.m_private_data)->bi_compression, 4);
+  memcpy(fourcc, &reinterpret_cast<alBITMAPINFOHEADER *>(m_ti.m_private_data->get_buffer())->bi_compression, 4);
   fourcc[4] = 0;
 
   if (mpeg4::p2::is_v3_fourcc(fourcc))
@@ -193,20 +190,13 @@ connection_result_e
 video_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                    std::string &error_message) {
   video_packetizer_c *vsrc = dynamic_cast<video_packetizer_c *>(src);
-  if (NULL == vsrc)
+  if (!vsrc)
     return CAN_CONNECT_NO_FORMAT;
 
   connect_check_v_width(m_width,      vsrc->m_width);
   connect_check_v_height(m_height,    vsrc->m_height);
   connect_check_codec_id(m_hcodec_id, vsrc->m_hcodec_id);
-
-  if (   ((NULL == m_ti.m_private_data) && (NULL != vsrc->m_ti.m_private_data))
-      || ((NULL != m_ti.m_private_data) && (NULL == vsrc->m_ti.m_private_data))
-      || (m_ti.m_private_size != vsrc->m_ti.m_private_size)) {
-    error_message = (boost::format(Y("The codec's private data does not match (lengths: %1% and %2%).")) % m_ti.m_private_size % vsrc->m_ti.m_private_size).str();
-    return CAN_CONNECT_MAYBE_CODECPRIVATE;
-  }
+  connect_check_codec_private(vsrc);
 
   return CAN_CONNECT_YES;
 }
-

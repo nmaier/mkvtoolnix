@@ -1,13 +1,13 @@
 '\" t
 .\"     Title: mkvpropedit
 .\"    Author: Bunkus Moritz[FAMILY Given] <moritz@bunkus.org>
-.\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
-.\"      Date: 2011-11-27
+.\" Generator: DocBook XSL Stylesheets v1.78.1 <http://docbook.sf.net/>
+.\"      Date: 2014-04-18
 .\"    Manual:  
-.\"    Source: MKVToolNix 5.1.0
+.\"    Source: MKVToolNix 6.9.1
 .\"  Language: Japanese
 .\"
-.TH "MKVPROPEDIT" "1" "2011\-11\-27" "MKVToolNix 5\&.1\&.0" ""
+.TH "MKVPROPEDIT" "1" "2014\-04\-18" "MKVToolNix 6\&.9\&.1" ""
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -31,7 +31,7 @@
 mkvpropedit \- 再MUXすることなく、既存のMatroska(TM)ファイルのプロパティを修正する
 .SH "書式"
 .HP \w'\fBmkvpropedit\fR\ 'u
-\fBmkvpropedit\fR [options] {source\-filename}
+\fBmkvpropedit\fR [options] {source\-filename} {actions}
 .SH "説明"
 .PP
 このプログラムは、既存のMatroska(TM)ファイルを解析し、そのプロパティのいくつかを修正します。そして、それらの修正を既存のファイルに書き込みます。プロパティの中で変更可能なのは、セグメント情報エレメント(例えばタイトル)と、トラックヘッダ(例えば言語コードや\*(Aqデフォルトトラック\*(Aqフラグ、トラック名)です。
@@ -48,7 +48,7 @@ mkvpropedit \- 再MUXすることなく、既存のMatroska(TM)ファイルの�
 解析モードを設定します。\*(Aq\fImode\fR\*(Aqパラメータは\*(Aqfast\*(Aq(デフォルト)と\*(Aqfull\*(Aqのどちらかを指定できます。\*(Aqfast\*(Aqモードはファイル全体を解析するのではなく、メタシークエレメントを使ってソースファイル内の必要なエレメントを探します。99%の場合これで十分です。しかし、メタシークエレメントを含まないファイルや破損したファイルに対しては\*(Aqfull\*(Aq解析モードを指定する必要があるかもしれません。\*(Aqfull\*(Aqスキャンには数分かかることがありますが、\*(Aqfast\*(Aqスキャンには数秒しかかかりません。
 .RE
 .PP
-アクション:
+Actions that deal with track and segment info properties:
 .PP
 \fB\-e\fR, \fB\-\-edit\fR \fIselector\fR
 .RS 4
@@ -61,7 +61,6 @@ mkvpropedit \- 再MUXすることなく、既存のMatroska(TM)ファイルの�
 .PP
 \fB\-a\fR, \fB\-\-add\fR \fIname\fR=\fIvalue\fR
 .RS 4
-
 \fIname\fRで指定された名前のプロパティを\fIvalue\fRで指定した値で追加します。プロパティは、既にその名前のプロパティが存在する場合も追加されます。ほとんどのプロパティは一意的で、複数回追加できないことに注意してください。
 .RE
 .PP
@@ -75,23 +74,111 @@ mkvpropedit \- 再MUXすることなく、既存のMatroska(TM)ファイルの�
 見付けた全ての、プロパティ名が\fIname\fRであるプロパティを削除します。いくつかのプロパティは必須で、削除できないことに注意してください。
 .RE
 .PP
+Actions that deal with tags and chapters:
+.PP
 \fB\-t\fR, \fB\-\-tags\fR \fIselector\fR:\fIfilename\fR
 .RS 4
-
 ファイル名からのタグを、このファイル中のタグに追加、あるいは置換します。もしファイル名が空白なら、タグを削除します。\fBmkvpropedit\fR(1)は、\fBmkvmerge\fR(1)が読み込むのと同じXMLタグフォーマットを読み込みます。
 .sp
-
 \fIセレクタ\fRは、\fBall\fR、\fBglobal\fR、または\fBtrack\fRのうちどれか一つを指定してください。\fBall\fRを指定すると、\fBmkvpropedit\fR(1)はファイル中の全てのタグを置換あるいは削除します。\fBglobal\fRを指定すると、グローバルタグだけが置換あるいは削除されます。
 .sp
-
 \fBtrack\fRを指定すると、\fBmkvpropedit\fR(1)は特定のトラックのタグを置換します。また、filenameから読み込まれたタグは、同じトラックに割り当てられます。edit selectorsが指定されるのと同じ様に（下を参照してください）、トラックは指定されます。(see below), e\&.g\&.
 \-\-tags track:a1:new\-audio\-tags\&.xml\&.
 .RE
 .PP
 \fB\-c\fR, \fB\-\-chapters\fR \fIfilename\fR
 .RS 4
-
 ファイル名からのチャプタを、このファイル中のタグに追加、あるいは置換します。もしファイル名が空白なら、チャプタを削除します。\fBmkvpropedit\fR(1)は、\fBmkvmerge\fR(1)が読み込むのと同じXMLまたはシンプルチャプタフォーマットを読み込みます。
+.RE
+.PP
+Actions for handling attachments:
+.PP
+\fB\-\-add\-attachment\fR \fIfilename\fR
+.RS 4
+Adds a new attachment from
+\fIfilename\fR\&.
+.sp
+If the option
+\fB\-\-attachment\-name\fR
+has been used prior to this option then its value is used as the new attachment\*(Aqs name\&. Otherwise it is derived from
+\fIfilename\fR\&.
+.sp
+If the option
+\fB\-\-attachment\-mime\-type\fR
+has been used prior to this option then its value is used as the new attachment\*(Aqs MIME type\&. Otherwise it is auto\-detected from the content of
+\fIfilename\fR\&.
+.sp
+If the option
+\fB\-\-attachment\-description\fR
+has been used prior to this option then its value is used as the new attachment\*(Aqs description\&. Otherwise no description will be set\&.
+.RE
+.PP
+\fB\-\-replace\-attachment\fR \fIselector\fR:\fIfilename\fR
+.RS 4
+Replaces one or more attachments that match
+\fIselector\fR
+with the file
+\fIfilename\fR\&. If more than one existing attachment matches
+\fIselector\fR
+then all of their contents will be replaced by the content of
+\fIfilename\fR\&.
+.sp
+The
+\fIselector\fR
+can have one of four forms\&. They\*(Aqre exlained below in the section
+attachment selectors\&.
+.sp
+If the option
+\fB\-\-attachment\-name\fR
+has been used prior to this option then its value is used as the replaced attachment\*(Aqs name\&. Otherwise the name is not changed\&.
+.sp
+If the option
+\fB\-\-attachment\-mime\-type\fR
+has been used prior to this option then its value is used as the replaced attachment\*(Aqs MIME type\&. Otherwise the MIME type is not changed\&.
+.sp
+If the option
+\fB\-\-attachment\-description\fR
+has been used prior to this option then its value is used as the replaced attachment\*(Aqs description\&. Otherwise no description is not changed\&.
+.RE
+.PP
+\fB\-\-delete\-attachment\fR \fIselector\fR
+.RS 4
+Deletes one or more attachments that match
+\fIselector\fR\&.
+.sp
+The
+\fIselector\fR
+can have one of four forms\&. They\*(Aqre exlained below in the section
+attachment selectors\&.
+.RE
+.PP
+Options for attachment actions:
+.PP
+\fB\-\-attachment\-name\fR \fIname\fR
+.RS 4
+Sets the name to use for the following
+\fB\-\-add\-attachment\fR
+or
+\fB\-\-replace\-attachment\fR
+operation\&.
+.RE
+.PP
+\fB\-\-attachment\-mime\-type\fR \fImime\-type\fR
+.RS 4
+Sets the MIME type to use for the following
+\fB\-\-add\-attachment\fR
+or
+\fB\-\-replace\-attachment\fR
+operation\&.
+.RE
+.PP
+\fB\-\-attachment\-description\fR \fIdescription\fR
+.RS 4
+Sets the description to use for the following
+\fB\-\-add\-attachment\fR
+or
+\fB\-\-replace\-attachment\fR
+operation\&.
 .RE
 .PP
 その他のオプション:
@@ -116,6 +203,21 @@ mkvpropedit \- 再MUXすることなく、既存のMatroska(TM)ファイルの�
 指定した\fIcode\fRを強制的に言語コード(例: 日本語ならば\*(Aqja_JP\*(Aq)として使用します。しかし、環境変数\fILANG\fRや\fILC_MESSAGES\fR、\fILC_ALL\fRを使用したほうが好ましいでしょう。\fIcode\fRにlistと指定すると、指定できる言語コードの一覧を出力します。
 .RE
 .PP
+\fB\-\-debug\fR \fItopic\fR
+.RS 4
+特定の機能のデバッグをオンにします。このオプションは開発者にのみ有用です。
+.RE
+.PP
+\fB\-\-engage\fR \fIfeature\fR
+.RS 4
+実験的機能をオンにします。利用可能な機能のリストは\fBmkvpropedit \-\-engage list\fRで得られます。これらの機能は通常の状況で利用されることは意図されていません。
+.RE
+.PP
+\fB\-\-gui\-mode\fR
+.RS 4
+Turns on GUI mode\&. In this mode specially\-formatted lines may be output that can tell a controlling GUI what\*(Aqs happening\&. These messages follow the format \*(Aq#GUI#message\*(Aq\&. The message may be followed by key/value pairs as in \*(Aq#GUI#message#key1=value1#key2=value2\&...\*(Aq\&. Neither the messages nor the keys are ever translated and always output in English\&.
+.RE
+.PP
 \fB\-v\fR, \fB\-\-verbose\fR
 .RS 4
 出力が冗長になり、Matroska(TM)のエレメントにとって重要なこと全てを、読み込まれるつどに表示していきます。
@@ -133,12 +235,14 @@ mkvpropedit \- 再MUXすることなく、既存のMatroska(TM)ファイルの�
 .PP
 \fB\-\-check\-for\-updates\fR
 .RS 4
-
-http://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xmlをダウンロードすることで、新しいリリースがないかオンラインでチェックします。key=valueという書式で、4行が出力されます：どこから情報を取得したか (key
-version_check_url)、現在実行中のバージョン (key
-running_version)、最新のリリースのバージョン (key
-available_version) 及びそのダウンロードURL (key
-download_url)。
+Checks online for new releases by downloading the URL
+\m[blue]\fBhttp://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xml\fR\m[]\&. Four lines will be output in
+key=value
+style: the URL from where the information was retrieved (key
+version_check_url), the currently running version (key
+running_version), the latest release\*(Aqs version (key
+available_version) and the download URL (key
+download_url)\&.
 .sp
 その後プログラムは、新しいリリースが入手可能ではなかった場合は終了コード0で、新しいリリースが入手可能であった場合は終了コード1で、エラーが発生した場合（例：アップデート情報を取得できなかった場合）は終了コード2で、それぞれ終了します。
 .sp
@@ -147,25 +251,24 @@ download_url)。
 .PP
 \fB@\fR\fIoptions\-file\fR
 .RS 4
-
 \fIoptions\-file\fRで指定されたファイルから追加のコマンドラインオプションを読み込みます。行で最初の空白文字でない文字がハッシュマーク(\*(Aq#\*(Aq)である行はコメントとして扱われ、無視されます。行頭、及び行末の空白文字は取り除かれます。各行には一つずつしかオプションを指定できません。
 .sp
 エスケープすることのできる文字もあります。例えば、コメントではない行を\*(Aq#\*(Aqで始める必要のある場合です。そのルールは、エスケープ文字についてのセクションで説明されています。
 .sp
-\*(Aq\fBmkvpropedit source\&.mkv \-\-edit trach:a2 \-\-set name=Comments\fR\*(Aqというコマンドラインと同じことは、次のようなオプションファイルによって指定できます。
+\*(Aq\fBmkvpropedit source\&.mkv \-\-edit track:a2 \-\-set name=Comments\fR\*(Aqというコマンドラインと同じことは、次のようなオプションファイルによって指定できます。
 .sp
 .if n \{\
 .RS 4
 .\}
 .nf
-# source\&.mkvを修正する
+# Modify source\&.mkv
 source\&.mkv
-# 2番目のオーディオトラックを編集する
+# Edit the second audio track
 \-\-edit
 track:a2
-# そのタイトルを\*(AqComments\*(Aqに設定する
+# and set the title to \*(AqComments\*(Aq
 \-\-set
-title=Comments     
+name=Comments
 .fi
 .if n \{\
 .RE
@@ -173,7 +276,6 @@ title=Comments
 .RE
 .SH "エディットセレクタ"
 .PP
-
 \fB\-\-edit\fRオプションは、以降のadd、set及びdeleteアクションが適用されるMatroska(TM)ファイルセクション(セグメント情報または特定のトラックヘッダ)を設定します。これは次の\fB\-\-edit\fRオプションが見付かるまでずっと有効です。このオプションへの引数はエディットセレクタと呼ばれます。
 .PP
 デフォルトでは、\fBmkvpropedit\fR(1)はセグメント情報のセクションを編集します。
@@ -187,11 +289,15 @@ title=Comments
 \fBtrack:\fR\fIn\fR
 .RS 4
 パラメータ\fIn\fRが数字であれば、\fIn\fR番目のトラックが選択されます。トラックの順番は、\fBmkvmerge\fR(1)に\fB\-\-identify\fRオプションを指定すると出力されるものと同じです。
+.sp
+Numbering starts at 1\&.
 .RE
 .PP
 \fBtrack:\fR\fIt\fR\fIn\fR
 .RS 4
 パラメータが一文字の英字\fIt\fRで始まり、次に\fIn\fRが続く場合、あるトラックタイプで\fIn\fR番目のトラックが選択されます。トラックタイプパラメータ\fIt\fRは、オーディオトラックを示す\*(Aqa\*(Aq、ボタントラックを示す\*(Aqb\*(Aq、字幕トラックを示す\*(Aqs\*(Aq、ビデオトラックを示す\*(Aqv\*(Aqの四つのうちの一つでなければなりません。トラックの順番は\fBmkvmerge\fR(1)の\fB\-\-identify\fRオプションで出力される順番と同じです。
+.sp
+Numbering starts at 1\&.
 .RE
 .PP
 \fBtrack:\fR=\fIuid\fR
@@ -206,6 +312,70 @@ title=Comments
 .SS "注意"
 .PP
 トラックエディットセレクタの性質から、いくつかのセレクタが同じトラックヘッダにマッチすることがあります。このような場合、それらのエディットセレクタへの全てのアクションは一つにまとめられ、コマンドラインに指定された順番に実行されます。
+.SH "ATTACHMENT SELECTORS"
+.PP
+An attachment selector is used with the two actions
+\fB\-\-replace\-attachment\fR
+and
+\fB\-\-delete\-attachment\fR\&. It can have one of the following four forms:
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 1.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  1." 4.2
+.\}
+Selection by attachment ID\&. In this form the selector is simply a number, the attachment\*(Aqs ID as output by
+\fBmkvmerge\fR(1)\*(Aqs identification command\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 2.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  2." 4.2
+.\}
+Selection by attachment UID (unique ID)\&. In this form the selector is the equal sign
+=
+followed by a number, the attachment\*(Aqs unique ID as output by
+\fBmkvmerge\fR(1)\*(Aqs verbose identification command\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 3.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  3." 4.2
+.\}
+Selection by attachment name\&. In this form the selector is the literal word
+name:
+followed by the existing attachment\*(Aqs name\&. If this selector is used with
+\fB\-\-replace\-attachment\fR
+then colons within the name to match must be escaped as
+\ec\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 4.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  4." 4.2
+.\}
+Selection by MIME type\&. In this form the selector is the literal word
+mime\-type:
+followed by the existing attachment\*(Aqs MIME type\&. If this selector is used with
+\fB\-\-replace\-attachment\fR
+then colons within the MIME type to match must be escaped as
+\ec\&.
+.RE
 .SH "例"
 .PP
 下に\*(Aqmovie\&.mkv\*(Aqというファイルを編集する例を示します。この例では、セグメントタイトルを設定し、オーディオトラックと字幕トラックの言語コードを修正します。この例は、最初の\fB\-\-edit\fRオプションが見付かる前の全てのオプションはデフォルトで結局セグメント情報エレメントを編集するので、最初の\fB\-\-edit\fRオプションを省略して短縮できることに注意してください。
@@ -279,9 +449,68 @@ $ mkvpropedit movie\&.mkv \-\-chapters \*(Aq\*(Aq
 .if n \{\
 .RE
 .\}
+.PP
+Adding a font file (Arial\&.ttf) as an attachment:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit movie\&.mkv \-\-add\-attachment Arial\&.ttf
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Adding a font file (89719823\&.ttf) as an attachment and providing some information as it really is just Arial:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit movie\&.mkv \-\-attachment\-name Arial\&.ttf \-\-attachment\-description \*(AqThe Arial font as a TrueType font\*(Aq \-\-attachment\-mime\-type application/x\-truetype\-font \-\-add\-attachment 89719823\&.ttf
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Replacing one attached font (Comit\&.ttf) file with another one (Arial\&.ttf):
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit movie\&.mkv \-\-attachment\-name Arial\&.ttf \-\-attachment\-description \*(AqThe Arial font as a TrueType font\*(Aq \-\-replace\-attachment name:Comic\&.ttf:Arial\&.ttf
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Deleting the second attached file, whatever it may be:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit movie\&.mkv \-\-delete\-attachment 2
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Deleting all attached fonts by MIME type:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit movie\&.mkv \-\-delete\-attachment mime\-type:application/x\-truetype\-font
+.fi
+.if n \{\
+.RE
+.\}
 .SH "返り値"
 .PP
-
 \fBmkvpropedit\fR(1)は下の3つの返り値を返します。
 .sp
 .RS 4
@@ -292,7 +521,6 @@ $ mkvpropedit movie\&.mkv \-\-chapters \*(Aq\*(Aq
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB0\fR
 \-\- この返り値は変更が成功したことを示します。
 .RE
@@ -305,7 +533,6 @@ $ mkvpropedit movie\&.mkv \-\-chapters \*(Aq\*(Aq
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB1\fR
 \-\- この返り値は、一つ以上の警告が出力されましたが、抽出が続行されたことを意味します。警告は \*(Aq警告:\*(Aq という文字列を先頭につけて出力されます。出力ファイルが無事であるかどうかは、場合によります。出力ファイルを確認することを強く推奨します。
 .RE
@@ -318,16 +545,39 @@ $ mkvpropedit movie\&.mkv \-\-chapters \*(Aq\*(Aq
 .sp -1
 .IP \(bu 2.3
 .\}
-この返り値は、エラーが発生し、エラーメッセージを表示した直後に\fBmkvpropedit\fR(1)が終了したことを示します。エラーメッセージは不正なコマンドラインやファイルI/Oエラー、壊れたファイルなど様々です。
+\fB2\fR
+\-\- この返り値は、エラーが発生し、エラーメッセージを表示した直後に\fBmkvpropedit\fR(1)が終了したことを示します。エラーメッセージは不正なコマンドラインやファイルI/Oエラー、壊れたファイルなど様々です。
 .RE
+.SH "テキストファイルと文字コード変換"
+.PP
+For an in\-depth discussion about how all tools in the MKVToolNix suite handle character set conversions, input/output encoding, command line encoding and console encoding please see the identically\-named section in the
+\fBmkvmerge\fR(1)
+man page\&.
 .SH "テキスト中の特殊文字をエスケープする"
 .PP
 特殊文字をエスケープしなければならない、あるいはすべき場所が少しだけあります。エスケープのルールは単純です：エスケープする必要のある各文字を、バックスラッシュ（Windows上の日本語フォントでは\e記号）の後ろに違う文字が1つついたものと入れ替えます。
 .PP
 ルール：\*(Aq \*(Aq（半角スペース）は\*(Aq\es\*(Aqに、\*(Aq"\*(Aq（ダブルクォーテーション）は\*(Aq\e2\*(Aqに、\*(Aq:\*(Aqは\*(Aq\ec\*(Aqに、\*(Aq#\*(Aqは\*(Aq\eh\*(Aqに、そして\*(Aq\e\*(Aqそれ自体は\*(Aq\e\e\*(Aqになります。
+.SH "環境変数"
+.PP
+\fBmkvpropedit\fR(1)はシステムのロケールを決めるデフォルトの変数（例：\fILANG\fRや\fILC_*\fR系）を使用します。追加の変数は以下の通りです：
+.PP
+\fIMKVTOOLNIX_DEBUG\fRとその短縮形\fIMTX_DEBUG\fR
+.RS 4
+その内容は、あたかも\fB\-\-debug\fRオプション経由で渡されたかのように扱われます。
+.RE
+.PP
+\fIMKVTOOLNIX_ENGAGE\fRとその短縮形\fIMTX_ENGAGE\fR
+.RS 4
+その内容は、あたかも\fB\-\-engage\fRオプション経由で渡されたかのように扱われます。
+.RE
+.PP
+\fIMKVTOOLNIX_OPTIONS\fRとその短縮形\fIMTX_OPTIONS\fR
+.RS 4
+その内容は空白で分割されます。得られた一部の文字列は、あたかもそれがコマンドラインオプションとして渡されたかのように扱われます。もし特殊な文字（例：空白）を渡す必要があるなら、それらをエスケープする必要があります（テキスト中の特殊文字のエスケープについてのセクションをご覧ください）。
+.RE
 .SH "関連項目"
 .PP
-
 \fBmkvmerge\fR(1),
 \fBmkvinfo\fR(1),
 \fBmkvextract\fR(1),

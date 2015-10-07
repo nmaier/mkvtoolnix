@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __R_MP3_H
-#define __R_MP3_H
+#ifndef MTX_R_MP3_H
+#define MTX_R_MP3_H
 
 #include "common/common_pch.h"
 
@@ -32,19 +32,22 @@ public:
   mp3_reader_c(const track_info_c &ti, const mm_io_cptr &in);
   virtual ~mp3_reader_c();
 
-  virtual const std::string get_format_name(bool translate = true) {
-    return translate ? Y("MP2/MP3") : "MP2/MP3";
+  virtual translatable_string_c get_format_name() const {
+    return YT("MP2/MP3");
   }
 
   virtual void read_headers();
   virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false);
   virtual void identify();
   virtual void create_packetizer(int64_t tid);
+  virtual bool is_providing_timecodes() const {
+    return false;
+  }
 
-  static int probe_file(mm_io_c *in, uint64_t size, int64_t probe_range, int num_headers = 5);
+  static int probe_file(mm_io_c *in, uint64_t size, int64_t probe_range, int num_headers = 5, bool require_zero_offset = false);
 
 protected:
   static int find_valid_headers(mm_io_c &in, int64_t probe_range, int num_headers);
 };
 
-#endif  // __R_MP3_H
+#endif  // MTX_R_MP3_H

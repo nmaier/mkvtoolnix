@@ -13,7 +13,7 @@
 
 #include "common/common_pch.h"
 
-#include "common/matroska.h"
+#include "common/codec.h"
 #include "input/r_srt.h"
 #include "input/subtitles.h"
 
@@ -32,12 +32,12 @@ srt_reader_c::srt_reader_c(const track_info_c &ti,
 void
 srt_reader_c::read_headers() {
   try {
-    m_text_in = mm_text_io_cptr(new mm_text_io_c(m_in.get_object(), false));
-    if (!srt_parser_c::probe(m_text_in.get_object()))
+    m_text_in = mm_text_io_cptr(new mm_text_io_c(m_in.get(), false));
+    if (!srt_parser_c::probe(m_text_in.get()))
       throw mtx::input::invalid_format_x();
 
     m_ti.m_id = 0;                 // ID for this track.
-    m_subs    = srt_parser_cptr(new srt_parser_c(m_text_in.get_object(), m_ti.m_fname, 0));
+    m_subs    = srt_parser_cptr(new srt_parser_c(m_text_in.get(), m_ti.m_fname, 0));
 
   } catch (...) {
     throw mtx::input::open_x();
@@ -57,7 +57,7 @@ srt_reader_c::create_packetizer(int64_t) {
     return;
 
   bool is_utf8 = m_text_in->get_byte_order() != BO_NONE;
-  add_packetizer(new textsubs_packetizer_c(this, m_ti, MKV_S_TEXTUTF8, NULL, 0, true, is_utf8));
+  add_packetizer(new textsubs_packetizer_c(this, m_ti, MKV_S_TEXTUTF8, true, is_utf8));
 
   show_packetizer_info(0, PTZR0);
 }
@@ -81,5 +81,5 @@ srt_reader_c::get_progress() {
 void
 srt_reader_c::identify() {
   id_result_container();
-  id_result_track(0, ID_RESULT_TRACK_SUBTITLES, "SRT");
+  id_result_track(0, ID_RESULT_TRACK_SUBTITLES, codec_c::get_name(CT_S_SRT, "SRT"));
 }

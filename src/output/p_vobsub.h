@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __P_VOBSUB_H
-#define __P_VOBSUB_H
+#ifndef MTX_P_VOBSUB_H
+#define MTX_P_VOBSUB_H
 
 #include "common/common_pch.h"
 
@@ -20,21 +20,18 @@
 #include "merge/pr_generic.h"
 
 class vobsub_packetizer_c: public generic_packetizer_c {
-private:
-  memory_cptr idx_data;
-
 public:
-  vobsub_packetizer_c(generic_reader_c *_reader, const void *_idx_data, int _idx_data_size, track_info_c &_ti);
+  vobsub_packetizer_c(generic_reader_c *reader, track_info_c &ti);
   virtual ~vobsub_packetizer_c();
 
   virtual int process(packet_cptr packet);
   virtual void set_headers();
 
-  virtual const std::string get_format_name(bool translate = true) {
-    return translate ? Y("VobSub") : "VobSub";
+  virtual translatable_string_c get_format_name() const {
+    return YT("VobSub");
   }
   virtual connection_result_e can_connect_to(generic_packetizer_c *src,
                                              std::string &error_message);
 };
 
-#endif // __P_VOBSUB_H
+#endif // MTX_P_VOBSUB_H

@@ -99,12 +99,12 @@ parse_args(std::vector<std::string> &args) {
 
     else if ((*arg == "-s") || (*arg == "--start")) {
       ++arg;
-      if ((args.end() == arg) || !parse_int(*arg, g_start) || (0 >= g_start))
+      if ((args.end() == arg) || !parse_number(*arg, g_start) || (0 >= g_start))
         mxerror(Y("Missing/wrong arugment to --start\n"));
 
     } else if ((*arg == "-e") || (*arg == "--end")) {
       ++arg;
-      if ((args.end() == arg) || !parse_int(*arg, g_end) || (0 >= g_end))
+      if ((args.end() == arg) || !parse_number(*arg, g_end) || (0 >= g_end))
         mxerror(Y("Missing/wrong arugment to --end\n"));
 
     } else if ((*arg == "-m") || (*arg == "--master")) {
@@ -114,7 +114,7 @@ parse_args(std::vector<std::string> &args) {
 
       if (arg->substr(0, 2) == "0x") {
         arg->erase(0, 2);
-        g_is_master[strtoll(arg->c_str(), NULL, 16)] = true;
+        g_is_master[strtoll(arg->c_str(), nullptr, 16)] = true;
 
       } else {
         uint32_t id = element_name_to_id(*arg);
@@ -271,7 +271,7 @@ read_size(int64_t end_pos) {
 static void
 parse_content(int level,
               int64_t end_pos) {
-  while (g_in->getFilePointer() < end_pos) {
+  while (static_cast<int64_t>(g_in->getFilePointer()) < end_pos) {
     int64_t element_start_pos = g_in->getFilePointer();
 
     try {
@@ -354,7 +354,7 @@ parse_file(const std::string &file_name) {
 int
 main(int argc,
      char **argv) {
-  mtx_common_init();
+  mtx_common_init("ebml_validator", argv[0]);
 
   init_element_names();
   init_master_information();

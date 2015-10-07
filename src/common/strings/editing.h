@@ -11,30 +11,26 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_STRINGS_H
-#define __MTX_COMMON_STRINGS_H
+#ifndef MTX_COMMON_STRINGS_EDITING_H
+#define MTX_COMMON_STRINGS_EDITING_H
 
-#include "common/os.h"
-
-#include <boost/algorithm/string.hpp>
-#include <string>
-#include <vector>
+#include "common/common_pch.h"
 
 #include <stdarg.h>
 
-namespace ba = boost::algorithm;
+std::vector<std::string> split(std::string const &text, boost::regex const &pattern, size_t max = 0, boost::match_flag_type match_flags = boost::match_default);
 
-std::vector<std::string> split(const char *src, const char *pattern = ",", int max_num = -1);
 inline std::vector<std::string>
-split(const std::string &src,
-      const std::string &pattern = std::string(","),
-      int max_num = -1) {
-  return split(src.c_str(), pattern.c_str(), max_num);
+split(std::string const &text,
+      std::string const &pattern = ",",
+      size_t max = 0) {
+  return split(text, boost::regex(std::string("\\Q") + pattern, boost::regex::perl), max);
 }
 
 std::string join(const char *pattern, const std::vector<std::string> &strings);
 
 void strip(std::string &s, bool newlines = false);
+std::string strip_copy(std::string const &s, bool newlines = false);
 void strip(std::vector<std::string> &v, bool newlines = false);
 void strip_back(std::string &s, bool newlines = false);
 
@@ -44,6 +40,7 @@ std::string escape(const std::string &src);
 std::string unescape(const std::string &src);
 
 std::string get_displayable_string(const char *src, int max_len = -1);
+std::string get_displayable_string(std::string const &src);
 
 extern const std::string empty_string;
 
@@ -52,4 +49,4 @@ int get_varg_len(const char *fmt, va_list ap);
 
 size_t utf8_strlen(const std::string &s);
 
-#endif  // __MTX_COMMON_STRINGS_H
+#endif  // MTX_COMMON_STRINGS_EDITING_H

@@ -14,7 +14,7 @@ class T_273pgssup < Test
     merge "#{tmp}-2", "#{tmp}-1"
     hashes << hash_file("#{tmp}-2")
 
-    xtr_tracks "#{tmp}-1", "1:#{tmp}-3"
+    xtr_tracks "#{tmp}-1", "0:#{tmp}-3"
     hashes << hash_file("#{tmp}-3")
 
     return hashes.join "-"

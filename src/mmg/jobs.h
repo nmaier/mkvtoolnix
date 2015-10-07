@@ -11,14 +11,17 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __JOBS_H
-#define __JOBS_H
+#ifndef MTX_JOBS_H
+#define MTX_JOBS_H
+
+#include "common/common_pch.h"
 
 #include <wx/dialog.h>
 #include <wx/listctrl.h>
 #include <wx/process.h>
 
 #include "mmg/taskbar_progress.h"
+#include "mmg/window_geometry_saver.h"
 
 #define ID_JOBS_B_UP                      17001
 #define ID_JOBS_B_DOWN                    17002
@@ -55,6 +58,7 @@ class job_log_dialog: public wxDialog {
   DECLARE_EVENT_TABLE();
 protected:
   wxString text;
+  window_geometry_saver_c m_geometry_saver;
 
 public:
   job_log_dialog(wxWindow *parent, wxString &log);
@@ -84,10 +88,13 @@ protected:
 
   int m_progress;
   int64_t m_next_remaining_time_update, m_next_remaining_time_update_total, m_start_time, m_start_time_total;
+  bool m_scanning_playlists;
 
 #if defined(SYS_WINDOWS)
   taskbar_progress_c *m_taskbar_progress;
 #endif
+
+  window_geometry_saver_c m_geometry_saver;
 
 public:
   job_run_dialog(wxWindow *parent, std::vector<int> &n_jobs_to_start);
@@ -121,6 +128,8 @@ protected:
   wxButton *b_ok, *b_up, *b_down, *b_abort, *b_abort_after_current, *b_delete;
   wxButton *b_start, *b_start_selected, *b_reenable, *b_view_log, *b_disable;
 
+  window_geometry_saver_c m_geometry_saver;
+
 public:
   job_dialog(wxWindow *parent);
 
@@ -141,4 +150,4 @@ public:
   void start_jobs(std::vector<int> &jobs_to_start);
 };
 
-#endif // __JOBS_H
+#endif // MTX_JOBS_H

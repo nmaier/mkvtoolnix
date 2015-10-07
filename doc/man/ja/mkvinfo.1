@@ -1,13 +1,13 @@
 '\" t
 .\"     Title: mkvinfo
 .\"    Author: Bunkus Moritz[FAMILY Given] <moritz@bunkus.org>
-.\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
-.\"      Date: 2011-11-27
+.\" Generator: DocBook XSL Stylesheets v1.78.1 <http://docbook.sf.net/>
+.\"      Date: 2014-04-18
 .\"    Manual:  
-.\"    Source: MKVToolNix 5.1.0
+.\"    Source: MKVToolNix 6.9.1
 .\"  Language: Japanese
 .\"
-.TH "MKVINFO" "1" "2011\-11\-27" "MKVToolNix 5\&.1\&.0" ""
+.TH "MKVINFO" "1" "2014\-04\-18" "MKVToolNix 6\&.9\&.1" ""
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -39,7 +39,6 @@ mkvinfo \- Matroska(TM)ファイルの要素についての情報を表示しま
 .PP
 \fB\-g\fR, \fB\-\-gui\fR
 .RS 4
-
 GUIを起動します。このオプションは、mkvinfoがGUIをサポートするようにコンパイルされていなければ無効です。
 .RE
 .PP
@@ -93,6 +92,25 @@ GUIを起動します。このオプションは、mkvinfoがGUIをサポート�
 指定した\fIcode\fRを強制的に言語コード(例: 日本語ならば\*(Aqja_JP\*(Aq)として使用します。しかし、環境変数\fILANG\fRや\fILC_MESSAGES\fR、\fILC_ALL\fRを使用したほうが好ましいでしょう。\fIcode\fRにlistと指定すると、指定できる言語コードの一覧を出力します。
 .RE
 .PP
+\fB\-\-debug\fR \fItopic\fR
+.RS 4
+特定の機能のデバッグをオンにします。このオプションは開発者にのみ有用です。
+.RE
+.PP
+\fB\-\-engage\fR \fIfeature\fR
+.RS 4
+実験的機能をオンにします。利用可能な機能のリストは\fBmkvinfo \-\-engage list\fRで得られます。これらの機能は通常の状況で使用されることを意図されていません。
+.RE
+.PP
+\fB\-\-gui\-mode\fR
+.RS 4
+Turns on GUI mode\&. In this mode specially\-formatted lines may be output that can tell a controlling GUI what\*(Aqs happening\&. These messages follow the format \*(Aq#GUI#message\*(Aq\&. The message may be followed by key/value pairs as in \*(Aq#GUI#message#key1=value1#key2=value2\&...\*(Aq\&. Neither the messages nor the keys are ever translated and always output in English\&.
+.sp
+This switch has nothing to do with the
+\fB\-\-gui\fR
+parameter which causes mkvinfo to display its own GUI\&.
+.RE
+.PP
 \fB\-v\fR, \fB\-\-verbose\fR
 .RS 4
 冗長モードになります。冗長レベルセクションに、どの冗長レベルでどの情報が出力されるかの説明があります。
@@ -110,12 +128,14 @@ GUIを起動します。このオプションは、mkvinfoがGUIをサポート�
 .PP
 \fB\-\-check\-for\-updates\fR
 .RS 4
-
-http://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xmlをダウンロードすることで、新しいリリースがないかオンラインでチェックします。key=valueという書式で、4行が出力されます：どこから情報を取得したか (key
-version_check_url)、現在実行中のバージョン (key
-running_version)、最新のリリースのバージョン (key
-available_version) 及びそのダウンロードURL (key
-download_url)。
+Checks online for new releases by downloading the URL
+\m[blue]\fBhttp://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xml\fR\m[]\&. Four lines will be output in
+key=value
+style: the URL from where the information was retrieved (key
+version_check_url), the currently running version (key
+running_version), the latest release\*(Aqs version (key
+available_version) and the download URL (key
+download_url)\&.
 .sp
 その後プログラムは、新しいリリースが入手可能ではなかった場合は終了コード0で、新しいリリースが入手可能であった場合は終了コード1で、エラーが発生した場合（例：アップデート情報を取得できなかった場合）は終了コード2で、それぞれ終了します。
 .sp
@@ -124,7 +144,6 @@ download_url)。
 .PP
 \fB@\fR\fIoptions\-file\fR
 .RS 4
-
 \fIoptions\-file\fRで指定されたファイルから追加のコマンドラインオプションを読み込みます。行で最初の空白文字でない文字がハッシュマーク(\*(Aq#\*(Aq)である行はコメントとして扱われ、無視されます。行頭、及び行末の空白文字は取り除かれます。各行には一つずつしかオプションを指定できません。
 .sp
 エスケープすることのできる文字もあります。例えば、コメントではない行を\*(Aq#\*(Aqで始める必要のある場合です。そのルールは、エスケープ文字についてのセクションで説明されています。
@@ -150,7 +169,6 @@ info\&.txt
 .RE
 .SH "冗長レベル"
 .PP
-
 \fB\-v\fRオプションにより、\fBmkvinfo\fR(1)の冗長レベルを上げ、入力ファイルについてのより詳しい情報を出力させることができます。
 .PP
 レベル0では、トラックヘッダとトラックの種類のみを出力します。\fBmkvinfo\fR(1)は、ヘッダを完全に解析し終るとすぐに(より技術的には、最初のクラスタを検出した直後に)終了します。このレベルでは、シークヘッドエントリ及びCUEがトラック情報の前に格納されていたとしても表示されません。
@@ -160,9 +178,13 @@ info\&.txt
 レベル2では、シークヘッドエントリ、CUE、及び各Matroska(TM)エレメントのファイル内位置も表示します。
 .PP
 レベル3以上では、Matroska(TM)エレメントに直接関係ない情報も表示します。他のエレメントについては、見付かったものだけを表示します。レベル3はデバッグ用にメタ情報を追加します(開発者向け)。レベル3で追加された行は、全て角括弧で囲われています。
+.SH "テキストファイルと文字コード変換"
+.PP
+For an in\-depth discussion about how all tools in the MKVToolNix suite handle character set conversions, input/output encoding, command line encoding and console encoding please see the identically\-named section in the
+\fBmkvmerge\fR(1)
+man page\&.
 .SH "返り値"
 .PP
-
 \fBmkvinfo\fR(1)は下の3つの返り値を返します。
 .sp
 .RS 4
@@ -173,7 +195,6 @@ info\&.txt
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB0\fR
 \-\- この返り値は正常に終了したことを示します。
 .RE
@@ -186,7 +207,6 @@ info\&.txt
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB1\fR
 \-\- この返り値は、少なくとも一つの警告が表示されましたが、処理が続行されたことを意味します。警告は \*(Aq警告:\*(Aq という文字列を先頭につけて出力されます。
 .RE
@@ -199,16 +219,34 @@ info\&.txt
 .sp -1
 .IP \(bu 2.3
 .\}
-この返り値は、エラーが発生し、エラーメッセージを表示した直後に\fBmkvinfo\fR(1)が終了したことを示します。エラーメッセージは不正なコマンドラインやファイルI/Oエラー、壊れたファイルなど様々です。
+\fB2\fR
+\-\- この返り値は、エラーが発生し、エラーメッセージを表示した直後に\fBmkvinfo\fR(1)が終了したことを示します。エラーメッセージは不正なコマンドラインやファイルI/Oエラー、壊れたファイルなど様々です。
 .RE
 .SH "テキスト中の特殊文字をエスケープする"
 .PP
 特殊文字をエスケープしなければならない、あるいはすべき場所が少しだけあります。エスケープのルールは単純です：エスケープする必要のある各文字を、バックスラッシュ（Windows上の日本語フォントでは\e記号）の後ろに違う文字が1つついたものと入れ替えます。
 .PP
 ルール：\*(Aq \*(Aq（半角スペース）は\*(Aq\es\*(Aqに、\*(Aq"\*(Aq（ダブルクォーテーション）は\*(Aq\e2\*(Aqに、\*(Aq:\*(Aqは\*(Aq\ec\*(Aqに、\*(Aq#\*(Aqは\*(Aq\eh\*(Aqに、そして\*(Aq\e\*(Aqそれ自体は\*(Aq\e\e\*(Aqになります。
+.SH "環境変数"
+.PP
+\fBmkvinfo\fR(1)はシステムのロケールを決めるデフォルトの変数（例：\fILANG\fRや\fILC_*\fR系）を使用します。追加の変数は以下の通りです：
+.PP
+\fIMKVTOOLNIX_DEBUG\fRとその短縮形\fIMTX_DEBUG\fR
+.RS 4
+その内容は、あたかも\fB\-\-debug\fRオプション経由で渡されたかのように扱われます。
+.RE
+.PP
+\fIMKVTOOLNIX_ENGAGE\fRとその短縮形\fIMTX_ENGAGE\fR
+.RS 4
+その内容は、あたかも\fB\-\-engage\fRオプション経由で渡されたかのように扱われます。
+.RE
+.PP
+\fIMKVTOOLNIX_OPTIONS\fRとその短縮形\fIMTX_OPTIONS\fR
+.RS 4
+その内容は空白で分割されます。得られた一部の文字列は、あたかもそれがコマンドラインオプションとして渡されたかのように扱われます。もし特殊な文字（例：空白）を渡す必要があるなら、それらをエスケープする必要があります（テキスト中の特殊文字のエスケープについてのセクションをご覧ください）。
+.RE
 .SH "関連項目"
 .PP
-
 \fBmkvmerge\fR(1),
 \fBmkvextract\fR(1),
 \fBmkvpropedit\fR(1),

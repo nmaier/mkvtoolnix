@@ -13,10 +13,10 @@
 
 #include "common/common_pch.h"
 
+#include "common/codec.h"
 #include "common/endian.h"
 #include "common/hacks.h"
 #include "common/math.h"
-#include "common/matroska.h"
 #include "common/strings/formatting.h"
 #include "common/theora.h"
 #include "output/p_theora.h"
@@ -51,11 +51,10 @@ theora_video_packetizer_c::process(packet_cptr packet) {
 
 void
 theora_video_packetizer_c::extract_aspect_ratio() {
-  if (display_dimensions_or_aspect_ratio_set() || (NULL == m_ti.m_private_data) || (0 == m_ti.m_private_size))
+  if (display_dimensions_or_aspect_ratio_set() || !m_ti.m_private_data || (0 == m_ti.m_private_data->get_size()))
     return;
 
-  memory_cptr private_data         = memory_cptr(new memory_c(m_ti.m_private_data, m_ti.m_private_size, false));
-  std::vector<memory_cptr> packets = unlace_memory_xiph(private_data);
+  auto packets = unlace_memory_xiph(m_ti.m_private_data);
 
   for (auto &packet : packets) {
     if ((0 == packet->get_size()) || (THEORA_HEADERTYPE_IDENTIFICATION != packet->get_buffer()[0]))
@@ -68,7 +67,7 @@ theora_video_packetizer_c::extract_aspect_ratio() {
       if ((0 == theora.display_width) || (0 == theora.display_height))
         return;
 
-      set_video_display_dimensions(theora.display_width, theora.display_height, PARAMETER_SOURCE_BITSTREAM);
+      set_video_display_dimensions(theora.display_width, theora.display_height, OPTION_SOURCE_BITSTREAM);
 
       mxinfo_tid(m_ti.m_fname, m_ti.m_id,
                  boost::format(Y("Extracted the aspect ratio information from the Theora video headers and set the display dimensions to %1%/%2%.\n"))

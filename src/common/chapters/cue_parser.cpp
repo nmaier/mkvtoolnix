@@ -25,13 +25,14 @@
 #include <matroska/KaxTags.h>
 
 #include "common/chapters/chapters.h"
+#include "common/chapters/physical.h"
 #include "common/ebml.h"
 #include "common/error.h"
 #include "common/locale.h"
-#include "common/matroska.h"
 #include "common/mm_io.h"
 #include "common/strings/editing.h"
 #include "common/strings/formatting.h"
+#include "common/tags/target_type.h"
 #include "common/unique_numbers.h"
 
 using namespace libmatroska;
@@ -57,7 +58,7 @@ probe_cue_chapters(mm_text_io_c *in) {
   if (!in->getline2(s))
     return false;
 
-  return (ba::istarts_with(s, "performer ") || ba::istarts_with(s, "title ") || ba::istarts_with(s, "file ") || ba::istarts_with(s, "catalog ") || ba::istarts_with(s, "rem "));
+  return (balg::istarts_with(s, "performer ") || balg::istarts_with(s, "title ") || balg::istarts_with(s, "file ") || balg::istarts_with(s, "catalog ") || balg::istarts_with(s, "rem "));
 }
 
 std::string g_cue_to_chapter_name_format;
@@ -145,9 +146,9 @@ struct cue_parser_args_t {
     , min_tc(0)
     , max_tc(0)
     , offset(0)
-    , chapters(NULL)
-    , edition(NULL)
-    , atom(NULL)
+    , chapters(nullptr)
+    , edition(nullptr)
+    , atom(nullptr)
     , do_convert(false)
     , line_num(0)
   {
@@ -169,8 +170,8 @@ create_simple_tag(cue_parser_args_t &a,
                   const std::string &value) {
   KaxTagSimple *simple = new KaxTagSimple;
 
-  GetChildAs<KaxTagName,   EbmlUnicodeString>(*simple) = cue_str_internal_to_utf(a, name);
-  GetChildAs<KaxTagString, EbmlUnicodeString>(*simple) = cue_str_internal_to_utf(a, value);
+  GetChild<KaxTagName>(*simple).SetValue(cue_str_internal_to_utf(a, name));
+  GetChild<KaxTagString>(*simple).SetValue(cue_str_internal_to_utf(a, value));
 
   return simple;
 }
@@ -185,18 +186,18 @@ create_simple_tag(cue_parser_args_t &a,
 static void
 add_tag_for_cue_entry(cue_parser_args_t &a,
                       KaxTags **tags,
-                      uint32_t cuid) {
-  if (NULL == tags)
+                      uint64_t cuid) {
+  if (!tags)
     return;
 
-  if (NULL == *tags)
+  if (!*tags)
     *tags = new KaxTags;
 
   KaxTag *tag            = new KaxTag;
   KaxTagTargets *targets = &GetChild<KaxTagTargets>(*tag);
-  GetChildAs<KaxTagChapterUID,      EbmlUInteger>(*targets) = cuid;
-  GetChildAs<KaxTagTargetTypeValue, EbmlUInteger>(*targets) = TAG_TARGETTYPE_TRACK;
-  GetChildAs<KaxTagTargetType,      EbmlString>(*targets)   = "track";
+  GetChild<KaxTagChapterUID>(*targets).SetValue(cuid);
+  GetChild<KaxTagTargetTypeValue>(*targets).SetValue(TAG_TARGETTYPE_TRACK);
+  GetChild<KaxTagTargetType>(*targets).SetValue("track");
 
   create_tag1(a.title, "TITLE");
   tag->PushElement(*create_simple_tag(a, "PART_NUMBER", to_string(a.num)));
@@ -213,7 +214,7 @@ add_tag_for_cue_entry(cue_parser_args_t &a,
   for (i = 0; i < a.comment.size(); i++)
     create_tag1(a.comment[i], "COMMENT");
 
-  if (FINDFIRST(tag, KaxTagSimple) != NULL)
+  if (FindChild<KaxTagSimple>(tag))
     (*tags)->PushElement(*tag);
   else
     delete tag;
@@ -222,17 +223,17 @@ add_tag_for_cue_entry(cue_parser_args_t &a,
 static void
 add_tag_for_global_cue_settings(cue_parser_args_t &a,
                                 KaxTags **tags) {
-  if (NULL == tags)
+  if (!tags)
     return;
 
-  if (NULL == *tags)
+  if (!*tags)
     *tags = new KaxTags;
 
   KaxTag *tag            = new KaxTag;
   KaxTagTargets *targets = &GetChild<KaxTagTargets>(*tag);
 
-  GetChildAs<KaxTagTargetTypeValue, EbmlUInteger>(*targets) = TAG_TARGETTYPE_ALBUM;
-  GetChildAs<KaxTagTargetType, EbmlString>(*targets)        = "album";
+  GetChild<KaxTagTargetTypeValue>(*targets).SetValue(TAG_TARGETTYPE_ALBUM);
+  GetChild<KaxTagTargetType>(*targets).SetValue("album");
 
   create_tag1(a.global_performer, "ARTIST");
   create_tag1(a.global_title,     "TITLE");
@@ -244,7 +245,7 @@ add_tag_for_global_cue_settings(cue_parser_args_t &a,
   for (i = 0; i < a.global_rem.size(); i++)
     create_tag1(a.global_rem[i], "COMMENT");
 
-  if (FINDFIRST(tag, KaxTagSimple) != NULL)
+  if (FindChild<KaxTagSimple>(tag))
     (*tags)->PushElement(*tag);
   else
     delete tag;
@@ -255,20 +256,20 @@ add_subchapters_for_index_entries(cue_parser_args_t &a) {
   if (a.start_indices.empty())
     return;
 
-  KaxChapterAtom *atom = NULL;
+  KaxChapterAtom *atom = nullptr;
   size_t offset        = a.index00_missing ? 1 : 0;
   size_t i;
   for (i = 0; i < a.start_indices.size(); i++) {
-    atom                                                             = &GetFirstOrNextChild<KaxChapterAtom>(a.atom, atom);
+    atom = &GetFirstOrNextChild<KaxChapterAtom>(a.atom, atom);
 
-    GetChildAs<KaxChapterUID,           EbmlUInteger>(*atom)         = create_unique_uint32(UNIQUE_CHAPTER_IDS);
-    GetChildAs<KaxChapterTimeStart,     EbmlUInteger>(*atom)         = a.start_indices[i] - a.offset;
-    GetChildAs<KaxChapterFlagHidden,    EbmlUInteger>(*atom)         = 1;
-    GetChildAs<KaxChapterPhysicalEquiv, EbmlUInteger>(*atom)         = CHAPTER_PHYSEQUIV_INDEX;
+    GetChild<KaxChapterUID>(*atom).SetValue(create_unique_number(UNIQUE_CHAPTER_IDS));
+    GetChild<KaxChapterTimeStart>(*atom).SetValue(a.start_indices[i] - a.offset);
+    GetChild<KaxChapterFlagHidden>(*atom).SetValue(1);
+    GetChild<KaxChapterPhysicalEquiv>(*atom).SetValue(CHAPTER_PHYSEQUIV_INDEX);
 
-    KaxChapterDisplay *display                                       = &GetChild<KaxChapterDisplay>(*atom);
-    GetChildAs<KaxChapterString,        EbmlUnicodeString>(*display) = cstrutf8_to_UTFstring((boost::format("INDEX %|1$02d|") % (i + offset)).str().c_str());
-    GetChildAs<KaxChapterLanguage,      EbmlString>(*display)        = "eng";
+    auto &display = GetChild<KaxChapterDisplay>(*atom);
+    GetChild<KaxChapterString>(display).SetValue(cstrutf8_to_UTFstring((boost::format("INDEX %|1$02d|") % (i + offset)).str().c_str()));
+    GetChild<KaxChapterLanguage>(display).SetValue("eng");
   }
 }
 
@@ -283,20 +284,21 @@ add_elements_for_cue_entry(cue_parser_args_t &a,
 
   cue_entries_to_chapter_name(a.performer, a.title, a.global_performer, a.global_title, a.name, a.num);
 
-  if (NULL == a.edition) {
-    a.edition                                           = &GetChild<KaxEditionEntry>(*a.chapters);
-    GetChildAs<KaxEditionUID, EbmlUInteger>(*a.edition) = create_unique_uint32(UNIQUE_EDITION_IDS);
+  if (!a.edition) {
+    a.edition = &GetChild<KaxEditionEntry>(*a.chapters);
+    GetChild<KaxEditionUID>(*a.edition).SetValue(create_unique_number(UNIQUE_EDITION_IDS));
   }
 
-  a.atom                                                      = &GetFirstOrNextChild<KaxChapterAtom>(*a.edition, a.atom);
-  GetChildAs<KaxChapterPhysicalEquiv, EbmlUInteger>(*a.atom)  = CHAPTER_PHYSEQUIV_TRACK;
-  uint32_t cuid                                               = create_unique_uint32(UNIQUE_CHAPTER_IDS);
-  GetChildAs<KaxChapterUID,           EbmlUInteger>(*a.atom)  = cuid;
-  GetChildAs<KaxChapterTimeStart,     EbmlUInteger>(*a.atom)  = a.start_of_track - a.offset;
+  a.atom = &GetFirstOrNextChild<KaxChapterAtom>(*a.edition, a.atom);
+  GetChild<KaxChapterPhysicalEquiv>(*a.atom).SetValue(CHAPTER_PHYSEQUIV_TRACK);
 
-  KaxChapterDisplay *display                                  = &GetChild<KaxChapterDisplay>(*a.atom);
-  GetChildAs<KaxChapterString,   EbmlUnicodeString>(*display) = cue_str_internal_to_utf(a, a.name);
-  GetChildAs<KaxChapterLanguage, EbmlString>(*display)        = a.language;
+  auto cuid = create_unique_number(UNIQUE_CHAPTER_IDS);
+  GetChild<KaxChapterUID>(*a.atom).SetValue(cuid);
+  GetChild<KaxChapterTimeStart>(*a.atom).SetValue(a.start_of_track - a.offset);
+
+  auto &display = GetChild<KaxChapterDisplay>(*a.atom);
+  GetChild<KaxChapterString>(display).SetValue(cue_str_internal_to_utf(a, a.name));
+  GetChild<KaxChapterLanguage>(display).SetValue(a.language);
 
   add_subchapters_for_index_entries(a);
 
@@ -341,7 +343,7 @@ erase_colon(std::string &s,
   return s;
 }
 
-KaxChapters *
+kax_chapters_cptr
 parse_cue_chapters(mm_text_io_c *in,
                    int64_t min_tc,
                    int64_t max_tc,
@@ -353,7 +355,8 @@ parse_cue_chapters(mm_text_io_c *in,
   std::string line;
 
   in->setFilePointer(0);
-  a.chapters = new KaxChapters;
+  kax_chapters_cptr chapters{new KaxChapters};
+  a.chapters = chapters.get();
 
   if (in->get_byte_order() == BO_NONE) {
     a.do_convert = true;
@@ -365,128 +368,116 @@ parse_cue_chapters(mm_text_io_c *in,
   a.max_tc   = max_tc;
   a.offset   = offset;
 
-  try {
-    while (in->getline2(line)) {
-      a.line_num++;
+  while (in->getline2(line)) {
+    a.line_num++;
+    strip(line);
+
+    if ((line.empty()) || balg::istarts_with(line, "file "))
+      continue;
+
+    if (balg::istarts_with(line, "performer ")) {
+      if (0 == a.num)
+        a.global_performer = get_quoted(line, 10);
+      else
+        a.performer        = get_quoted(line, 10);
+
+    } else if (balg::istarts_with(line, "catalog "))
+      a.global_catalog = get_quoted(line, 8);
+
+    else if (balg::istarts_with(line, "title ")) {
+      if (0 == a.num)
+        a.global_title = get_quoted(line, 6);
+      else
+        a.title        = get_quoted(line, 6);
+
+    } else if (balg::istarts_with(line, "index ")) {
+      unsigned int index, min, sec, frames;
+
+      line.erase(0, 6);
       strip(line);
+      if (sscanf(line.c_str(), "%u %u:%u:%u", &index, &min, &sec, &frames) < 4)
+        mxerror(boost::format(Y("Cue sheet parser: Invalid INDEX entry in line %1%.\n")) % a.line_num);
 
-      if ((line.empty()) || ba::istarts_with(line, "file "))
-        continue;
+      bool index_ok = false;
+      if (99 >= index) {
+        if ((a.start_indices.empty()) && (1 == index))
+          a.index00_missing = true;
 
-      if (ba::istarts_with(line, "performer ")) {
-        if (0 == a.num)
-          a.global_performer = get_quoted(line, 10);
-        else
-          a.performer        = get_quoted(line, 10);
+        if ((a.start_indices.size() == index) || ((a.start_indices.size() == (index - 1)) && a.index00_missing)) {
+          int64_t timestamp = min * 60 * 1000000000ll + sec * 1000000000ll + frames * 1000000000ll / 75;
+          a.start_indices.push_back(timestamp);
 
-      } else if (ba::istarts_with(line, "catalog "))
-        a.global_catalog = get_quoted(line, 8);
+          if ((1 == index) || (0 == index))
+            a.start_of_track = timestamp;
 
-      else if (ba::istarts_with(line, "title ")) {
-        if (0 == a.num)
-          a.global_title = get_quoted(line, 6);
-        else
-          a.title        = get_quoted(line, 6);
-
-      } else if (ba::istarts_with(line, "index ")) {
-        unsigned int index, min, sec, frames;
-
-        line.erase(0, 6);
-        strip(line);
-        if (sscanf(line.c_str(), "%u %u:%u:%u", &index, &min, &sec, &frames) < 4)
-          mxerror(boost::format(Y("Cue sheet parser: Invalid INDEX entry in line %1%.\n")) % a.line_num);
-
-        bool index_ok = false;
-        if (99 >= index) {
-          if ((a.start_indices.empty()) && (1 == index))
-            a.index00_missing = true;
-
-          if ((a.start_indices.size() == index) || ((a.start_indices.size() == (index - 1)) && a.index00_missing)) {
-            int64_t timestamp = min * 60 * 1000000000ll + sec * 1000000000ll + frames * 1000000000ll / 75;
-            a.start_indices.push_back(timestamp);
-
-            if ((1 == index) || (0 == index))
-              a.start_of_track = timestamp;
-
-            index_ok = true;
-          }
-        }
-
-        if (!index_ok)
-          mxerror(boost::format(Y("Cue sheet parser: Invalid INDEX number (got %1%, expected %2%) in line %3%,\n")) % index % a.start_indices.size() % a.line_num);
-
-      } else if (ba::istarts_with(line, "track ")) {
-        if ((line.length() < 5) || strcasecmp(&line[line.length() - 5], "audio"))
-          continue;
-
-        if (1 <= a.num)
-          add_elements_for_cue_entry(a, tags);
-        else
-          add_tag_for_global_cue_settings(a, tags);
-
-        a.num++;
-        a.start_of_track  = -1;
-        a.index00_missing = false;
-        a.performer       = "";
-        a.title           = "";
-        a.isrc            = "";
-        a.date            = "";
-        a.genre           = "";
-        a.flags           = "";
-        a.start_indices.clear();
-        a.comment.clear();
-
-      } else if (ba::istarts_with(line, "isrc "))
-        a.isrc = get_quoted(line, 5);
-
-      else if (ba::istarts_with(line, "flags "))
-        a.flags = get_quoted(line, 6);
-
-      else if (ba::istarts_with(line, "rem ")) {
-        erase_colon(line, 4);
-        if (ba::istarts_with(line, "rem date ") || ba::istarts_with(line, "rem year ")) {
-          if (0 == a.num)
-            a.global_date = get_quoted(line, 9);
-          else
-            a.date        = get_quoted(line, 9);
-
-        } else if (ba::istarts_with(line, "rem genre ")) {
-          if (0 == a.num)
-            a.global_genre = get_quoted(line, 10);
-          else
-            a.genre        = get_quoted(line, 10);
-
-        } else if (ba::istarts_with(line, "rem discid "))
-          a.global_disc_id = get_quoted(line, 11);
-
-        else if (ba::istarts_with(line, "rem comment ")) {
-          if (0 == a.num)
-            a.global_comment.push_back(get_quoted(line, 12));
-          else
-            a.comment.push_back(get_quoted(line, 12));
-
-        } else {
-          if (0 == a.num)
-            a.global_rem.push_back(get_quoted(line, 4));
-          else
-            a.comment.push_back(get_quoted(line, 4));
+          index_ok = true;
         }
       }
+
+      if (!index_ok)
+        mxerror(boost::format(Y("Cue sheet parser: Invalid INDEX number (got %1%, expected %2%) in line %3%,\n")) % index % a.start_indices.size() % a.line_num);
+
+    } else if (balg::istarts_with(line, "track ")) {
+      if ((line.length() < 5) || strcasecmp(&line[line.length() - 5], "audio"))
+        continue;
+
+      if (1 <= a.num)
+        add_elements_for_cue_entry(a, tags);
+      else
+        add_tag_for_global_cue_settings(a, tags);
+
+      a.num++;
+      a.start_of_track  = -1;
+      a.index00_missing = false;
+      a.performer       = "";
+      a.title           = "";
+      a.isrc            = "";
+      a.date            = "";
+      a.genre           = "";
+      a.flags           = "";
+      a.start_indices.clear();
+      a.comment.clear();
+
+    } else if (balg::istarts_with(line, "isrc "))
+      a.isrc = get_quoted(line, 5);
+
+    else if (balg::istarts_with(line, "flags "))
+      a.flags = get_quoted(line, 6);
+
+    else if (balg::istarts_with(line, "rem ")) {
+      erase_colon(line, 4);
+      if (balg::istarts_with(line, "rem date ") || balg::istarts_with(line, "rem year ")) {
+        if (0 == a.num)
+          a.global_date = get_quoted(line, 9);
+        else
+          a.date        = get_quoted(line, 9);
+
+      } else if (balg::istarts_with(line, "rem genre ")) {
+        if (0 == a.num)
+          a.global_genre = get_quoted(line, 10);
+        else
+          a.genre        = get_quoted(line, 10);
+
+      } else if (balg::istarts_with(line, "rem discid "))
+        a.global_disc_id = get_quoted(line, 11);
+
+      else if (balg::istarts_with(line, "rem comment ")) {
+        if (0 == a.num)
+          a.global_comment.push_back(get_quoted(line, 12));
+        else
+          a.comment.push_back(get_quoted(line, 12));
+
+      } else {
+        if (0 == a.num)
+          a.global_rem.push_back(get_quoted(line, 4));
+        else
+          a.comment.push_back(get_quoted(line, 4));
+      }
     }
-
-    if (1 <= a.num)
-      add_elements_for_cue_entry(a, tags);
-
-  } catch(mtx::exception &e) {
-
-    delete a.chapters;
-    throw;
   }
 
-  if (0 == a.num) {
-    delete a.chapters;
-    return NULL;
-  }
+  if (1 <= a.num)
+    add_elements_for_cue_entry(a, tags);
 
-  return a.chapters;
+  return 0 == a.num ? kax_chapters_cptr{} : chapters;
 }

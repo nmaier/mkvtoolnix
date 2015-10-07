@@ -17,9 +17,9 @@
 
 #include <avilib.h>
 
+#include "common/codec.h"
 #include "common/endian.h"
 #include "common/hacks.h"
-#include "common/matroska.h"
 #include "merge/output_control.h"
 #include "merge/packet_extensions.h"
 #include "output/p_vc1.h"
@@ -32,9 +32,6 @@ vc1_video_packetizer_c::vc1_video_packetizer_c(generic_reader_c *n_reader, track
 {
   m_relaxed_timecode_checking = true;
 
-  if (get_cue_creation() == CUE_STRATEGY_UNSPECIFIED)
-    set_cue_creation(CUE_STRATEGY_IFRAMES);
-
   set_track_type(track_video);
   set_codec_id(MKV_V_MSCOMP);
 
@@ -45,7 +42,7 @@ vc1_video_packetizer_c::vc1_video_packetizer_c(generic_reader_c *n_reader, track
 
 void
 vc1_video_packetizer_c::set_headers() {
-  int priv_size           = sizeof(alBITMAPINFOHEADER) + (m_raw_headers.is_set() ? m_raw_headers->get_size() + 1 : 0);
+  int priv_size           = sizeof(alBITMAPINFOHEADER) + (m_raw_headers ? m_raw_headers->get_size() + 1 : 0);
   memory_cptr buf         = memory_c::alloc(priv_size);
   alBITMAPINFOHEADER *bih = (alBITMAPINFOHEADER *)buf->get_buffer();
 
@@ -64,7 +61,7 @@ vc1_video_packetizer_c::set_headers() {
   set_video_pixel_width(m_seqhdr.pixel_width);
   set_video_pixel_height(m_seqhdr.pixel_height);
 
-  if (m_raw_headers.is_set()) {
+  if (m_raw_headers) {
     if (m_seqhdr.display_info_flag) {
       int display_width  = m_seqhdr.display_width;
       int display_height = m_seqhdr.display_height;
@@ -91,7 +88,7 @@ vc1_video_packetizer_c::set_headers() {
   } else
     set_track_default_duration(1000000000ll * 1001 / 30000);
 
-  set_codec_private(buf->get_buffer(), buf->get_size());
+  set_codec_private(buf);
 
   generic_packetizer_c::set_headers();
 
@@ -107,7 +104,7 @@ vc1_video_packetizer_c::add_timecodes_to_parser(packet_cptr &packet) {
     if (extension->get_type() != packet_extension_c::MULTIPLE_TIMECODES)
       continue;
 
-    multiple_timecodes_packet_extension_c *tc_extension = static_cast<multiple_timecodes_packet_extension_c *>(extension.get_object());
+    multiple_timecodes_packet_extension_c *tc_extension = static_cast<multiple_timecodes_packet_extension_c *>(extension.get());
     int64_t timecode, position;
 
     while (tc_extension->get_next(timecode, position))
@@ -121,7 +118,7 @@ vc1_video_packetizer_c::process(packet_cptr packet) {
 
   m_parser.add_bytes(packet->data->get_buffer(), packet->data->get_size());
 
-  if (!m_raw_headers.is_set() && m_parser.are_headers_available())
+  if (!m_raw_headers && m_parser.are_headers_available())
     headers_found();
 
   flush_frames();
@@ -146,19 +143,16 @@ vc1_video_packetizer_c::headers_found() {
 }
 
 void
-vc1_video_packetizer_c::flush() {
+vc1_video_packetizer_c::flush_impl() {
   m_parser.flush();
   flush_frames();
-  generic_packetizer_c::flush();
 }
 
 void
 vc1_video_packetizer_c::flush_frames() {
   while (m_parser.is_frame_available()) {
     vc1::frame_cptr frame = m_parser.get_frame();
-
-    add_packet(new packet_t(frame->data, frame->timecode, frame->duration,
-                            (frame->header.frame_type == vc1::FRAME_TYPE_I) || frame->contains_sequence_header ? -1 : m_previous_timecode));
+    add_packet(new packet_t(frame->data, frame->timecode, frame->duration, frame->is_key() ? -1 : m_previous_timecode));
 
     m_previous_timecode = frame->timecode;
   }
@@ -168,9 +162,8 @@ connection_result_e
 vc1_video_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                        std::string &) {
   vc1_video_packetizer_c *vsrc = dynamic_cast<vc1_video_packetizer_c *>(src);
-  if (vsrc == NULL)
+  if (!vsrc)
     return CAN_CONNECT_NO_FORMAT;
 
   return CAN_CONNECT_YES;
 }
-

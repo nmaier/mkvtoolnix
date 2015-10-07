@@ -11,7 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #if defined(SYS_WINDOWS)
 
@@ -48,13 +48,13 @@ mmg_dialog::RegisterWindowMessages() {
 
 void
 mmg_dialog::init_dpi_settings() {
-  HDC hdc = GetDC(NULL);
+  HDC hdc = GetDC(nullptr);
   if (!hdc)
     return;
 
   ms_dpi_x = GetDeviceCaps(hdc, LOGPIXELSX);
   ms_dpi_y = GetDeviceCaps(hdc, LOGPIXELSY);
-  ReleaseDC(NULL, hdc);
+  ReleaseDC(nullptr, hdc);
 }
 
 size_t

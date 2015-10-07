@@ -27,7 +27,7 @@
 
 namespace mpeg4 {
   namespace p2 {
-    static bool find_vol_header(bit_cursor_c &bits);
+    static bool find_vol_header(bit_reader_c &bits);
     static bool parse_vol_header(const unsigned char *buffer, int buffer_size, config_data_t &config_data);
     static bool extract_par_internal(const unsigned char *buffer, int buffer_size, uint32_t &par_num, uint32_t &par_den);
     static void parse_frame(video_frame_t &frame, const unsigned char *buffer, const mpeg4::p2::config_data_t &config_data);
@@ -43,7 +43,7 @@ mpeg4::p2::config_data_t::config_data_t()
 }
 
 static bool
-mpeg4::p2::find_vol_header(bit_cursor_c &bits) {
+mpeg4::p2::find_vol_header(bit_reader_c &bits) {
   uint32_t marker;
 
   while (!bits.eof()) {
@@ -70,7 +70,7 @@ static bool
 mpeg4::p2::parse_vol_header(const unsigned char *buffer,
                             int buffer_size,
                             mpeg4::p2::config_data_t &config_data) {
-  bit_cursor_c bits(buffer, buffer_size);
+  bit_reader_c bits(buffer, buffer_size);
 
   if (!find_vol_header(bits))
     return false;
@@ -173,7 +173,7 @@ mpeg4::p2::extract_par_internal(const unsigned char *buffer,
   const uint32_t ar_nums[16] = {0, 1, 12, 10, 16, 40, 0, 0, 0, 0,  0,  0,  0,  0, 0, 0};
   const uint32_t ar_dens[16] = {1, 1, 11, 11, 11, 33, 1, 1, 1, 1,  1,  1,  1,  1, 1, 1};
   uint32_t aspect_ratio_info, num, den;
-  bit_cursor_c bits(buffer, buffer_size);
+  bit_reader_c bits(buffer, buffer_size);
 
   if (!find_vol_header(bits))
     return false;
@@ -241,7 +241,7 @@ mpeg4::p2::parse_frame(video_frame_t &frame,
                        const mpeg4::p2::config_data_t &config_data) {
   static const frame_type_e s_frame_type_map[4] = { FRAME_TYPE_I, FRAME_TYPE_P, FRAME_TYPE_B, FRAME_TYPE_P };
 
-  bit_cursor_c bc(&buffer[ frame.pos + 4 ], frame.size);
+  bit_reader_c bc(&buffer[ frame.pos + 4 ], frame.size);
 
   frame.type = s_frame_type_map[ bc.get_bits(2) ];
 
@@ -339,15 +339,15 @@ mpeg4::p2::find_frame_types(const unsigned char *buffer,
    \param data_pos This is set to the length of the configuration
      data inside the \c buffer if such data was found.
 
-   \return \c NULL if no configuration data was found and a pointer to
+   \return \c nullptr if no configuration data was found and a pointer to
      a memory_c object otherwise. This object has to be deleted manually.
 */
-memory_c *
+memory_cptr
 mpeg4::p2::parse_config_data(const unsigned char *buffer,
                              int buffer_size,
                              mpeg4::p2::config_data_t &config_data) {
   if (5 > buffer_size)
-    return NULL;
+    return nullptr;
 
   mxverb(3, boost::format("\nmpeg4_config_data: start search in %1% bytes\n") % buffer_size);
 
@@ -378,7 +378,7 @@ mpeg4::p2::parse_config_data(const unsigned char *buffer,
   }
 
   if (0 == size)
-    return NULL;
+    return nullptr;
 
   if (-1 != vol_offset)
     try {
@@ -389,16 +389,16 @@ mpeg4::p2::parse_config_data(const unsigned char *buffer,
     } catch (...) {
     }
 
-  memory_c *mem;
+  memory_cptr mem;
   if (-1 == vos_offset) {
-    mem                = new memory_c((unsigned char *)safemalloc(size + 5), size + 5, true);
+    mem                = memory_c::alloc(size + 5);
     unsigned char *dst = mem->get_buffer();
     put_uint32_be(dst, MPEGVIDEO_VOS_START_CODE);
     dst[4] = 0xf5;
     memcpy(dst + 5, buffer, size);
 
   } else {
-    mem                = new memory_c((unsigned char *)safemalloc(size), size, true);
+    mem                = memory_c::alloc(size);
     unsigned char *dst = mem->get_buffer();
     put_uint32_be(dst, MPEGVIDEO_VOS_START_CODE);
     if (3 >= buffer[vos_offset + 4])
@@ -424,11 +424,11 @@ bool
 mpeg4::p2::is_fourcc(const void *fourcc) {
   static const char *mpeg4_p2_fourccs[] = {
     "MP42", "DIV2", "DIVX", "XVID", "DX50", "FMP4", "DXGM",
-    NULL
+    nullptr
   };
   int i;
 
-  for (i = 0; NULL != mpeg4_p2_fourccs[i]; ++i)
+  for (i = 0; mpeg4_p2_fourccs[i]; ++i)
     if (!strncasecmp((const char *)fourcc, mpeg4_p2_fourccs[i], 4))
       return true;
   return false;
@@ -446,11 +446,11 @@ mpeg4::p2::is_v3_fourcc(const void *fourcc) {
   static const char *mpeg4_p2_v3_fourccs[] = {
     "DIV3", "MPG3", "MP43",
     "AP41", // Angel Potion
-    NULL
+    nullptr
   };
   int i;
 
-  for (i = 0; NULL != mpeg4_p2_v3_fourccs[i]; ++i)
+  for (i = 0; mpeg4_p2_v3_fourccs[i]; ++i)
     if (!strncasecmp((const char *)fourcc, mpeg4_p2_v3_fourccs[i], 4))
       return true;
   return false;

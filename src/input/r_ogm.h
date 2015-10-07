@@ -11,36 +11,18 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __R_OGM_H
-#define __R_OGM_H
+#ifndef MTX_R_OGM_H
+#define MTX_R_OGM_H
 
 #include "common/common_pch.h"
 
-#include <stdio.h>
-
 #include <ogg/ogg.h>
 
+#include "common/codec.h"
 #include "common/mm_io.h"
 #include "merge/pr_generic.h"
 #include "common/theora.h"
 #include "common/kate.h"
-
-enum ogm_stream_type_e {
-  OGM_STREAM_TYPE_UNKNOWN,
-  OGM_STREAM_TYPE_A_AAC,
-  OGM_STREAM_TYPE_A_AC3,
-  OGM_STREAM_TYPE_A_FLAC,
-  OGM_STREAM_TYPE_A_MP2,
-  OGM_STREAM_TYPE_A_MP3,
-  OGM_STREAM_TYPE_A_PCM,
-  OGM_STREAM_TYPE_A_VORBIS,
-  OGM_STREAM_TYPE_S_KATE,
-  OGM_STREAM_TYPE_S_TEXT,
-  OGM_STREAM_TYPE_V_AVC,
-  OGM_STREAM_TYPE_V_MSCOMP,
-  OGM_STREAM_TYPE_V_THEORA,
-  OGM_STREAM_TYPE_V_VP8,
-};
 
 class ogm_reader_c;
 
@@ -53,7 +35,8 @@ public:
   int ptzr;
   int64_t track_id;
 
-  ogm_stream_type_e stype;
+  codec_c codec;
+  bool ms_compat;
   int serialno, eos;
   unsigned int units_processed, num_header_packets, num_non_header_packets;
   bool headers_read;
@@ -73,13 +56,13 @@ public:
     return "unknown";
   };
   virtual std::string get_codec() {
-    return "unknown";
+    return codec.get_name("unknown");
   };
 
   virtual void initialize() {
   };
   virtual generic_packetizer_c *create_packetizer() {
-    return NULL;
+    return nullptr;
   };
   virtual void process_page(int64_t granulepos);
   virtual void process_header_page();
@@ -90,7 +73,7 @@ public:
   };
 };
 
-typedef counted_ptr<ogm_demuxer_c> ogm_demuxer_cptr;
+typedef std::shared_ptr<ogm_demuxer_c> ogm_demuxer_cptr;
 
 class ogm_reader_c: public generic_reader_c {
 private:
@@ -102,8 +85,8 @@ public:
   ogm_reader_c(const track_info_c &ti, const mm_io_cptr &in);
   virtual ~ogm_reader_c();
 
-  virtual const std::string get_format_name(bool translate = true) {
-    return translate ? Y("Ogg/OGM") : "Ogg/OGM";
+  virtual translatable_string_c get_format_name() const {
+    return YT("Ogg/OGM");
   }
 
   virtual void read_headers();
@@ -128,4 +111,4 @@ private:
   virtual void handle_stream_comments();
 };
 
-#endif  // __R_OGM_H
+#endif  // MTX_R_OGM_H

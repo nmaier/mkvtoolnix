@@ -11,22 +11,26 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_EXTERN_DATA_H
-#define __MTX_COMMON_EXTERN_DATA_H
+#ifndef MTX_COMMON_EXTERN_DATA_H
+#define MTX_COMMON_EXTERN_DATA_H
 
-#include "os.h"
+#include "common/common_pch.h"
 
-#include <string>
+struct mime_type_t {
+  std::string const name;
+  std::vector<std::string> const extensions;
 
-typedef struct {
-  const char *name, *extensions;
-} mime_type_t;
+  mime_type_t(std::string const &p_name, std::vector<std::string> const p_extensions)
+    : name{p_name}
+    , extensions{p_extensions}
+  {
+  }
+};
 
-extern const char *sub_charsets[];
-extern const mime_type_t mime_types[];
-extern const char *cctlds[];
+extern std::vector<std::string> const sub_charsets, cctlds;
+extern std::vector<mime_type_t> const mime_types;
 
 std::string guess_mime_type(std::string ext, bool is_file);
 bool is_valid_cctld(const std::string &s);
 
-#endif // __MTX_COMMON_EXTERN_DATA_H
+#endif // MTX_COMMON_EXTERN_DATA_H

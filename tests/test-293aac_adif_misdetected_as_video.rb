@@ -6,7 +6,7 @@ class T_293aac_adif_misdetected_as_video < Test
   end
 
   def run
-    sys "../src/mkvmerge --identify data/simple/aac_adif.aac", 3
+    sys "../src/mkvmerge --identify data/aac/aac_adif.aac", 3
     ($? >> 8).to_s
   end
 end

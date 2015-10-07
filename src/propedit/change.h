@@ -8,18 +8,16 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __PROPEDIT_CHANGE_H
-#define __PROPEDIT_CHANGE_H
+#ifndef MTX_PROPEDIT_CHANGE_H
+#define MTX_PROPEDIT_CHANGE_H
 
-#include "common/os.h"
-
-#include <string>
-#include <vector>
+#include "common/common_pch.h"
 
 #include "common/bitvalue.h"
-#include "common/memory.h"
 #include "common/property_element.h"
-#include "common/smart_pointers.h"
+
+class change_c;
+typedef std::shared_ptr<change_c> change_cptr;
 
 class change_c {
 public:
@@ -46,7 +44,7 @@ public:
 public:
   change_c(change_type_e type, const std::string &name, const std::string &value);
 
-  void validate(std::vector<property_element_c> *property_table = NULL);
+  void validate(std::vector<property_element_c> *property_table = nullptr);
   void dump_info() const;
 
   bool lookup_property(std::vector<property_element_c> &table);
@@ -54,6 +52,9 @@ public:
   std::string get_spec();
 
   void execute(EbmlMaster *master, EbmlMaster *sub_master);
+
+public:
+  static change_cptr parse_spec(change_type_e type, std::string const &spec);
 
 protected:
   void parse_ascii_string();
@@ -74,6 +75,5 @@ protected:
 
   const EbmlSemantic *get_semantic();
 };
-typedef counted_ptr<change_c> change_cptr;
 
-#endif // __PROPEDIT_CHANGE_H
+#endif // MTX_PROPEDIT_CHANGE_H

@@ -11,10 +11,13 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_AC3COMMON_H
-#define __MTX_COMMON_AC3COMMON_H
+#ifndef MTX_COMMON_AC3COMMON_H
+#define MTX_COMMON_AC3COMMON_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
+
+#include "common/bit_cursor.h"
+#include "common/byte_buffer.h"
 
 #define AC3_SYNC_WORD           0x0b77
 
@@ -38,26 +41,55 @@
 #define EAC3_FRAME_TYPE_AC3_CONVERT  2
 #define EAC3_FRAME_TYPE_RESERVED     3
 
-struct ac3_header_t {
-  unsigned int sample_rate;
-  unsigned int bit_rate;
-  unsigned int channels;
-  unsigned int flags;
-  unsigned int bytes;
-  unsigned int bsid;
-  unsigned int samples;
+namespace ac3 {
+  class frame_c {
+  public:
+    unsigned int m_sample_rate, m_bit_rate, m_channels, m_flags, m_bytes, m_bs_id, m_samples, m_frame_type, m_sub_stream_id;
+    uint64_t m_stream_position, m_garbage_size;
+    bool m_valid;
+    memory_cptr m_data;
+    std::vector<frame_c> m_dependent_frames;
 
-  unsigned int frame_type;
-  unsigned int sub_stream_id;
+  public:
+    frame_c();
+    void init();
+    bool is_eac3() const;
+    void add_dependent_frame(frame_c const &frame, unsigned char const *buffer, size_t buffer_size);
+    bool decode_header(unsigned char const *buffer, size_t buffer_size);
+    bool decode_header_type_eac3(bit_reader_c &bc);
+    bool decode_header_type_ac3(bit_reader_c &bc);
 
-  bool has_dependent_frames;
+    std::string to_string(bool verbose) const;
 
-  ac3_header_t();
+    int find_in(memory_cptr const &buffer);
+    int find_in(unsigned char const *buffer, size_t buffer_size);
+  };
+
+  class parser_c {
+  protected:
+    std::deque<frame_c> m_frames;
+    byte_buffer_c m_buffer;
+    uint64_t m_parsed_stream_position, m_total_stream_position;
+    frame_c m_current_frame;
+    size_t m_garbage_size;
+
+  public:
+    parser_c();
+    void add_bytes(memory_cptr const &mem);
+    void add_bytes(unsigned char *const buffer, size_t size);
+    void flush();
+    size_t frame_available() const;
+    frame_c get_frame();
+    uint64_t get_parsed_stream_position() const;
+    uint64_t get_total_stream_position() const;
+
+    int find_consecutive_frames(unsigned char const *buffer, size_t buffer_size, size_t num_required_headers);
+
+  protected:
+    void parse(bool end_of_stream);
+  };
 };
 
-int find_ac3_header(const unsigned char *buf, size_t size, ac3_header_t *ac3_header, bool look_for_second_header);
-int find_consecutive_ac3_headers(const unsigned char *buf, size_t size, unsigned int num);
-bool parse_ac3_header(const unsigned char *buf, ac3_header_t &header);
-bool verify_ac3_checksum(const unsigned char *buf, size_t size);
+bool verify_ac3_checksum(unsigned char const *buf, size_t size);
 
-#endif // __MTX_COMMON_AC3COMMON_H
+#endif // MTX_COMMON_AC3COMMON_H

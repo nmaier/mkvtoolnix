@@ -11,23 +11,18 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_MM_MULTI_FILE_IO_H
-#define __MTX_COMMON_MM_MULTI_FILE_IO_H
+#ifndef MTX_COMMON_MM_MULTI_FILE_IO_H
+#define MTX_COMMON_MM_MULTI_FILE_IO_H
 
 #include "common/common_pch.h"
 
-#include <boost/filesystem.hpp>
-#include <string>
-#include <vector>
-
 #include "common/mm_io.h"
 
-namespace bfs = boost::filesystem;
-
 class mm_multi_file_io_c;
-typedef counted_ptr<mm_multi_file_io_c> mm_multi_file_io_cptr;
+typedef std::shared_ptr<mm_multi_file_io_c> mm_multi_file_io_cptr;
 
 class mm_multi_file_io_c: public mm_io_c {
+protected:
   struct file_t {
     bfs::path m_file_name;
     uint64_t m_size, m_global_start;
@@ -57,6 +52,7 @@ public:
   virtual std::vector<bfs::path> get_file_names();
   virtual void create_verbose_identification_info(std::vector<std::string> &verbose_info);
   virtual void display_other_file_info();
+  virtual void enable_buffering(bool enable);
 
   static mm_io_cptr open_multi(const std::string &display_file_name, bool single_only = false);
 
@@ -65,4 +61,4 @@ protected:
   virtual size_t _write(const void *buffer, size_t size);
 };
 
-#endif  // __MTX_COMMON_MM_MULTI_FILE_IO_H
+#endif  // MTX_COMMON_MM_MULTI_FILE_IO_H

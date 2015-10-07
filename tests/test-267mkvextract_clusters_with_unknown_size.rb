@@ -6,7 +6,7 @@ class T_267mkvextract_clusters_with_unknown_size < Test
   end
 
   def run
-    xtr_tracks "data/webm/live-stream.webm", "2:#{tmp}"
+    xtr_tracks "data/webm/live-stream.webm", "1:#{tmp}"
     return hash_tmp
   end
 end

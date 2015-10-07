@@ -4,8 +4,8 @@
 // Distributed under the Boost Software License, Version 1.0.
 // (See http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef __MTX_COMMON_UTF8_FILECVT_FACET_H
-#define __MTX_COMMON_UTF8_FILECVT_FACET_H
+#ifndef MTX_COMMON_UTF8_FILECVT_FACET_H
+#define MTX_COMMON_UTF8_FILECVT_FACET_H
 
 #include <boost/filesystem/config.hpp>
 

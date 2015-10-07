@@ -13,14 +13,11 @@
 
 #include "common/common_pch.h"
 
-#include <cassert>
-#include <boost/range/algorithm.hpp>
-
 #include "common/hacks.h"
 #include "common/random.h"
 #include "common/unique_numbers.h"
 
-static std::vector<uint32_t> s_random_unique_numbers[4];
+static std::vector<uint64_t> s_random_unique_numbers[4];
 
 static void
 assert_valid_category(unique_id_category_e category) {
@@ -28,31 +25,31 @@ assert_valid_category(unique_id_category_e category) {
 }
 
 void
-clear_list_of_unique_uint32(unique_id_category_e category) {
+clear_list_of_unique_numbers(unique_id_category_e category) {
   assert((UNIQUE_ALL_IDS <= category) && (UNIQUE_ATTACHMENT_IDS >= category));
 
   if (UNIQUE_ALL_IDS == category) {
     int i;
     for (i = 0; 4 > i; ++i)
-      clear_list_of_unique_uint32((unique_id_category_e)i);
+      clear_list_of_unique_numbers((unique_id_category_e)i);
   } else
     s_random_unique_numbers[category].clear();
 }
 
 bool
-is_unique_uint32(uint32_t number,
+is_unique_number(uint64_t number,
                  unique_id_category_e category) {
   assert_valid_category(category);
 
   if (hack_engaged(ENGAGE_NO_VARIABLE_DATA))
     return true;
 
-  return boost::find_if(s_random_unique_numbers[category], [=](uint32_t stored_number) { return number == stored_number; })
+  return boost::find_if(s_random_unique_numbers[category], [=](uint64_t stored_number) { return number == stored_number; })
     == s_random_unique_numbers[category].end();
 }
 
 void
-add_unique_uint32(uint32_t number,
+add_unique_number(uint64_t number,
                   unique_id_category_e category) {
   assert_valid_category(category);
 
@@ -63,14 +60,14 @@ add_unique_uint32(uint32_t number,
 }
 
 void
-remove_unique_uint32(uint32_t number,
+remove_unique_number(uint64_t number,
                      unique_id_category_e category) {
   assert_valid_category(category);
-  boost::remove_if(s_random_unique_numbers[category], [=](uint32_t stored_number) { return number == stored_number; });
+  boost::remove_erase_if(s_random_unique_numbers[category], [=](uint64_t stored_number) { return number == stored_number; });
 }
 
-uint32_t
-create_unique_uint32(unique_id_category_e category) {
+uint64_t
+create_unique_number(unique_id_category_e category) {
   assert_valid_category(category);
 
   if (hack_engaged(ENGAGE_NO_VARIABLE_DATA)) {
@@ -78,12 +75,11 @@ create_unique_uint32(unique_id_category_e category) {
     return s_random_unique_numbers[category].size();
   }
 
-  uint32_t random_number;
+  uint64_t random_number;
   do {
-    random_number = random_c::generate_32bits();
-  } while ((random_number == 0) || !is_unique_uint32(random_number, category));
-  add_unique_uint32(random_number, category);
+    random_number = random_c::generate_64bits();
+  } while ((random_number == 0) || !is_unique_number(random_number, category));
+  add_unique_number(random_number, category);
 
   return random_number;
 }
-

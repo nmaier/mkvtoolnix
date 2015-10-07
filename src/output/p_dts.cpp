@@ -14,38 +14,35 @@
 
 #include "common/common_pch.h"
 
+#include "common/codec.h"
 #include "common/dts.h"
-#include "common/matroska.h"
-#include "merge/output_control.h"
-#include "merge/pr_generic.h"
+#include "merge/connection_checks.h"
 #include "output/p_dts.h"
 
 using namespace libmatroska;
 
 dts_packetizer_c::dts_packetizer_c(generic_reader_c *p_reader,
                                    track_info_c &p_ti,
-                                   const dts_header_t &dtsheader,
-                                   bool get_first_header_later)
+                                   const dts_header_t &dtsheader)
   : generic_packetizer_c(p_reader, p_ti)
   , m_samples_written(0)
   , m_bytes_written(0)
   , m_packet_buffer(128 * 1024)
-  , m_get_first_header_later(get_first_header_later)
   , m_first_header(dtsheader)
   , m_previous_header(dtsheader)
   , m_skipping_is_normal(false)
 {
   set_track_type(track_audio);
-  set_default_compression_method(COMPRESSION_DTS);
 }
 
 dts_packetizer_c::~dts_packetizer_c() {
 }
 
 unsigned char *
-dts_packetizer_c::get_dts_packet(dts_header_t &dtsheader) {
+dts_packetizer_c::get_dts_packet(dts_header_t &dtsheader,
+                                 bool flushing) {
   if (0 == m_packet_buffer.get_size())
-    return NULL;
+    return nullptr;
 
   const unsigned char *buf = m_packet_buffer.get_buffer();
   int buf_size             = m_packet_buffer.get_size();
@@ -54,7 +51,7 @@ dts_packetizer_c::get_dts_packet(dts_header_t &dtsheader) {
   if (0 > pos) {
     if (4 < buf_size)
       m_packet_buffer.remove(buf_size - 4);
-    return NULL;
+    return nullptr;
   }
 
   if (0 < pos) {
@@ -63,21 +60,10 @@ dts_packetizer_c::get_dts_packet(dts_header_t &dtsheader) {
     buf_size = m_packet_buffer.get_size();
   }
 
-  pos = find_dts_header(buf, buf_size, &dtsheader, m_get_first_header_later ? false : !m_first_header.dts_hd);
+  pos = find_dts_header(buf, buf_size, &dtsheader, flushing);
 
   if ((0 > pos) || (static_cast<int>(pos + dtsheader.frame_byte_size) > buf_size))
-    return NULL;
-
-  if (m_get_first_header_later) {
-    m_first_header           = dtsheader;
-    m_previous_header        = dtsheader;
-    m_get_first_header_later = false;
-
-    if (!m_reader->m_appending)
-      set_headers();
-
-    rerender_track_headers();
-  }
+    return nullptr;
 
   if ((1 < verbose) && (dtsheader != m_previous_header)) {
     mxinfo(Y("DTS header information changed! - New format:\n"));
@@ -126,11 +112,19 @@ dts_packetizer_c::process(packet_cptr packet) {
   if (-1 != packet->timecode)
     m_available_timecodes.push_back(packet->timecode);
 
+  m_packet_buffer.add(packet->data->get_buffer(), packet->data->get_size());
+
+  process_available_packets(false);
+
+  return FILE_STATUS_MOREDATA;
+}
+
+void
+dts_packetizer_c::process_available_packets(bool flushing) {
   dts_header_t dtsheader;
   unsigned char *dts_packet;
 
-  m_packet_buffer.add(packet->data->get_buffer(), packet->data->get_size());
-  while ((dts_packet = get_dts_packet(dtsheader)) != NULL) {
+  while ((dts_packet = get_dts_packet(dtsheader, flushing))) {
     int64_t new_timecode;
     if (!m_available_timecodes.empty()) {
       m_samples_written = 0;
@@ -145,19 +139,19 @@ dts_packetizer_c::process(packet_cptr packet) {
     m_bytes_written   += dtsheader.frame_byte_size;
     m_samples_written += get_dts_packet_length_in_core_samples(&dtsheader);
   }
+}
 
-  return FILE_STATUS_MOREDATA;
+void
+dts_packetizer_c::flush_impl() {
+  process_available_packets(true);
 }
 
 connection_result_e
 dts_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                  std::string &error_message) {
   dts_packetizer_c *dsrc = dynamic_cast<dts_packetizer_c *>(src);
-  if (NULL == dsrc)
+  if (!dsrc)
     return CAN_CONNECT_NO_FORMAT;
-
-  if (m_get_first_header_later)
-    return CAN_CONNECT_MAYBE_CODECPRIVATE;
 
   connect_check_a_samplerate(m_first_header.core_sampling_frequency, dsrc->m_first_header.core_sampling_frequency);
   connect_check_a_channels(m_first_header.audio_channels, dsrc->m_first_header.audio_channels);

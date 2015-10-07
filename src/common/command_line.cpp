@@ -13,17 +13,21 @@
 
 #include "common/common_pch.h"
 
+#include <algorithm>
 #include <cstring>
 #ifdef SYS_WINDOWS
 # include <windows.h>
 #endif
 
 #include "common/command_line.h"
-#include "common/mm_io.h"
-#include "common/mm_write_cache_io.h"
+#include "common/hacks.h"
+#include "common/mm_io_x.h"
+#include "common/mm_write_buffer_io.h"
 #include "common/strings/editing.h"
 #include "common/translation.h"
 #include "common/version.h"
+
+bool g_gui_mode = false;
 
 /** \brief Reads command line arguments from a file
 
@@ -38,11 +42,11 @@ read_args_from_file(std::vector<std::string> &args,
   std::string buffer;
   bool skip_next;
 
-  mm_io = NULL;
+  mm_io = nullptr;
   try {
     mm_io = new mm_text_io_c(new mm_file_io_c(filename));
-  } catch (...) {
-    mxerror(boost::format(Y("The file '%1%' could not be opened for reading command line arguments.\n")) % filename);
+  } catch (mtx::mm_io::exception &ex) {
+    mxerror(boost::format(Y("The file '%1%' could not be opened for reading: %2%.\n")) % filename % ex);
   }
 
   skip_next = false;
@@ -71,6 +75,24 @@ read_args_from_file(std::vector<std::string> &args,
   delete mm_io;
 }
 
+static std::vector<std::string>
+command_line_args_from_environment() {
+  std::vector<std::string> args;
+
+  char const *value = getenv("MKVTOOLNIX_OPTIONS");
+  if (value)
+    args = split(value, " ");
+  else {
+    value = getenv("MTX_OPTIONS");
+    if (value)
+      args = split(value, " ");
+  }
+
+  std::transform(args.begin(), args.end(), args.begin(), unescape);
+
+  return args;
+}
+
 /** \brief Expand the command line parameters
 
    Takes each command line paramter, converts it to UTF-8, and reads more
@@ -91,7 +113,7 @@ std::vector<std::string>
 command_line_utf8(int argc,
                   char **argv) {
   int i;
-  std::vector<std::string> args;
+  std::vector<std::string> args = command_line_args_from_environment();
 
   charset_converter_cptr cc_command_line = g_cc_stdio;
 
@@ -102,7 +124,7 @@ command_line_utf8(int argc,
       if (!strcmp(argv[i], "--command-line-charset")) {
         if ((i + 1) == argc)
           mxerror(Y("'--command-line-charset' is missing its argument.\n"));
-        cc_command_line = charset_converter_c::init(argv[i + 1] == NULL ? "" : argv[i + 1]);
+        cc_command_line = charset_converter_c::init(!argv[i + 1] ? "" : argv[i + 1]);
         i++;
       } else
         args.push_back(cc_command_line->utf8(argv[i]));
@@ -116,13 +138,13 @@ command_line_utf8(int argc,
 std::vector<std::string>
 command_line_utf8(int,
                   char **) {
-  std::vector<std::string> args;
+  std::vector<std::string> args = command_line_args_from_environment();
   std::string utf8;
 
   int num_args     = 0;
   LPWSTR *arg_list = CommandLineToArgvW(GetCommandLineW(), &num_args);
 
-  if (NULL == arg_list)
+  if (!arg_list)
     return args;
 
   int i;
@@ -162,21 +184,27 @@ std::string usage_text, version_info;
 bool
 handle_common_cli_args(std::vector<std::string> &args,
                        const std::string &redirect_output_short) {
-  size_t i                 = 0;
-  bool debug_options_found = false;
+  size_t i = 0;
 
   while (args.size() > i) {
     if (args[i] == "--debug") {
       if ((i + 1) == args.size())
         mxerror("Missing argument for '--debug'.\n");
 
-      if (!debug_options_found)
-        clear_debugging_requests();
-
-      request_debugging(args[i + 1]);
-      debug_options_found = true;
-
+      debugging_c::request(args[i + 1]);
       args.erase(args.begin() + i, args.begin() + i + 2);
+
+    } else if (args[i] == "--engage") {
+      if ((i + 1) == args.size())
+        mxerror(Y("'--engage' lacks its argument.\n"));
+
+      engage_hacks(args[i + 1]);
+      args.erase(args.begin() + i, args.begin() + i + 2);
+
+    } else if (args[i] == "--gui-mode") {
+      g_gui_mode = true;
+      args.erase(args.begin() + i, args.begin() + i + 1);
+
     } else
       ++i;
   }
@@ -203,7 +231,7 @@ handle_common_cli_args(std::vector<std::string> &args,
         mxerror(boost::format(Y("'%1%' is missing the file name.\n")) % args[i]);
       try {
         if (!stdio_redirected()) {
-          mm_io_cptr file = mm_write_cache_io_c::open(args[i + 1], 128 * 1024);
+          mm_io_cptr file = mm_write_buffer_io_c::open(args[i + 1], 128 * 1024);
           file->write_bom(g_stdio_charset);
           redirect_stdio(file);
         }
@@ -269,8 +297,16 @@ handle_common_cli_args(std::vector<std::string> &args,
       if (!rel.latest_source.valid)
         mxerror(boost::format(Y("The update information could not be retrieved from %1%.\n")) % MTX_VERSION_CHECK_URL);
 
-      mxinfo(boost::format("version_check_url=%1%\nrunning_version=%2%\navailable_version=%3%\ndownload_url=%4%\n")
-             % MTX_VERSION_CHECK_URL % rel.current_version.to_string() % rel.latest_source.to_string() % rel.source_download_url);
+      std::vector<std::string> keys;
+      brng::push_back(keys, rel.urls | badap::map_keys | badap::filtered([](std::string const &key) { return key != "general"; }));
+      brng::sort(keys);
+
+      std::string urls;
+      for (auto &key : keys)
+        urls += key + "_download_url=" + rel.urls[key] + "\n";
+
+      mxinfo(boost::format("version_check_url=%1%\nrunning_version=%2%\navailable_version=%3%\ndownload_url=%4%\n%5%")
+             % MTX_VERSION_CHECK_URL % rel.current_version.to_string() % rel.latest_source.to_string() % rel.urls["general"] % urls);
       mxexit(rel.current_version < rel.latest_source ? 1 : 0);
     }
 #endif  // defined(HAVE_CURL_EASY_H)
@@ -287,4 +323,3 @@ usage(int exit_code) {
   mxinfo(boost::format("%1%\n") % usage_text);
   mxexit(exit_code);
 }
-

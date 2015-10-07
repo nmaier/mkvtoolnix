@@ -13,8 +13,10 @@
 
 #include "common/common_pch.h"
 
+#include "common/codec.h"
 #include "common/error.h"
 #include "common/hacks.h"
+#include "common/mm_io_x.h"
 #include "input/r_mp3.h"
 #include "output/p_mp3.h"
 
@@ -24,8 +26,10 @@ int
 mp3_reader_c::probe_file(mm_io_c *in,
                          uint64_t,
                          int64_t probe_range,
-                         int num_headers) {
-  return (find_valid_headers(*in, probe_range, num_headers) != -1) ? 1 : 0;
+                         int num_headers,
+                         bool require_zero_offset) {
+  int offset = find_valid_headers(*in, probe_range, num_headers);
+  return (require_zero_offset && (0 == offset)) || (!require_zero_offset && (0 <= offset));
 }
 
 mp3_reader_c::mp3_reader_c(const track_info_c &ti,
@@ -87,8 +91,9 @@ mp3_reader_c::read(generic_packetizer_c *,
 
 void
 mp3_reader_c::identify() {
+  auto type = (boost::format("MP%1%") % m_mp3header.layer).str();
   id_result_container();
-  id_result_track(0, ID_RESULT_TRACK_AUDIO, (boost::format("MPEG-%1% layer %2%") % (m_mp3header.version == 1 ? "1" : m_mp3header.version == 2 ? "2" : "2.5") % m_mp3header.layer).str());
+  id_result_track(0, ID_RESULT_TRACK_AUDIO, codec_c::get_name(type, type));
 }
 
 int

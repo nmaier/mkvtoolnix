@@ -11,19 +11,12 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __TIMECODE_FACTORY_H
-#define __TIMECODE_FACTORY_H
+#ifndef MTX_TIMECODE_FACTORY_H
+#define MTX_TIMECODE_FACTORY_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
-#include <string>
-#include <vector>
-
-#include "common/smart_pointers.h"
 #include "merge/packet.h"
-
-
-class mm_io_c;
 
 enum timecode_factory_application_e {
   TFA_AUTOMATIC,
@@ -50,7 +43,7 @@ public:
 };
 
 class timecode_factory_c;
-typedef counted_ptr<timecode_factory_c> timecode_factory_cptr;
+typedef std::shared_ptr<timecode_factory_c> timecode_factory_cptr;
 
 class timecode_factory_c {
 protected:
@@ -58,6 +51,7 @@ protected:
   int64_t m_tid;
   int m_version;
   bool m_preserve_duration;
+  debugging_option_c m_debug;
 
 public:
   timecode_factory_c(const std::string &file_name,
@@ -69,6 +63,7 @@ public:
     , m_tid(tid)
     , m_version(version)
     , m_preserve_duration(false)
+    , m_debug{"timecode_factory"}
   {
   }
   virtual ~timecode_factory_c() {
@@ -131,7 +126,7 @@ class timecode_factory_v2_c: public timecode_factory_c {
 protected:
   std::vector<int64_t> m_timecodes, m_durations;
   int64_t m_frameno;
-  double m_default_fps;
+  double m_default_duration;
   bool m_warning_printed;
 
 public:
@@ -140,7 +135,7 @@ public:
                         int64_t tid, int version)
     : timecode_factory_c(file_name, source_name, tid, version)
     , m_frameno(0)
-    , m_default_fps(0.0)
+    , m_default_duration(0)
     , m_warning_printed(false)
   {
   }
@@ -150,7 +145,7 @@ public:
   virtual void parse(mm_io_c &in);
   virtual bool get_next(packet_cptr &packet);
   virtual double get_default_duration(double proposal) {
-    return m_default_fps != 0.0 ? static_cast<double>(1000000000.0) / m_default_fps : proposal;
+    return m_default_duration != 0 ? m_default_duration : proposal;
   }
 };
 
@@ -180,4 +175,4 @@ public:
   }
 };
 
-#endif // __TIMECODE_FACTORY_H
+#endif // MTX_TIMECODE_FACTORY_H

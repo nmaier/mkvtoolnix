@@ -48,15 +48,16 @@ dnl
 
   if test x"$continue_wx_check" = x1 ; then
     WXWIDGETS_CFLAGS=`$WX_CONFIG --cxxflags`
-    WXWIDGETS_LIBS=`$WX_CONFIG --libs | \
+    WXWIDGETS_LIBS=`$WX_CONFIG --libs std,richtext | \
       sed -e 's/-Wl,--subsystem,windows//' -e 's/-mwindows//'`
     AC_CACHE_VAL(ac_cv_wx_compilation, [
       AC_LANG_PUSH(C++)
       ac_save_CXXFLAGS="$CXXFLAGS"
       ac_save_LIBS="$LIBS"
-      CXXFLAGS="$CXXFLAGS $WXWIDGETS_CFLAGS"
+      CXXFLAGS="$CXXFLAGS $STD_CXX11 $WXWIDGETS_CFLAGS"
       LIBS="$LDFLAGS $WXWIDGETS_LIBS"
       AC_TRY_LINK([
+#undef __STRICT_ANSI__
 #include <wx/dnd.h>
 #include <wx/treectrl.h>
 ], [
@@ -76,14 +77,15 @@ wxTreeItemId id;
 
   if test x"$continue_wx_check" = x1 ; then
     WXWIDGETS_CFLAGS=`$WX_CONFIG --cxxflags`
-    WXWIDGETS_LIBS=`$WX_CONFIG --libs | sed -e 's/-Wl,--subsystem,windows//' -e 's/-mwindows//'`
+    WXWIDGETS_LIBS=`$WX_CONFIG --libs std,richtext | sed -e 's/-Wl,--subsystem,windows//' -e 's/-mwindows//'`
     AC_CACHE_VAL(ac_cv_wx_unicode, [
       AC_LANG_PUSH(C++)
       ac_save_CXXFLAGS="$CXXFLAGS"
       ac_save_LIBS="$LIBS"
-      CXXFLAGS="$CXXFLAGS $WXWIDGETS_CFLAGS"
+      CXXFLAGS="$CXXFLAGS $STD_CXX11 $WXWIDGETS_CFLAGS"
       LIBS="$LDFLAGS $WXWIDGETS_LIBS"
       AC_TRY_COMPILE([
+#undef __STRICT_ANSI__
 #include <wx/app.h>
 ], [
 #if defined(wxUSE_UNICODE) && wxUSE_UNICODE
@@ -126,11 +128,12 @@ int dummy;
     AC_LANG_PUSH(C++)
     ac_save_CXXFLAGS="$CXXFLAGS"
     ac_save_LIBS="$LIBS"
-    CXXFLAGS="$CXXFLAGS $WXWIDGETS_CFLAGS"
+    CXXFLAGS="$CXXFLAGS $STD_CXX11 $WXWIDGETS_CFLAGS"
     LIBS="$LDFLAGS $WXWIDGETS_LIBS"
 
     AC_CACHE_CHECK([for wxWidgets class wxBitmapComboBox], [ac_cv_wx_bitmapcombobox], [
       AC_TRY_COMPILE([
+#undef __STRICT_ANSI__
 #include <wx/bmpcbox.h>
 ], [
 wxBitmapComboBox bitmap_combobox(NULL, -1);
@@ -143,6 +146,7 @@ wxBitmapComboBox bitmap_combobox(NULL, -1);
 
     AC_CACHE_CHECK([for wxMenuBar member function SetMenuLabel], [ac_cv_wx_menubar_setmenulabel], [
       AC_TRY_COMPILE([
+#undef __STRICT_ANSI__
 #include <wx/string.h>
 #include <wx/menu.h>
 ], [
@@ -157,6 +161,7 @@ bar.SetMenuLabel(0, wxEmptyString);
 
     AC_CACHE_CHECK([for wxMenuItem member function SetItemlabel], [ac_cv_wx_menuitem_setitemlabel], [
       AC_TRY_COMPILE([
+#undef __STRICT_ANSI__
 #include <wx/string.h>
 #include <wx/menuitem.h>
 ], [
@@ -175,6 +180,9 @@ item.SetItemLabel(wxEmptyString);
 
   else
     opt_features_no="$opt_features_no\n   * GUIs (wxWidgets version)"
+    unset XWIDGETS_CFLAGS
+    unset WXWIDGETS_INCLUDES
+    unset WXWIDGETS_LIBS
   fi
 
 AC_SUBST(WXWIDGETS_CFLAGS)

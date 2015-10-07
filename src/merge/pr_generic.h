@@ -12,12 +12,12 @@
    Modified by Steve Lhomme <steve.lhomme@free.fr>.
 */
 
-#ifndef __PR_GENERIC_H
-#define __PR_GENERIC_H
+#ifndef MTX_PR_GENERIC_H
+#define MTX_PR_GENERIC_H
 
 #include "common/common_pch.h"
 
-#include <boost/logic/tribool.hpp>
+#include <boost/optional.hpp>
 #include <deque>
 
 #include <matroska/KaxAttachments.h>
@@ -27,13 +27,14 @@
 #include <matroska/KaxTracks.h>
 #include <matroska/KaxTags.h>
 
+#include "common/chapters/chapters.h"
 #include "common/compression.h"
-#include "common/error.h"
-#include "common/memory.h"
-#include "common/mm_io.h"
-#include "common/smart_pointers.h"
+#include "common/option_with_source.h"
 #include "common/stereo_mode.h"
 #include "common/strings/editing.h"
+#include "common/tags/tags.h"
+#include "common/timecode.h"
+#include "common/translation.h"
 #include "merge/item_selector.h"
 #include "merge/packet.h"
 #include "merge/timecode_factory.h"
@@ -181,13 +182,6 @@ enum default_track_priority_e {
   DEFAULT_TRACK_PRIORITY_CMDLINE     = 255
 };
 
-enum parameter_source_e {
-  PARAMETER_SOURCE_NONE      = 0,
-  PARAMETER_SOURCE_BITSTREAM = 1,
-  PARAMETER_SOURCE_CONTAINER = 2,
-  PARAMETER_SOURCE_CMDLINE   = 3,
-};
-
 struct display_properties_t {
   float aspect_ratio;
   bool ar_factor;
@@ -206,10 +200,18 @@ struct pixel_crop_t {
   int left, top, right, bottom;
 
   pixel_crop_t()
-  : left(0)
-  , top(0)
-  , right(0)
-  , bottom(0)
+  : left{}
+  , top{}
+  , right{}
+  , bottom{}
+  {
+  }
+
+  pixel_crop_t(int p_left, int p_top, int p_right, int p_bottom)
+  : left{p_left}
+  , top{p_top}
+  , right{p_right}
+  , bottom{p_bottom}
   {
   }
 };
@@ -234,8 +236,7 @@ public:
   bool m_disable_multi_file;
 
   // Options used by the packetizers.
-  unsigned char *m_private_data;
-  size_t m_private_size;
+  memory_cptr m_private_data;
 
   std::map<int64_t, std::string> m_all_fourccs;
   std::string m_fourcc;
@@ -243,7 +244,7 @@ public:
   float m_aspect_ratio;
   int m_display_width, m_display_height;
   bool m_aspect_ratio_given, m_aspect_ratio_is_factor, m_display_dimensions_given;
-  parameter_source_e m_display_dimensions_source;
+  option_source_e m_display_dimensions_source;
 
   std::map<int64_t, timecode_sync_t> m_timecode_syncs; // As given on the command line
   timecode_sync_t m_tcsync;                       // For this very track
@@ -257,8 +258,14 @@ public:
   std::map<int64_t, bool> m_default_track_flags; // As given on the command line
   boost::logic::tribool m_default_track;    // For this very track
 
+  std::map<int64_t, bool> m_fix_bitstream_frame_rate_flags; // As given on the command line
+  boost::logic::tribool m_fix_bitstream_frame_rate;         // For this very track
+
   std::map<int64_t, bool> m_forced_track_flags; // As given on the command line
   boost::logic::tribool m_forced_track;    // For this very track
+
+  std::map<int64_t, bool> m_enabled_track_flags; // As given on the command line
+  boost::logic::tribool m_enabled_track;    // For this very track
 
   std::map<int64_t, std::string> m_languages; // As given on the command line
   std::string m_language;              // For this very track
@@ -268,7 +275,7 @@ public:
 
   std::map<int64_t, std::string> m_all_tags;     // As given on the command line
   std::string m_tags_file_name;        // For this very track
-  KaxTags *m_tags;                // For this very track
+  kax_tags_cptr m_tags;                // For this very track
 
   std::map<int64_t, bool> m_all_aac_is_sbr; // For AAC+/HE-AAC/SBR
 
@@ -282,12 +289,10 @@ public:
   std::string m_ext_timecodes;         // For this very track
 
   std::map<int64_t, pixel_crop_t> m_pixel_crop_list; // As given on the command line
-  pixel_crop_t m_pixel_cropping;  // For this very track
-  parameter_source_e m_pixel_cropping_source;
+  option_with_source_c<pixel_crop_t> m_pixel_cropping;  // For this very track
 
   std::map<int64_t, stereo_mode_c::mode> m_stereo_mode_list; // As given on the command line
-  stereo_mode_c::mode m_stereo_mode;                    // For this very track
-  parameter_source_e m_stereo_mode_source;
+  option_with_source_c<stereo_mode_c::mode> m_stereo_mode;   // For this very track
 
   std::map<int64_t, int64_t> m_default_durations; // As given on the command line
   std::map<int64_t, int> m_max_blockadd_ids; // As given on the command line
@@ -312,17 +317,13 @@ public:
 
 public:
   track_info_c();
-  track_info_c(const track_info_c &src)
-    : m_initialized(false)
-  {
+  track_info_c(const track_info_c &src) {
     *this = src;
   }
   virtual ~track_info_c() {
-    free_contents();
   }
 
   track_info_c &operator =(const track_info_c &src);
-  virtual void free_contents();
   virtual bool display_dimensions_or_aspect_ratio_set();
 };
 
@@ -336,6 +337,8 @@ public:
 #define show_packetizer_info(track_id, packetizer) \
   mxinfo_tid(m_ti.m_fname, track_id, boost::format(Y("Using the output module for the format '%1%'.\n")) % packetizer->get_format_name());
 
+class mm_multi_file_io_c;
+
 class generic_reader_c {
 public:
   track_info_c m_ti;
@@ -346,21 +349,30 @@ public:
   generic_packetizer_c *m_ptzr_first_packet;
   std::vector<int64_t> m_requested_track_ids, m_available_track_ids, m_used_track_ids;
   int64_t m_max_timecode_seen;
-  KaxChapters *m_chapters;
+  kax_chapters_cptr m_chapters;
   bool m_appending;
   int m_num_video_tracks, m_num_audio_tracks, m_num_subtitle_tracks;
 
   int64_t m_reference_timecode_tolerance;
 
-private:
+protected:
   id_result_t m_id_results_container;
   std::vector<id_result_t> m_id_results_tracks, m_id_results_attachments, m_id_results_chapters, m_id_results_tags;
+
+  timecode_c m_restricted_timecodes_min, m_restricted_timecodes_max;
 
 public:
   generic_reader_c(const track_info_c &ti, const mm_io_cptr &in);
   virtual ~generic_reader_c();
 
-  virtual const std::string get_format_name(bool translate = true) = 0;
+  virtual translatable_string_c get_format_name() const = 0;
+  virtual bool is_providing_timecodes() const {
+    return true;
+  }
+
+  virtual void set_timecode_restrictions(timecode_c const &min, timecode_c const &max);
+  virtual timecode_c const &get_timecode_restriction_min() const;
+  virtual timecode_c const &get_timecode_restriction_max() const;
 
   virtual void read_headers() = 0;
   virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false) = 0;
@@ -382,8 +394,15 @@ public:
   virtual void add_requested_track_id(int64_t id);
   virtual void add_available_track_id(int64_t id);
   virtual void add_available_track_ids();
+  virtual void add_available_track_id_range(int64_t start, int64_t end);
+  virtual void add_available_track_id_range(int64_t num) {
+    add_available_track_id_range(0, num - 1);
+  }
 
-  virtual int64_t get_queued_bytes();
+  virtual int64_t get_file_size() {
+    return m_in->get_size();
+  }
+  virtual int64_t get_queued_bytes() const;
   virtual bool is_simple_subtitle_container() {
     return false;
   }
@@ -403,12 +422,14 @@ protected:
   virtual void id_result_container(const std::vector<std::string> &verbose_info);
   virtual void id_result_track(int64_t track_id, const std::string &type, const std::string &info, const std::string &verbose_info = empty_string);
   virtual void id_result_track(int64_t track_id, const std::string &type, const std::string &info, const std::vector<std::string> &verbose_info);
-  virtual void id_result_attachment(int64_t attachment_id, const std::string &type, int size, const std::string &file_name = empty_string, const std::string &description = empty_string);
+  virtual void id_result_attachment(int64_t attachment_id, const std::string &type, int size, const std::string &file_name = empty_string, const std::string &description = empty_string,
+                                    boost::optional<uint64_t> id = boost::optional<uint64_t>{});
   virtual void id_result_chapters(int num_entries);
   virtual void id_result_tags(int64_t track_id, int num_entries);
 
   virtual std::string id_escape_string(const std::string &s);
 
+  virtual mm_io_c *get_underlying_input() const;
 };
 
 void id_result_container_unsupported(const std::string &filename, const std::string &info);
@@ -420,46 +441,6 @@ enum connection_result_e {
   CAN_CONNECT_MAYBE_CODECPRIVATE
 };
 
-#define connect_check_a_samplerate(a, b)                                                                                       \
-  if ((a) != (b)) {                                                                                                            \
-    error_message = (boost::format(Y("The sample rate of the two audio tracks is different: %1% and %2%")) % (a) % (b)).str(); \
-    return CAN_CONNECT_NO_PARAMETERS;                                                                                          \
-  }
-#define connect_check_a_channels(a, b)                                                                                                \
-  if ((a) != (b)) {                                                                                                                   \
-    error_message = (boost::format(Y("The number of channels of the two audio tracks is different: %1% and %2%")) % (a) % (b)).str(); \
-    return CAN_CONNECT_NO_PARAMETERS;                                                                                                 \
-  }
-#define connect_check_a_bitdepth(a, b)                                                                                                       \
-  if ((a) != (b)) {                                                                                                                          \
-    error_message = (boost::format(Y("The number of bits per sample of the two audio tracks is different: %1% and %2%")) % (a) % (b)).str(); \
-    return CAN_CONNECT_NO_PARAMETERS;                                                                                                        \
-  }
-#define connect_check_v_width(a, b)                                                                                \
-  if ((a) != (b)) {                                                                                                \
-    error_message = (boost::format(Y("The width of the two tracks is different: %1% and %2%")) % (a) % (b)).str(); \
-    return CAN_CONNECT_NO_PARAMETERS;                                                                              \
-  }
-#define connect_check_v_height(a, b)                                                                                \
-  if ((a) != (b)) {                                                                                                 \
-    error_message = (boost::format(Y("The height of the two tracks is different: %1% and %2%")) % (a) % (b)).str(); \
-    return CAN_CONNECT_NO_PARAMETERS;                                                                               \
-  }
-#define connect_check_v_dwidth(a, b)                                                                                       \
-  if ((a) != (b)) {                                                                                                        \
-    error_message = (boost::format(Y("The display width of the two tracks is different: %1% and %2%")) % (a) % (b)).str(); \
-    return CAN_CONNECT_NO_PARAMETERS;                                                                                      \
-  }
-#define connect_check_v_dheight(a, b)                                                                                       \
-  if ((a) != (b)) {                                                                                                         \
-    error_message = (boost::format(Y("The display height of the two tracks is different: %1% and %2%")) % (a) % (b)).str(); \
-    return CAN_CONNECT_NO_PARAMETERS;                                                                                       \
-  }
-#define connect_check_codec_id(a, b)                                                                                 \
-  if ((a) != (b)) {                                                                                                  \
-    error_message = (boost::format(Y("The CodecID of the two tracks is different: %1% and %2%")) % (a) % (b)).str(); \
-    return CAN_CONNECT_NO_PARAMETERS;                                                                                \
-  }
 
 typedef std::deque<packet_cptr>::iterator packet_cptr_di;
 
@@ -480,12 +461,12 @@ protected:
   int64_t m_htrack_default_duration;
   bool m_default_duration_forced;
   bool m_default_track_warning_printed;
-  uint32_t m_huid;
+  uint64_t m_huid;
   int m_htrack_max_add_block_ids;
+  timecode_c m_seek_pre_roll, m_codec_delay;
 
   std::string m_hcodec_id;
-  unsigned char *m_hcodec_private;
-  size_t m_hcodec_private_length;
+  memory_cptr m_hcodec_private;
 
   float m_haudio_sampling_freq, m_haudio_output_sampling_freq;
   int m_haudio_channels, m_haudio_bit_depth;
@@ -501,6 +482,9 @@ protected:
   int64_t m_last_cue_timecode;
 
   bool m_has_been_flushed;
+
+protected:                      // static
+  static int ms_track_number;
 
 public:
   track_info_c m_ti;
@@ -531,11 +515,12 @@ public:
   inline bool packet_available() {
     return !m_packet_queue.empty() && m_packet_queue.front()->factory_applied;
   }
-  virtual void flush();
-  virtual int64_t get_smallest_timecode() {
+  void discard_queued_packets();
+  void flush();
+  virtual int64_t get_smallest_timecode() const {
     return m_packet_queue.empty() ? 0x0FFFFFFF : m_packet_queue.front()->timecode;
   }
-  inline int64_t get_queued_bytes() {
+  inline int64_t get_queued_bytes() const {
     return m_enqueued_bytes;
   }
 
@@ -543,7 +528,7 @@ public:
     m_free_refs      = m_next_free_refs;
     m_next_free_refs = free_refs;
   }
-  inline int64_t get_free_refs() {
+  inline int64_t get_free_refs() const {
     return m_free_refs;
   }
   virtual void set_headers();
@@ -556,48 +541,61 @@ public:
   virtual void set_cue_creation(cue_strategy_e create_cue_data) {
     m_ti.m_cues = create_cue_data;
   }
-  virtual cue_strategy_e get_cue_creation() {
+  virtual cue_strategy_e get_cue_creation() const {
     return m_ti.m_cues;
   }
-  virtual int64_t get_last_cue_timecode() {
+  virtual bool wants_cue_duration() const;
+  virtual int64_t get_last_cue_timecode() const {
     return m_last_cue_timecode;
   }
   virtual void set_last_cue_timecode(int64_t timecode) {
     m_last_cue_timecode = timecode;
   }
 
-  virtual KaxTrackEntry *get_track_entry() {
+  virtual KaxTrackEntry *get_track_entry() const {
     return m_track_entry;
   }
-  virtual int get_track_num() {
+  virtual int get_track_num() const {
     return m_hserialno;
   }
-  virtual int64_t get_source_track_num() {
+  virtual int64_t get_source_track_num() const {
     return m_ti.m_id;
   }
 
-  virtual int set_uid(uint32_t uid);
-  virtual int get_uid() {
+  virtual bool set_uid(uint64_t uid);
+  virtual uint64_t get_uid() const {
     return m_huid;
   }
   virtual void set_track_type(int type, timecode_factory_application_e tfa_mode = TFA_AUTOMATIC);
-  virtual int get_track_type() {
+  virtual int get_track_type() const {
     return m_htrack_type;
   }
+
+  virtual timecode_c const &get_track_seek_pre_roll() const {
+    return m_seek_pre_roll;
+  }
+
+  virtual timecode_c const &get_codec_delay() const {
+    return m_codec_delay;
+  }
+
   virtual void set_language(const std::string &language);
 
   virtual void set_codec_id(const std::string &id);
-  virtual void set_codec_private(const unsigned char *cp, int length);
+  virtual void set_codec_private(memory_cptr const &buffer);
 
   virtual void set_track_min_cache(int min_cache);
   virtual void set_track_max_cache(int max_cache);
   virtual void set_track_default_duration(int64_t default_duration);
   virtual void set_track_max_additionals(int max_add_block_ids);
-  virtual int64_t get_track_default_duration();
+  virtual int64_t get_track_default_duration() const;
   virtual void set_track_forced_flag(bool forced_track);
+  virtual void set_track_enabled_flag(bool enabled_track);
+  virtual void set_track_seek_pre_roll(timecode_c const &seek_pre_roll);
+  virtual void set_codec_delay(timecode_c const &codec_delay);
 
   virtual void set_audio_sampling_freq(float freq);
-  virtual float get_audio_sampling_freq() {
+  virtual float get_audio_sampling_freq() const {
     return m_haudio_sampling_freq;
   }
   virtual void set_audio_output_sampling_freq(float freq);
@@ -607,13 +605,14 @@ public:
   virtual void set_video_interlaced_flag(bool interlaced);
   virtual void set_video_pixel_width(int width);
   virtual void set_video_pixel_height(int height);
+  virtual void set_video_pixel_dimensions(int width, int height);
   virtual void set_video_display_width(int width);
   virtual void set_video_display_height(int height);
-  virtual void set_video_display_dimensions(int width, int height, parameter_source_e source);
-  virtual void set_video_aspect_ratio(double aspect_ratio, bool is_factor, parameter_source_e source);
-  virtual void set_video_pixel_cropping(int left, int top, int right, int bottom, parameter_source_e source);
-  virtual void set_video_pixel_cropping(const pixel_crop_t &cropping, parameter_source_e source);
-  virtual void set_video_stereo_mode(stereo_mode_c::mode stereo_mode, parameter_source_e source);
+  virtual void set_video_display_dimensions(int width, int height, option_source_e source);
+  virtual void set_video_aspect_ratio(double aspect_ratio, bool is_factor, option_source_e source);
+  virtual void set_video_pixel_cropping(int left, int top, int right, int bottom, option_source_e source);
+  virtual void set_video_pixel_cropping(const pixel_crop_t &cropping, option_source_e source);
+  virtual void set_video_stereo_mode(stereo_mode_c::mode stereo_mode, option_source_e source);
   virtual void set_video_stereo_mode_impl(EbmlMaster &video, stereo_mode_c::mode stereo_mode);
 
   virtual void set_as_default_track(int type, int priority);
@@ -629,7 +628,7 @@ public:
 
   virtual void force_duration_on_last_packet();
 
-  virtual const std::string get_format_name(bool translate = true) = 0;
+  virtual translatable_string_c get_format_name() const = 0;
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message) = 0;
   virtual void connect(generic_packetizer_c *src, int64_t append_timecode_offset = -1);
 
@@ -652,8 +651,16 @@ public:
   virtual bool display_dimensions_or_aspect_ratio_set();
 
   virtual bool is_compatible_with(output_compatibility_e compatibility);
+
+  int64_t create_track_number();
+
+protected:
+  virtual void flush_impl() {
+  };
+
+  virtual void show_experimental_status_version(std::string const &codec_id);
 };
 
 extern std::vector<generic_packetizer_c *> ptzrs_in_header_order;
 
-#endif  // __PR_GENERIC_H
+#endif  // MTX_PR_GENERIC_H

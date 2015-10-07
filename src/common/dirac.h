@@ -12,12 +12,10 @@
    \author Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_DIRAC_COMMON_H
-#define __MTX_COMMON_DIRAC_COMMON_H
+#ifndef MTX_COMMON_DIRAC_COMMON_H
+#define MTX_COMMON_DIRAC_COMMON_H
 
-#include "common/os.h"
-
-#include "common/smart_pointers.h"
+#include "common/common_pch.h"
 
 #define DIRAC_SYNC_WORD            0x42424344 // 'BBCD'
 #define DIRAC_UNIT_SEQUENCE_HEADER 0x00
@@ -66,7 +64,7 @@ namespace dirac {
     frame_t();
     void init();
   };
-  typedef counted_ptr<frame_t> frame_cptr;
+  typedef std::shared_ptr<frame_t> frame_cptr;
 
   bool parse_sequence_header(const unsigned char *buf, int size, sequence_header_t &seqhdr);
 
@@ -124,10 +122,7 @@ namespace dirac {
     }
 
     virtual memory_cptr get_raw_sequence_header() {
-      if (m_seqhdr_found)
-        return memory_cptr(m_raw_seqhdr->clone());
-      else
-        return memory_cptr(NULL);
+      return m_seqhdr_found ? memory_cptr{m_raw_seqhdr->clone()} : memory_cptr{};
     }
 
     virtual void handle_unit(memory_cptr packet);
@@ -179,4 +174,4 @@ namespace dirac {
   };
 };
 
-#endif  // __MTX_COMMON_DIRAC_COMMON_H
+#endif  // MTX_COMMON_DIRAC_COMMON_H

@@ -16,7 +16,8 @@
 #include <ogg/ogg.h>
 #include <vorbis/codec.h>
 
-#include "common/matroska.h"
+#include "common/codec.h"
+#include "merge/connection_checks.h"
 #include "merge/output_control.h"
 #include "output/p_vorbis.h"
 
@@ -76,8 +77,7 @@ vorbis_packetizer_c::set_headers() {
 
   set_codec_id(MKV_A_VORBIS);
 
-  memory_cptr codec_private = lace_memory_xiph(m_headers);
-  set_codec_private(codec_private->get_buffer(), codec_private->get_size());
+  set_codec_private(lace_memory_xiph(m_headers));
 
   set_audio_sampling_freq((float)m_vi.rate);
   set_audio_channels(m_vi.channels);
@@ -131,7 +131,7 @@ connection_result_e
 vorbis_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                     std::string &error_message) {
   vorbis_packetizer_c *vsrc = dynamic_cast<vorbis_packetizer_c *>(src);
-  if (NULL == vsrc)
+  if (!vsrc)
     return CAN_CONNECT_NO_FORMAT;
 
   connect_check_a_samplerate(m_vi.rate,   vsrc->m_vi.rate);

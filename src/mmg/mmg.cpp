@@ -11,18 +11,21 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <wx/wx.h>
 #include <wx/config.h>
 #include <wx/file.h>
+#include <wx/fileconf.h>
 #include <wx/regex.h>
+#ifdef SYS_WINDOWS
+# include <wx/msw/registry.h>
+#endif
 
 #ifdef __WXMAC__
 # include <ApplicationServices/ApplicationServices.h>
 #endif
 
-#include "common/common_pch.h"
 #include "common/chapters/chapters.h"
 #include "common/command_line.h"
 #include "common/common_pch.h"
@@ -33,7 +36,6 @@
 #include "common/strings/formatting.h"
 #include "common/translation.h"
 #include "common/wx.h"
-#include "common/xml/element_mapping.h"
 #include "mmg/header_editor/frame.h"
 #include "mmg/mmg_dialog.h"
 #include "mmg/mmg.h"
@@ -70,9 +72,17 @@ mmg_track_t::create_label() {
 
 bool
 mmg_track_t::is_webm_compatible() {
-  static wxRegEx re_valid_webm_codecs(wxT("VP8|Vorbis"), wxRE_ICASE);
+  static wxRegEx re_valid_webm_codecs(wxT("VP8|Vorbis|Opus"), wxRE_ICASE);
 
   return (is_audio() || is_video()) && re_valid_webm_codecs.Matches(ctype);
+}
+
+mmg_app::mmg_app() {
+#if defined(SYS_WINDOWS)
+  wxString dummy;
+  wxRegKey key(wxU("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\mmg.exe"));
+  m_is_installed = key.Exists() && key.QueryValue(wxU(""), dummy) && !dummy.IsEmpty();
+#endif
 }
 
 void
@@ -102,21 +112,21 @@ mmg_app::init_ui_locale() {
   m_ui_locale = locale;
 
   if (s_first_init) {
-    std::string installation_path = get_installation_path();
+    auto installation_path = mtx::get_installation_path();
     if (!installation_path.empty())
-      wxLocale::AddCatalogLookupPathPrefix(wxU(installation_path + "/locale"));
-  }
+      wxLocale::AddCatalogLookupPathPrefix(wxU((installation_path / "locale").string()));
 
-  const wxLanguageInfo *lang_info = wxLocale::FindLanguageInfo(wxU(m_ui_locale));
-  if (s_first_init) {
-    if ((NULL != lang_info) && m_locale.Init(lang_info->Language)) {
+    auto lang_info = !m_ui_locale.empty() ? wxLocale::FindLanguageInfo(wxU(m_ui_locale)) : nullptr;
+    auto language  = lang_info            ? lang_info->Language                          : wxLANGUAGE_ENGLISH;
+
+    if (lang_info && m_locale.Init(language)) {
       m_locale.AddCatalog(wxU("wxstd"));
 #ifdef SYS_WINDOWS
       m_locale.AddCatalog(wxU("wxmsw"));
 #endif // SYS_WINDOWS
     }
 
-    delete wxLog::SetActiveTarget(NULL);
+    delete wxLog::SetActiveTarget(nullptr);
     s_first_init = false;
   }
 
@@ -126,13 +136,23 @@ mmg_app::init_ui_locale() {
 }
 
 wxString
-mmg_app::get_config_file_name() {
-  return wxU(get_application_data_folder()) + wxT("/config");
+mmg_app::get_config_file_name()
+  const {
+#ifdef SYS_WINDOWS
+  return wxU((mtx::get_installation_path() / "mkvtoolnix.ini").string());
+#else
+  return wxU((mtx::get_application_data_folder() / "config").string());
+#endif
 }
 
 wxString
-mmg_app::get_jobs_folder() {
-  return wxU(get_application_data_folder()) + wxT("/jobs");
+mmg_app::get_jobs_folder()
+  const {
+#if defined(SYS_WINDOWS)
+  return m_is_installed ? wxU(mtx::get_application_data_folder().string()) : wxU((mtx::get_installation_path() / "jobs").string());
+#else
+  return wxU((mtx::get_application_data_folder() / "jobs").string());
+#endif
 }
 
 void
@@ -156,6 +176,23 @@ mmg_app::prepare_mmg_data_folder() {
 #endif
 }
 
+void
+mmg_app::init_config_base()
+  const {
+  auto cfg = static_cast<wxConfigBase *>(nullptr);
+
+#if defined(SYS_WINDOWS)
+  if (m_is_installed)
+    cfg = new wxConfig{wxT("mkvmergeGUI")};
+#endif
+
+  if (!cfg)
+    cfg = new wxFileConfig{wxT("mkvmergeGUI"), wxEmptyString, get_config_file_name()};
+
+  cfg->SetExpandEnvVars(false);
+  wxConfigBase::Set(cfg);
+}
+
 bool
 mmg_app::OnInit() {
 #ifdef __WXMAC__
@@ -164,24 +201,21 @@ mmg_app::OnInit() {
   TransformProcessType(&PSN, kProcessTransformToForegroundApplication);
 #endif
 
-  mtx_common_init();
+  wxImage::AddHandler(new wxPNGHandler);
 
-  wxConfigBase *cfg;
+  mtx_common_init("mmg", to_utf8(wxString{this->argv[0]}).c_str());
+
+  debugging_c::send_to_logger(true);
+
   uint32_t i;
   wxString k, v;
   int index;
 
   prepare_mmg_data_folder();
-
-#if defined(SYS_WINDOWS)
-  cfg = new wxConfig(wxT("mkvmergeGUI"));
-#else
-  cfg = new wxFileConfig(wxT("mkvmergeGUI"), wxEmptyString, get_config_file_name());
-#endif
-  wxConfigBase::Set(cfg);
-
+  init_config_base();
   init_ui_locale();
 
+  auto cfg = wxConfigBase::Get();
   cfg->SetPath(wxT("/GUI"));
   cfg->Read(wxT("last_directory"), &last_open_dir, wxEmptyString);
   for (i = 0; i < 4; i++) {
@@ -242,23 +276,23 @@ mmg_app::handle_command_line_arguments() {
     return;
   }
 
-  wxString file = wargs[0];
-  if (!wxFileExists(file) || wxDirExists(file))
-    wxMessageBox(wxString::Format(Z("The file '%s' does not exist."), file.c_str()), Z("Error loading settings"), wxOK | wxCENTER | wxICON_ERROR);
-  else {
+  for (auto &file : wargs)
+    if (!wxFileExists(file) || wxDirExists(file))
+      wxMessageBox(wxString::Format(Z("The file '%s' does not exist."), file.c_str()), Z("Error loading settings"), wxOK | wxCENTER | wxICON_ERROR);
+    else {
 #ifdef SYS_WINDOWS
-    if ((file.Length() > 3) && (file.c_str()[1] != wxT(':')) && (file.c_str()[0] != wxT('\\')))
-      file = wxGetCwd() + wxT("\\") + file;
+      if ((file.Length() > 3) && (file.c_str()[1] != wxT(':')) && (file.c_str()[0] != wxT('\\')))
+        file = wxGetCwd() + wxT("\\") + file;
 #else
-    if ((file.Length() > 0) && (file.c_str()[0] != wxT('/')))
-      file = wxGetCwd() + wxT("/") + file;
+      if ((file.Length() > 0) && (file.c_str()[0] != wxT('/')))
+        file = wxGetCwd() + wxT("/") + file;
 #endif
 
-    if (wxFileName(file).GetExt() == wxU("mmg"))
-      mdlg->load(file);
-    else
-      mdlg->input_page->add_file(file, false);
-  }
+      if (wxFileName(file).GetExt() == wxU("mmg"))
+        mdlg->load(file);
+      else
+        mdlg->input_page->add_file(file, false);
+    }
 }
 
 int

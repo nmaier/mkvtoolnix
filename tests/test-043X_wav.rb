@@ -6,7 +6,7 @@ class T_043X_wav < Test
   end
 
   def run
-    return xtr_tracks_s(8)
+    xtr_tracks_s 7
   end
 end
 

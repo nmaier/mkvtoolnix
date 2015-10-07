@@ -15,11 +15,6 @@
 
 #include "common/common_pch.h"
 
-#include <ctype.h>
-#include <stdarg.h>
-
-#include <cassert>
-
 #include <ebml/EbmlVersion.h>
 
 #include <matroska/KaxInfo.h>
@@ -27,41 +22,11 @@
 #include <matroska/KaxVersion.h>
 
 #include "common/ebml.h"
-#include "common/error.h"
 #include "common/hacks.h"
 #include "common/segmentinfo.h"
 #include "common/version.h"
-#include "common/xml/element_parser.h"
 
 using namespace libmatroska;
-
-/** \brief Parse a XML file containing segment info elements.
-
-   The file \a file_name is opened and handed over to ::parse_xml_segmentinfo
-
-   Its parameters don't have to be checked for validity.
-
-   \param file_name The name of the text file to read from.
-   \param exception_on_error If set to \c true then an exception is thrown
-     if an error occurs. Otherwise \c NULL will be returned.
-
-   \return A segment element containing the elements parsed from the file or
-     \c NULL if an error occured.
-*/
-KaxInfo *
-parse_segmentinfo(const std::string &file_name,
-                  bool exception_on_error) {
-  try {
-    mm_text_io_c *in = new mm_text_io_c(new mm_file_io_c(file_name));
-    return parse_xml_segmentinfo(in, exception_on_error);
-  } catch (mtx::xml::parser_x &e) {
-    if (exception_on_error)
-      throw;
-    mxerror(e.error());
-  }
-
-  return NULL;
-}
 
 /** \brief Add missing mandatory elements
 
@@ -76,11 +41,11 @@ parse_segmentinfo(const std::string &file_name,
 */
 void
 fix_mandatory_segmentinfo_elements(EbmlElement *e) {
-  if (NULL == e)
+  if (!e)
     return;
 
   KaxInfo *info = dynamic_cast<KaxInfo *>(e);
-  if (NULL == info)
+  if (!info)
     return;
 
   GetChild<KaxTimecodeScale>(info);

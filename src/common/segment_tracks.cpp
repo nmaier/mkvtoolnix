@@ -53,7 +53,7 @@ fix_mandatory_content_encoding_elements(KaxContentEncoding *encoding) {
   for (i = 0; encoding->ListSize() > i; ++i) {
     EbmlElement *e = (*encoding)[i];
 
-    if (dynamic_cast<KaxContentCompression *>(e) != NULL)
+    if (dynamic_cast<KaxContentCompression *>(e))
       fix_mandatory_content_compression_elements(static_cast<KaxContentCompression *>(e));
   }
 }
@@ -64,13 +64,16 @@ fix_mandatory_content_encodings_elements(KaxContentEncodings *encodings) {
   for (i = 0; encodings->ListSize() > i; ++i) {
     EbmlElement *e = (*encodings)[i];
 
-    if (dynamic_cast<KaxContentEncoding *>(e) != NULL)
+    if (dynamic_cast<KaxContentEncoding *>(e))
       fix_mandatory_content_encoding_elements(static_cast<KaxContentEncoding *>(e));
   }
 }
 
 static void
 fix_mandatory_track_entry_elements(KaxTrackEntry *track_entry) {
+  // Deprecated element that must not be rendered anymore
+  DeleteChildren<KaxTrackTimecodeScale>(track_entry);
+
   GetChild<KaxTrackNumber>(track_entry);
   GetChild<KaxTrackUID>(track_entry);
   GetChild<KaxTrackType>(track_entry);
@@ -79,7 +82,6 @@ fix_mandatory_track_entry_elements(KaxTrackEntry *track_entry) {
   GetChild<KaxTrackFlagForced>(track_entry);
   GetChild<KaxTrackFlagLacing>(track_entry);
   GetChild<KaxTrackMinCache>(track_entry);
-  GetChild<KaxTrackTimecodeScale>(track_entry);
   GetChild<KaxMaxBlockAdditionID>(track_entry);
   GetChild<KaxCodecID>(track_entry);
   GetChild<KaxCodecDecodeAll>(track_entry);
@@ -88,13 +90,13 @@ fix_mandatory_track_entry_elements(KaxTrackEntry *track_entry) {
   for (i = 0; track_entry->ListSize() > i; ++i) {
     EbmlElement *e = (*track_entry)[i];
 
-    if (dynamic_cast<KaxTrackVideo *>(e) != NULL)
+    if (dynamic_cast<KaxTrackVideo *>(e))
       fix_mandatory_track_video_elements(static_cast<KaxTrackVideo *>(e));
 
-    else if (dynamic_cast<KaxTrackAudio *>(e) != NULL)
+    else if (dynamic_cast<KaxTrackAudio *>(e))
       fix_mandatory_track_audio_elements(static_cast<KaxTrackAudio *>(e));
 
-    else if (dynamic_cast<KaxContentEncodings *>(e) != NULL)
+    else if (dynamic_cast<KaxContentEncodings *>(e))
       fix_mandatory_content_encodings_elements(static_cast<KaxContentEncodings *>(e));
   }
 }
@@ -112,18 +114,23 @@ fix_mandatory_track_entry_elements(KaxTrackEntry *track_entry) {
 */
 void
 fix_mandatory_segment_tracks_elements(EbmlElement *e) {
-  if (NULL == e)
+  if (!e)
     return;
 
+  if (dynamic_cast<KaxTrackEntry *>(e)) {
+    fix_mandatory_track_entry_elements(static_cast<KaxTrackEntry *>(e));
+    return;
+  }
+
   KaxTracks *tracks = dynamic_cast<KaxTracks *>(e);
-  if (NULL == tracks)
+  if (!tracks)
     return;
 
   size_t i;
   for (i = 0; tracks->ListSize() > i; ++i) {
     e = (*tracks)[i];
 
-    if (dynamic_cast<KaxTrackEntry *>(e) != NULL)
+    if (dynamic_cast<KaxTrackEntry *>(e))
       fix_mandatory_track_entry_elements(static_cast<KaxTrackEntry *>(e));
   }
 }

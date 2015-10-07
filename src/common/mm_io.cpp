@@ -15,10 +15,6 @@
 #include "common/common_pch.h"
 
 #include <errno.h>
-#if HAVE_POSIX_FADVISE
-# include <fcntl.h>
-# include <sys/utsname.h>
-#endif
 #include <string.h>
 #include <stdarg.h>
 #include <stdio.h>
@@ -29,87 +25,39 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#include <boost/filesystem.hpp>
-#include <boost/system/error_code.hpp>
-
 #include "common/endian.h"
 #include "common/error.h"
 #include "common/fs_sys_helpers.h"
 #include "common/mm_io.h"
+#include "common/mm_io_x.h"
 #include "common/strings/editing.h"
 #include "common/strings/parsing.h"
 
+union double_to_uint64_t {
+  uint64_t i;
+  double d;
+};
+
 #if !defined(SYS_WINDOWS)
-static std::string
-get_errno_msg() {
-  return g_cc_local_utf8->utf8(strerror(errno));
-}
-
-# if HAVE_POSIX_FADVISE
-static const unsigned long s_read_using_willneed   = 16 * 1024 * 1024;
-static const unsigned long s_write_before_dontneed =  8 * 1024 * 1024;
-bool mm_file_io_c::ms_use_posix_fadvise            = false;
-
-bool
-operator <(const file_id_t &file_id_1,
-           const file_id_t &file_id_2) {
-  return (file_id_1.m_dev < file_id_2.m_dev) || ((file_id_1.m_dev == file_id_2.m_dev) && (file_id_1.m_ino < file_id_2.m_ino));
-}
-
-bool
-operator ==(const file_id_t &file_id_1,
-            const file_id_t &file_id_2) {
-  return (file_id_1.m_dev == file_id_2.m_dev) && (file_id_1.m_ino == file_id_2.m_ino);
-}
-
-static std::map<file_id_t, int> s_fadvised_file_count_by_id;
-static std::map<file_id_t, mm_file_io_c *> s_fadvised_file_object_by_id;
-# endif
-
-#define FADVISE_WARNING                                                         \
-  "mm_file_io_c: Could not posix_fadvise() file '%1%' (errno = %2%, %3%). "     \
-  "This only means that access to this file might be slower than it could be. " \
-  "Data integrity is not in danger."
-
 mm_file_io_c::mm_file_io_c(const std::string &path,
                            const open_mode mode)
   : m_file_name(path)
-  , m_file(NULL)
-#if HAVE_POSIX_FADVISE
-  , m_read_count(0)
-  , m_write_count(0)
-  , m_use_posix_fadvise_here(ms_use_posix_fadvise)
-#endif
+  , m_file(nullptr)
 {
   const char *cmode;
-# if HAVE_POSIX_FADVISE
-  int advise = 0;
-# endif
 
   switch (mode) {
     case MODE_READ:
       cmode = "rb";
-# if HAVE_POSIX_FADVISE
-      advise = POSIX_FADV_WILLNEED;
-# endif
       break;
     case MODE_WRITE:
       cmode = "r+b";
-# if HAVE_POSIX_FADVISE
-      advise = POSIX_FADV_DONTNEED;
-# endif
       break;
     case MODE_CREATE:
       cmode = "w+b";
-# if HAVE_POSIX_FADVISE
-      advise = POSIX_FADV_DONTNEED;
-# endif
       break;
     case MODE_SAFE:
       cmode = "rb";
-# if HAVE_POSIX_FADVISE
-      advise = POSIX_FADV_WILLNEED;
-# endif
       break;
     default:
       throw mtx::invalid_parameter_x();
@@ -121,42 +69,13 @@ mm_file_io_c::mm_file_io_c(const std::string &path,
 
   struct stat st;
   if ((0 == stat(local_path.c_str(), &st)) && S_ISDIR(st.st_mode))
-    throw mtx::mm_io::open_x();
+    throw mtx::mm_io::open_x{mtx::mm_io::make_error_code()};
 
   m_file = (FILE *)fopen(local_path.c_str(), cmode);
 
-  if (NULL == m_file)
-    throw mtx::mm_io::open_x();
-
-# if HAVE_POSIX_FADVISE
-  if (POSIX_FADV_WILLNEED == advise)
-    setup_fadvise(local_path);
-# endif
+  if (!m_file)
+    throw mtx::mm_io::open_x{mtx::mm_io::make_error_code()};
 }
-
-# if HAVE_POSIX_FADVISE
-void
-mm_file_io_c::setup_fadvise(const std::string &local_path) {
-  struct stat st;
-  if (0 != stat(local_path.c_str(), &st))
-    throw mtx::mm_io::open_x();
-
-  m_file_id.initialize(st);
-
-  if (!map_has_key(s_fadvised_file_count_by_id, m_file_id))
-    s_fadvised_file_count_by_id[m_file_id] = 0;
-
-  s_fadvised_file_count_by_id[m_file_id]++;
-
-  if (1 < s_fadvised_file_count_by_id[m_file_id]) {
-    m_use_posix_fadvise_here = false;
-    if (map_has_key(s_fadvised_file_object_by_id, m_file_id))
-      s_fadvised_file_object_by_id[m_file_id]->m_use_posix_fadvise_here = false;
-
-  } else
-    s_fadvised_file_object_by_id[m_file_id] = this;
-}
-#endif  // HAVE_POSIX_FADVISE
 
 void
 mm_file_io_c::setFilePointer(int64 offset,
@@ -166,7 +85,7 @@ mm_file_io_c::setFilePointer(int64 offset,
              :                          SEEK_CUR;
 
   if (fseeko((FILE *)m_file, offset, whence) != 0)
-    throw mtx::mm_io::seek_x();
+    throw mtx::mm_io::seek_x{mtx::mm_io::make_error_code()};
 
   if (mode == seek_beginning)
     m_current_position = offset;
@@ -181,20 +100,7 @@ mm_file_io_c::_write(const void *buffer,
                      size_t size) {
   size_t bwritten = fwrite(buffer, 1, size, (FILE *)m_file);
   if (ferror((FILE *)m_file) != 0)
-    mxerror(boost::format(Y("Could not write to the output file: %1% (%2%)\n")) % errno % get_errno_msg());
-
-# if HAVE_POSIX_FADVISE
-  m_write_count += bwritten;
-  if (ms_use_posix_fadvise && m_use_posix_fadvise_here && (m_write_count > s_write_before_dontneed)) {
-    uint64 pos    = getFilePointer();
-    m_write_count = 0;
-
-    if (0 != posix_fadvise(fileno((FILE *)m_file), 0, pos, POSIX_FADV_DONTNEED)) {
-      mxverb(2, boost::format(FADVISE_WARNING) % m_file_name % errno % get_errno_msg());
-      m_use_posix_fadvise_here = false;
-    }
-  }
-# endif
+    throw mtx::mm_io::read_write_x{mtx::mm_io::make_error_code()};
 
   m_current_position += bwritten;
   m_cached_size       = -1;
@@ -207,27 +113,6 @@ mm_file_io_c::_read(void *buffer,
                     size_t size) {
   int64_t bread = fread(buffer, 1, size, (FILE *)m_file);
 
-# if HAVE_POSIX_FADVISE
-  if (ms_use_posix_fadvise && m_use_posix_fadvise_here && (0 <= bread)) {
-    m_read_count += bread;
-    if (m_read_count > s_read_using_willneed) {
-      uint64 pos   = getFilePointer();
-      int fd       = fileno((FILE *)m_file);
-      m_read_count = 0;
-
-      if (0 != posix_fadvise(fd, 0, pos, POSIX_FADV_DONTNEED)) {
-        mxverb(2, boost::format(FADVISE_WARNING) % m_file_name % errno % get_errno_msg());
-        m_use_posix_fadvise_here = false;
-      }
-
-      if (m_use_posix_fadvise_here && (0 != posix_fadvise(fd, pos, pos + s_read_using_willneed, POSIX_FADV_WILLNEED))) {
-        mxverb(2, boost::format(FADVISE_WARNING) % m_file_name % errno % get_errno_msg());
-        m_use_posix_fadvise_here = false;
-      }
-    }
-  }
-# endif
-
   m_current_position += bread;
 
   return bread;
@@ -235,19 +120,9 @@ mm_file_io_c::_read(void *buffer,
 
 void
 mm_file_io_c::close() {
-  if (NULL != m_file) {
+  if (m_file) {
     fclose((FILE *)m_file);
-    m_file = NULL;
-
-# if HAVE_POSIX_FADVISE
-    if (m_file_id.m_initialized) {
-      s_fadvised_file_count_by_id[m_file_id]--;
-      if (0 == s_fadvised_file_count_by_id[m_file_id])
-        s_fadvised_file_object_by_id.erase(m_file_id);
-
-      m_file_id.m_initialized = false;
-    }
-# endif
+    m_file = nullptr;
   }
 }
 
@@ -263,35 +138,33 @@ mm_file_io_c::truncate(int64_t pos) {
 }
 
 /** \brief OS and kernel dependant setup
-
-   The \c posix_fadvise call can improve read/write performance a lot.
-   Unfortunately it is pretty new and a buggy on a couple of Linux kernels
-   in the 2.4.x series. So only enable its usage for 2.6.x kernels.
 */
 void
 mm_file_io_c::setup() {
-# if HAVE_POSIX_FADVISE
-  struct utsname un;
-
-  ms_use_posix_fadvise = false;
-  if ((0 == uname(&un)) && !strcasecmp(un.sysname, "Linux")) {
-    std::vector<std::string> versions = split(un.release, ".");
-    int major, minor;
-
-    if ((2 <= versions.size()) && parse_int(versions[0], major) && parse_int(versions[1], minor) && ((2 < major) || (6 <= minor)))
-      ms_use_posix_fadvise = true;
-  }
-# endif // HAVE_POSIX_FADVISE
 }
 
 #endif // !defined(SYS_WINDOWS)
 
 void
 mm_file_io_c::prepare_path(const std::string &path) {
+  boost::filesystem::path directory = boost::filesystem::path(path).parent_path();
+  if (directory.empty() || boost::filesystem::exists(directory))
+    return;
+
   boost::system::error_code error_code;
-  boost::filesystem::create_directories(boost::filesystem::path(path).parent_path(), error_code);
+  boost::filesystem::create_directories(directory, error_code);
   if (error_code)
-    throw mtx::mm_io::create_directory_x(path, strerror(error_code.value()), error_code.value());
+    throw mtx::mm_io::create_directory_x(path, mtx::mm_io::make_error_code());
+}
+
+memory_cptr
+mm_file_io_c::slurp(std::string const &file_name) {
+  mm_file_io_c in(file_name, MODE_READ);
+  auto content = memory_c::alloc(in.get_size());
+  if (in.get_size() != in.read(content, in.get_size()))
+    throw mtx::mm_io::end_of_file_x{mtx::mm_io::make_error_code()};
+
+  return content;
 }
 
 uint64
@@ -306,10 +179,6 @@ mm_file_io_c::~mm_file_io_c() {
 
 void
 mm_file_io_c::cleanup() {
-#if HAVE_POSIX_FADVISE
-  s_fadvised_file_count_by_id.clear();
-  s_fadvised_file_object_by_id.clear();
-#endif
 }
 
 mm_io_cptr
@@ -328,7 +197,7 @@ mm_io_c::getline() {
   std::string s;
 
   if (eof())
-    throw mtx::mm_io::end_of_file_x();
+    throw mtx::mm_io::end_of_file_x{mtx::mm_io::make_error_code()};
 
   while (read(&c, 1) == 1) {
     if (c == '\r')
@@ -382,18 +251,27 @@ mm_io_c::puts(const std::string &s) {
       continue;
 
     if (prev_pos < cur_pos)
-      num_written += write(&cs[prev_pos], cur_pos - prev_pos);
+      num_written += write(std::string{&cs[prev_pos], static_cast<std::string::size_type>(cur_pos - prev_pos)});
 
     if (insert_cr)
-      num_written += write("\r", 1);
+      num_written += write(std::string{"\r"});
 
     prev_pos = cur_pos + (keep_char ? 0 : 1);
   }
 
   if (prev_pos < cur_pos)
-    num_written += write(&cs[prev_pos], cur_pos - prev_pos);
+    num_written += write(std::string{&cs[prev_pos], static_cast<std::string::size_type>(cur_pos - prev_pos)});
 
   return num_written;
+}
+
+memory_cptr
+mm_io_c::read(size_t size) {
+  auto buffer = memory_c::alloc(size);
+  if (read(buffer, size) != size)
+    throw mtx::mm_io::end_of_file_x{};
+
+  return buffer;
 }
 
 uint32_t
@@ -422,7 +300,7 @@ mm_io_c::read_uint8() {
   unsigned char value;
 
   if (read(&value, 1) != 1)
-    throw mtx::mm_io::end_of_file_x();
+    throw mtx::mm_io::end_of_file_x{mtx::mm_io::make_error_code()};
 
   return value;
 }
@@ -432,7 +310,7 @@ mm_io_c::read_uint16_le() {
   unsigned char buffer[2];
 
   if (read(buffer, 2) != 2)
-    throw mtx::mm_io::end_of_file_x();
+    throw mtx::mm_io::end_of_file_x{mtx::mm_io::make_error_code()};
 
   return get_uint16_le(buffer);
 }
@@ -442,7 +320,7 @@ mm_io_c::read_uint24_le() {
   unsigned char buffer[3];
 
   if (read(buffer, 3) != 3)
-    throw mtx::mm_io::end_of_file_x();
+    throw mtx::mm_io::end_of_file_x{mtx::mm_io::make_error_code()};
 
   return get_uint24_le(buffer);
 }
@@ -452,7 +330,7 @@ mm_io_c::read_uint32_le() {
   unsigned char buffer[4];
 
   if (read(buffer, 4) != 4)
-    throw mtx::mm_io::end_of_file_x();
+    throw mtx::mm_io::end_of_file_x{mtx::mm_io::make_error_code()};
 
   return get_uint32_le(buffer);
 }
@@ -462,7 +340,7 @@ mm_io_c::read_uint64_le() {
   unsigned char buffer[8];
 
   if (read(buffer, 8) != 8)
-    throw mtx::mm_io::end_of_file_x();
+    throw mtx::mm_io::end_of_file_x{mtx::mm_io::make_error_code()};
 
   return get_uint64_le(buffer);
 }
@@ -472,9 +350,14 @@ mm_io_c::read_uint16_be() {
   unsigned char buffer[2];
 
   if (read(buffer, 2) != 2)
-    throw mtx::mm_io::end_of_file_x();
+    throw mtx::mm_io::end_of_file_x{mtx::mm_io::make_error_code()};
 
   return get_uint16_be(buffer);
+}
+
+int32_t
+mm_io_c::read_int24_be() {
+  return (static_cast<int32_t>(read_uint24_be()) + 0xff800000) ^ 0xff800000;
 }
 
 uint32_t
@@ -482,7 +365,7 @@ mm_io_c::read_uint24_be() {
   unsigned char buffer[3];
 
   if (read(buffer, 3) != 3)
-    throw mtx::mm_io::end_of_file_x();
+    throw mtx::mm_io::end_of_file_x{mtx::mm_io::make_error_code()};
 
   return get_uint24_be(buffer);
 }
@@ -492,7 +375,7 @@ mm_io_c::read_uint32_be() {
   unsigned char buffer[4];
 
   if (read(buffer, 4) != 4)
-    throw mtx::mm_io::end_of_file_x();
+    throw mtx::mm_io::end_of_file_x{mtx::mm_io::make_error_code()};
 
   return get_uint32_be(buffer);
 }
@@ -502,9 +385,33 @@ mm_io_c::read_uint64_be() {
   unsigned char buffer[8];
 
   if (read(buffer, 8) != 8)
-    throw mtx::mm_io::end_of_file_x();
+    throw mtx::mm_io::end_of_file_x{mtx::mm_io::make_error_code()};
 
   return get_uint64_be(buffer);
+}
+
+double
+mm_io_c::read_double() {
+  double_to_uint64_t d2ui;
+
+  d2ui.i = read_uint64_be();
+  return d2ui.d;
+}
+
+unsigned int
+mm_io_c::read_mp4_descriptor_len() {
+  unsigned int len       = 0;
+  unsigned int num_bytes = 0;
+  uint8_t byte;
+
+  do {
+    byte = read_uint8();
+    len  = (len << 7) | (byte & 0x7f);
+    ++num_bytes;
+
+  } while (((byte & 0x80) == 0x80) && (4 > num_bytes));
+
+  return len;
 }
 
 uint32_t
@@ -518,7 +425,7 @@ mm_io_c::read(memory_cptr &buffer,
     buffer->resize(size + offset);
 
   if (read(buffer->get_buffer() + offset, size) != size)
-    throw mtx::mm_io::end_of_file_x();
+    throw mtx::mm_io::end_of_file_x{mtx::mm_io::make_error_code()};
 
   buffer->set_size(size + offset);
 
@@ -578,6 +485,21 @@ mm_io_c::write_uint64_be(uint64_t value) {
   return write(&buffer, sizeof(uint64_t));
 }
 
+int
+mm_io_c::write_double(double value) {
+  double_to_uint64_t d2ui;
+  d2ui.d = value;
+  return write_uint64_be(d2ui.i);
+}
+
+size_t
+mm_io_c::write(std::string const &buffer) {
+  if (!m_string_output_converter)
+    return write(buffer.c_str(), buffer.length());
+  auto native = m_string_output_converter->native(buffer);
+  return write(native.c_str(), native.length());
+}
+
 size_t
 mm_io_c::write(const void *buffer,
                size_t size) {
@@ -591,7 +513,7 @@ mm_io_c::write(const memory_cptr &buffer,
   size = std::min(buffer->get_size() - offset, size);
 
   if (write(buffer->get_buffer() + offset, size) != size)
-    throw mtx::mm_io::end_of_file_x();
+    throw mtx::mm_io::end_of_file_x{mtx::mm_io::make_error_code()};
   return size;
 }
 
@@ -600,7 +522,7 @@ mm_io_c::skip(int64 num_bytes) {
   uint64_t pos = getFilePointer();
   setFilePointer(pos + num_bytes);
   if ((pos + num_bytes) != getFilePointer())
-    throw mtx::mm_io::end_of_file_x();
+    throw mtx::mm_io::end_of_file_x{mtx::mm_io::make_error_code()};
 }
 
 void
@@ -632,7 +554,7 @@ mm_io_c::write_bom(const std::string &charset) {
   const unsigned char *bom;
   unsigned int bom_len;
 
-  if (charset.empty())
+  if (m_bom_written || charset.empty())
     return false;
 
   if ((charset =="UTF-8") || (charset =="UTF8")) {
@@ -655,7 +577,15 @@ mm_io_c::write_bom(const std::string &charset) {
 
   setFilePointer(0, seek_beginning);
 
-  return (write(bom, bom_len) == bom_len);
+  m_bom_written = write(bom, bom_len) == bom_len;
+
+  return m_bom_written;
+}
+
+bool
+mm_io_c::bom_written()
+  const {
+  return m_bom_written;
 }
 
 int64_t
@@ -687,10 +617,10 @@ mm_io_c::getch() {
 
 void
 mm_proxy_io_c::close() {
-  if ((NULL != m_proxy_io) && m_proxy_delete_io)
+  if (m_proxy_delete_io)
     delete m_proxy_io;
 
-  m_proxy_io = NULL;
+  m_proxy_io = nullptr;
 }
 
 
@@ -710,8 +640,9 @@ mm_proxy_io_c::_write(const void *buffer,
    Dummy class for output to /dev/null. Needed for two pass stuff.
 */
 
-mm_null_io_c::mm_null_io_c()
+mm_null_io_c::mm_null_io_c(std::string const &file_name)
   : m_pos(0)
+  , m_file_name(file_name)
 {
 }
 
@@ -749,6 +680,17 @@ void
 mm_null_io_c::close() {
 }
 
+bool
+mm_null_io_c::eof() {
+  return false;
+}
+
+std::string
+mm_null_io_c::get_file_name()
+  const {
+  return m_file_name;
+}
+
 /*
    IO callback class working on memory
 */
@@ -760,13 +702,13 @@ mm_mem_io_c::mm_mem_io_c(unsigned char *mem,
   , m_allocated(mem_size)
   , m_increase(increase)
   , m_mem(mem)
-  , m_ro_mem(NULL)
+  , m_ro_mem(nullptr)
   , m_read_only(false)
 {
   if (0 >= m_increase)
     throw mtx::invalid_parameter_x();
 
-  if ((NULL == m_mem) && (0 < m_increase)) {
+  if (!m_mem && (0 < m_increase)) {
     if (0 == mem_size)
       m_allocated = increase;
 
@@ -783,13 +725,27 @@ mm_mem_io_c::mm_mem_io_c(const unsigned char *mem,
   , m_mem_size(mem_size)
   , m_allocated(mem_size)
   , m_increase(0)
-  , m_mem(NULL)
+  , m_mem(nullptr)
   , m_ro_mem(mem)
   , m_free_mem(false)
   , m_read_only(true)
 {
-  if (NULL == m_ro_mem)
+  if (!m_ro_mem)
     throw mtx::invalid_parameter_x();
+}
+
+mm_mem_io_c::mm_mem_io_c(memory_c const &mem)
+  : m_pos{}
+  , m_mem_size{mem.get_size()}
+  , m_allocated{mem.get_size()}
+  , m_increase{}
+  , m_mem{}
+  , m_ro_mem{mem.get_buffer()}
+  , m_free_mem{}
+  , m_read_only{true}
+{
+  if (!m_ro_mem)
+    throw mtx::invalid_parameter_x{};
 }
 
 mm_mem_io_c::~mm_mem_io_c() {
@@ -804,7 +760,7 @@ mm_mem_io_c::getFilePointer() {
 void
 mm_mem_io_c::setFilePointer(int64 offset,
                             seek_mode mode) {
-  if ((NULL == m_mem) && (NULL == m_ro_mem) && (0 == m_mem_size))
+  if (!m_mem && !m_ro_mem && (0 == m_mem_size))
     throw mtx::invalid_parameter_x();
 
   int64_t new_pos
@@ -815,7 +771,7 @@ mm_mem_io_c::setFilePointer(int64 offset,
   if ((0 <= new_pos) && (static_cast<int64_t>(m_mem_size) >= new_pos))
     m_pos = new_pos;
   else
-    throw mtx::mm_io::seek_x();
+    throw mtx::mm_io::seek_x{mtx::mm_io::make_error_code()};
 }
 
 uint32
@@ -865,8 +821,8 @@ void
 mm_mem_io_c::close() {
   if (m_free_mem)
     safefree(m_mem);
-  m_mem       = NULL;
-  m_ro_mem    = NULL;
+  m_mem       = nullptr;
+  m_ro_mem    = nullptr;
   m_read_only = true;
   m_free_mem  = false;
   m_mem_size  = 0;
@@ -880,9 +836,28 @@ mm_mem_io_c::eof() {
 }
 
 unsigned char *
+mm_mem_io_c::get_buffer()
+  const {
+  if (m_read_only)
+    throw mtx::invalid_parameter_x();
+  return m_mem;
+}
+
+unsigned char *
 mm_mem_io_c::get_and_lock_buffer() {
   m_free_mem = false;
   return m_mem;
+}
+
+std::string
+mm_mem_io_c::get_content()
+  const {
+  char const *source = m_read_only ? reinterpret_cast<char const *>(m_ro_mem) : reinterpret_cast<char const *>(m_mem);
+
+  if (!source || !m_mem_size)
+    return std::string{};
+
+  return std::string(source, m_mem_size);
 }
 
 /*
@@ -1002,7 +977,7 @@ mm_text_io_c::read_next_char(char *buffer) {
          :                                99;
 
     if (99 == size)
-      mxerror(boost::format(Y("mm_text_io_c::read_next_char(): Invalid UTF-8 char. First byte: 0x%|1$02x|")) % (unsigned int)stream[0]);
+      throw mtx::mm_io::text::invalid_utf8_char_x(stream[0]);
 
     if ((1 < size) && (read(&stream[1], size - 1) != (size - 1)))
       return 0;
@@ -1020,17 +995,12 @@ mm_text_io_c::read_next_char(char *buffer) {
     return 0;
 
   unsigned long data = 0;
-  size_t i;
-  if ((BO_UTF16_LE == m_byte_order) || (BO_UTF32_LE == m_byte_order))
-    for (i = 0; i < size; i++) {
-      data <<= 8;
-      data  |= stream[size - i - 1];
-    }
-  else
-    for (i = 0; i < size; i++) {
-      data <<= 8;
-      data  |= stream[i];
-    }
+  auto little_endian = ((BO_UTF16_LE == m_byte_order) || (BO_UTF32_LE == m_byte_order));
+  auto shift         = little_endian ? 0 : 8 * (size - 1);
+  for (auto i = 0u; i < size; i++) {
+    data  |= static_cast<unsigned long>(stream[i]) << shift;
+    shift += little_endian ? 8 : -8;
+  }
 
   if (data < 0x80) {
     buffer[0] = data;
@@ -1058,7 +1028,7 @@ mm_text_io_c::read_next_char(char *buffer) {
 std::string
 mm_text_io_c::getline() {
   if (eof())
-    throw mtx::mm_io::end_of_file_x();
+    throw mtx::mm_io::end_of_file_x{mtx::mm_io::make_error_code()};
 
   if (!m_eol_style_detected)
     detect_eol_style();
@@ -1095,11 +1065,6 @@ mm_text_io_c::getline() {
     previous_was_carriage_return  = false;
     s                            += utf8char;
   }
-}
-
-byte_order_e
-mm_text_io_c::get_byte_order() {
-  return m_byte_order;
 }
 
 void

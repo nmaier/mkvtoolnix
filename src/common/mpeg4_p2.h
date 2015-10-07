@@ -12,12 +12,10 @@
    \author Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_MPEG4_P2_H
-#define __MTX_COMMON_MPEG4_P2_H
+#ifndef MTX_COMMON_MPEG4_P2_H
+#define MTX_COMMON_MPEG4_P2_H
 
-#include "common/os.h"
-
-#include "common/memory.h"
+#include "common/common_pch.h"
 
 /** Start code for a MPEG-4 part 2 (?) video object plain */
 #define MPEGVIDEO_VOP_START_CODE                  0x000001b6
@@ -104,11 +102,11 @@ struct video_frame_t {
   bool is_coded;
 
   video_frame_t()
-    : data(NULL)
+    : data(nullptr)
     , size(0)
     , pos(0)
     , type(FRAME_TYPE_I)
-    , priv(NULL)
+    , priv(nullptr)
     , timecode(0)
     , duration(0)
     , bref(0)
@@ -134,8 +132,8 @@ namespace mpeg4 {
     bool extract_par(const unsigned char *buffer, int buffer_size, uint32_t &par_num, uint32_t &par_den);
     bool extract_size(const unsigned char *buffer, int buffer_size, uint32_t &width, uint32_t &height);
     void find_frame_types(const unsigned char *buffer, int buffer_size, std::vector<video_frame_t> &frames, const config_data_t &config_data);
-    memory_c * parse_config_data(const unsigned char *buffer, int buffer_size, config_data_t &config_data);
+    memory_cptr parse_config_data(const unsigned char *buffer, int buffer_size, config_data_t &config_data);
   };
 };
 
-#endif  // __MTX_COMMON_MPEG4_P2_H
+#endif  // MTX_COMMON_MPEG4_P2_H

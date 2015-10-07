@@ -13,14 +13,11 @@
 
 #include "common/common_pch.h"
 
-#include <boost/math/common_factor.hpp>
-#include <vector>
-
 #include "common/hacks.h"
-#include "common/matroska.h"
+#include "common/codec.h"
 #include "common/truehd.h"
+#include "merge/connection_checks.h"
 #include "merge/output_control.h"
-#include "merge/pr_generic.h"
 #include "output/p_truehd.h"
 
 using namespace libmatroska;
@@ -119,7 +116,7 @@ truehd_packetizer_c::adjust_header_values(truehd_frame_cptr &frame) {
 }
 
 void
-truehd_packetizer_c::flush() {
+truehd_packetizer_c::flush_impl() {
   m_parser.parse(true);
   flush_frames();
 }
@@ -189,7 +186,7 @@ connection_result_e
 truehd_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                  std::string &error_message) {
   truehd_packetizer_c *asrc = dynamic_cast<truehd_packetizer_c *>(src);
-  if (NULL == asrc)
+  if (!asrc)
     return CAN_CONNECT_NO_FORMAT;
 
   connect_check_a_samplerate(m_first_truehd_header.m_sampling_rate, asrc->m_first_truehd_header.m_sampling_rate);
@@ -197,4 +194,3 @@ truehd_packetizer_c::can_connect_to(generic_packetizer_c *src,
 
   return CAN_CONNECT_YES;
 }
-

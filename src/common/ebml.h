@@ -11,10 +11,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_EBML_H
-#define __MTX_COMMON_EBML_H
+#ifndef MTX_COMMON_EBML_H
+#define MTX_COMMON_EBML_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <ebml/EbmlMaster.h>
 #include <ebml/EbmlUnicodeString.h>
@@ -24,7 +24,7 @@
 using namespace libebml;
 using namespace libmatroska;
 
-#define can_be_cast(c, e) (dynamic_cast<c *>(e) != NULL)
+#define can_be_cast(c, e) (dynamic_cast<c *>(e))
 
 bool is_valid_utf8_string(const std::string &c);
 UTFstring cstrutf8_to_UTFstring(const std::string &c);
@@ -38,14 +38,15 @@ int kt_get_max_blockadd_id(KaxTrackEntry &track);
 std::string kt_get_language(KaxTrackEntry &track);
 
 int kt_get_a_channels(KaxTrackEntry &track);
-float kt_get_a_sfreq(KaxTrackEntry &track);
-float kt_get_a_osfreq(KaxTrackEntry &track);
+double kt_get_a_sfreq(KaxTrackEntry &track);
+double kt_get_a_osfreq(KaxTrackEntry &track);
 int kt_get_a_bps(KaxTrackEntry &track);
 
 int kt_get_v_pixel_width(KaxTrackEntry &track);
 int kt_get_v_pixel_height(KaxTrackEntry &track);
 
-#define is_id(e, ref) (EbmlId(*e) == EBML_ID(ref))
+int write_ebml_element_head(mm_io_c &out, EbmlId const &id, int64_t content_size);
+
 #if !defined(EBML_INFO)
 #define EBML_INFO(ref)  ref::ClassInfos
 #endif
@@ -104,16 +105,13 @@ int kt_get_v_pixel_height(KaxTrackEntry &track);
 #define INVALID_FILEPOS_T 0
 #endif
 
-#define FINDFIRST(p, c)   (static_cast<c *>(((EbmlMaster *)p)->FindFirstElt(EBML_INFO(c), false)))
-#define FINDNEXT(p, c, e) (static_cast<c *>(((EbmlMaster *)p)->FindNextElt(*e, false)))
-
 template <typename type>type &
 GetEmptyChild(EbmlMaster &master) {
   EbmlElement *e;
   EbmlMaster *m;
 
   e = master.FindFirstElt(EBML_INFO(type), true);
-  if ((m = dynamic_cast<EbmlMaster *>(e)) != NULL) {
+  if ((m = dynamic_cast<EbmlMaster *>(e))) {
     while (m->ListSize() > 0) {
       delete (*m)[0];
       m->Remove(0);
@@ -128,7 +126,7 @@ GetNextEmptyChild(EbmlMaster &master,
                   const type &past_elt) {
   EbmlMaster *m;
   EbmlElement *e = master.FindNextElt(past_elt, true);
-  if ((m = dynamic_cast<EbmlMaster *>(e)) != NULL) {
+  if ((m = dynamic_cast<EbmlMaster *>(e))) {
     while (m->ListSize() > 0) {
       delete (*m)[0];
       m->Remove(0);
@@ -142,7 +140,7 @@ template <typename type>type &
 AddEmptyChild(EbmlMaster &master) {
   EbmlMaster *m;
   EbmlElement *e = new type;
-  if ((m = dynamic_cast<EbmlMaster *>(e)) != NULL) {
+  if ((m = dynamic_cast<EbmlMaster *>(e))) {
     while (m->ListSize() > 0) {
       delete (*m)[0];
       m->Remove(0);
@@ -153,37 +151,193 @@ AddEmptyChild(EbmlMaster &master) {
   return *(static_cast<type *>(e));
 }
 
+template <typename T>
+T *
+FindChild(EbmlMaster const &m) {
+  return static_cast<T *>(m.FindFirstElt(EBML_INFO(T)));
+}
+
+template <typename T>
+T *
+FindChild(EbmlElement const &e) {
+  auto &m = dynamic_cast<EbmlMaster const &>(e);
+  return static_cast<T *>(m.FindFirstElt(EBML_INFO(T)));
+}
+
+template <typename A> A*
+FindChild(EbmlMaster const *m) {
+  return static_cast<A *>(m->FindFirstElt(EBML_INFO(A)));
+}
+
+template <typename A> A*
+FindChild(EbmlElement const *e) {
+  auto m = dynamic_cast<EbmlMaster const *>(e);
+  assert(m);
+  return static_cast<A *>(m->FindFirstElt(EBML_INFO(A)));
+}
+
+template <typename A> A*
+FindNextChild(EbmlMaster const *m,
+              EbmlElement const *p) {
+  return static_cast<A *>(m->FindNextElt(*p));
+}
+
+template <typename A> A*
+FindNextChild(EbmlElement const *e,
+              EbmlElement const *p) {
+  auto m = dynamic_cast<EbmlMaster const *>(e);
+  assert(m);
+  return static_cast<A *>(m->FindNextElt(*p));
+}
+
 template<typename A> A &
 GetChild(EbmlMaster *m) {
-  return GetChild<A>(*m);
-}
-
-template<typename A, typename B> B &
-GetChildAs(EbmlMaster &m) {
-  return GetChild<A>(m);
-}
-
-template<typename A, typename B> B &
-GetChildAs(EbmlMaster *m) {
   return GetChild<A>(*m);
 }
 
 template <typename A>A &
 GetFirstOrNextChild(EbmlMaster &master,
                     A *previous_child) {
-  return NULL == previous_child ? GetChild<A>(master) : GetNextChild<A>(master, *previous_child);
+  return !previous_child ? GetChild<A>(master) : GetNextChild<A>(master, *previous_child);
 }
 
 template <typename A>A &
 GetFirstOrNextChild(EbmlMaster *master,
                     A *previous_child) {
-  return NULL == previous_child ? GetChild<A>(*master) : GetNextChild<A>(*master, *previous_child);
+  return !previous_child ? GetChild<A>(*master) : GetNextChild<A>(*master, *previous_child);
+}
+
+template<typename T>
+EbmlMaster *
+DeleteChildren(EbmlMaster *master) {
+  for (auto idx = master->ListSize(); 0 < idx; --idx)
+    if (dynamic_cast<T *>((*master)[idx - 1])) {
+      delete (*master)[idx - 1];
+      master->Remove(idx - 1);
+    }
+
+  return master;
+}
+
+template<typename T>
+EbmlMaster &
+DeleteChildren(EbmlMaster &master) {
+  return *DeleteChildren<T>(&master);
+}
+
+template<typename T>
+void
+FixMandatoryElement(EbmlMaster &master) {
+  auto &element = GetChild<T>(master);
+  element.SetValue(element.GetValue());
+}
+
+template<typename Tfirst,
+         typename Tsecond,
+         typename... Trest>
+void
+FixMandatoryElement(EbmlMaster &master) {
+  FixMandatoryElement<Tfirst>(master);
+  FixMandatoryElement<Tsecond, Trest...>(master);
+}
+
+template<typename... Trest>
+void
+FixMandatoryElement(EbmlMaster *master) {
+  if (!master)
+    return;
+  FixMandatoryElement<Trest...>(*master);
+}
+
+template<typename Telement,
+         typename Tvalue = decltype(Telement().GetValue())>
+Tvalue
+FindChildValue(EbmlMaster &master,
+               Tvalue const &default_value = Tvalue{}) {
+  auto child = FindChild<Telement>(master);
+  return child ? static_cast<Tvalue>(child->GetValue()) : default_value;
+}
+
+template<typename Telement,
+         typename Tvalue = decltype(Telement().GetValue())>
+Tvalue
+FindChildValue(EbmlMaster *master,
+               Tvalue const &default_value = Tvalue{}) {
+  return FindChildValue<Telement>(*master, default_value);
+}
+
+template<typename T>
+memory_cptr
+FindChildValue(EbmlMaster &master,
+               bool clone = true,
+               typename std::enable_if< std::is_base_of<EbmlBinary, T>::value >::type * = nullptr) {
+  auto child = FindChild<T>(master);
+  return !child ? memory_cptr()
+       : clone  ? memory_c::clone(child->GetBuffer(), child->GetSize())
+       :          memory_cptr(new memory_c(child->GetBuffer(), child->GetSize(), false));
+}
+
+template<typename T>
+memory_cptr
+FindChildValue(EbmlMaster *master,
+               bool clone = true,
+               typename std::enable_if< std::is_base_of<EbmlBinary, T>::value >::type * = nullptr) {
+  return FindChildValue<T>(*master, clone);
+}
+
+template<typename Telement>
+decltype(Telement().GetValue())
+GetChildValue(EbmlMaster &master) {
+  return GetChild<Telement>(master).GetValue();
+}
+
+template<typename Telement>
+decltype(Telement().GetValue())
+GetChildValue(EbmlMaster *master) {
+  return GetChild<Telement>(master).GetValue();
+}
+
+template<typename T>
+bool
+Is(EbmlId const &id) {
+  return id == T::ClassInfos.GlobalId;
+}
+
+template<typename T1, typename T2, typename... Trest>
+bool
+Is(EbmlId const &id) {
+  return Is<T1>(id) || Is<T2, Trest...>(id);
+}
+
+template<typename T>
+bool
+Is(EbmlElement *e) {
+  return !e ? false : (EbmlId(*e) == T::ClassInfos.GlobalId);
+}
+
+template<typename T1, typename T2, typename... Trest>
+bool
+Is(EbmlElement *e) {
+  return !e ? false : Is<T1>(e) || Is<T2, Trest...>(e);
+}
+
+template<typename T>
+bool
+Is(EbmlElement const &e) {
+  return EbmlId(e) == T::ClassInfos.GlobalId;
+}
+
+template<typename T1, typename T2, typename... Trest>
+bool
+Is(EbmlElement const &e) {
+  return Is<T1>(e) || Is<T2, Trest...>(e);
 }
 
 EbmlElement *empty_ebml_master(EbmlElement *e);
 EbmlElement *create_ebml_element(const EbmlCallbacks &callbacks, const EbmlId &id);
 EbmlMaster *sort_ebml_master(EbmlMaster *e);
 void remove_voids_from_master(EbmlElement *element);
+void move_children(EbmlMaster &source, EbmlMaster &destination);
 
 const EbmlCallbacks *find_ebml_callbacks(const EbmlCallbacks &base, const EbmlId &id);
 const EbmlCallbacks *find_ebml_callbacks(const EbmlCallbacks &base, const char *debug_name);
@@ -191,15 +345,16 @@ const EbmlCallbacks *find_ebml_parent_callbacks(const EbmlCallbacks &base, const
 const EbmlSemantic *find_ebml_semantic(const EbmlCallbacks &base, const EbmlId &id);
 
 EbmlElement *find_ebml_element_by_id(EbmlMaster *master, const EbmlId &id);
+std::pair<EbmlMaster *, size_t> find_element_in_master(EbmlMaster *master, EbmlElement *element_to_find);
 
 void fix_mandatory_elements(EbmlElement *master);
 
 template<typename A> void
 provide_default_for_child(EbmlMaster &master,
                           const UTFstring &default_value) {
-  EbmlUnicodeString &value = GetChildAs<A, EbmlUnicodeString>(master);
-  if (!static_cast<const UTFstring &>(value).length())
-    value = default_value;
+  A &value = GetChild<A>(master);
+  if (!value.GetValue().length())
+    value.SetValue(default_value);
 }
 
 template<typename A> void
@@ -208,4 +363,25 @@ provide_default_for_child(EbmlMaster *master,
   provide_default_for_child<A>(*master, default_value);
 }
 
-#endif // __MTX_COMMON_EBML_H
+typedef std::shared_ptr<EbmlElement> ebml_element_cptr;
+typedef std::shared_ptr<EbmlMaster> ebml_master_cptr;
+
+template<typename T>
+std::shared_ptr<T>
+clone(T const &e) {
+  return std::shared_ptr<T>{static_cast<T *>(e.Clone())};
+}
+
+template<typename T>
+std::shared_ptr<T>
+clone(T *e) {
+  return clone(*e);
+}
+
+template <typename T>
+std::shared_ptr<T>
+clone(std::shared_ptr<T> const &e) {
+  return clone(*e);
+}
+
+#endif // MTX_COMMON_EBML_H

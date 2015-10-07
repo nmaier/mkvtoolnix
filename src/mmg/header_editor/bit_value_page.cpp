@@ -11,7 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <wx/wx.h>
 
@@ -30,7 +30,7 @@ he_bit_value_page_c::he_bit_value_page_c(header_editor_frame_c *parent,
                                          const translatable_string_c &description,
                                          int bit_length)
   : he_value_page_c(parent, toplevel_page, master, callbacks, vt_binary, title, description)
-  , m_tc_text(NULL)
+  , m_tc_text(nullptr)
   , m_original_value(128)
   , m_bit_length(bit_length)
 {
@@ -41,7 +41,7 @@ he_bit_value_page_c::~he_bit_value_page_c() {
 
 wxControl *
 he_bit_value_page_c::create_input_control() {
-  if (NULL != m_element)
+  if (m_element)
     m_original_value = bitvalue_c(*static_cast<EbmlBinary *>(m_element));
 
   m_tc_text = new wxTextCtrl(this, wxID_ANY, get_original_value_as_string());
@@ -53,7 +53,7 @@ he_bit_value_page_c::get_original_value_as_string() {
   wxString value;
   unsigned char *data = m_original_value.data();
 
-  if (NULL != data) {
+  if (data) {
     int i, num_bytes = m_original_value.size() / 8;
     for (i = 0; i < num_bytes; ++i)
       value += wxString::Format(wxT("%02x"), data[i]);

@@ -15,7 +15,7 @@
 // * wxStaticText is not wrapping on Windows.
 // * Add "recent files" to the file menu.
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <wx/wx.h>
 #include <wx/dnd.h>
@@ -43,7 +43,10 @@
 #include "mmg/header_editor/unsigned_integer_value_page.h"
 #include "mmg/mmg_dialog.h"
 #include "mmg/mmg.h"
-#include "share/icons/32x32/mkvmergeGUI.xpm"
+
+#if !defined(SYS_WINDOWS)
+# include "share/icons/64x64/mkvmergeGUI.h"
+#endif
 
 class header_editor_drop_target_c: public wxFileDropTarget {
 private:
@@ -62,15 +65,13 @@ public:
 
 header_editor_frame_c::header_editor_frame_c(wxWindow *parent)
   : wxFrame(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(800, 600), wxDEFAULT_FRAME_STYLE | wxTAB_TRAVERSAL)
-  , m_file_menu(NULL)
+  , m_file_menu(nullptr)
   , m_file_menu_sep(false)
-  , m_page_panel(NULL)
-  , m_bs_main(NULL)
-  , m_bs_page(NULL)
-  , m_analyzer(NULL)
-  , m_e_segment_info(NULL)
-  , m_e_tracks(NULL)
+  , m_page_panel(nullptr)
+  , m_bs_main(nullptr)
+  , m_bs_page(nullptr)
   , m_ignore_tree_selection_changes(false)
+  , m_geometry_saver{this, "header_editor_frame"}
 {
   wxPanel *frame_panel = new wxPanel(this);
 
@@ -81,15 +82,13 @@ header_editor_frame_c::header_editor_frame_c(wxWindow *parent)
 
   m_page_panel = new wxPanel(frame_panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE);
   m_bs_page    = new wxBoxSizer(wxHORIZONTAL);
-  m_page_panel->SetSizer(m_bs_page);
+  m_page_panel->SetSizerAndFit(m_bs_page);
 
   m_bs_main = new wxBoxSizer(wxHORIZONTAL);
   m_bs_main->Add(m_tc_tree,   2, wxGROW | wxALL, 5);
   m_bs_main->Add(m_page_panel,3, wxGROW | wxALL, 5);
 
-  frame_panel->SetSizer(m_bs_main);
-
-  SetMinSize(wxSize(800, 600));
+  frame_panel->SetSizerAndFit(m_bs_main);
 
   clear_pages();
 
@@ -118,6 +117,8 @@ header_editor_frame_c::header_editor_frame_c(wxWindow *parent)
   menu_bar->Append(help_menu,                          dummy);
   SetMenuBar(menu_bar);
 
+  m_geometry_saver.set_default_size(800, 600, true).restore();
+
   translate_ui();
 
   enable_menu_entries();
@@ -127,16 +128,13 @@ header_editor_frame_c::header_editor_frame_c(wxWindow *parent)
 
   m_status_bar_timer.SetOwner(this, ID_T_HE_STATUS_BAR);
 
-  SetIcon(wxIcon(mkvmergeGUI_xpm));
+  SetIcon(wx_get_png_or_icon(mkvmergeGUI));
   SetDropTarget(new header_editor_drop_target_c(this));
 
   set_status_bar(Z("Header editor ready."));
 }
 
 header_editor_frame_c::~header_editor_frame_c() {
-  delete m_e_segment_info;
-  delete m_e_tracks;
-  delete m_analyzer;
 }
 
 void
@@ -156,7 +154,7 @@ header_editor_frame_c::translate_ui() {
 
   set_window_title();
 
-  for (auto page : m_pages) {
+  for (auto &page : m_pages) {
     page->translate_ui();
     m_tc_tree->SetItemText(page->m_page_id, page->get_title());
   }
@@ -170,7 +168,7 @@ header_editor_frame_c::translate_ui() {
 
 void
 header_editor_frame_c::set_window_title() {
-  if (NULL == m_analyzer)
+  if (!m_analyzer)
     SetTitle(Z("Header editor"));
   else
     SetTitle(wxString::Format(Z("Header editor: %s"), m_file_name.GetFullName().c_str()));
@@ -178,8 +176,8 @@ header_editor_frame_c::set_window_title() {
 
 bool
 header_editor_frame_c::have_been_modified() {
-  for (size_t i = 0; m_top_level_pages.size() > i; ++i)
-    if (m_top_level_pages[i]->has_been_modified())
+  for (auto &page : m_top_level_pages)
+    if (page->has_been_modified())
       return true;
 
   return false;
@@ -187,14 +185,14 @@ header_editor_frame_c::have_been_modified() {
 
 void
 header_editor_frame_c::do_modifications() {
-  for (size_t i = 0; m_top_level_pages.size() > i; ++i)
-    m_top_level_pages[i]->do_modifications();
+  for (auto &page : m_top_level_pages)
+    page->do_modifications();
 }
 
 wxTreeItemId
 header_editor_frame_c::validate_pages() {
-  for (size_t i = 0; m_top_level_pages.size() > i; ++i) {
-    wxTreeItemId result = m_top_level_pages[i]->validate();
+  for (auto &page : m_top_level_pages) {
+    wxTreeItemId result = page->validate();
     if (result.IsOk())
       return result;
   }
@@ -206,9 +204,9 @@ void
 header_editor_frame_c::clear_pages() {
   m_ignore_tree_selection_changes = true;
 
-  for (size_t i = 0; m_pages.size() > i; ++i)
-    if (m_pages[i]->IsShown())
-      m_pages[i]->Hide();
+  for (auto &page : m_pages)
+    if (page->IsShown())
+      page->Hide();
 
   m_bs_page->Clear();
   m_bs_main->Hide(m_tc_tree);
@@ -230,7 +228,7 @@ header_editor_frame_c::clear_pages() {
 
 void
 header_editor_frame_c::on_file_open(wxCommandEvent &) {
-  if (debugging_requested("he_open_std")) {
+  if (debugging_c::requested("he_open_std")) {
     wxString home;
     wxGetEnv(wxT("HOME"), &home);
     open_file(wxFileName(wxString::Format(wxT("%s/prog/video/mkvtoolnix/data/muh.mkv"), home.c_str())));
@@ -251,23 +249,20 @@ header_editor_frame_c::open_file(wxFileName file_name) {
     return false;
   }
 
-  delete m_e_segment_info;
-  delete m_e_tracks;
-  m_e_segment_info = NULL;
-  m_e_tracks       = NULL;
+  m_e_segment_info.reset();
+  m_e_tracks.reset();
 
-  delete m_analyzer;
-  m_analyzer = new wx_kax_analyzer_c(this, wxMB(file_name.GetFullPath()));
+  m_analyzer = wx_kax_analyzer_cptr(new wx_kax_analyzer_c(this, wxMB(file_name.GetFullPath())));
+
   if (!m_analyzer->process(kax_analyzer_c::parse_mode_fast)) {
     wxMessageBox(Z("This file could not be opened or parsed."), Z("File parsing failed"), wxOK | wxCENTER | wxICON_ERROR);
-    delete m_analyzer;
-    m_analyzer = NULL;
+    m_analyzer.reset();
 
     return false;
   }
 
   m_file_name = file_name;
-  m_file_name.GetTimes(NULL, &m_file_mtime, NULL);
+  m_file_name.GetTimes(nullptr, &m_file_mtime, nullptr);
 
   set_window_title();
 
@@ -277,31 +272,26 @@ header_editor_frame_c::open_file(wxFileName file_name) {
 
   m_bs_main->Hide(m_tc_tree);
 
-  size_t i;
-  for (i = 0; m_pages.size() > i; ++i)
-    if (m_pages[i]->IsShown())
-      m_pages[i]->Hide();
+  for (auto &page : m_pages)
+    if (page->IsShown())
+      page->Hide();
 
   m_tc_tree->DeleteChildren(m_root_id);
   m_bs_page->Clear();
   m_pages.clear();
   m_top_level_pages.clear();
 
-  for (i = 0; m_analyzer->m_data.size() > i; ++i) {
-    kax_analyzer_data_c *data = m_analyzer->m_data[i].get_object();
+  for (auto &data : m_analyzer->m_data)
     if (data->m_id == KaxInfo::ClassInfos.GlobalId) {
-      handle_segment_info(data);
+      handle_segment_info(data.get());
       break;
     }
-  }
 
-  for (i = 0; m_analyzer->m_data.size() > i; ++i) {
-    kax_analyzer_data_c *data = m_analyzer->m_data[i].get_object();
+  for (auto &data : m_analyzer->m_data)
     if (data->m_id == KaxTracks::ClassInfos.GlobalId) {
-      handle_tracks(data);
+      handle_tracks(data.get());
       break;
     }
-  }
 
   m_analyzer->close_file();
 
@@ -317,15 +307,14 @@ header_editor_frame_c::open_file(wxFileName file_name) {
 
 void
 header_editor_frame_c::handle_segment_info(kax_analyzer_data_c *data) {
-  EbmlElement *e = m_analyzer->read_element(data);
-  if (NULL == e)
+  m_e_segment_info = m_analyzer->read_element(data);
+  if (!m_e_segment_info)
     return;
 
-  he_top_level_page_c *page = new he_top_level_page_c(this, YT("Segment information"), e);
+  he_top_level_page_c *page = new he_top_level_page_c(this, YT("Segment information"), m_e_segment_info);
   page->init();
 
-  m_e_segment_info = e;
-  KaxInfo *info    = static_cast<KaxInfo *>(e);
+  KaxInfo *info    = static_cast<KaxInfo *>(m_e_segment_info.get());
   he_value_page_c *child_page;
 
   child_page = new he_string_value_page_c(this, page, info, KaxTitle::ClassInfos, YT("Title"), YT("The title for the whole movie."));
@@ -357,32 +346,29 @@ header_editor_frame_c::handle_segment_info(kax_analyzer_data_c *data) {
 
 void
 header_editor_frame_c::handle_tracks(kax_analyzer_data_c *data) {
-  EbmlElement *e = m_analyzer->read_element(data);
-  if (NULL == e)
+  m_e_tracks = m_analyzer->read_element(data);
+  if (!m_e_tracks)
     return;
 
-  m_e_tracks            = e;
-  KaxTracks *kax_tracks = static_cast<KaxTracks *>(e);
+  he_track_type_page_c *last_track_page = nullptr;
+
+  KaxTracks *kax_tracks = static_cast<KaxTracks *>(m_e_tracks.get());
   int track_type        = -1;
   size_t i;
   for (i = 0; kax_tracks->ListSize() > i; ++i) {
     KaxTrackEntry *k_track_entry = dynamic_cast<KaxTrackEntry *>((*kax_tracks)[i]);
-    if (NULL == k_track_entry)
+    if (!k_track_entry)
       continue;
 
-    KaxTrackType *k_track_type = dynamic_cast<KaxTrackType *>(FINDFIRST(k_track_entry, KaxTrackType));
-    if (NULL == k_track_type)
+    KaxTrackType *k_track_type = dynamic_cast<KaxTrackType *>(FindChild<KaxTrackType>(k_track_entry));
+    if (!k_track_type)
       continue;
+    track_type = k_track_type->GetValue();
 
-    unsigned int track_number = 0;
-    KaxTrackNumber *k_track_number = dynamic_cast<KaxTrackNumber *>(FINDFIRST(k_track_entry, KaxTrackNumber));
-    if (NULL != k_track_number)
-      track_number = uint64(*k_track_number);
+    unsigned int track_number = FindChildValue<KaxTrackNumber>(k_track_entry);
 
-    wxString title;
-    track_type = uint64(*k_track_type);
-
-    he_track_type_page_c *page = new he_track_type_page_c(this, track_type, track_number, kax_tracks);
+    he_track_type_page_c *page = new he_track_type_page_c(this, track_type, track_number, m_e_tracks, *k_track_entry);
+    last_track_page            = page;
     page->init();
 
     he_value_page_c *child_page;
@@ -422,11 +408,6 @@ header_editor_frame_c::handle_tracks(kax_analyzer_data_c *data) {
                                                       YT("Number of nanoseconds (not scaled) per frame."));
     child_page->init();
 
-    child_page = new he_float_value_page_c(this, page, k_track_entry, KaxTrackTimecodeScale::ClassInfos, YT("Timecode scaling"),
-                                           YT("The scale to apply on this track to work at normal\nspeed in relation with other tracks "
-                                             "(mostly used\nto adjust video speed when the audio length differs)."));
-    child_page->init();
-
     child_page = new he_string_value_page_c(this, page, k_track_entry, KaxTrackName::ClassInfos, YT("Name"), YT("A human-readable track name."));
     child_page->init();
 
@@ -462,7 +443,7 @@ header_editor_frame_c::handle_tracks(kax_analyzer_data_c *data) {
       child_page->init();
 
       child_page = new he_unsigned_integer_value_page_c(this, page, k_track_entry, KaxVideoDisplayUnit::ClassInfos,
-                                                        YT("Video display unit"), YT("Type of the unit for DisplayWidth/Height\n(0: pixels, 1: centimeters, 2: inches)."));
+                                                        YT("Video display unit"), YT("Type of the unit for DisplayWidth/Height\n(0: pixels, 1: centimeters, 2: inches, 3: aspect ratio)."));
       child_page->set_sub_master_callbacks(KaxTrackVideo::ClassInfos);
       child_page->init();
 
@@ -516,12 +497,15 @@ header_editor_frame_c::handle_tracks(kax_analyzer_data_c *data) {
 
     // m_tc_tree->ExpandAllChildren(page->m_page_id);
   }
+
+  if (last_track_page)
+    last_track_page->set_is_last_track(true);
 }
 
 void
 header_editor_frame_c::on_file_save(wxCommandEvent &) {
   wxDateTime curr_mtime;
-  m_file_name.GetTimes(NULL, &curr_mtime, NULL);
+  m_file_name.GetTimes(nullptr, &curr_mtime, nullptr);
 
   if (curr_mtime != m_file_mtime) {
     wxMessageBox(Z("The file has been changed by another program since it was read by the header editor. Therefore you have to re-load it. "
@@ -544,20 +528,20 @@ header_editor_frame_c::on_file_save(wxCommandEvent &) {
 
   do_modifications();
 
-  size_t i;
   bool tracks_written = false;
-  for (i = 0; m_top_level_pages.size() > i; ++i) {
-    if (m_top_level_pages[i]->has_been_modified()) {
-      if (m_top_level_pages[i]->m_l1_element->Generic().GlobalId == KaxTracks::ClassInfos.GlobalId) {
-        if (tracks_written)
-          continue;
-        tracks_written = true;
-      }
+  for (auto &page : m_top_level_pages) {
+    if (!page->has_been_modified())
+      continue;
 
-      kax_analyzer_c::update_element_result_e result = m_analyzer->update_element(m_top_level_pages[i]->m_l1_element, true);
-      if (kax_analyzer_c::uer_success != result)
-        display_update_element_result(result);
+    if (page->m_l1_element->Generic().GlobalId == KaxTracks::ClassInfos.GlobalId) {
+      if (tracks_written)
+        continue;
+      tracks_written = true;
     }
+
+    kax_analyzer_c::update_element_result_e result = m_analyzer->update_element(page->m_l1_element, true);
+    if (kax_analyzer_c::uer_success != result)
+      display_update_element_result(result);
   }
 
   open_file(m_file_name);
@@ -566,8 +550,7 @@ header_editor_frame_c::on_file_save(wxCommandEvent &) {
 void
 header_editor_frame_c::on_file_reload(wxCommandEvent &) {
   if (   have_been_modified()
-      && (wxYES != wxMessageBox(Z("Some header values have been modified. Do you really want to reload without saving the file?"), Z("Headers modified"),
-                                wxYES_NO | wxICON_QUESTION, this)))
+      && (wxYES != wxMessageBox(Z("Some header values have been modified. Do you really want to reload without saving the file?"), Z("Headers modified"), wxYES_NO | wxICON_QUESTION, this)))
     return;
 
   open_file(m_file_name);
@@ -576,14 +559,12 @@ header_editor_frame_c::on_file_reload(wxCommandEvent &) {
 void
 header_editor_frame_c::on_file_close(wxCommandEvent &) {
   if (   have_been_modified()
-      && (wxYES != wxMessageBox(Z("Some header values have been modified. Do you really want to close without saving the file?"), Z("Headers modified"),
-                                wxYES_NO | wxICON_QUESTION, this)))
+      && (wxYES != wxMessageBox(Z("Some header values have been modified. Do you really want to close without saving the file?"), Z("Headers modified"), wxYES_NO | wxICON_QUESTION, this)))
     return;
 
   clear_pages();
 
-  delete m_analyzer;
-  m_analyzer = NULL;
+  m_analyzer.reset();
 
   m_file_name.Clear();
 
@@ -608,18 +589,16 @@ header_editor_frame_c::on_file_quit(wxCommandEvent &) {
 void
 header_editor_frame_c::on_headers_expand_all(wxCommandEvent &) {
   m_tc_tree->Freeze();
-  size_t i;
-  for (i = 0; m_pages.size() > i; ++i)
-    m_tc_tree->Expand(m_pages[i]->m_page_id);
+  for (auto &page : m_pages)
+    m_tc_tree->Expand(page->m_page_id);
   m_tc_tree->Thaw();
 }
 
 void
 header_editor_frame_c::on_headers_collapse_all(wxCommandEvent &) {
   m_tc_tree->Freeze();
-  size_t i;
-  for (i = 0; m_pages.size() > i; ++i)
-    m_tc_tree->Collapse(m_pages[i]->m_page_id);
+  for (auto &page : m_pages)
+    m_tc_tree->Collapse(page->m_page_id);
   m_tc_tree->Thaw();
 }
 
@@ -660,15 +639,6 @@ header_editor_frame_c::update_file_menu() {
     wxMenuItem *mi = m_file_menu->Remove(i);
     delete mi;
   }
-
-  // if ((last_settings.size() > 0) && !file_menu_sep) {
-  //   file_menu->AppendSeparator();
-  //   file_menu_sep = true;
-  // }
-  // for (i = 0; i < last_settings.size(); i++) {
-  //   s.Printf(wxT("&%u. %s"), i + 1, last_settings[i].c_str());
-  //   file_menu->Append(ID_M_FILE_LOADLAST1 + i, s);
-  // }
 }
 
 void
@@ -701,7 +671,7 @@ header_editor_frame_c::display_update_element_result(kax_analyzer_c::update_elem
 
     case kax_analyzer_c::uer_error_meta_seek:
       wxMessageBox(Z("The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. "
-                     "Please use your favorite player to check this file.\n"),
+                     "Please use your favorite player to check this file."),
                    Z("File structure warning"), wxOK | wxCENTER | wxICON_EXCLAMATION, this);
       break;
 
@@ -717,7 +687,7 @@ header_editor_frame_c::append_sub_page(he_page_base_c *page,
 
   wxTreeItemId id = m_tc_tree->AppendItem(parent_id, page->get_title());
   page->m_page_id = id;
-  m_pages.push_back(page);
+  m_pages.push_back(he_page_base_cptr(page));
 
   if (parent_id == m_root_id)
     m_top_level_pages.push_back(page);
@@ -730,11 +700,11 @@ header_editor_frame_c::append_page(he_page_base_c *page) {
 
 he_page_base_c *
 header_editor_frame_c::find_page_for_item(wxTreeItemId id) {
-  for (size_t i = 0; m_pages.size() > i; ++i)
-    if (m_pages[i]->m_page_id == id)
-      return m_pages[i];
+  for (auto &page : m_pages)
+    if (page->m_page_id == id)
+      return page.get();
 
-  return NULL;
+  return nullptr;
 }
 
 void
@@ -751,10 +721,9 @@ header_editor_frame_c::on_tree_sel_changed(wxTreeEvent &evt) {
 
   m_page_panel->Freeze();
 
-  size_t i;
-  for (i = 0; m_pages.size() > i; ++i)
-    if (m_pages[i]->IsShown())
-      m_pages[i]->Hide();
+  for (auto &page : m_pages)
+    if (page->IsShown())
+      page->Hide();
 
   page->Show();
 
@@ -782,8 +751,7 @@ header_editor_frame_c::on_drop_files(wxCoord,
                                      wxCoord,
                                      const wxArrayString &dropped_files) {
   if (   have_been_modified()
-      && (wxYES != wxMessageBox(Z("Some header values have been modified. Do you really want to load a new file without saving the current one?"), Z("Headers modified"),
-                                wxYES_NO | wxICON_QUESTION, this)))
+      && (wxYES != wxMessageBox(Z("Some header values have been modified. Do you really want to load a new file without saving the current one?"), Z("Headers modified"), wxYES_NO | wxICON_QUESTION, this)))
     return false;
 
   open_file(wxFileName(dropped_files[0]));

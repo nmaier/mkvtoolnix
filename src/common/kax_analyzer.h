@@ -11,21 +11,21 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_KAX_ANALYZER_H
-#define __MTX_COMMON_KAX_ANALYZER_H
+#ifndef MTX_COMMON_KAX_ANALYZER_H
+#define MTX_COMMON_KAX_ANALYZER_H
 
 #include "common/common_pch.h"
 
 #include <matroska/KaxSegment.h>
 
-#include "common/matroska.h"
+#include "common/ebml.h"
 #include "common/mm_io.h"
 
 using namespace libebml;
 using namespace libmatroska;
 
 class kax_analyzer_data_c;
-typedef counted_ptr<kax_analyzer_data_c> kax_analyzer_data_cptr;
+typedef std::shared_ptr<kax_analyzer_data_c> kax_analyzer_data_cptr;
 
 class kax_analyzer_data_c {
 public:
@@ -94,10 +94,10 @@ private:
   std::string m_file_name;
   mm_file_io_c *m_file;
   bool m_close_file;
-  counted_ptr<KaxSegment> m_segment;
+  std::shared_ptr<KaxSegment> m_segment;
   std::map<int64_t, bool> m_meta_seeks_by_position;
   EbmlStream *m_stream;
-  bool m_debugging_requested;
+  debugging_option_c m_debugging_requested;
 
 public:                         // Static functions
   static bool probe(std::string file_name);
@@ -108,14 +108,17 @@ public:
   virtual ~kax_analyzer_c();
 
   virtual update_element_result_e update_element(EbmlElement *e, bool write_defaults = false);
-  virtual update_element_result_e remove_elements(EbmlId id);
-  virtual EbmlMaster *read_all(const EbmlCallbacks &callbacks);
-
-  virtual EbmlElement *read_element(kax_analyzer_data_c *element_data);
-  virtual EbmlElement *read_element(kax_analyzer_data_cptr element_data) {
-    return read_element(element_data.get_object());
+  virtual update_element_result_e update_element(ebml_element_cptr e, bool write_defaults = false) {
+    return update_element(e.get(), write_defaults);
   }
-  virtual EbmlElement *read_element(unsigned int pos) {
+  virtual update_element_result_e remove_elements(EbmlId id);
+  virtual ebml_master_cptr read_all(const EbmlCallbacks &callbacks);
+
+  virtual ebml_element_cptr read_element(kax_analyzer_data_c *element_data);
+  virtual ebml_element_cptr read_element(kax_analyzer_data_cptr element_data) {
+    return read_element(element_data.get());
+  }
+  virtual ebml_element_cptr read_element(unsigned int pos) {
     return read_element(m_data[pos]);
   }
 
@@ -129,7 +132,7 @@ public:
     return -1;
   }
 
-  virtual bool process(parse_mode_e parse_mode = parse_mode_full, const open_mode mode = MODE_WRITE);
+  virtual bool process(parse_mode_e parse_mode = parse_mode_full, const open_mode mode = MODE_WRITE, bool throw_on_error = false);
 
   virtual void show_progress_start(int64_t /* size */) {
   }
@@ -153,6 +156,9 @@ public:
   virtual void reopen_file(const open_mode = MODE_WRITE);
 
   static placement_strategy_e get_placement_strategy_for(EbmlElement *e);
+  static placement_strategy_e get_placement_strategy_for(ebml_element_cptr e) {
+    return get_placement_strategy_for(e.get());
+  }
 
 protected:
   virtual void _log_debug_message(const std::string &message);
@@ -176,7 +182,7 @@ protected:
   virtual void read_meta_seek(uint64_t pos, std::map<int64_t, bool> &positions_found);
   virtual void fix_element_sizes(uint64_t file_size);
 };
-typedef counted_ptr<kax_analyzer_c> kax_analyzer_cptr;
+typedef std::shared_ptr<kax_analyzer_c> kax_analyzer_cptr;
 
 class console_kax_analyzer_c: public kax_analyzer_c {
 private:
@@ -195,6 +201,6 @@ public:
 
   virtual void debug_abort_process();
 };
-typedef counted_ptr<console_kax_analyzer_c> console_kax_analyzer_cptr;
+typedef std::shared_ptr<console_kax_analyzer_c> console_kax_analyzer_cptr;
 
-#endif  // __MTX_COMMON_KAX_ANALYZER_H
+#endif  // MTX_COMMON_KAX_ANALYZER_H

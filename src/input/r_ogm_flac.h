@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __R_OGM_FLAC_H
-#define __R_OGM_FLAC_H
+#ifndef MTX_R_OGM_FLAC_H
+#define MTX_R_OGM_FLAC_H
 
 #include "common/common_pch.h"
 
@@ -60,10 +60,6 @@ public:
     return "audio";
   };
 
-  virtual std::string get_codec() {
-    return "FLAC";
-  };
-
   virtual void initialize();
 
   virtual generic_packetizer_c *create_packetizer();
@@ -74,4 +70,4 @@ public:
 
 #endif  // HAVE_FLAC_FORMAT_H
 
-#endif  // __R_OGM_FLAC_H
+#endif  // MTX_R_OGM_FLAC_H

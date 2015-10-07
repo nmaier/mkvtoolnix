@@ -11,12 +11,12 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __TAB_INPUT_H
-#define __TAB_INPUT_H
+#ifndef MTX_TAB_INPUT_H
+#define MTX_TAB_INPUT_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
-#include <wx/config.h>
+#include <wx/wx.h>
 
 #define ID_LB_INPUTFILES                  11000
 #define ID_B_ADDFILE                      11001
@@ -55,6 +55,8 @@
 #define ID_B_REMOVE_ALL_FILES             11036
 #define ID_CB_FORCED_TRACK                11037
 #define ID_TC_CROPPING                    11038
+#define ID_B_ADDITIONAL_PARTS             11039
+#define ID_CB_FIX_BITSTREAM_TIMING_INFO   11040
 #define ID_NB_OPTIONS                     11999
 
 extern const wxChar *predefined_aspect_ratios[];
@@ -101,7 +103,7 @@ class tab_input_format: public wxPanel {
   DECLARE_CLASS(tab_input_format);
   DECLARE_EVENT_TABLE();
 public:
-  wxCheckBox *cb_aac_is_sbr;
+  wxCheckBox *cb_aac_is_sbr, *cb_fix_bitstream_timing_info;
   wxMTX_COMBOBOX_TYPE *cob_sub_charset, *cob_aspect_ratio, *cob_fourcc, *cob_stereo_mode, *cob_fps, *cob_nalu_size_length;
   wxTextCtrl *tc_delay, *tc_stretch, *tc_cropping;
   wxRadioButton *rb_aspect_ratio, *rb_display_dimensions;
@@ -122,6 +124,7 @@ public:
   void set_track_mode(mmg_track_t *t);
 
   void on_aac_is_sbr_clicked(wxCommandEvent &evt);
+  void on_fix_bitstream_timing_info_clicked(wxCommandEvent &evt);
   void on_subcharset_selected(wxCommandEvent &evt);
   void on_delay_changed(wxCommandEvent &evt);
   void on_stretch_changed(wxCommandEvent &evt);
@@ -171,30 +174,37 @@ class tab_input: public wxPanel {
   DECLARE_CLASS(tab_input);
   DECLARE_EVENT_TABLE();
 public:
+  static wxEventType const ms_event;
+  enum event_type_e {
+    dropped_files_added = 1,
+  };
+
+public:
   tab_input_general *ti_general;
   tab_input_format *ti_format;
   tab_input_extra *ti_extra;
 
   wxListBox *lb_input_files;
   wxButton *b_add_file, *b_remove_file, *b_remove_all_files;
-  wxButton *b_track_up, *b_track_down, *b_append_file;
+  wxButton *b_track_up, *b_track_down, *b_append_file, *b_additional_parts;
   wxCheckListBox *clb_tracks;
   wxStaticText *st_tracks, *st_input_files;
   wxNotebook *nb_options;
 
   wxTimer value_copy_timer;
   bool dont_copy_values_now;
-  bool avc_es_fps_warning_shown;
 
   int selected_file, selected_track;
 
   wxString media_files;
+  wxArrayString dropped_files;
 
 public:
   tab_input(wxWindow *parent);
 
   void on_add_file(wxCommandEvent &evt);
   void add_file(const wxString &file_name, bool append);
+  void add_dropped_files(wxArrayString const &files);
   void select_file(bool append);
   void on_remove_file(wxCommandEvent &evt);
   void on_remove_all_files(wxCommandEvent &evt);
@@ -202,12 +212,15 @@ public:
   void on_file_selected(wxCommandEvent &evt);
   void on_move_track_up(wxCommandEvent &evt);
   void on_move_track_down(wxCommandEvent &evt);
+  void on_additional_parts(wxCommandEvent &evt);
   void on_track_selected(wxCommandEvent &evt);
   void on_track_enabled(wxCommandEvent &evt);
   void on_value_copy_timer(wxTimerEvent &evt);
   void on_file_new(wxCommandEvent &evt);
+  void on_dropped_files_added(wxCommandEvent &evt);
 
   void set_track_mode(mmg_track_t *t);
+  void enable_file_controls();
 
   void save(wxConfigBase *cfg);
   void load(wxConfigBase *cfg, int version);
@@ -217,6 +230,18 @@ public:
 
   void translate_ui();
   void handle_webm_mode(bool enabled);
+
+  void parse_track_line(mmg_file_cptr file, wxString const &line, wxString const &delay_from_file_name, std::map<char, bool> &default_track_found_for);
+  void parse_container_line(mmg_file_cptr file, wxString const &line);
+  void parse_attachment_line(mmg_file_cptr file, wxString const &line);
+  void parse_chapters_line(mmg_file_cptr file, wxString const &line);
+  void parse_global_tags_line(mmg_file_cptr file, wxString const &line);
+  void parse_tags_line(mmg_file_cptr file, wxString const &line);
+  void parse_identification_output(mmg_file_cptr file, wxArrayString const &output);
+  bool run_mkvmerge_identification(wxString const &file_name, wxArrayString &output);
+  void insert_file_in_controls(mmg_file_cptr file, bool append);
+  wxString check_for_and_handle_playlist_file(wxString const &file_name, wxArrayString &original_output);
+  std::map<wxString, wxString> parse_properties(wxString const &wanted_line, wxArrayString const &output) const;
 };
 
-#endif // __TAB_INPUT_H
+#endif // MTX_TAB_INPUT_H

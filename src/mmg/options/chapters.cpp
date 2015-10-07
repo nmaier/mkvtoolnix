@@ -11,12 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
-
-#include <string>
-#include <vector>
-
-#include <wx/wxprec.h>
+#include "common/common_pch.h"
 
 #include <wx/wx.h>
 #include <wx/config.h>
@@ -25,7 +20,6 @@
 #include <wx/process.h>
 #include <wx/statline.h>
 
-#include "common/common_pch.h"
 #include "common/chapters/chapters.h"
 #include "common/common_pch.h"
 #include "common/extern_data.h"
@@ -41,25 +35,30 @@ optdlg_chapters_tab::optdlg_chapters_tab(wxWindow *parent,
 {
   // Create the controls.
 
-  cob_language = new wxMTX_COMBOBOX_TYPE(this, wxID_STATIC, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
-  cob_country  = new wxMTX_COMBOBOX_TYPE(this, wxID_STATIC, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+  cob_language = new wxMTX_COMBOBOX_TYPE(this, wxID_STATIC, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_DROPDOWN | wxCB_READONLY);
+  cob_country  = new wxMTX_COMBOBOX_TYPE(this, wxID_STATIC, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_DROPDOWN | wxCB_READONLY);
 
   // Set the defaults.
+
+  append_combobox_items(cob_language, sorted_iso_codes);
 
   wxString default_language = wxU(g_default_chapter_language);
   bool found                = false;
   unsigned int idx;
   for (idx = 0; sorted_iso_codes.Count() > idx; ++idx) {
-    cob_language->Append(sorted_iso_codes[idx]);
     if (!found && (extract_language_code(sorted_iso_codes[idx]) == default_language)) {
       set_combobox_selection(cob_language,sorted_iso_codes[idx]);
       found = true;
     }
   }
 
-  cob_country->Append(wxEmptyString);
-  for (idx = 0; NULL != cctlds[idx]; ++idx)
-    cob_country->Append(wxU(cctlds[idx]));
+  auto ary = wxArrayString{};
+  ary.Alloc(cctlds.size() + 1);
+  ary.Add(wxEmptyString);
+  for (auto &cctld : cctlds)
+    ary.Add(wxU(cctld));
+
+  append_combobox_items(cob_country, ary);
   set_combobox_selection(cob_country, wxU(g_default_chapter_country));
 
   // Create the layout.
@@ -81,19 +80,19 @@ optdlg_chapters_tab::optdlg_chapters_tab(wxWindow *parent,
                  0, wxLEFT | wxRIGHT, 5);
   siz_all->AddSpacer(5);
 
-  wxFlexGridSizer *siz_input = new wxFlexGridSizer(2);
+  auto siz_input = new wxFlexGridSizer(2, 5, 5);
   siz_input->AddGrowableCol(1);
 
-  siz_input->Add(new wxStaticText(this, wxID_STATIC, Z("Language:")), 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
-  siz_input->Add(cob_language, 0, wxGROW, 0);
+  siz_input->Add(new wxStaticText(this, wxID_STATIC, Z("Language:")), 0, wxALIGN_CENTER_VERTICAL);
+  siz_input->Add(cob_language, 0, wxGROW);
 
-  siz_input->Add(new wxStaticText(this, wxID_STATIC, Z("Country:")), 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
-  siz_input->Add(cob_country, 0, wxGROW, 0);
+  siz_input->Add(new wxStaticText(this, wxID_STATIC, Z("Country:")), 0, wxALIGN_CENTER_VERTICAL);
+  siz_input->Add(cob_country, 0, wxGROW);
 
   siz_all->Add(siz_input, 0, wxGROW | wxLEFT | wxRIGHT, 5);
   siz_all->AddSpacer(5);
 
-  SetSizer(siz_all);
+  SetSizerAndFit(siz_all);
 }
 
 void

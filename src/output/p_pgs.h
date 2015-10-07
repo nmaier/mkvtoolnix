@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __P_PGS_H
-#define __P_PGS_H
+#ifndef MTX_P_PGS_H
+#define MTX_P_PGS_H
 
 #include "common/common_pch.h"
 
@@ -34,10 +34,10 @@ public:
     m_aggregate_packets = aggregate_packets;
   }
 
-  virtual const std::string get_format_name(bool translate = true) {
-    return translate ? Y("PGS") : "PGS";
+  virtual translatable_string_c get_format_name() const {
+    return YT("PGS");
   }
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);
 };
 
-#endif // __P_PGS_H
+#endif // MTX_P_PGS_H

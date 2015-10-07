@@ -11,10 +11,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MMG_OPTIONS_DIALOG_H
-#define __MMG_OPTIONS_DIALOG_H
+#ifndef MTX_MMG_OPTIONS_DIALOG_H
+#define MTX_MMG_OPTIONS_DIALOG_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <vector>
 #include <wx/log.h>
@@ -36,4 +36,4 @@ public:
   void on_ok(wxCommandEvent &evt);
 };
 
-#endif // __MMG_OPTIONS_DIALOG_H
+#endif // MTX_MMG_OPTIONS_DIALOG_H

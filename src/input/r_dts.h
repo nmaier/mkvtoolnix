@@ -12,8 +12,8 @@
    Modified by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __R_DTS_H
-#define __R_DTS_H
+#ifndef MTX_R_DTS_H
+#define MTX_R_DTS_H
 
 #include "common/common_pch.h"
 
@@ -30,25 +30,29 @@ private:
   unsigned short *m_buf[2];
   unsigned int m_cur_buf;
   dts_header_t m_dtsheader;
-  bool m_dts14_to_16, m_swap_bytes, m_debug;
+  bool m_dts14_to_16, m_swap_bytes;
+  debugging_option_c m_debug;
 
 public:
   dts_reader_c(const track_info_c &ti, const mm_io_cptr &in);
   virtual ~dts_reader_c();
 
-  virtual const std::string get_format_name(bool translate = true) {
-    return translate ? Y("DTS") : "DTS";
+  virtual translatable_string_c get_format_name() const {
+    return YT("DTS");
   }
 
   virtual void read_headers();
   virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false);
   virtual void identify();
   virtual void create_packetizer(int64_t id);
+  virtual bool is_providing_timecodes() const {
+    return false;
+  }
 
-  static int probe_file(mm_io_c *in, uint64_t size);
+  static int probe_file(mm_io_c *in, uint64_t size, bool strict_mode = false);
 
 protected:
   virtual int decode_buffer(size_t length);
 };
 
-#endif // __R_DTS_H
+#endif // MTX_R_DTS_H

@@ -20,12 +20,13 @@
 
  **/
 
-#ifndef __MPEGVIDEOBUFFER_H__
-#define __MPEGVIDEOBUFFER_H__
+#ifndef MTX_MPEGVIDEOBUFFER_H
+#define MTX_MPEGVIDEOBUFFER_H
+
+#include "common/common_pch.h"
 
 #include "Types.h"
 #include "CircBuffer.h"
-#include <cassert>
 
 #define MPEG_VIDEO_PICTURE_START_CODE  0x00
 #define MPEG_VIDEO_SEQUENCE_START_CODE  0xb3
@@ -91,7 +92,7 @@ public:
     data(n_data), size(n_size) {
 
     assert(data);
-    assert(size > 4);
+    assert(4 <= size);
 
     type = data[3];
   }
@@ -161,4 +162,4 @@ public:
   int32_t Feed(binary* data, uint32_t numBytes);
 };
 
-#endif //__MPEGVIDEOBUFFER_H__
+#endif //MTX_MPEGVIDEOBUFFER_H

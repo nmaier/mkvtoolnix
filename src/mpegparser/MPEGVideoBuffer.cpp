@@ -20,6 +20,8 @@
 
  **/
 
+#include "common/common_pch.h"
+
 #include "MPEGVideoBuffer.h"
 #include <cstring>
 #include <stddef.h>
@@ -67,7 +69,7 @@ int32_t MPEGVideoBuffer::FindStartCode(uint32_t startPos){
 }
 
 void MPEGVideoBuffer::UpdateState(){
-  assert(myBuffer != NULL);
+  assert(myBuffer);
   int32_t test = 0;
   if(myBuffer->GetLength() == 0){
     state = MPEG2_BUFFER_STATE_EMPTY;
@@ -92,7 +94,7 @@ void MPEGVideoBuffer::UpdateState(){
 }
 
 MPEGChunk * MPEGVideoBuffer::ReadChunk(){
-  MPEGChunk* myChunk = NULL;
+  MPEGChunk* myChunk = nullptr;
   if(state == MPEG2_BUFFER_STATE_CHUNK_READY){
     assert(chunkStart < chunkEnd && chunkStart != -1 && chunkEnd != -1);
     if(chunkStart != 0){ //we have to skip some bytes
@@ -107,7 +109,7 @@ MPEGChunk * MPEGVideoBuffer::ReadChunk(){
     myChunk = new MPEGChunk(chunkData, chunkLength);
     return myChunk;
   }else{
-    return NULL;
+    return nullptr;
   }
 }
 

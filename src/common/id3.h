@@ -11,12 +11,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_ID3_COMMON_H
-#define __MTX_COMMON_ID3_COMMON_H
+#ifndef MTX_COMMON_ID3_COMMON_H
+#define MTX_COMMON_ID3_COMMON_H
 
-#include "common/os.h"
-
-class mm_io_c;
+#include "common/common_pch.h"
 
 int skip_id3v2_tag(mm_io_c &io);
 int id3v1_tag_present_at_end(mm_io_c &io);

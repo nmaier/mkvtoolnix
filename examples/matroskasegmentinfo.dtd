@@ -1,14 +1,20 @@
 <!ELEMENT Info (
-          SegmentUID,
-          NextSegmentUID,
-          PreviousSegmentUID,
-          SegmentFamily,
+          SegmentUID?,
+          NextSegmentUID?,
+          PreviousSegmentUID?,
+          SegmentFamily?,
+          SegmentFilename?,
+          NextSegmentFilename?,
+          PreviousSegmentFilename?,
           ChapterTranslate*)>
 
 <!ELEMENT SegmentUID (#PCDATA)>
 <!ELEMENT NextSegmentUID (#PCDATA)>
 <!ELEMENT PreviousSegmentUID (#PCDATA)>
 <!ELEMENT SegmentFamily (#PCDATA)>
+<!ELEMENT SegmentFilename (#PCDATA)>
+<!ELEMENT NextSegmentFilename (#PCDATA)>
+<!ELEMENT PreviousSegmentFilename (#PCDATA)>
 
 <!ELEMENT ChapterTranslate (
           ChapterTranslateEditionUID,

@@ -11,10 +11,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MUX_DIALOG_H
-#define __MUX_DIALOG_H
+#ifndef MTX_MUX_DIALOG_H
+#define MTX_MUX_DIALOG_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <wx/dialog.h>
 #include <wx/process.h>
@@ -23,10 +23,14 @@
 # include "common/fs_sys_helpers.h"
 # include "mmg/taskbar_progress.h"
 #endif  // SYS_WINDOWS
+#include "mmg/window_geometry_saver.h"
 
 #define ID_B_MUX_OK                       18000
 #define ID_B_MUX_SAVELOG                  18001
 #define ID_B_MUX_ABORT                    18002
+#define ID_T_READ_INPUT                   18003
+
+extern const wxEventType mux_thread_event;
 
 class mux_process;
 
@@ -37,24 +41,32 @@ protected:
   long pid;
   wxStaticText *st_label, *st_remaining_time_label, *st_remaining_time;
   wxGauge *g_progress;
-  mux_process *process;
+  mux_process *m_process;
+  int m_pid;
   wxString log, opt_file_name;
   wxButton *b_ok, *b_save_log, *b_abort;
   wxTextCtrl *tc_output, *tc_warnings, *tc_errors;
-  wxWindowDisabler *m_window_disabler;
 #if defined(SYS_WINDOWS)
   taskbar_progress_c *m_taskbar_progress;
-  bool m_abort_button_changed;
 #endif  // SYS_WINDOWS
+  bool m_abort_button_changed, m_scanning_playlists;
 
   int m_exit_code, m_progress;
   int64_t m_next_remaining_time_update, m_start_time;
+
+  wxTimer m_read_input_timer;
+  std::string m_available_input;
+
+  window_geometry_saver_c m_geometry_saver;
+
 public:
 
   mux_dialog(wxWindow *parent);
   ~mux_dialog();
 
-  void update_window(wxString text);
+  void run();
+
+  void update_label(wxString const &text);
   void update_gauge(long value);
   void update_remaining_time();
 
@@ -62,11 +74,11 @@ public:
   void on_save_log(wxCommandEvent &evt);
   void on_abort(wxCommandEvent &evt);
   void on_close(wxCloseEvent &evt);
-  void done(int status);
+  void on_output_available(wxCommandEvent &evt);
+  void on_process_terminated(wxCommandEvent &evt);
+  void on_read_input(wxTimerEvent &evt);
 
-  void set_exit_code(int exit_code) {
-    m_exit_code = exit_code;
-  }
+  void add_input(std::string const &input);
 
 #if defined(SYS_WINDOWS)
   void change_abort_button();
@@ -74,11 +86,22 @@ public:
 };
 
 class mux_process: public wxProcess {
-public:
-  mux_dialog *dlg;
+private:
+  mux_dialog *m_dialog;
 
-  mux_process(mux_dialog *mdlg);
+public:
+  static wxEventType const event;
+  enum event_type_e {
+    output_available = 1,
+    process_terminated,
+  };
+
+public:
+  mux_process(mux_dialog *dialog);
   virtual void OnTerminate(int terminated_pid, int status);
+
+  void process_input(bool end_of_input = false);
+  void detach_from_dialog();
 };
 
-#endif // __MUX_DIALOG_H
+#endif // MTX_MUX_DIALOG_H

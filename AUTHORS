@@ -4,6 +4,10 @@ for MKVToolNix or in alphabetical order:
 Angelino, Matteo <matteo.maff@gmail.com>
     * Italian translation
 
+Aramendi, Xabier (Azpidatziak) <azpidatziak@gmail.com>
+    * Basque translation of the programs, mmg's guide and the
+      installer
+
 Baranauskas, Mindaugas <embar@users.berlios.de>
     * Lithuanian translation
 
@@ -15,9 +19,15 @@ Boriotti, Roberto <Roberto.Boriotti@canon-europe.com>
 
 Bunkus, Moritz (Mosu) <moritz@bunkus.org>
     * Almost everything
+    * Most of the code, the build system
+    * All of the English documentation
+    * German translation for the applications
 
 Callegari, Massimo <massimocallegari@yahoo.it>
     * MPEG transport stream demuxer: basic implementation
+
+Cancilla, Michael <michael.cancilla@rovicorp.com>
+    * h.265/HEVC support
 
 Cannon, John (spyder482) <spyder@matroska.org>
     * MPEG ES parser code
@@ -31,6 +41,9 @@ Coalson, Josh <j_coalson@yahoo.com>
 Codari, Stefano <l.stickell@yahoo.it>
     * Italian translation
 
+Daniel <sir.daniel.k@gmail.com>
+    * Polish translation
+
 DenB <denb10@free.fr>
     * French translation
 
@@ -42,12 +55,28 @@ Duret, Xavier <xaviour.maillists@gmail.com>
     * Bugfix for timecode and default duration calculation for MPEG-1/2 tracks
     * 'Interlaced' header flag for interlaced MPEG-1/2 tracks
 
+Dvorak, Andrew <acdvorak@gmail.com>
+    * Remove trailing superfluous chapter entries for MPLS files
+
 Galassi, Damiano <damiog@gmail.com>
     * Bugfix for timecodes in MP4 files with edit lists and B frames
+
+Geier, Eduard <edu.g@online.de>
+    * New icons for all executables based on new icon from Alexandr Grigorcea
+      including transparency
+
+Giles, Ralph <giles@mozilla.com>
+    * Bug fixes for Opus muxing
+
+Grigorcea, Alexandr <cahr.gr@gmail.com>
+    * New icon for mmg
 
 Hakobyan, Sergey <sergey.hakobyan@viragelogic.com>
     * Support for creating missing output directories
     * Using the attachment names in Matroska files for extraction
+
+Humpert, Ben <ben@an3k.de>
+    * New icons for all executables based on new icons from Eduard Geier
 
 Jacobs, Aurelien <aurel@gnuage.org>
     * Support for RealAudio v3 in RealMedia files
@@ -56,6 +85,9 @@ Jacobs, Aurelien <aurel@gnuage.org>
 
 Jems <anojems@gmail.com>
     * French translation
+
+Kühn, Thiago <thiago_khar@hotmail.com>
+    * Brazilian Portuguese translation
 
 Le Guen, Nicolas (Goldenear) <nleguen@pepper-prod.com>
     * Enhancements and updates to the "CUE sheet to tags & chapter
@@ -66,6 +98,10 @@ Lee, Dean <xslidian@gmail.com>
     * Chinese Simplified translation (programs, man pages and mmg's guide)
     * Chinese Traditional translation
 
+Leick, Chris <c.leick@vollbio.de>
+    * Parts of the German translation for the programs
+    * German man page translation
+
 Lhomme, Steve (robux4) <slhomme@matroska.org>
     * Fixes for compilation with MSVC
     * Enhancements and fixes to the XML chapter parser
@@ -75,11 +111,20 @@ Lhomme, Steve (robux4) <slhomme@matroska.org>
     * The CorePicture XML reader
     * Changes for compilation with libebml2/libmatroska2
 
+Maier, Nils <maierman@web.de>
+    * File buffering improvements
+    * Input file buffering
+    * Error mode fix on Windows
+
 Medina, Sergi <nousernameremain@gmail.com>
     * Spanish translation
 
 Maassen, René <bmom43@hotmail.com>
-    * Dutch translation
+    * Dutch translation of programs, man pages and the guide
+
+Main, Nicholai <goyuken@gmail.com>
+    * h.264 width/height calculation fix for pixel formats other than
+      4:2:0
 
 Matsnev, Mike (Haali) <mike@po.cs.msu.su>
     * CreateFileUtf8() function
@@ -92,6 +137,11 @@ Mierzejewski, Dominik (Rathann) <dominik@greysector.net>
 Millan, Robert <rmh@aybabtu.com>
     * MIME type recognition via libmagic
     * Fix for a malloc bomb in the PCM handling
+
+Mike <kona8lend@gmail.com>
+    * Support for compilation with minimal Boost trees and detection of
+      Boost on Mac OS
+    * Optimization for Rake dependencies to use relative paths
 
 Mistry, Shailesh L <shailesh.mistry@milan.eclipse.co.uk>
     * Fixes for compilation of avilib with cygwin
@@ -106,6 +156,9 @@ Nishimra, Katsuhiko <kat841@hotmail.com>
 Pettenò, Diego <flameeyes@gentoo.org>
     * Support for liblzo2
 
+Perdigão, Ricardo <ricardofonseca1977@gmail.com>
+    * Portuguese translation
+
 Pettersen, Vegard <vegard_p@broadpark.no>
     * Extended support for converting CUE sheets to tags & chapters
 
@@ -115,6 +168,13 @@ Player, David <dave@ran.bz>
 
 Rice, Matt <topquark@sluggy.net>
     * Extraction of h.264 into proper h.264 ES streams
+
+De Robertis, Giuseppe <giuseppe.derobertis@ba.infn.it>
+    * Option --fix-bitstream-timing-information & implementation for
+      AVC/h.264
+
+Robinson, Aaron <Aaron.Robinson@rovicorp.com>
+    * h.265/HEVC support
 
 Schmuland, Todd <tschmula@gmail.com>
     * Bugfix for VobSub extraction
@@ -135,10 +195,13 @@ Taniura, Hiroki <boiled.sugar@gmail.com>
     * Japanese translation
 
 Torrijos, Israel Lucas <lukillas.ole@gmail.com>
-    * Spanish translation
+    * Spanish translation of the programs and mmg's guide
 
 Trinine <trinine@free.fr>
     * French translation
+
+Trottel <trottel09@gmail.com>
+    * Czech translation
 
 Vega, Cristian Morales <cmorve69@yahoo.es>
     * .desktop and MIME type files
@@ -148,7 +211,7 @@ Vega, Cristian Morales <cmorve69@yahoo.es>
 Wu, Dong-Jun <ziyawu@gmail.com>
     * Chinese Traditional translation
 
-Yavuz, Burak <hitowerdigit@hotmail.com>
+Yavuz, Burak <bourock@live.com>
     * Turkish translation
 
 Zenkov, Mihail <mihail.zenkov@gmail.com>

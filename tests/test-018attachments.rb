@@ -6,12 +6,12 @@ class T_018attachments < Test
   end
 
   def run
-    merge("--sub-charset 0:ISO-8859-1 data/textsubs/vde.srt " +
+    merge("--sub-charset 0:ISO-8859-1 data/subtitles/srt/vde.srt " +
            "--attachment-description 'Dummy " +
            "description' --attachment-mime-type text/plain --attach-file " +
-           "data/textsubs/vde.srt")
+           "data/subtitles/srt/vde.srt")
     hash = hash_tmp
-    merge("--sub-charset 0:ISO-8859-1 data/textsubs/vde.srt " +
+    merge("--sub-charset 0:ISO-8859-1 data/subtitles/srt/vde.srt " +
            "--attachment-description 'automatic MIME " +
            "type test' --attach-file data/text/cuewithtags2.cue")
     return hash + "-" + hash_tmp

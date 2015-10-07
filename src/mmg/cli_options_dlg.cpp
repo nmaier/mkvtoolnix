@@ -11,7 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <wx/wx.h>
 #include <wx/statline.h>
@@ -21,7 +21,8 @@
 std::vector<cli_option_t> cli_options_dlg::all_cli_options;
 
 cli_options_dlg::cli_options_dlg(wxWindow *parent)
-  : wxDialog(parent, 0, Z("Add command line options"), wxDefaultPosition, wxSize(400, 350))
+  : wxDialog(parent, 0, Z("Add command line options"))
+  , m_geometry_saver{this, "cli_options_dlg"}
 {
   if (all_cli_options.empty())
     init_cli_option_list();
@@ -37,7 +38,7 @@ cli_options_dlg::cli_options_dlg(wxWindow *parent)
   siz_all->AddSpacer(5);
 
   wxBoxSizer *siz_line = new wxBoxSizer(wxHORIZONTAL);
-  cob_option           = new wxMTX_COMBOBOX_TYPE(this, ID_CLIOPTIONS_COB, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+  cob_option           = new wxMTX_COMBOBOX_TYPE(this, ID_CLIOPTIONS_COB, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_DROPDOWN | wxCB_READONLY);
 
   size_t i;
   for (i = 0; i < all_cli_options.size(); i++)
@@ -59,6 +60,10 @@ cli_options_dlg::cli_options_dlg(wxWindow *parent)
   tc_options = new wxTextCtrl(this, -1);
   siz_all->Add(tc_options, 0, wxGROW | wxLEFT | wxRIGHT, 10);
 
+  cb_save_as_default = new wxCheckBox(this, -1, Z("Save as default for new jobs"));
+  siz_all->AddSpacer(10);
+  siz_all->Add(cb_save_as_default, 0, wxGROW | wxLEFT | wxRIGHT, 10);
+
   siz_all->AddSpacer(10);
   siz_all->Add(new wxStaticLine(this, -1), 0, wxGROW | wxLEFT | wxRIGHT, 10);
 
@@ -71,7 +76,9 @@ cli_options_dlg::cli_options_dlg(wxWindow *parent)
   siz_all->Add(siz_line, 0, wxGROW, 0);
   siz_all->AddSpacer(10);
 
-  SetSizer(siz_all);
+  SetSizerAndFit(siz_all);
+
+  m_geometry_saver.set_default_size(450, 400, true).restore();
 }
 
 void
@@ -144,6 +151,10 @@ cli_options_dlg::init_cli_option_list() {
                                              "and all following non-sync frames into a single Matroska block. Without it each non-sync frame is put into its own Matroska block.")));
   all_cli_options.push_back(cli_option_t(wxU("--engage vobsub_subpic_stop_cmds"),
                                            Z("Causes mkvmerge to add 'stop display' commands to VobSub subtitle packets that do not contain a duration field.")));
+  all_cli_options.push_back(cli_option_t(wxU("--engage no_cue_duration"),
+                                           Z("Causes mkvmerge not to write 'CueDuration' elemenets in the cues.")));
+  all_cli_options.push_back(cli_option_t(wxU("--engage no_cue_relative_position"),
+                                           Z("Causes mkvmerge not to write 'CueRelativePosition' elemenets in the cues.")));
   all_cli_options.push_back(cli_option_t(wxU("--engage cow"),
                                            Z("No help available.")));
 }
@@ -169,13 +180,16 @@ cli_options_dlg::on_add_clicked(wxCommandEvent &) {
 }
 
 bool
-cli_options_dlg::go(wxString &options) {
+cli_options_dlg::go(wxString &options,
+                    bool &save_as_default) {
   tc_options->SetValue(options);
 
   if (ShowModal() != wxID_OK)
     return false;
 
-  options = tc_options->GetValue();
+  options         = tc_options->GetValue();
+  save_as_default = cb_save_as_default->GetValue();
+
   return true;
 }
 
@@ -184,4 +198,3 @@ BEGIN_EVENT_TABLE(cli_options_dlg, wxDialog)
   EVT_COMBOBOX(ID_CLIOPTIONS_COB, cli_options_dlg::on_option_changed)
   EVT_BUTTON(ID_CLIOPTIONS_ADD,   cli_options_dlg::on_add_clicked)
 END_EVENT_TABLE();
-

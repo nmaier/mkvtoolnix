@@ -1,13 +1,13 @@
 '\" t
 .\"     Title: mkvinfo
 .\"    Author: Moritz Bunkus <moritz@bunkus.org>
-.\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
-.\"      Date: 2011-11-27
+.\" Generator: DocBook XSL Stylesheets v1.78.1 <http://docbook.sf.net/>
+.\"      Date: 2014-04-18
 .\"    Manual: User Commands
-.\"    Source: MKVToolNix 5.1.0
+.\"    Source: MKVToolNix 6.9.1
 .\"  Language: English
 .\"
-.TH "MKVINFO" "1" "2011\-11\-27" "MKVToolNix 5\&.1\&.0" "User Commands"
+.TH "MKVINFO" "1" "2014\-04\-18" "MKVToolNix 6\&.9\&.1" "User Commands"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -114,6 +114,26 @@ will cause
 to output a list of available translations\&.
 .RE
 .PP
+\fB\-\-debug\fR \fItopic\fR
+.RS 4
+Turn on debugging for a specific feature\&. This option is only useful for developers\&.
+.RE
+.PP
+\fB\-\-engage\fR \fIfeature\fR
+.RS 4
+Turn on experimental features\&. A list of available features can be requested with
+\fBmkvinfo \-\-engage list\fR\&. These features are not meant to be used in normal situations\&.
+.RE
+.PP
+\fB\-\-gui\-mode\fR
+.RS 4
+Turns on GUI mode\&. In this mode specially\-formatted lines may be output that can tell a controlling GUI what\*(Aqs happening\&. These messages follow the format \*(Aq#GUI#message\*(Aq\&. The message may be followed by key/value pairs as in \*(Aq#GUI#message#key1=value1#key2=value2\&...\*(Aq\&. Neither the messages nor the keys are ever translated and always output in English\&.
+.sp
+This switch has nothing to do with the
+\fB\-\-gui\fR
+parameter which causes mkvinfo to display its own GUI\&.
+.RE
+.PP
 \fB\-v\fR, \fB\-\-verbose\fR
 .RS 4
 Be more verbose\&. See the section about
@@ -134,7 +154,7 @@ Show version information and exit\&.
 \fB\-\-check\-for\-updates\fR
 .RS 4
 Checks online for new releases by downloading the URL
-http://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xml\&. Four lines will be output in
+\m[blue]\fBhttp://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xml\fR\m[]\&. Four lines will be output in
 key=value
 style: the URL from where the information was retrieved (key
 version_check_url), the currently running version (key
@@ -206,9 +226,13 @@ At level 3 and above
 will print some information that is not directly connected to a
 Matroska(TM)
 element\&. All other elements only print stuff about the elements that were just found\&. Level 3 adds meta information to ease debugging (read: it\*(Aqs intended for developers only)\&. All lines written by level 3 are enclosed in square brackets to make filtering them out easy\&.
+.SH "TEXT FILES AND CHARACTER SET CONVERSIONS"
+.PP
+For an in\-depth discussion about how all tools in the MKVToolNix suite handle character set conversions, input/output encoding, command line encoding and console encoding please see the identically\-named section in the
+\fBmkvmerge\fR(1)
+man page\&.
 .SH "EXIT CODES"
 .PP
-
 \fBmkvinfo\fR(1)
 exits with one of three exit codes:
 .sp
@@ -220,7 +244,6 @@ exits with one of three exit codes:
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB0\fR
 \-\- This exit codes means that the run has completed successfully\&.
 .RE
@@ -233,7 +256,6 @@ exits with one of three exit codes:
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB1\fR
 \-\- In this case
 \fBmkvinfo\fR(1)
@@ -248,7 +270,6 @@ has output at least one warning, but the run did continue\&. A warning is prefix
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB2\fR
 \-\- This exit code is used after an error occurred\&.
 \fBmkvinfo\fR(1)
@@ -259,9 +280,36 @@ aborts right after outputting the error message\&. Error messages range from wro
 There are a few places in which special characters in text must or should be escaped\&. The rules for escaping are simple: each character that needs escaping is replaced with a backslash followed by another character\&.
 .PP
 The rules are: \*(Aq \*(Aq (a space) becomes \*(Aq\es\*(Aq, \*(Aq"\*(Aq (double quotes) becomes \*(Aq\e2\*(Aq, \*(Aq:\*(Aq becomes \*(Aq\ec\*(Aq, \*(Aq#\*(Aq becomes \*(Aq\eh\*(Aq and \*(Aq\e\*(Aq (a single backslash) itself becomes \*(Aq\e\e\*(Aq\&.
+.SH "ENVIRONMENT VARIABLES"
+.PP
+\fBmkvinfo\fR(1)
+uses the default variables that determine the system\*(Aqs locale (e\&.g\&.
+\fILANG\fR
+and the
+\fILC_*\fR
+family)\&. Additional variables:
+.PP
+\fIMKVTOOLNIX_DEBUG\fR and its short form \fIMTX_DEBUG\fR
+.RS 4
+The content is treated as if it had been passed via the
+\fB\-\-debug\fR
+option\&.
+.RE
+.PP
+\fIMKVTOOLNIX_ENGAGE\fR and its short form \fIMTX_ENGAGE\fR
+.RS 4
+The content is treated as if it had been passed via the
+\fB\-\-engage\fR
+option\&.
+.RE
+.PP
+\fIMKVTOOLNIX_OPTIONS\fR and its short form \fIMTX_OPTIONS\fR
+.RS 4
+The content is split on white space\&. The resulting partial strings are treated as if it had been passed as command line options\&. If you need to pass special characters (e\&.g\&. spaces) then you have to escape them (see
+the section about escaping special characters in text)\&.
+.RE
 .SH "SEE ALSO"
 .PP
-
 \fBmkvmerge\fR(1),
 \fBmkvextract\fR(1),
 \fBmkvpropedit\fR(1),

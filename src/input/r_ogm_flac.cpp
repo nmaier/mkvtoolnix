@@ -124,11 +124,11 @@ flac_header_extractor_c::flac_header_extractor_c(const std::string &file_name,
   file    = new mm_file_io_c(file_name);
   decoder = FLAC__stream_decoder_new();
 
-  if (NULL == decoder)
+  if (!decoder)
     mxerror(Y("flac_header_extraction: FLAC__stream_decoder_new() failed.\n"));
   if (!FLAC__stream_decoder_set_metadata_respond_all(decoder))
     mxerror(Y("flac_header_extraction: Could not set metadata_respond_all.\n"));
-  if (FLAC__stream_decoder_init_stream(decoder, fhe_read_cb, NULL, NULL, NULL, NULL, fhe_write_cb, fhe_metadata_cb, fhe_error_cb, this) != FLAC__STREAM_DECODER_INIT_STATUS_OK)
+  if (FLAC__stream_decoder_init_stream(decoder, fhe_read_cb, nullptr, nullptr, nullptr, nullptr, fhe_write_cb, fhe_metadata_cb, fhe_error_cb, this) != FLAC__STREAM_DECODER_INIT_STATUS_OK)
     mxerror(Y("flac_header_extraction: Could not initialize the FLAC decoder.\n"));
 
   ogg_sync_init(&oy);
@@ -200,7 +200,7 @@ ogm_a_flac_demuxer_c::ogm_a_flac_demuxer_c(ogm_reader_c *p_reader,
   , bits_per_sample(0)
   , mode(p_mode)
 {
-  stype = OGM_STREAM_TYPE_A_FLAC;
+  codec = codec_c::look_up(CT_A_FLAC);
 }
 
 void
@@ -214,10 +214,8 @@ ogm_a_flac_demuxer_c::process_page(int64_t granulepos) {
     if (units_processed <= flac_header_packets)
       continue;
 
-    for (int i = 0; i < (int)nh_packet_data.size(); i++) {
-      memory_c *mem = nh_packet_data[i]->clone();
-      reader->m_reader_packetizers[ptzr]->process(new packet_t(mem, 0));
-    }
+    for (int i = 0; i < (int)nh_packet_data.size(); i++)
+      reader->m_reader_packetizers[ptzr]->process(new packet_t(nh_packet_data[i]->clone(), 0));
 
     nh_packet_data.clear();
 
@@ -236,15 +234,14 @@ ogm_a_flac_demuxer_c::process_header_page() {
 
   while ((packet_data.size() < flac_header_packets) && (ogg_stream_packetout(&os, &op) == 1)) {
     eos |= op.e_o_s;
-    packet_data.push_back(clone_memory(op.packet, op.bytes));
+    packet_data.push_back(memory_c::clone(op.packet, op.bytes));
   }
 
   if (packet_data.size() >= flac_header_packets)
     headers_read = true;
 
-  while (ogg_stream_packetout(&os, &op) == 1) {
-    nh_packet_data.push_back(clone_memory(op.packet, op.bytes));
-  }
+  while (ogg_stream_packetout(&os, &op) == 1)
+    nh_packet_data.push_back(memory_c::clone(op.packet, op.bytes));
 }
 
 void

@@ -11,7 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <wx/string.h>
 #include <wx/regex.h>
@@ -33,7 +33,7 @@ he_float_value_page_c::he_float_value_page_c(header_editor_frame_c *parent,
                                              const translatable_string_c &title,
                                              const translatable_string_c &description)
   : he_value_page_c(parent, toplevel_page, master, callbacks, vt_float, title, description)
-  , m_tc_text(NULL)
+  , m_tc_text(nullptr)
   , m_original_value(0)
 {
 }
@@ -43,8 +43,8 @@ he_float_value_page_c::~he_float_value_page_c() {
 
 wxControl *
 he_float_value_page_c::create_input_control() {
-  if (NULL != m_element)
-    m_original_value = double(*static_cast<EbmlFloat *>(m_element));
+  if (m_element)
+    m_original_value = static_cast<EbmlFloat *>(m_element)->GetValue();
 
   m_tc_text = new wxTextCtrl(this, wxID_ANY, get_original_value_as_string());
   m_tc_text->SetValidator(wxTextValidator(wxFILTER_NUMERIC));
@@ -54,7 +54,7 @@ he_float_value_page_c::create_input_control() {
 
 wxString
 he_float_value_page_c::get_original_value_as_string() {
-  if (NULL == m_element)
+  if (!m_element)
     return wxEmptyString;
 
   wxString value = wxString::Format(wxT("%f"), m_original_value);
@@ -83,12 +83,12 @@ he_float_value_page_c::reset_value() {
 bool
 he_float_value_page_c::validate_value() {
   double value;
-  return parse_double(wxMB(m_tc_text->GetValue()), value);
+  return parse_number(wxMB(m_tc_text->GetValue()), value);
 }
 
 void
 he_float_value_page_c::copy_value_to_element() {
   double value;
-  parse_double(wxMB(m_tc_text->GetValue()), value);
-  *static_cast<EbmlFloat *>(m_element) = value;
+  parse_number(wxMB(m_tc_text->GetValue()), value);
+  static_cast<EbmlFloat *>(m_element)->SetValue(value);
 }

@@ -12,13 +12,12 @@
    Modified by Peter Niemayer <niemayer@isg.de>.
 */
 
-#ifndef __R_WAV_H
-#define __R_WAV_H
+#ifndef MTX_R_WAV_H
+#define MTX_R_WAV_H
 
 #include "common/common_pch.h"
 
-#include <stdio.h>
-
+#include "common/codec.h"
 #include "common/dts.h"
 #include "common/error.h"
 #include "common/mm_io.h"
@@ -34,6 +33,7 @@ public:
   wave_header          *m_wheader;
   generic_packetizer_c *m_ptzr;
   track_info_c         &m_ti;
+  codec_c               m_codec;
 
 public:
   wav_demuxer_c(wav_reader_c *reader, wave_header *wheader);
@@ -45,12 +45,10 @@ public:
 
   virtual generic_packetizer_c *create_packetizer() = 0;
 
-  virtual std::string get_codec() = 0;
-
   virtual bool probe(mm_io_cptr &io) = 0;
 };
 
-typedef counted_ptr<wav_demuxer_c> wav_demuxer_cptr;
+typedef std::shared_ptr<wav_demuxer_c> wav_demuxer_cptr;
 
 struct wav_chunk_t {
   int64_t pos;
@@ -74,14 +72,17 @@ public:
   wav_reader_c(const track_info_c &ti, const mm_io_cptr &in);
   virtual ~wav_reader_c();
 
-  virtual const std::string get_format_name(bool translate = true) {
-    return translate ? Y("WAV") : "WAV";
+  virtual translatable_string_c get_format_name() const {
+    return YT("WAV");
   }
 
   virtual void read_headers();
   virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false);
   virtual void identify();
   virtual void create_packetizer(int64_t tid);
+  virtual bool is_providing_timecodes() const {
+    return false;
+  }
 
   static int probe_file(mm_io_c *in, uint64_t size);
 
@@ -95,4 +96,4 @@ protected:
   void create_demuxer();
 };
 
-#endif // __R_WAV_H
+#endif // MTX_R_WAV_H

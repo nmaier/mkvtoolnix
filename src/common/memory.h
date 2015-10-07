@@ -11,15 +11,12 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_MEMORY_H
-#define __MTX_COMMON_MEMORY_H
+#ifndef MTX_COMMON_MEMORY_H
+#define MTX_COMMON_MEMORY_H
 
 #include "common/common_pch.h"
 
-#include <cassert>
 #include <deque>
-
-#include "common/error.h"
 
 namespace mtx {
   namespace mem {
@@ -47,7 +44,7 @@ namespace mtx {
 
 inline void
 safefree(void *p) {
-  if (NULL != p)
+  if (p)
     free(p);
 }
 
@@ -81,20 +78,25 @@ _safestrdup(const char *s,
 unsigned char *_saferealloc(void *mem, size_t size, const char *file, int line);
 
 class memory_c;
-typedef counted_ptr<memory_c> memory_cptr;
+typedef std::shared_ptr<memory_c> memory_cptr;
 typedef std::vector<memory_cptr> memories_c;
 
 class memory_c {
 public:
   typedef unsigned char X;
 
-  explicit memory_c(void *p = NULL,
+  explicit memory_c(void *p = nullptr,
                     size_t s = 0,
                     bool f = false) // allocate a new counter
-    : its_counter(NULL)
+    : its_counter(nullptr)
   {
     if (p)
       its_counter = new counter(static_cast<unsigned char *>(p), s, f);
+  }
+
+  explicit memory_c(size_t s)
+    : its_counter(new counter(static_cast<unsigned char *>(safemalloc(s)), s, true))
+  {
   }
 
   ~memory_c() {
@@ -114,7 +116,7 @@ public:
   }
 
   X *get_buffer() const throw() {
-    return its_counter ? its_counter->ptr + its_counter->offset : NULL;
+    return its_counter ? its_counter->ptr + its_counter->offset : nullptr;
   }
 
   size_t get_size() const throw() {
@@ -133,15 +135,15 @@ public:
   }
 
   bool is_unique() const throw() {
-    return (its_counter ? its_counter->count == 1 : true);
+    return its_counter ? its_counter->count == 1 : true;
   }
 
   bool is_allocated() const throw() {
-    return (NULL != its_counter) && (NULL != its_counter->ptr);
+    return its_counter && its_counter->ptr;
   }
 
-  memory_c *clone() const {
-    return new memory_c(static_cast<unsigned char *>(safememdup(get_buffer(), get_size())), get_size(), true);
+  memory_cptr clone() const {
+    return memory_c::clone(get_buffer(), get_size());
   }
 
   bool is_free() const {
@@ -164,31 +166,53 @@ public:
   }
 
   void resize(size_t new_size) throw();
-  void add(unsigned char *new_buffer, size_t new_size);
-  void add(memory_cptr &new_buffer) {
+  void add(unsigned char const *new_buffer, size_t new_size);
+  void add(memory_cptr const &new_buffer) {
     add(new_buffer->get_buffer(), new_buffer->get_size());
   }
 
   operator const unsigned char *() const {
-    return its_counter ? its_counter->ptr : NULL;
+    return its_counter ? its_counter->ptr : nullptr;
   }
 
   operator const void *() const {
-    return its_counter ? its_counter->ptr : NULL;
+    return its_counter ? its_counter->ptr : nullptr;
   }
 
   operator unsigned char *() const {
-    return its_counter ? its_counter->ptr : NULL;
+    return its_counter ? its_counter->ptr : nullptr;
   }
 
   operator void *() const {
-    return its_counter ? its_counter->ptr : NULL;
+    return its_counter ? its_counter->ptr : nullptr;
+  }
+
+  bool operator ==(memory_c const &cmp) const {
+    return (get_size() == cmp.get_size())
+        && ((get_buffer() && cmp.get_buffer()) || (!get_buffer() && !cmp.get_buffer()))
+        && (get_buffer() ? !::memcmp(get_buffer(), cmp.get_buffer(), get_size()) : true);
+  }
+
+  bool operator !=(memory_c const &cmp) const {
+    return !(*this == cmp);
   }
 
 public:
-  static memory_cptr alloc(size_t size) {
+  static memory_cptr
+  alloc(size_t size) {
     return memory_cptr(new memory_c(static_cast<unsigned char *>(safemalloc(size)), size, true));
   };
+
+  static inline memory_cptr
+  clone(const void *buffer,
+        size_t size) {
+    return memory_cptr(new memory_c(static_cast<unsigned char *>(safememdup(buffer, size)), size, true));
+  }
+
+  static inline memory_cptr
+  clone(std::string const &buffer) {
+    return clone(buffer.c_str(), buffer.length());
+  }
 
 private:
   struct counter {
@@ -198,7 +222,7 @@ private:
     unsigned count;
     size_t offset;
 
-    counter(X *p = NULL,
+    counter(X *p = nullptr,
             size_t s = 0,
             bool f = false,
             unsigned c = 1)
@@ -273,7 +297,7 @@ class memory_slice_cursor_c {
   inline unsigned char get_char() {
     assert(m_pos < m_size);
 
-    memory_c &slice = *(*m_slice).get_object();
+    memory_c &slice = *m_slice->get();
     unsigned char c = *(slice.get_buffer() + m_pos_in_slice);
 
     ++m_pos_in_slice;
@@ -345,27 +369,7 @@ private:
   memory_slice_cursor_c(const memory_slice_cursor_c &) { }
 };
 
-inline memory_cptr
-clone_memory(const void *buffer,
-             size_t size) {
-  return memory_cptr(new memory_c(static_cast<unsigned char *>(safememdup(buffer, size)), size, true));
-}
-
-inline memory_cptr
-clone_memory(memory_cptr data) {
-  return clone_memory(data->get_buffer(), data->get_size());
-}
-
-struct buffer_t {
-  unsigned char *m_buffer;
-  size_t m_size;
-
-  buffer_t();
-  buffer_t(unsigned char *buffer, size_t m_size);
-  ~buffer_t();
-};
-
 memory_cptr lace_memory_xiph(const std::vector<memory_cptr> &blocks);
 std::vector<memory_cptr> unlace_memory_xiph(memory_cptr &buffer);
 
-#endif  // __MTX_COMMON_MEMORY_H
+#endif  // MTX_COMMON_MEMORY_H

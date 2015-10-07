@@ -22,7 +22,6 @@
 #endif
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 #include <time.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
@@ -35,6 +34,7 @@
 #include <iostream>
 #include <list>
 #include <sstream>
+#include <tuple>
 #include <typeinfo>
 
 #include <matroska/KaxChapters.h>
@@ -49,19 +49,18 @@
 #include "common/extern_data.h"
 #include "common/file_types.h"
 #include "common/fs_sys_helpers.h"
-#include "common/hacks.h"
 #include "common/iso639.h"
 #include "common/mm_io.h"
 #include "common/segmentinfo.h"
+#include "common/split_arg_parsing.h"
 #include "common/strings/formatting.h"
 #include "common/strings/parsing.h"
-#include "common/tags/tags.h"
-#include "common/tags/parser.h"
 #include "common/unique_numbers.h"
 #include "common/version.h"
 #include "common/webm.h"
+#include "common/xml/ebml_segmentinfo_converter.h"
+#include "common/xml/ebml_tags_converter.h"
 #include "merge/cluster_helper.h"
-#include "merge/mkvmerge.h"
 #include "merge/output_control.h"
 
 using namespace libmatroska;
@@ -109,6 +108,32 @@ set_usage() {
   usage_text += Y("  --clusters-in-meta-seek  Write meta seek data for clusters.\n");
   usage_text += Y("  --disable-lacing         Do not Use lacing.\n");
   usage_text += Y("  --enable-durations       Enable block durations for all blocks.\n");
+  usage_text += Y("  --timecode-scale <n>     Force the timecode scale factor to n.\n");
+  usage_text +=   "\n";
+  usage_text += Y(" File splitting, linking, appending and concatenating (more global options):\n");
+  usage_text += Y("  --split <d[K,M,G]|HH:MM:SS|s>\n"
+                  "                           Create a new file after d bytes (KB, MB, GB)\n"
+                  "                           or after a specific time.\n");
+  usage_text += Y("  --split timecodes:A[,B...]\n"
+                  "                           Create a new file after each timecode A, B\n"
+                  "                           etc.\n");
+  usage_text += Y("  --split parts:start1-end1[,[+]start2-end2,...]\n"
+                  "                           Keep ranges of timecodes start-end, either in\n"
+                  "                           separate files or append to previous range's file\n"
+                  "                           if prefixed with '+'.\n");
+  usage_text += Y("  --split parts-frames:start1-end1[,[+]start2-end2,...]\n"
+                  "                           Same as 'parts:', but 'startN'/'endN' are frame/\n"
+                  "                           field numbers instead of timecodes.\n");
+  usage_text += Y("  --split frames:A[,B...]\n"
+                  "                           Create a new file after each frame/field A, B\n"
+                  "                           etc.\n");
+  usage_text += Y("  --split chapters:all|A[,B...]\n"
+                  "                           Create a new file before each chapter (with 'all')\n"
+                  "                           or before chapter numbers A, B etc.\n");
+  usage_text += Y("  --split-max-files <n>    Create at most n files.\n");
+  usage_text += Y("  --link                   Link splitted files.\n");
+  usage_text += Y("  --link-to-previous <SID> Link the first file to the given SID.\n");
+  usage_text += Y("  --link-to-next <SID>     Link the last file to the given SID.\n");
   usage_text += Y("  --append-to <SFID1:STID1:DFID1:DTID1,SFID2:STID2:DFID2:DTID2,...>\n"
                   "                           A comma separated list of file and track IDs\n"
                   "                           that controls which track of a file is\n"
@@ -117,19 +142,13 @@ set_usage() {
   usage_text += Y("  --append-mode <file|track>\n"
                   "                           Selects how mkvmerge calculates timecodes when\n"
                   "                           appending files.\n");
-  usage_text += Y("  --timecode-scale <n>     Force the timecode scale factor to n.\n");
-  usage_text +=   "\n";
-  usage_text += Y(" File splitting and linking (more global options):\n");
-  usage_text += Y("  --split <d[K,M,G]|HH:MM:SS|s>\n"
-                  "                           Create a new file after d bytes (KB, MB, GB)\n"
-                  "                           or after a specific time.\n");
-  usage_text += Y("  --split timecodes:A[,B...]\n"
-                  "                           Create a new file after each timecode A, B\n"
-                  "                           etc.\n");
-  usage_text += Y("  --split-max-files <n>    Create at most n files.\n");
-  usage_text += Y("  --link                   Link splitted files.\n");
-  usage_text += Y("  --link-to-previous <SID> Link the first file to the given SID.\n");
-  usage_text += Y("  --link-to-next <SID>     Link the last file to the given SID.\n");
+  usage_text += Y("  <file1> + <file2>        Append file2 to file1.\n");
+  usage_text += Y("  <file1> +<file2>         Same as \"<file1> + <file2>\".\n");
+  usage_text += Y("  = <file>                 Don't look for and concatenate files with the same\n"
+                  "                           base name but with a different trailing number.\n");
+  usage_text += Y("  =<file>                  Same as \"= <file>\".\n");
+  usage_text += Y("  ( <file1> <file2> )      Treat file1 and file2 as if they were concatenated\n"
+                  "                           into a single big file.\n");
   usage_text +=   "\n";
   usage_text += Y(" Attachment support (more global options):\n");
   usage_text += Y("  --attachment-description <desc>\n"
@@ -142,7 +161,7 @@ set_usage() {
                   "                           Matroska file.\n");
   usage_text += Y("  --attach-file-once <file>\n"
                   "                           Creates a file attachment inside the\n"
-                  "                           firsts Matroska file written.\n");
+                  "                           first Matroska file written.\n");
   usage_text +=   "\n";
   usage_text += Y(" Options for each input file:\n");
   usage_text += Y("  -a, --audio-tracks <n,m,...>\n"
@@ -199,6 +218,9 @@ set_usage() {
   usage_text += Y("  --default-duration <TID:Xs|ms|us|ns|fps>\n"
                   "                           Force the default duration of a track to X.\n"
                   "                           X can be a floating point number or a fraction.\n");
+  usage_text += Y("  --fix-bitstream-timing-information <TID[:bool]>\n"
+                  "                           Adjust the frame/field rate stored in the video\n"
+                  "                           bitstream to match the track's default duration.\n");
   usage_text += Y("  --nalu-size-length <TID:n>\n"
                   "                           Force the NALU size length to n bytes with\n"
                   "                           2 <= n <= 4 with 4 being the default.\n");
@@ -252,7 +274,9 @@ set_usage() {
                   "                           the specified file (see man page).\n");
   usage_text += Y("  -h, --help               Show this help.\n");
   usage_text += Y("  -V, --version            Show version information.\n");
+#if defined(HAVE_CURL_EASY_H)
   usage_text += std::string("  --check-for-updates      ") + Y("Check online for the latest release.") + "\n";
+#endif
   usage_text +=   "\n\n";
   usage_text += Y("Please read the man page/the HTML documentation to mkvmerge. It\n"
                   "explains several details in great length which are not obvious from\n"
@@ -266,60 +290,9 @@ set_usage() {
 static void
 print_capabilities() {
   mxinfo(boost::format("VERSION=%1%\n") % version_info);
-#if defined(HAVE_BZLIB_H)
-  mxinfo("BZ2\n");
-#endif
-#if defined(HAVE_LZO)
-  mxinfo("LZO\n");
-#endif
 #if defined(HAVE_FLAC_FORMAT_H)
   mxinfo("FLAC\n");
 #endif
-}
-
-int64_t
-create_track_number(generic_reader_c *reader,
-                    int64_t tid) {
-  // Specs say that track numbers should start at 1.
-  static int s_track_number = 1;
-
-  bool found   = false;
-  int file_num = -1;
-  size_t i;
-  for (i = 0; i < g_files.size(); i++)
-    if (g_files[i].reader == reader) {
-      found = true;
-      file_num = i;
-      break;
-    }
-
-  if (!found)
-    mxerror(boost::format(Y("create_track_number: file_num not found. %1%\n")) % BUGMSG);
-
-  int64_t tnum = -1;
-  found        = false;
-  for (i = 0; i < g_track_order.size(); i++)
-    if ((g_track_order[i].file_id == file_num) &&
-        (g_track_order[i].track_id == tid)) {
-      found = true;
-      tnum = i + 1;
-      break;
-    }
-  if (found) {
-    found = false;
-    for (i = 0; i < g_packetizers.size(); i++)
-      if ((g_packetizers[i].packetizer != NULL) &&
-          (g_packetizers[i].packetizer->get_track_num() == tnum)) {
-        tnum = s_track_number;
-        break;
-      }
-  } else
-    tnum = s_track_number;
-
-  if (tnum >= s_track_number)
-    s_track_number = tnum + 1;
-
-  return tnum;
 }
 
 static std::string
@@ -337,23 +310,35 @@ guess_mime_type_and_report(std::string file_name) {
 static void
 handle_segmentinfo() {
   // segment families
-  KaxSegmentFamily *family = FINDFIRST(g_kax_info_chap, KaxSegmentFamily);
-  while (NULL != family) {
+  KaxSegmentFamily *family = FindChild<KaxSegmentFamily>(g_kax_info_chap.get());
+  while (family) {
     g_segfamily_uids.add_family_uid(*family);
-    family = FINDNEXT(g_kax_info_chap, KaxSegmentFamily, family);
+    family = FindNextChild<KaxSegmentFamily>(g_kax_info_chap.get(), family);
   }
 
-  EbmlBinary *uid = FINDFIRST(g_kax_info_chap, KaxSegmentUID);
-  if (NULL != uid)
+  EbmlBinary *uid = FindChild<KaxSegmentUID>(g_kax_info_chap.get());
+  if (uid)
     g_forced_seguids.push_back(bitvalue_cptr(new bitvalue_c(*uid)));
 
-  uid = FINDFIRST(g_kax_info_chap, KaxNextUID);
-  if (NULL != uid)
+  uid = FindChild<KaxNextUID>(g_kax_info_chap.get());
+  if (uid)
     g_seguid_link_next = bitvalue_cptr(new bitvalue_c(*uid));
 
-  uid = FINDFIRST(g_kax_info_chap, KaxPrevUID);
-  if (NULL != uid)
+  uid = FindChild<KaxPrevUID>(g_kax_info_chap.get());
+  if (uid)
     g_seguid_link_previous = bitvalue_cptr(new bitvalue_c(*uid));
+
+  auto segment_filename = FindChild<KaxSegmentFilename>(g_kax_info_chap.get());
+  if (segment_filename)
+    g_segment_filename = UTFstring_to_cstrutf8(*segment_filename);
+
+  auto next_segment_filename = FindChild<KaxNextFilename>(g_kax_info_chap.get());
+  if (next_segment_filename)
+    g_next_segment_filename = UTFstring_to_cstrutf8(*next_segment_filename);
+
+  auto previous_segment_filename = FindChild<KaxPrevFilename>(g_kax_info_chap.get());
+  if (previous_segment_filename)
+    g_previous_segment_filename = UTFstring_to_cstrutf8(*previous_segment_filename);
 }
 
 static void
@@ -410,35 +395,39 @@ identify(std::string &filename) {
 /** \brief Parse a number postfixed with a time-based unit
 
    This function parsers a number that is postfixed with one of the
-   four units 's', 'ms', 'us' or 'ns'. If the postfix is 'fps' then
-   this means 'frames per second'. It returns a number of nanoseconds.
+   units 's', 'ms', 'us', 'ns', 'fps', 'p' or 'i'. If the postfix is
+   'fps' then this means 'frames per second'. If the postfix is 'p' or
+   'i' then it is also interpreted as the number of 'progressive
+   frames per second' or 'interlaced frames per second'.
+
+   It returns a number of nanoseconds.
 */
 int64_t
 parse_number_with_unit(const std::string &s,
                        const std::string &subject,
                        const std::string &argument,
                        std::string display_s = "") {
-  boost::regex re1("(-?\\d+\\.?\\d*)(s|ms|us|ns|fps)?", boost::regex::perl | boost::regbase::icase);
-  boost::regex re2("(-?\\d+)/(-?\\d+)(s|ms|us|ns|fps)?", boost::regex::perl | boost::regbase::icase);
+  boost::regex re1("(-?\\d+\\.?\\d*)(s|ms|us|ns|fps|p|i)?",  boost::regex::perl | boost::regex::icase);
+  boost::regex re2("(-?\\d+)/(-?\\d+)(s|ms|us|ns|fps|p|i)?", boost::regex::perl | boost::regex::icase);
 
   std::string unit, s_n, s_d;
-  int64_t n, d;
+  int64_t n = 0, d = 0;
   double d_value = 0.0;
   bool is_fraction = false;
 
   if (display_s.empty())
     display_s = s;
 
-  boost::match_results<std::string::const_iterator> matches;
-  if (boost::regex_match(s, matches, re1, boost::match_default)) {
-    parse_double(matches[1], d_value);
+  boost::smatch matches;
+  if (boost::regex_match(s, matches, re1)) {
+    parse_number(matches[1], d_value);
     if (matches.size() > 2)
       unit = matches[2];
     d = 1;
 
-  } else if (boost::regex_match(s, matches, re2, boost::match_default)) {
-    parse_int(matches[1], n);
-    parse_int(matches[2], d);
+  } else if (boost::regex_match(s, matches, re2)) {
+    parse_number(matches[1], n);
+    parse_number(matches[2], d);
     if (matches.size() > 3)
       unit = matches[3];
     is_fraction = true;
@@ -447,7 +436,7 @@ parse_number_with_unit(const std::string &s,
     mxerror(boost::format(Y("'%1%' is not a valid %2% in '%3% %4%'.\n")) % s % subject % argument % display_s);
 
   int64_t multiplier = 1000000000;
-  ba::to_lower(unit);
+  balg::to_lower(unit);
 
   if (unit == "ms")
     multiplier = 1000000;
@@ -455,10 +444,14 @@ parse_number_with_unit(const std::string &s,
     multiplier = 1000;
   else if (unit == "ns")
     multiplier = 1;
-  else if (unit == "fps") {
+  else if ((unit == "fps") || (unit == "p") || (unit == "i")) {
     if (is_fraction)
-      return 1000000000ll * d / n;
-    else if (29.97 == d_value)
+      return 1000000000ll * d / n / (unit == "i" ? 2 : 1);
+
+    if (unit == "i")
+      d_value /= 2;
+
+    if (29.97 == d_value)
       return (int64_t)(100100000.0 / 3.0);
     else if (23.976 == d_value)
       return (int64_t)(1001000000.0 / 24.0);
@@ -466,7 +459,7 @@ parse_number_with_unit(const std::string &s,
       return (int64_t)(1000000000.0 / d_value);
 
   } else if (unit != "s")
-    mxerror(boost::format(Y("'%1%' does not contain a valid unit ('s', 'ms', 'us' or 'ns') in '%2% %3%'.\n")) % s % argument % display_s);
+    mxerror(boost::format(Y("'%1%' does not contain a valid unit ('s', 'ms', 'us', 'ns', 'fps', 'p' or 'i') in '%2% %3%'.\n")) % s % argument % display_s);
 
   if (is_fraction)
     return multiplier * n / d;
@@ -480,23 +473,20 @@ parse_number_with_unit(const std::string &s,
 */
 void
 parse_and_add_tags(const std::string &file_name) {
-  KaxTags *tags = new KaxTags;
+  auto tags = mtx::xml::ebml_tags_converter_c::parse_file(file_name, false);
+  if (!tags)
+    return;
 
-  parse_xml_tags(file_name, tags);
-
-  while (tags->ListSize() > 0) {
-    KaxTag *tag = dynamic_cast<KaxTag *>((*tags)[0]);
-    if (NULL != tag) {
-      fix_mandatory_tag_elements(tag);
+  for (auto element : *tags) {
+    auto tag = dynamic_cast<KaxTag *>(element);
+    if (tag) {
       if (!tag->CheckMandatory())
         mxerror(boost::format(Y("Error parsing the tags in '%1%': some mandatory elements are missing.\n")) % file_name);
       add_tags(tag);
     }
-
-    tags->Remove(0);
   }
 
-  delete tags;
+  tags->RemoveAll();
 }
 
 /** \brief Parse the \c --xtracks arguments
@@ -509,7 +499,7 @@ parse_arg_tracks(std::string s,
                  const std::string &opt) {
   tracks.clear();
 
-  if (ba::starts_with(s, "!")) {
+  if (balg::starts_with(s, "!")) {
     s.erase(0, 1);
     tracks.set_reversed();
   }
@@ -520,7 +510,7 @@ parse_arg_tracks(std::string s,
   size_t i;
   for (i = 0; i < elements.size(); i++) {
     int64_t tid;
-    if (!parse_int(elements[i], tid))
+    if (!parse_number(elements[i], tid))
       mxerror(boost::format(Y("Invalid track ID in '%1% %2%'.\n")) % opt % s);
     tracks.add(tid);
   }
@@ -547,7 +537,7 @@ parse_arg_sync(std::string s,
     mxerror(boost::format(Y("Invalid sync option. No track ID specified in '%1% %2%'.\n")) % opt % s);
 
   int64_t id = 0;
-  if (!parse_int(parts[0], id))
+  if (!parse_number(parts[0], id))
     mxerror(boost::format(Y("Invalid track ID specified in '%1% %2%'.\n")) % opt % s);
 
   s = parts[1];
@@ -566,14 +556,14 @@ parse_arg_sync(std::string s,
     s.erase(idx);
     idx = linear.find('/');
     if (idx < 0) {
-      tcsync.numerator   = strtod(linear.c_str(), NULL);
+      tcsync.numerator   = strtod(linear.c_str(), nullptr);
       tcsync.denominator = 1.0;
 
     } else {
       std::string div = linear.substr(idx + 1);
       linear.erase(idx);
-      double d1  = strtod(linear.c_str(), NULL);
-      double d2  = strtod(div.c_str(), NULL);
+      double d1  = strtod(linear.c_str(), nullptr);
+      double d2  = strtod(div.c_str(), nullptr);
       if (0.0 == d2)
         mxerror(boost::format(Y("Invalid sync option specified in '%1% %2%'. The divisor is zero.\n")) % opt % orig);
 
@@ -608,7 +598,7 @@ parse_arg_aspect_ratio(const std::string &s,
     mxerror(boost::format(Y("%1%: missing track ID in '%2% %3%'.\n")) % msg % opt % s);
 
   int64_t id = 0;
-  if (!parse_int(parts[0], id))
+  if (!parse_number(parts[0], id))
     mxerror(boost::format(Y("%1%: invalid track ID in '%2% %3%'.\n")) % msg % opt % s);
 
   dprop.width  = -1;
@@ -618,7 +608,7 @@ parse_arg_aspect_ratio(const std::string &s,
   if (0 > idx)
     idx = parts[1].find(':');
   if (0 > idx) {
-    dprop.aspect_ratio          = strtod(parts[1].c_str(), NULL);
+    dprop.aspect_ratio          = strtod(parts[1].c_str(), nullptr);
     ti.m_display_properties[id] = dprop;
     return;
   }
@@ -631,8 +621,8 @@ parse_arg_aspect_ratio(const std::string &s,
   if (div.empty())
     mxerror(boost::format(Y("%1%: missing divisor in '%2% %3%'.\n")) % msg % opt % s);
 
-  double w = strtod(parts[1].c_str(), NULL);
-  double h = strtod(div.c_str(), NULL);
+  double w = strtod(parts[1].c_str(), nullptr);
+  double h = strtod(div.c_str(), nullptr);
   if (0.0 == h)
     mxerror(boost::format(Y("%1%: divisor is 0 in '%2% %3%'.\n")) % msg % opt % s);
 
@@ -656,8 +646,8 @@ parse_arg_display_dimensions(const std::string s,
 
   std::vector<std::string> dims = split(parts[1], "x", 2);
   int64_t id = 0;
-  int w, h;
-  if ((dims.size() != 2) || !parse_int(parts[0], id) || !parse_int(dims[0], w) || !parse_int(dims[1], h) || (0 >= w) || (0 >= h))
+  int w = 0, h = 0;
+  if ((dims.size() != 2) || !parse_number(parts[0], id) || !parse_number(dims[0], w) || !parse_number(dims[1], h) || (0 >= w) || (0 >= h))
     mxerror(boost::format(Y("Display dimensions: not given in the form <TID>:<width>x<height>, e.g. 1:640x480 (argument was '%1%').\n")) % s);
 
   dprop.aspect_ratio          = -1.0;
@@ -684,14 +674,14 @@ parse_arg_cropping(const std::string &s,
     mxerror(boost::format(err_msg) % s);
 
   int64_t id = 0;
-  if (!parse_int(v[0], id))
+  if (!parse_number(v[0], id))
     mxerror(boost::format(err_msg) % s);
 
   v = split(v[1], ",");
   if (v.size() != 4)
     mxerror(boost::format(err_msg) % s);
 
-  if (!parse_int(v[0], crop.left) || !parse_int(v[1], crop.top) || !parse_int(v[2], crop.right) || !parse_int(v[3], crop.bottom))
+  if (!parse_number(v[0], crop.left) || !parse_number(v[1], crop.top) || !parse_number(v[2], crop.right) || !parse_number(v[3], crop.bottom))
     mxerror(boost::format(err_msg) % s);
 
   ti.m_pixel_crop_list[id] = crop;
@@ -726,7 +716,7 @@ parse_arg_stereo_mode(const std::string &s,
     mxerror(boost::format(errmsg) % stereo_mode_c::max_index() % stereo_mode_c::displayable_modes_list() % s);
 
   int64_t id = 0;
-  if (!parse_int(v[0], id))
+  if (!parse_number(v[0], id))
     mxerror(boost::format(errmsg) % stereo_mode_c::max_index() % stereo_mode_c::displayable_modes_list() % s);
 
   stereo_mode_c::mode mode = stereo_mode_c::parse_mode(v[1]);
@@ -736,7 +726,7 @@ parse_arg_stereo_mode(const std::string &s,
   }
 
   int index;
-  if (!parse_int(v[1], index) || !stereo_mode_c::valid_index(index))
+  if (!parse_number(v[1], index) || !stereo_mode_c::valid_index(index))
     mxerror(boost::format(errmsg) % stereo_mode_c::max_index() % stereo_mode_c::displayable_modes_list() % s);
 
   ti.m_stereo_mode_list[id] = static_cast<stereo_mode_c::mode>(index);
@@ -751,26 +741,26 @@ static void
 parse_arg_split_duration(const std::string &arg) {
   std::string s = arg;
 
-  if (ba::istarts_with(s, "duration:"))
+  if (balg::istarts_with(s, "duration:"))
     s.erase(0, strlen("duration:"));
 
   int64_t split_after;
   if (!parse_timecode(s, split_after))
     mxerror(boost::format(Y("Invalid time for '--split' in '--split %1%'. Additional error message: %2%\n")) % arg % timecode_parser_error);
 
-  g_cluster_helper->add_split_point(split_point_t(split_after, split_point_t::SPT_DURATION, false));
+  g_cluster_helper->add_split_point(split_point_c(split_after, split_point_c::duration, false));
 }
 
 /** \brief Parse the timecode format to \c --split
 
   This function is called by ::parse_split if the format specifies
-  a timecodes after which a new file should be started.
+  timecodes after which a new file should be started.
 */
 static void
 parse_arg_split_timecodes(const std::string &arg) {
   std::string s = arg;
 
-  if (ba::istarts_with(s, "timecodes:"))
+  if (balg::istarts_with(s, "timecodes:"))
     s.erase(0, 10);
 
   std::vector<std::string> timecodes = split(s, ",");
@@ -778,7 +768,105 @@ parse_arg_split_timecodes(const std::string &arg) {
     int64_t split_after;
     if (!parse_timecode(timecode, split_after))
       mxerror(boost::format(Y("Invalid time for '--split' in '--split %1%'. Additional error message: %2%.\n")) % arg % timecode_parser_error);
-    g_cluster_helper->add_split_point(split_point_t(split_after, split_point_t::SPT_TIMECODE, true));
+    g_cluster_helper->add_split_point(split_point_c(split_after, split_point_c::timecode, true));
+  }
+}
+
+/** \brief Parse the frames format to \c --split
+
+  This function is called by ::parse_split if the format specifies
+  frames after which a new file should be started.
+*/
+static void
+parse_arg_split_frames(std::string const &arg) {
+  std::string s = arg;
+
+  if (balg::istarts_with(s, "frames:"))
+    s.erase(0, 7);
+
+  std::vector<std::string> frames = split(s, ",");
+  for (auto &frame : frames) {
+    uint64_t split_after = 0;
+    if (!parse_number(frame, split_after) || (0 == split_after))
+      mxerror(boost::format(Y("Invalid frame for '--split' in '--split %1%'.\n")) % arg);
+    g_cluster_helper->add_split_point(split_point_c(split_after, split_point_c::frame_field, true));
+  }
+}
+
+void
+parse_arg_split_chapters(std::string const &arg) {
+  std::string s = arg;
+
+  if (balg::istarts_with(s, "chapters:"))
+    s.erase(0, 9);
+
+  bool use_all = s == "all";
+  std::unordered_map<unsigned int, bool> chapter_numbers;
+
+  if (!use_all) {
+    std::vector<std::string> numbers = split(s, ",");
+    for (auto &number_str : numbers) {
+      auto number = 0u;
+      if (!parse_number(number_str, number) || !number)
+        mxerror(boost::format(Y("Invalid chapter number '%1%' for '--split' in '--split %2%': %3%\n")) % number_str % arg % Y("Not a valid number or not positive."));
+      chapter_numbers[number] = true;
+    }
+
+    if (chapter_numbers.empty())
+      mxerror(boost::format(Y("No chapter numbers listed after '--split %1%'.\n")) % arg);
+  }
+
+  if (!g_kax_chapters)
+    mxerror(boost::format(Y("No chapters in source files or chapter files found to split by.\n")));
+
+  std::vector<split_point_c> new_split_points;
+  auto current_number = 0u;
+  for (auto element : *g_kax_chapters) {
+    auto edition = dynamic_cast<KaxEditionEntry *>(element);
+    if (!edition)
+      continue;
+
+    for (auto sub_element : *edition) {
+      auto atom = dynamic_cast<KaxChapterAtom *>(sub_element);
+      if (!atom)
+        continue;
+
+
+      ++current_number;
+      if (!use_all && !chapter_numbers[current_number])
+        continue;
+
+      int64_t split_after = FindChildValue<KaxChapterTimeStart, uint64_t>(atom, 0);
+      if (split_after)
+        new_split_points.push_back(split_point_c{split_after, split_point_c::timecode, true});
+    }
+  }
+
+  if (!current_number)
+    mxerror(boost::format(Y("No chapters in source files or chapter files found to split by.\n")));
+
+  for (auto &number : chapter_numbers)
+    if (number.first > current_number)
+      mxerror(boost::format(Y("Invalid chapter number '%1%' for '--split' in '--split %2%': %3%\n"))
+              % number.first % arg
+              % (boost::format(Y("Only %1% chapters found in source files & chapter files.")) % current_number));
+
+  brng::sort(new_split_points);
+
+  for (auto &split_point : new_split_points)
+    g_cluster_helper->add_split_point(split_point);
+}
+
+static void
+parse_arg_split_parts(const std::string &arg,
+                      bool frames_fields) {
+  try {
+    auto split_points = mtx::args::parse_split_parts(arg, frames_fields);
+    for (auto &point : split_points)
+      g_cluster_helper->add_split_point(point);
+
+  } catch (mtx::args::format_x &ex) {
+    mxerror(ex.what());
   }
 }
 
@@ -792,7 +880,7 @@ parse_arg_split_size(const std::string &arg) {
   std::string s       = arg;
   std::string err_msg = Y("Invalid split size in '--split %1%'.\n");
 
-  if (ba::istarts_with(s, "size:"))
+  if (balg::istarts_with(s, "size:"))
     s.erase(0, strlen("size:"));
 
   if (s.empty())
@@ -813,11 +901,11 @@ parse_arg_split_size(const std::string &arg) {
   if (1 != modifier)
     s.erase(s.size() - 1);
 
-  int64_t split_after;
-  if (!parse_int(s, split_after))
+  int64_t split_after = 0;
+  if (!parse_number(s, split_after))
     mxerror(boost::format(err_msg) % arg);
 
-  g_cluster_helper->add_split_point(split_point_t(split_after * modifier, split_point_t::SPT_SIZE, false));
+  g_cluster_helper->add_split_point(split_point_c(split_after * modifier, split_point_c::size, false));
 }
 
 /** \brief Parse the \c --split argument
@@ -844,14 +932,26 @@ parse_arg_split(const std::string &arg) {
   std::string s = arg;
 
   // HH:MM:SS
-  if (ba::istarts_with(s, "duration:"))
+  if (balg::istarts_with(s, "duration:"))
     parse_arg_split_duration(arg);
 
-  else if (ba::istarts_with(s, "size:"))
+  else if (balg::istarts_with(s, "size:"))
     parse_arg_split_size(arg);
 
-  else if (ba::istarts_with(s, "timecodes:"))
+  else if (balg::istarts_with(s, "timecodes:"))
     parse_arg_split_timecodes(arg);
+
+  else if (balg::istarts_with(s, "parts:"))
+    parse_arg_split_parts(arg, false);
+
+  else if (balg::istarts_with(s, "parts-frames:"))
+    parse_arg_split_parts(arg, true);
+
+  else if (balg::istarts_with(s, "frames:"))
+    parse_arg_split_frames(arg);
+
+  else if (balg::istarts_with(s, "chapters:"))
+    g_splitting_by_chapters_arg = arg;
 
   else if ((   (s.size() == 8)
             || (s.size() == 12))
@@ -888,7 +988,7 @@ parse_arg_default_track(const std::string &s,
   int64_t id           = 0;
 
   strip(parts);
-  if (!parse_int(parts[0], id))
+  if (!parse_number(parts[0], id))
     mxerror(boost::format(Y("Invalid track ID specified in '--default-track %1%'.\n")) % s);
 
   try {
@@ -914,7 +1014,7 @@ parse_arg_forced_track(const std::string &s,
   int64_t id                     = 0;
 
   strip(parts);
-  if (!parse_int(parts[0], id))
+  if (!parse_number(parts[0], id))
     mxerror(boost::format(Y("Invalid track ID specified in '--forced-track %1%'.\n")) % s);
 
   try {
@@ -942,7 +1042,7 @@ parse_arg_cues(const std::string &s,
     mxerror(boost::format(Y("Invalid cues option. No track ID specified in '--cues %1%'.\n")) % s);
 
   int64_t id = 0;
-  if (!parse_int(parts[0], id))
+  if (!parse_number(parts[0], id))
     mxerror(boost::format(Y("Invalid track ID specified in '--cues %1%'.\n")) % s);
 
   if (parts[1].empty())
@@ -960,7 +1060,7 @@ parse_arg_cues(const std::string &s,
 
 /** \brief Parse the \c --compression argument
 
-   The argument must have the form \c TID:compression, e.g. \c 0:bz2.
+   The argument must have the form \c TID:compression, e.g. \c 0:zlib.
 */
 static void
 parse_arg_compression(const std::string &s,
@@ -972,7 +1072,7 @@ parse_arg_compression(const std::string &s,
     mxerror(boost::format(Y("Invalid compression option. No track ID specified in '--compression %1%'.\n")) % s);
 
   int64_t id = 0;
-  if (!parse_int(parts[0], id))
+  if (!parse_number(parts[0], id))
     mxerror(boost::format(Y("Invalid track ID specified in '--compression %1%'.\n")) % s);
 
   if (parts[1].size() == 0)
@@ -985,7 +1085,7 @@ parse_arg_compression(const std::string &s,
   available_compression_methods.push_back("analyze_header_removal");
 
   ti.m_compression_list[id] = COMPRESSION_UNSPECIFIED;
-  ba::to_lower(parts[1]);
+  balg::to_lower(parts[1]);
 
   if (parts[1] == "zlib")
     ti.m_compression_list[id] = COMPRESSION_ZLIB;
@@ -998,20 +1098,6 @@ parse_arg_compression(const std::string &s,
 
   if (parts[1] == "analyze_header_removal")
       ti.m_compression_list[id] = COMPRESSION_ANALYZE_HEADER_REMOVAL;
-
-#ifdef HAVE_LZO
-  if ((parts[1] == "lzo") || (parts[1] == "lzo1x"))
-    ti.m_compression_list[id] = COMPRESSION_LZO;
-  else
-    available_compression_methods.push_back("lzo");
-#endif
-
-#ifdef HAVE_BZLIB_H
-  if ((parts[1] == "bz2") || (parts[1] == "bzlib"))
-    ti.m_compression_list[id] = COMPRESSION_BZ2;
-  else
-    available_compression_methods.push_back("bz2");
-#endif
 
   if (ti.m_compression_list[id] == COMPRESSION_UNSPECIFIED)
     mxerror(boost::format(Y("'%1%' is an unsupported argument for --compression. Available compression methods are: %2%\n")) % s % join(", ", available_compression_methods));
@@ -1041,7 +1127,7 @@ parse_arg_language(const std::string &s,
   }
 
   int64_t id = 0;
-  if (!parse_int(parts[0], id))
+  if (!parse_number(parts[0], id))
     mxerror(boost::format(Y("Invalid track ID specified in '--%1% %2%'.\n")) % opt % s);
 
   if (check) {
@@ -1073,7 +1159,7 @@ parse_arg_sub_charset(const std::string &s,
     mxerror(boost::format(Y("Invalid sub charset option. No track ID specified in '--sub-charset %1%'.\n")) % s);
 
   int64_t id = 0;
-  if (!parse_int(parts[0], id))
+  if (!parse_number(parts[0], id))
     mxerror(boost::format(Y("Invalid track ID specified in '--sub-charset %1%'.\n")) % s);
 
   if (parts[1].empty())
@@ -1097,7 +1183,7 @@ parse_arg_tags(const std::string &s,
     mxerror(boost::format(Y("Invalid tags option. No track ID specified in '%1% %2%'.\n")) % opt % s);
 
   int64_t id = 0;
-  if (!parse_int(parts[0], id))
+  if (!parse_number(parts[0], id))
     mxerror(boost::format(Y("Invalid track ID specified in '%1% %2%'.\n")) % opt % s);
 
   if (parts[1].empty())
@@ -1121,7 +1207,7 @@ parse_arg_fourcc(const std::string &s,
     mxerror(boost::format(Y("FourCC: Missing track ID in '%1% %2%'.\n")) % opt % orig);
 
   int64_t id = 0;
-  if (!parse_int(parts[0], id))
+  if (!parse_number(parts[0], id))
     mxerror(boost::format(Y("FourCC: Invalid track ID in '%1% %2%'.\n")) % opt % orig);
 
   if (parts[1].size() != 4)
@@ -1148,10 +1234,10 @@ parse_arg_track_order(const std::string &s) {
     if (pair.size() != 2)
       mxerror(boost::format(Y("'%1%' is not a valid pair of file ID and track ID in '--track-order %2%'.\n")) % parts[i] % s);
 
-    if (!parse_int(pair[0], to.file_id))
+    if (!parse_number(pair[0], to.file_id))
       mxerror(boost::format(Y("'%1%' is not a valid file ID in '--track-order %2%'.\n")) % pair[0] % s);
 
-    if (!parse_int(pair[1], to.track_id))
+    if (!parse_number(pair[1], to.track_id))
       mxerror(boost::format(Y("'%1%' is not a valid file ID in '--track-order %2%'.\n")) % pair[1] % s);
 
     g_track_order.push_back(to);
@@ -1187,14 +1273,10 @@ parse_arg_append_to(const std::string &s) {
     std::vector<std::string> parts = split(entry, ":");
 
     if (   (parts.size() != 4)
-        || !parse_int(parts[0], mapping.src_file_id)
-        || !parse_int(parts[1], mapping.src_track_id)
-        || !parse_int(parts[2], mapping.dst_file_id)
-        || !parse_int(parts[3], mapping.dst_track_id)
-        || (0 > mapping.src_file_id)
-        || (0 > mapping.src_track_id)
-        || (0 > mapping.dst_file_id)
-        || (0 > mapping.dst_track_id))
+        || !parse_number(parts[0], mapping.src_file_id)
+        || !parse_number(parts[1], mapping.src_track_id)
+        || !parse_number(parts[2], mapping.dst_file_id)
+        || !parse_number(parts[3], mapping.dst_track_id))
       mxerror(boost::format(Y("'%1%' is not a valid mapping of file and track IDs in '--append-to %2%'.\n")) % entry % s);
 
     g_append_mapping.push_back(mapping);
@@ -1217,7 +1299,7 @@ parse_arg_append_mode(const std::string &s) {
 
    The argument must be a tuple consisting of a track ID and the default
    duration separated by a colon. The duration must be postfixed by 'ms',
-   'us', 'ns' or 'fps' (see \c parse_number_with_unit).
+   'us', 'ns', 'fps', 'p' or 'i' (see \c parse_number_with_unit).
 */
 static void
 parse_arg_default_duration(const std::string &s,
@@ -1227,7 +1309,7 @@ parse_arg_default_duration(const std::string &s,
     mxerror(boost::format(Y("'%1%' is not a valid tuple of track ID and default duration in '--default-duration %1%'.\n")) % s);
 
   int64_t id = 0;
-  if (!parse_int(parts[0], id))
+  if (!parse_number(parts[0], id))
     mxerror(boost::format(Y("'%1%' is not a valid track ID in '--default-duration %2%'.\n")) % parts[0] % s);
 
   ti.m_default_durations[id] = parse_number_with_unit(parts[1], "default duration", "--default-duration");
@@ -1248,11 +1330,11 @@ parse_arg_nalu_size_length(const std::string &s,
     mxerror(boost::format(Y("'%1%' is not a valid tuple of track ID and NALU size length in '--nalu-size-length %1%'.\n")) % s);
 
   int64_t id = 0;
-  if (!parse_int(parts[0], id))
+  if (!parse_number(parts[0], id))
     mxerror(boost::format(Y("'%1%' is not a valid track ID in '--nalu-size-length %2%'.\n")) % parts[0] % s);
 
   int64_t nalu_size_length;
-  if (!parse_int(parts[1], nalu_size_length) || (2 > nalu_size_length) || (4 < nalu_size_length))
+  if (!parse_number(parts[1], nalu_size_length) || (2 > nalu_size_length) || (4 < nalu_size_length))
     mxerror(boost::format(Y("The NALU size length must be a number between 2 and 4 inclusively in '--nalu-size-length %1%'.\n")) % s);
 
   if ((3 == nalu_size_length) && !s_nalu_size_length_3_warning_printed) {
@@ -1262,6 +1344,33 @@ parse_arg_nalu_size_length(const std::string &s,
 
   ti.m_nalu_size_lengths[id] = nalu_size_length;
 }
+
+/** \brief Parse the \c --fix-bitstream-timing-information argument
+
+   The argument must have the form \c TID or \c TID:boolean. The former
+   is equivalent to \c TID:1.
+*/
+static void
+parse_arg_fix_bitstream_frame_rate(const std::string &s,
+                                   track_info_c &ti) {
+  bool fix   = true;
+  auto parts = split(s, ":", 2);
+  int64_t id = 0;
+
+  strip(parts);
+  if (!parse_number(parts[0], id))
+    mxerror(boost::format(Y("Invalid track ID specified in '--fix-bitstream-timing-information %1%'.\n")) % s);
+
+  try {
+    if (2 == parts.size())
+      fix = parse_bool(parts[1]);
+  } catch (...) {
+    mxerror(boost::format(Y("Invalid boolean option specified in '--fix-bitstream-timing-information %1%'.\n")) % s);
+  }
+
+  ti.m_fix_bitstream_frame_rate_flags[id] = fix;
+}
+
 
 /** \brief Parse the argument for \c --blockadd
 
@@ -1276,11 +1385,11 @@ parse_arg_max_blockadd_id(const std::string &s,
     mxerror(boost::format(Y("'%1%' is not a valid pair of track ID and block additional in '--blockadd %1%'.\n")) % s);
 
   int64_t id = 0;
-  if (!parse_int(parts[0], id))
+  if (!parse_number(parts[0], id))
     mxerror(boost::format(Y("'%1%' is not a valid track ID in '--blockadd %2%'.\n")) % parts[0] % s);
 
   int64_t max_blockadd_id = 0;
-  if (!parse_int(parts[1], max_blockadd_id) || (max_blockadd_id < 0))
+  if (!parse_number(parts[1], max_blockadd_id) || (max_blockadd_id < 0))
     mxerror(boost::format(Y("'%1%' is not a valid block additional max in '--blockadd %2%'.\n")) % parts[1] % s);
 
   ti.m_max_blockadd_ids[id] = max_blockadd_id;
@@ -1298,7 +1407,7 @@ parse_arg_aac_is_sbr(const std::string &s,
   std::vector<std::string> parts = split(s, ":", 2);
 
   int64_t id = 0;
-  if (!parse_int(parts[0], id) || (id < 0))
+  if (!parse_number(parts[0], id) || (id < 0))
     mxerror(boost::format(Y("Invalid track ID specified in '--aac-is-sbr %1%'.\n")) % s);
 
   if ((parts.size() == 2) && (parts[1] != "0") && (parts[1] != "1"))
@@ -1324,7 +1433,7 @@ parse_arg_priority(const std::string &arg) {
 static void
 parse_arg_previous_segment_uid(const std::string &param,
                                const std::string &arg) {
-  if (g_seguid_link_previous.is_set())
+  if (g_seguid_link_previous)
     mxerror(boost::format(Y("The previous UID was already given in '%1% %2%'.\n")) % param % arg);
 
   try {
@@ -1337,7 +1446,7 @@ parse_arg_previous_segment_uid(const std::string &param,
 static void
 parse_arg_next_segment_uid(const std::string &param,
                            const std::string &arg) {
-  if (g_seguid_link_next.is_set())
+  if (g_seguid_link_next)
     mxerror(boost::format(Y("The next UID was already given in '%1% %2%'.\n")) % param % arg);
 
   try {
@@ -1366,14 +1475,14 @@ parse_arg_cluster_length(std::string arg) {
   if (0 <= idx) {
     arg.erase(idx);
     int64_t max_ms_per_cluster;
-    if (!parse_int(arg, max_ms_per_cluster) || (100 > max_ms_per_cluster) || (32000 < max_ms_per_cluster))
+    if (!parse_number(arg, max_ms_per_cluster) || (100 > max_ms_per_cluster) || (32000 < max_ms_per_cluster))
       mxerror(boost::format(Y("Cluster length '%1%' out of range (100..32000).\n")) % arg);
 
     g_max_ns_per_cluster     = max_ms_per_cluster * 1000000;
     g_max_blocks_per_cluster = 65535;
 
   } else {
-    if (!parse_int(arg, g_max_blocks_per_cluster) || (0 > g_max_blocks_per_cluster) || (65535 < g_max_blocks_per_cluster))
+    if (!parse_number(arg, g_max_blocks_per_cluster) || (0 > g_max_blocks_per_cluster) || (65535 < g_max_blocks_per_cluster))
       mxerror(boost::format(Y("Cluster length '%1%' out of range (0..65535).\n")) % arg);
 
     g_max_ns_per_cluster = 32000000000ull;
@@ -1450,10 +1559,8 @@ parse_arg_chapters(const std::string &param,
   if (g_chapter_file_name != "")
     mxerror(boost::format(Y("Only one chapter file allowed in '%1% %2%'.\n")) % param % arg);
 
-  delete g_kax_chapters;
-
   g_chapter_file_name = arg;
-  g_kax_chapters      = parse_chapters(g_chapter_file_name, 0, -1, 0, g_chapter_language.c_str(), g_chapter_charset.c_str(), false, NULL, &g_tags_from_cue_chapters);
+  g_kax_chapters      = parse_chapters(g_chapter_file_name, 0, -1, 0, g_chapter_language.c_str(), g_chapter_charset.c_str(), false, nullptr, &g_tags_from_cue_chapters);
 }
 
 static void
@@ -1463,7 +1570,7 @@ parse_arg_segmentinfo(const std::string &param,
     mxerror(boost::format(Y("Only one segment info file allowed in '%1% %2%'.\n")) % param % arg);
 
   g_segmentinfo_file_name = arg;
-  g_kax_info_chap         = parse_segmentinfo(arg, false);
+  g_kax_info_chap         = mtx::xml::ebml_segmentinfo_converter_c::parse_file(arg, false);
 
   handle_segmentinfo();
 }
@@ -1473,8 +1580,8 @@ parse_arg_timecode_scale(const std::string &arg) {
   if (TIMECODE_SCALE_MODE_NORMAL != g_timecode_scale_mode)
     mxerror(Y("'--timecode-scale' was used more than once.\n"));
 
-  int64_t temp =0 ;
-  if (!parse_int(arg, temp))
+  int64_t temp = 0;
+  if (!parse_number(arg, temp))
     mxerror(Y("The argument to '--timecode-scale' must be a number.\n"));
 
   if (-1 == temp)
@@ -1502,7 +1609,7 @@ static void
 parse_arg_attachments(const std::string &param,
                       std::string arg,
                       track_info_c &ti) {
-  if (ba::starts_with(arg, "!")) {
+  if (balg::starts_with(arg, "!")) {
     arg.erase(0, 1);
     ti.m_attach_mode_list.set_reversed();
   }
@@ -1520,7 +1627,7 @@ parse_arg_attachments(const std::string &param,
       mxerror(boost::format(Y("The argument '%1%' to '%2%' is invalid: too many colons in element '%3%'.\n")) % arg % param % elements[i]);
 
     int64_t id;
-    if (!parse_int(pair[0], id))
+    if (!parse_number(pair[0], id))
       mxerror(boost::format(Y("The argument '%1%' to '%2%' is invalid: '%3%' is not a valid track ID.\n")) % arg % param % pair[0]);
 
     if (pair[1] == "all")
@@ -1556,6 +1663,8 @@ handle_file_name_arg(const std::string &this_arg,
     if (!end_found)
       mxerror(Y("The closing parenthesis ')' are missing.\n"));
 
+    ti->m_disable_multi_file = true;
+
   } else
     file_names.push_back(this_arg);
 
@@ -1583,6 +1692,7 @@ handle_file_name_arg(const std::string &this_arg,
   filelist_t file;
   file.all_names = file_names;
   file.name      = file_names[0];
+  file.id        = g_files.size();
 
   if (file_names.size() == 1) {
     if ('+' == this_arg[0]) {
@@ -1611,6 +1721,11 @@ handle_file_name_arg(const std::string &this_arg,
     mxerror(boost::format(Y("The file '%1%' has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and "
                             "contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n")) % file.name);
 
+  if (file.is_playlist) {
+    file.name   = file.playlist_mpls_in->get_file_name();
+    ti->m_fname = file.name;
+  }
+
   if (FILE_TYPE_CHAPTERS != file.type) {
     file.ti = ti;
 
@@ -1636,12 +1751,17 @@ handle_file_name_arg(const std::string &this_arg,
    pass looks for '<tt>--output-file</tt>'. The fourth pass handles
    everything else.
 */
-static void
-parse_args(std::vector<std::string> args) {
+std::vector<std::string>
+parse_common_args(std::vector<std::string> args) {
   set_usage();
   while (handle_common_cli_args(args, ""))
     set_usage();
 
+  return args;
+}
+
+static void
+parse_args(std::vector<std::string> args) {
   // Check if only information about the file is wanted. In this mode only
   // two parameters are allowed: the --identify switch and the file.
   if ((   (2 == args.size())
@@ -1707,12 +1827,6 @@ parse_args(std::vector<std::string> args) {
         mxerror(Y("Only one output file allowed.\n"));
 
       g_outfile = next_arg;
-      sit++;
-
-    } else if (this_arg == "--engage") {
-      if (no_next_arg)
-        mxerror(Y("'--engage' lacks its argument.\n"));
-      engage_hacks(next_arg);
       sit++;
 
     } else if ((this_arg == "-w") || (this_arg == "--webm"))
@@ -1785,7 +1899,7 @@ parse_args(std::vector<std::string> args) {
       if ((no_next_arg) || (next_arg[0] == 0))
         mxerror(Y("'--split-max-files' lacks the number of files.\n"));
 
-      if (!parse_int(next_arg, g_split_max_num_files) || (2 > g_split_max_num_files))
+      if (!parse_number(next_arg, g_split_max_num_files) || (2 > g_split_max_num_files))
         mxerror(Y("Wrong argument to '--split-max-files'.\n"));
 
       sit++;
@@ -1968,35 +2082,35 @@ parse_args(std::vector<std::string> args) {
 
     else if ((this_arg == "-a") || (this_arg == "--atracks") || (this_arg == "--audio-tracks")) {
       if (no_next_arg)
-        mxerror(boost::format(Y("'%1%' lacks the track number(s).\n")) % this_arg);
+        mxerror(boost::format(Y("'%1%' lacks the track numbers.\n")) % this_arg);
 
       parse_arg_tracks(next_arg, ti->m_atracks, this_arg);
       sit++;
 
     } else if ((this_arg == "-d") || (this_arg == "--vtracks") || (this_arg == "--video-tracks")) {
       if (no_next_arg)
-        mxerror(boost::format(Y("'%1%' lacks the track number(s).\n")) % this_arg);
+        mxerror(boost::format(Y("'%1%' lacks the track numbers.\n")) % this_arg);
 
       parse_arg_tracks(next_arg, ti->m_vtracks, this_arg);
       sit++;
 
     } else if ((this_arg == "-s") || (this_arg == "--stracks") || (this_arg == "--sub-tracks") || (this_arg == "--subtitle-tracks")) {
       if (no_next_arg)
-        mxerror(boost::format(Y("'%1%' lacks the track number(s).\n")) % this_arg);
+        mxerror(boost::format(Y("'%1%' lacks the track numbers.\n")) % this_arg);
 
       parse_arg_tracks(next_arg, ti->m_stracks, this_arg);
       sit++;
 
     } else if ((this_arg == "-b") || (this_arg == "--btracks") || (this_arg == "--button-tracks")) {
       if (no_next_arg)
-        mxerror(boost::format(Y("'%1%' lacks the track number(s).\n")) % this_arg);
+        mxerror(boost::format(Y("'%1%' lacks the track numbers.\n")) % this_arg);
 
       parse_arg_tracks(next_arg, ti->m_btracks, this_arg);
       sit++;
 
     } else if ((this_arg == "--track-tags")) {
       if (no_next_arg)
-        mxerror(boost::format(Y("'%1%' lacks the track number(s).\n")) % this_arg);
+        mxerror(boost::format(Y("'%1%' lacks the track numbers.\n")) % this_arg);
 
       parse_arg_tracks(next_arg, ti->m_track_tags, this_arg);
       sit++;
@@ -2172,6 +2286,13 @@ parse_args(std::vector<std::string> args) {
       parse_arg_nalu_size_length(next_arg, *ti);
       sit++;
 
+    } else if (this_arg == "--fix-bitstream-timing-information") {
+      if (no_next_arg)
+        mxerror(Y("'--fix-bitstream-timing-information' lacks its argument.\n"));
+
+      parse_arg_fix_bitstream_frame_rate(next_arg, *ti);
+      sit++;
+
     } else if (this_arg == "+")
       append_next_file = true;
 
@@ -2192,11 +2313,132 @@ parse_args(std::vector<std::string> args) {
     mxerror(Y("No input files were given. No output will be created.\n"));
 }
 
-/** \brief Initialize global variables
-*/
 static void
-init_globals() {
-  clear_list_of_unique_uint32(UNIQUE_ALL_IDS);
+display_playlist_scan_progress(size_t num_scanned,
+                               size_t total_num_to_scan) {
+  static auto s_no_progress = debugging_option_c{"no_progress"};
+
+  if (s_no_progress)
+    return;
+
+  auto current_percentage = (num_scanned * 1000 + 5) / total_num_to_scan / 10;
+  mxinfo(boost::format(Y("Progress: %1%%%%2%")) % current_percentage % "\r");
+}
+
+static filelist_t
+create_filelist_for_playlist(bfs::path const &file_name,
+                             size_t previous_filelist_id,
+                             size_t current_filelist_id,
+                             size_t idx,
+                             track_info_c const &src_ti) {
+  auto new_filelist                          = filelist_t{};
+  new_filelist.name                          = file_name.string();
+  new_filelist.all_names                     = std::vector<std::string>{ new_filelist.name };
+  new_filelist.size                          = bfs::file_size(file_name);
+  new_filelist.id                            = current_filelist_id;
+  new_filelist.appending                     = true;
+  new_filelist.is_playlist                   = true;
+  new_filelist.playlist_index                = idx;
+  new_filelist.playlist_previous_filelist_id = previous_filelist_id;
+
+  get_file_type(new_filelist);
+
+  if (FILE_TYPE_IS_UNKNOWN == new_filelist.type)
+    mxerror(boost::format(Y("The file '%1%' has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and "
+                            "contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n")) % new_filelist.name);
+
+  new_filelist.ti                       = new track_info_c;
+  new_filelist.ti->m_fname              = new_filelist.name;
+  new_filelist.ti->m_disable_multi_file = true;
+  new_filelist.ti->m_no_chapters        = true;
+  new_filelist.ti->m_no_global_tags     = true;
+  new_filelist.ti->m_atracks            = src_ti.m_atracks;
+  new_filelist.ti->m_vtracks            = src_ti.m_vtracks;
+  new_filelist.ti->m_stracks            = src_ti.m_stracks;
+  new_filelist.ti->m_btracks            = src_ti.m_btracks;
+  new_filelist.ti->m_track_tags         = src_ti.m_track_tags;
+
+  return new_filelist;
+}
+
+static void
+add_filelists_for_playlists() {
+  auto num_playlists = 0u, num_files_in_playlists = 0u;
+
+  for (auto const &filelist : g_files) {
+    if (!filelist.is_playlist)
+      continue;
+
+    num_playlists          += 1;
+    num_files_in_playlists += filelist.playlist_mpls_in->get_file_names().size();
+  }
+
+  if (num_playlists == num_files_in_playlists)
+    return;
+
+  if (g_gui_mode)
+    mxinfo(boost::format("#GUI#begin_scanning_playlists#num_playlists=%1%#num_files_in_playlists=%2%\n") % num_playlists % num_files_in_playlists);
+  mxinfo(boost::format(NY("Scanning %1% files in %2% playlist.\n", "Scanning %1% files in %2% playlists.\n", num_playlists)) % num_files_in_playlists % num_playlists);
+
+  std::vector<filelist_t> new_filelists;
+  auto num_scanned_playlists = 0u;
+
+  display_playlist_scan_progress(0, num_files_in_playlists);
+
+  for (auto filelist = g_files.begin(), filelist_end = g_files.end(); filelist != filelist_end; ++filelist) {
+    if (!filelist->is_playlist)
+      continue;
+
+    auto &file_names          = filelist->playlist_mpls_in->get_file_names();
+    auto previous_filelist_id = filelist->id;
+    auto const &play_items    = filelist->playlist_mpls_in->get_mpls_parser().get_playlist().items;
+
+    assert(file_names.size() == play_items.size());
+
+    filelist->restricted_timecode_min = play_items[0].in_time;
+    filelist->restricted_timecode_max = play_items[0].out_time;
+
+    for (size_t idx = 1, idx_end = file_names.size(); idx < idx_end; ++idx) {
+      auto current_filelist_id             = g_files.size() + new_filelists.size();
+      auto new_filelist                    = create_filelist_for_playlist(file_names[idx], previous_filelist_id, current_filelist_id, idx, *filelist->ti);
+      new_filelist.restricted_timecode_min = play_items[idx].in_time;
+      new_filelist.restricted_timecode_max = play_items[idx].out_time;
+
+      new_filelists.push_back(new_filelist);
+
+      previous_filelist_id = new_filelist.id;
+
+      display_playlist_scan_progress(++num_scanned_playlists, num_files_in_playlists);
+    }
+  }
+
+  brng::copy(new_filelists, std::back_inserter(g_files));
+
+  display_playlist_scan_progress(num_files_in_playlists, num_files_in_playlists);
+
+  if (g_gui_mode)
+    mxinfo("#GUI#end_scanning_playlists\n");
+  mxinfo(boost::format(Y("Done scanning playlists.\n")));
+}
+
+static void
+create_append_mappings_for_playlists() {
+  for (auto &src_file : g_files) {
+    if (!src_file.is_playlist || !src_file.playlist_index)
+      continue;
+
+    // Default mapping.
+    for (auto track_id : src_file.reader->m_used_track_ids) {
+      append_spec_t new_amap;
+
+      new_amap.src_file_id  = src_file.id;
+      new_amap.src_track_id = track_id;
+      new_amap.dst_file_id  = src_file.playlist_previous_filelist_id;
+      new_amap.dst_track_id = track_id;
+
+      g_append_mapping.push_back(new_amap);
+    }
+  }
 }
 
 /** \brief Global program initialization
@@ -2205,9 +2447,12 @@ init_globals() {
    For Unix like systems a signal handler is installed. The locale's
    \c LC_MESSAGES is set.
 */
-static void
-setup() {
-  mtx_common_init();
+static std::vector<std::string>
+setup(int argc,
+      char **argv) {
+  clear_list_of_unique_numbers(UNIQUE_ALL_IDS);
+
+  mtx_common_init("mkvmerge", argv[0]);
   g_kax_tracks = new KaxTracks();
 
 #if defined(SYS_UNIX) || defined(COMP_CYGWIN) || defined(SYS_APPLE)
@@ -2215,7 +2460,11 @@ setup() {
   signal(SIGINT, sighandler);
 #endif
 
-  g_cluster_helper = new cluster_helper_c();
+  auto args = parse_common_args(command_line_utf8(argc, argv));
+
+  g_cluster_helper = new cluster_helper_c;
+
+  return args;
 }
 
 /** \brief Setup and high level program control
@@ -2227,17 +2476,32 @@ setup() {
 int
 main(int argc,
      char **argv) {
-  init_globals();
-  setup();
+  auto args = setup(argc, argv);
 
-  parse_args(command_line_utf8(argc, argv));
+  parse_args(args);
 
   int64_t start = get_current_time_millis();
 
+  add_filelists_for_playlists();
   create_readers();
 
-  if (g_packetizers.empty() && !g_files.empty())
-    mxerror(Y("No streams to output were found. Aborting.\n"));
+  if (!g_identifying) {
+    create_packetizers();
+    if (g_packetizers.empty() && !g_files.empty())
+      mxerror(Y("No streams to output were found. Aborting.\n"));
+
+    check_track_id_validity();
+    create_append_mappings_for_playlists();
+    check_append_mapping();
+    calc_attachment_sizes();
+    calc_max_chapter_size();
+  }
+
+  // Finally parse the chapter splitting argument.
+  if (!g_splitting_by_chapters_arg.empty())
+    parse_arg_split_chapters(g_splitting_by_chapters_arg);
+
+  g_cluster_helper->dump_split_points();
 
   create_next_output_file();
   main_loop();

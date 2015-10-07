@@ -41,13 +41,21 @@ static const struct {
   { ENGAGE_MERGE_TRUEHD_FRAMES,          "merge_truehd_frames"          },
   { ENGAGE_REMOVE_BITSTREAM_AR_INFO,     "remove_bitstream_ar_info"     },
   { ENGAGE_VOBSUB_SUBPIC_STOP_CMDS,      "vobsub_subpic_stop_cmds"      },
-  { 0,                                   NULL },
+  { ENGAGE_NO_CUE_DURATION,              "no_cue_duration"              },
+  { ENGAGE_NO_CUE_RELATIVE_POSITION,     "no_cue_relative_position"     },
+  { 0,                                   nullptr },
 };
 static std::vector<bool> s_engaged_hacks(ENGAGE_MAX_IDX + 1, false);
 
 bool
 hack_engaged(unsigned int id) {
   return (s_engaged_hacks.size() > id) && s_engaged_hacks[id];
+}
+
+void
+engage_hack(unsigned int id) {
+  if (s_engaged_hacks.size() > id)
+    s_engaged_hacks[id] = true;
 }
 
 void
@@ -58,7 +66,7 @@ engage_hacks(const std::string &hacks) {
   for (aidx = 0; engage_args.size() > aidx; aidx++)
     if (engage_args[aidx] == "list") {
       mxinfo(Y("Valid hacks are:\n"));
-      for (hidx = 0; NULL != s_available_hacks[hidx].name; ++hidx)
+      for (hidx = 0; s_available_hacks[hidx].name; ++hidx)
         mxinfo(boost::format("%1%\n") % s_available_hacks[hidx].name);
       mxexit(0);
 
@@ -76,7 +84,7 @@ engage_hacks(const std::string &hacks) {
 
   for (aidx = 0; engage_args.size() > aidx; aidx++) {
     bool valid_hack = false;
-    for (hidx = 0; s_available_hacks[hidx].name != NULL; hidx++)
+    for (hidx = 0; s_available_hacks[hidx].name; hidx++)
       if (engage_args[aidx] == s_available_hacks[hidx].name) {
         valid_hack = true;
         s_engaged_hacks[s_available_hacks[hidx].id] = true;
@@ -85,5 +93,16 @@ engage_hacks(const std::string &hacks) {
 
     if (!valid_hack)
       mxerror(boost::format(Y("'%1%' is not a valid hack.\n")) % engage_args[aidx]);
+  }
+}
+
+void
+init_hacks() {
+  std::vector<std::string> env_vars = { "MKVTOOLNIX_ENGAGE", "MTX_ENGAGE", balg::to_upper_copy(get_program_name()) + "_ENGAGE" };
+
+  for (auto &name : env_vars) {
+    auto value = getenv(name.c_str());
+    if (value)
+      engage_hacks(value);
   }
 }

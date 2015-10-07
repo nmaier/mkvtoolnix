@@ -20,6 +20,8 @@
 #include "common/dirac.h"
 #include "common/endian.h"
 
+#define MAX_STANDARD_VIDEO_FORMAT 23
+
 dirac::sequence_header_t::sequence_header_t() {
   memset(this, 0, sizeof(dirac::sequence_header_t));
 }
@@ -33,14 +35,14 @@ dirac::frame_t::frame_t()
 
 void
 dirac::frame_t::init() {
-  data                     = memory_cptr(NULL);
+  data.reset();
   timecode                 = -1;
   duration                 = 0;
   contains_sequence_header = false;
 }
 
 static unsigned int
-read_uint(bit_cursor_c &bc) {
+read_uint(bit_reader_c &bc) {
   int count          = 0;
   unsigned int value = 0;
 
@@ -72,7 +74,7 @@ dirac::parse_sequence_header(const unsigned char *buf,
     unsigned int top_offset;
   };
 
-  static const standard_video_format standard_video_formats[17] = {
+  static const standard_video_format standard_video_formats[MAX_STANDARD_VIDEO_FORMAT] = {
     {  640,  480, false, false, 24000, 1001,  1,  1,  640,  480, 0, 0, },
     {  176,  120, false, false, 15000, 1001, 10, 11,  176,  120, 0, 0, },
     {  176,  144, false,  true,    25,    2, 12, 11,  176,  144, 0, 0, },
@@ -90,6 +92,12 @@ dirac::parse_sequence_header(const unsigned char *buf,
     { 1920, 1080, false,  true,    50,    1,  1,  1, 1920, 1080, 0, 0, },
     { 2048, 1080, false,  true,    24,    1,  1,  1, 2048, 1080, 0, 0, },
     { 4096, 2160, false,  true,    24,    1,  1,  1, 2048, 1536, 0, 0, },
+    { 3840, 2160, false,  true, 60000, 1001,  1,  1, 3840, 2160, 0, 0, },
+    { 3840, 2160, false,  true,    50,    1,  1,  1, 3840, 2160, 0, 0, },
+    { 7680, 4320, false,  true, 60000, 1001,  1,  1, 7680, 4320, 0, 0, },
+    { 7680, 4320, false,  true,    50,    1,  1,  1, 7680, 4320, 0, 0, },
+    { 1920, 1080, false,  true, 24000, 1001,  1,  1, 1920, 1080, 0, 0, },
+    {  720,  486,  true, false, 30000, 1001, 10, 11,  720,  486, 0, 0, },
   };
 
   static const struct { int numerator, denominator; } standard_frame_rates[11] = {
@@ -117,7 +125,7 @@ dirac::parse_sequence_header(const unsigned char *buf,
   };
 
   try {
-    bit_cursor_c bc(buf, size);
+    bit_reader_c bc(buf, size);
     dirac::sequence_header_t hdr;
 
     bc.skip_bits((4 + 1 + 4 + 4) * 8); // Marker, type, next offset, previous offset
@@ -128,7 +136,7 @@ dirac::parse_sequence_header(const unsigned char *buf,
     hdr.level             = read_uint(bc);
 
     hdr.base_video_format = read_uint(bc);
-    if (17 < hdr.base_video_format)
+    if (MAX_STANDARD_VIDEO_FORMAT < hdr.base_video_format)
       hdr.base_video_format = 0;
 
     const standard_video_format &svf = standard_video_formats[hdr.base_video_format];
@@ -224,7 +232,7 @@ dirac::es_parser_c::add_bytes(unsigned char *buffer,
   size_t previous_pos         = 0;
   int64_t previous_stream_pos = m_stream_pos;
 
-  if (m_unparsed_buffer.is_set() && (0 != m_unparsed_buffer->get_size()))
+  if (m_unparsed_buffer && (0 != m_unparsed_buffer->get_size()))
     cursor.add_slice(m_unparsed_buffer);
   cursor.add_slice(buffer, size);
 
@@ -279,18 +287,18 @@ dirac::es_parser_c::add_bytes(unsigned char *buffer,
     m_unparsed_buffer = new_unparsed_buffer;
 
   } else
-    m_unparsed_buffer = memory_cptr(NULL);
+    m_unparsed_buffer.reset();
 }
 
 void
 dirac::es_parser_c::flush() {
-  if (m_unparsed_buffer.is_set() && (4 <= m_unparsed_buffer->get_size())) {
+  if (m_unparsed_buffer && (4 <= m_unparsed_buffer->get_size())) {
     uint32_t marker = get_uint32_be(m_unparsed_buffer->get_buffer());
     if (DIRAC_SYNC_WORD == marker)
-      handle_unit(clone_memory(m_unparsed_buffer->get_buffer(), m_unparsed_buffer->get_size()));
+      handle_unit(memory_c::clone(m_unparsed_buffer->get_buffer(), m_unparsed_buffer->get_size()));
   }
 
-  m_unparsed_buffer = memory_cptr(NULL);
+  m_unparsed_buffer.reset();
 
   flush_frame();
 }
@@ -373,7 +381,7 @@ dirac::es_parser_c::handle_unknown_unit(memory_cptr packet) {
 
 void
 dirac::es_parser_c::flush_frame() {
-  if (!m_current_frame.is_set())
+  if (!m_current_frame)
     return;
 
   if (!m_pre_frame_extra_data.empty() || !m_post_frame_extra_data.empty())
@@ -384,7 +392,7 @@ dirac::es_parser_c::flush_frame() {
 
   m_frames.push_back(m_current_frame);
 
-  m_current_frame = frame_cptr(NULL);
+  m_current_frame.reset();
 }
 
 void
@@ -448,4 +456,3 @@ void
 dirac::es_parser_c::add_post_frame_extra_data(memory_cptr packet) {
   m_post_frame_extra_data.push_back(memory_cptr(packet->clone()));
 }
-

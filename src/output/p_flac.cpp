@@ -19,9 +19,9 @@
 #include <vorbis/codec.h>
 
 #include "common/checksums.h"
+#include "common/codec.h"
 #include "common/flac.h"
-#include "common/matroska.h"
-#include "merge/pr_generic.h"
+#include "merge/connection_checks.h"
 #include "output/p_flac.h"
 
 using namespace libmatroska;
@@ -58,7 +58,7 @@ flac_packetizer_c::~flac_packetizer_c() {
 void
 flac_packetizer_c::set_headers() {
   set_codec_id(MKV_A_FLAC);
-  set_codec_private(m_header->get_buffer(), m_header->get_size());
+  set_codec_private(m_header);
   set_audio_sampling_freq((float)m_stream_info.sample_rate);
   set_audio_channels(m_stream_info.channels);
   set_audio_bit_depth(m_stream_info.bits_per_sample);
@@ -87,7 +87,7 @@ connection_result_e
 flac_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                   std::string &error_message) {
   flac_packetizer_c *fsrc = dynamic_cast<flac_packetizer_c *>(src);
-  if (NULL == fsrc)
+  if (!fsrc)
     return CAN_CONNECT_NO_FORMAT;
 
   connect_check_a_samplerate(m_stream_info.sample_rate, fsrc->m_stream_info.sample_rate);
@@ -95,10 +95,10 @@ flac_packetizer_c::can_connect_to(generic_packetizer_c *src,
   connect_check_a_bitdepth(m_stream_info.bits_per_sample, fsrc->m_stream_info.bits_per_sample);
 
   if (   (m_header->get_size() != fsrc->m_header->get_size())
-      || !m_header.is_set()
-      || !fsrc->m_header.is_set()
+      || !m_header
+      || !fsrc->m_header
       || memcmp(m_header->get_buffer(), fsrc->m_header->get_buffer(), m_header->get_size())) {
-    error_message = (boost::format(Y("The FLAC header data is different for the two tracks (lengths: %1% and %2%)")) % m_header->get_size() % fsrc->m_header->get_size()).str();
+    error_message = (boost::format(Y("The codec's private data does not match (lengths: %1% and %2%).")) % m_header->get_size() % fsrc->m_header->get_size()).str();
     return CAN_CONNECT_MAYBE_CODECPRIVATE;
   }
 

@@ -6,7 +6,7 @@ class T_235wav_fmt_chunk_length < Test
   end
 
   def run
-    merge("data/simple/dts-sample.dts.wav")
+    merge("data/wav/dts-sample.dts.wav")
     return hash_tmp
   end
 end

@@ -17,6 +17,7 @@
 
 #include <avilib.h>
 
+#include "common/codec.h"
 #include "common/error.h"
 #include "common/id3.h"
 #include "input/r_ac3.h"
@@ -28,11 +29,14 @@ int
 ac3_reader_c::probe_file(mm_io_c *in,
                          uint64_t,
                          int64_t probe_size,
-                         int num_headers) {
+                         int num_headers,
+                         bool require_zero_offset) {
   try {
     in->setFilePointer(0, seek_beginning);
     skip_id3v2_tag(*in);
-    return (find_valid_headers(*in, probe_size, num_headers) != -1) ? 1 : 0;
+    int offset = find_valid_headers(*in, probe_size, num_headers);
+
+    return (require_zero_offset && (0 == offset)) || (!require_zero_offset && (0 <= offset));
 
   } catch (...) {
     return 0;
@@ -64,12 +68,15 @@ ac3_reader_c::read_headers() {
 
     m_in->setFilePointer(tag_size_start, seek_beginning);
 
+    ac3::parser_c parser;
+    parser.add_bytes(m_chunk->get_buffer(), init_read_len);
+    if (!parser.frame_available())
+      throw mtx::input::header_parsing_x();
+    m_ac3header = parser.get_frame();
+
   } catch (mtx::mm_io::exception &) {
     throw mtx::input::open_x();
   }
-
-  if (0 > find_ac3_header(m_chunk->get_buffer(), AC3_READ_SIZE, &m_ac3header, true))
-    throw mtx::input::header_parsing_x();
 
   m_ti.m_id       = 0;          // ID for this track.
 
@@ -84,7 +91,7 @@ ac3_reader_c::create_packetizer(int64_t) {
   if (!demuxing_requested('a', 0) || (NPTZR() != 0))
     return;
 
-  add_packetizer(new ac3_packetizer_c(this, m_ti, m_ac3header.sample_rate, m_ac3header.channels, m_ac3header.bsid));
+  add_packetizer(new ac3_packetizer_c(this, m_ti, m_ac3header.m_sample_rate, m_ac3header.m_channels, m_ac3header.m_bs_id));
   show_packetizer_info(0, PTZR0);
 }
 
@@ -104,7 +111,7 @@ ac3_reader_c::read(generic_packetizer_c *,
 void
 ac3_reader_c::identify() {
   id_result_container();
-  id_result_track(0, ID_RESULT_TRACK_AUDIO, 16 == m_ac3header.bsid ? "EAC3" : "AC3");
+  id_result_track(0, ID_RESULT_TRACK_AUDIO, codec_c::get_name(CT_A_AC3, "AC3"));
 }
 
 int
@@ -117,8 +124,9 @@ ac3_reader_c::find_valid_headers(mm_io_c &in,
     in.setFilePointer(0, seek_beginning);
     skip_id3v2_tag(in);
 
+    ac3::parser_c parser;
     int num_read = in.read(buf->get_buffer(), probe_range);
-    int pos      = find_consecutive_ac3_headers(buf->get_buffer(), num_read, num_headers);
+    int pos      = parser.find_consecutive_frames(buf->get_buffer(), num_read, num_headers);
 
     in.setFilePointer(0, seek_beginning);
 

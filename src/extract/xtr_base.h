@@ -10,25 +10,34 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __XTR_BASE_H
-#define __XTR_BASE_H
+#ifndef MTX_XTR_BASE_H
+#define MTX_XTR_BASE_H
 
 #include "common/common_pch.h"
 
 #include <matroska/KaxBlock.h>
 #include <matroska/KaxTracks.h>
 
-#include "common/compression.h"
+#include "common/content_decoder.h"
+#include "common/timecode.h"
 #include "extract/mkvextract.h"
 
 using namespace libmatroska;
+
+struct xtr_frame_t {
+  memory_cptr &frame;
+  KaxBlockAdditions *additions;
+  int64_t timecode, duration, bref, fref;
+  bool keyframe, discardable, references_valid;
+  timecode_c discard_duration;
+};
 
 class xtr_base_c {
 public:
   std::string m_codec_id, m_file_name, m_container_name;
   xtr_base_c *m_master;
   mm_io_cptr m_out;
-  int64_t m_tid;
+  int64_t m_tid, m_track_num;
   int64_t m_default_duration;
 
   int64_t m_bytes_written;
@@ -36,13 +45,16 @@ public:
   content_decoder_c m_content_decoder;
   bool m_content_decoder_initialized;
 
+  bool m_debug;
+
 public:
-  xtr_base_c(const std::string &codec_id, int64_t tid, track_spec_t &tspec, const char *container_name = NULL);
+  xtr_base_c(const std::string &codec_id, int64_t tid, track_spec_t &tspec, const char *container_name = nullptr);
   virtual ~xtr_base_c();
 
+  void decode_and_handle_frame(xtr_frame_t &f);
+
   virtual void create_file(xtr_base_c *_master, KaxTrackEntry &track);
-  virtual void handle_frame(memory_cptr &frame, KaxBlockAdditions *additions, int64_t timecode, int64_t duration, int64_t bref, int64_t fref,
-                            bool keyframe, bool discardable, bool references_valid);
+  virtual void handle_frame(xtr_frame_t &f);
   virtual void handle_codec_state(memory_cptr &/* codec_state */) {
   };
   virtual void finish_track();

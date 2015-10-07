@@ -10,14 +10,13 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __XTR_TEXTSUBS_H
-#define __XTR_TEXTSUBS_H
+#ifndef MTX_XTR_TEXTSUBS_H
+#define MTX_XTR_TEXTSUBS_H
 
 #include "common/common_pch.h"
 
-#include "common/xml/element_writer.h"
+#include "common/xml/xml.h"
 #include "extract/xtr_base.h"
-
 
 class xtr_srt_c: public xtr_base_c {
 public:
@@ -29,8 +28,7 @@ public:
   xtr_srt_c(const std::string &codec_id, int64_t tid, track_spec_t &tspec);
 
   virtual void create_file(xtr_base_c *master, KaxTrackEntry &track);
-  virtual void handle_frame(memory_cptr &frame, KaxBlockAdditions *additions, int64_t timecode, int64_t duration, int64_t bref, int64_t fref,
-                            bool keyframe, bool discardable, bool references_valid);
+  virtual void handle_frame(xtr_frame_t &f);
 
   virtual const char *get_container_name() {
     return "SRT text subtitles";
@@ -66,8 +64,7 @@ public:
   xtr_ssa_c(const std::string &codec_id, int64_t tid, track_spec_t &tspec);
 
   virtual void create_file(xtr_base_c *master, KaxTrackEntry &track);
-  virtual void handle_frame(memory_cptr &frame, KaxBlockAdditions *additions, int64_t timecode, int64_t duration, int64_t bref, int64_t fref,
-                            bool keyframe, bool discardable, bool references_valid);
+  virtual void handle_frame(xtr_frame_t &f);
   virtual void finish_file();
 
   virtual const char *get_container_name() {
@@ -85,16 +82,15 @@ private:
       m_text(text), m_start(start), m_end(end) { }
   };
 
-  std::string m_sub_charset, m_codec_private, m_language;
-  counted_ptr<xml_formatter_c> m_formatter;
+  std::string m_sub_charset, m_simplified_sub_charset, m_codec_private, m_language;
+  mtx::xml::document_cptr m_doc;
   std::vector<usf_entry_t> m_entries;
 
 public:
   xtr_usf_c(const std::string &codec_id, int64_t tid, track_spec_t &tspec);
 
   virtual void create_file(xtr_base_c *master, KaxTrackEntry &track);
-  virtual void handle_frame(memory_cptr &frame, KaxBlockAdditions *additions, int64_t timecode, int64_t duration, int64_t bref, int64_t fref,
-                            bool keyframe, bool discardable, bool references_valid);
+  virtual void handle_frame(xtr_frame_t &f);
   virtual void finish_track();
   virtual void finish_file();
 

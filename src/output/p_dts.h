@@ -12,8 +12,8 @@
    Modified by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __P_DTS_H
-#define __P_DTS_H
+#ifndef MTX_P_DTS_H
+#define MTX_P_DTS_H
 
 #include "common/common_pch.h"
 
@@ -27,14 +27,13 @@ private:
 
   byte_buffer_c m_packet_buffer;
 
-  bool m_get_first_header_later;
   dts_header_t m_first_header, m_previous_header;
   bool m_skipping_is_normal;
 
   std::deque<int64_t> m_available_timecodes;
 
 public:
-  dts_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, const dts_header_t &dts_header, bool get_first_header_later = false);
+  dts_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, const dts_header_t &dts_header);
   virtual ~dts_packetizer_c();
 
   virtual int process(packet_cptr packet);
@@ -42,15 +41,18 @@ public:
   virtual void set_skipping_is_normal(bool skipping_is_normal) {
     m_skipping_is_normal = skipping_is_normal;
   }
-
-  virtual const std::string get_format_name(bool translate = true) {
-    return translate ? Y("DTS") : "DTS";
+  virtual translatable_string_c get_format_name() const {
+    return YT("DTS");
   }
 
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);
 
+protected:
+  virtual void flush_impl();
+
 private:
-  virtual unsigned char *get_dts_packet(dts_header_t &dts_header);
+  virtual unsigned char *get_dts_packet(dts_header_t &dts_header, bool flushing);
+  virtual void process_available_packets(bool flushing);
 };
 
-#endif // __P_DTS_H
+#endif // MTX_P_DTS_H

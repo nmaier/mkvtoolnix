@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "/usr/share/xml/docbook/schema/dtd/4.5/docbookx.dtd"
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd"
 [
 <!ENTITY product "mkvextract">
-<!ENTITY version "5.1.0">
-<!ENTITY date "2011-11-27">
+<!ENTITY version "6.9.1">
+<!ENTITY date "2014-04-18">
 
 <!ENTITY mkvmerge "<citerefentry><refentrytitle>mkvmerge</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
 <!ENTITY mkvinfo "<citerefentry><refentrytitle>mkvinfo</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
@@ -131,6 +131,37 @@
      </listitem>
     </varlistentry>
 
+    <varlistentry id="mkvextract.description.debug">
+     <term><option>--debug</option> <parameter>topic</parameter></term>
+     <listitem>
+      <para>
+       Turn on debugging for a specific feature. This option is only useful for developers.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry id="mkvextract.description.engage">
+     <term><option>--engage</option> <parameter>feature</parameter></term>
+     <listitem>
+      <para>
+       Turn on experimental features. A list of available features can be requested with <command>mkvextract --engage list</command>. These
+       features are not meant to be used in normal situations.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry id="mkvextract.description.gui_mode">
+     <term><option>--gui-mode</option></term>
+     <listitem>
+      <para>
+       Turns on GUI mode. In this mode specially-formatted lines may be output that can tell a controlling GUI what's happening. These
+       messages follow the format '<literal>#GUI#message</literal>'. The message may be followed by key/value pairs as in
+       '<literal>#GUI#message#key1=value1#key2=value2…</literal>'. Neither the messages nor the keys are ever translated and always output
+       in English.
+      </para>
+     </listitem>
+    </varlistentry>
+
     <varlistentry>
      <term><option>-v</option>, <option>--verbose</option></term>
      <listitem>
@@ -162,8 +193,9 @@
      <term><option>--check-for-updates</option></term>
      <listitem>
       <para>
-       Checks online for new releases by downloading the URL <uri>http://mkvtoolnix-releases.bunkus.org/latest-release.xml</uri>. Four lines
-       will be output in <literal>key=value</literal> style: the URL from where the information was retrieved (key
+       Checks online for new releases by downloading the URL <ulink
+       url="http://mkvtoolnix-releases.bunkus.org/latest-release.xml">http://mkvtoolnix-releases.bunkus.org/latest-release.xml</ulink>. Four
+       lines will be output in <literal>key=value</literal> style: the URL from where the information was retrieved (key
        <literal>version_check_url</literal>), the currently running version (key <literal>running_version</literal>), the latest release's
        version (key <literal>available_version</literal>) and the download URL (key <literal>download_url</literal>).
       </para>
@@ -213,7 +245,7 @@ source.mkv
    <title>Track extraction mode</title>
 
    <para>
-    Syntax: <command>mkvextract</command> <option>tracks</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional> <parameter>TID1:dest-filename1</parameter> <optional><parameter>TID2:dest-filename2</parameter> ...</optional>
+    Syntax: <command>mkvextract <option>tracks</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional> <parameter>TID1:dest-filename1</parameter> <optional><parameter>TID2:dest-filename2</parameter> ...</optional></command>
    </para>
 
    <para>
@@ -301,7 +333,7 @@ source.mkv
    <title>Tags extraction mode</title>
 
    <para>
-    Syntax: <command>mkvextract</command> <option>tags</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional>
+    Syntax: <command>mkvextract <option>tags</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional></command>
    </para>
 
    <para>
@@ -314,7 +346,7 @@ source.mkv
    <title>Attachments extraction mode</title>
 
    <para>
-    Syntax: <command>mkvextract</command> <option>attachments</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional> <parameter>AID1:outname1</parameter> <optional><parameter>AID2:outname2</parameter> ...</optional>
+    Syntax: <command>mkvextract <option>attachments</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional> <parameter>AID1:outname1</parameter> <optional><parameter>AID2:outname2</parameter> ...</optional></command>
    </para>
 
    <variablelist>
@@ -336,7 +368,7 @@ source.mkv
    <title>Chapters extraction mode</title>
 
    <para>
-    Syntax: <command>mkvextract</command> <option>chapters</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional>
+    Syntax: <command>mkvextract <option>chapters</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional></command>
    </para>
 
    <variablelist>
@@ -362,7 +394,7 @@ source.mkv
    <title>Cue sheet extraction mode</title>
 
    <para>
-    Syntax: <command>mkvextract</command> <option>cuesheet</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional>
+    Syntax: <command>mkvextract <option>cuesheet</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional></command>
    </para>
 
    <para>
@@ -375,7 +407,7 @@ source.mkv
    <title>Timecode extraction mode</title>
 
    <para>
-    Syntax: <command>mkvextract</command> <option>timecodes_v2</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional> <parameter>TID1:dest-filename1</parameter> <optional><parameter>TID2:dest-filename2</parameter> ...</optional>
+    Syntax: <command>mkvextract <option>timecodes_v2</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional> <parameter>TID1:dest-filename1</parameter> <optional><parameter>TID2:dest-filename2</parameter> ...</optional></command>
    </para>
 
    <para>
@@ -436,6 +468,15 @@ source.mkv
   </note>
  </refsect1>
 
+ <refsect1 id="mkvextract.text_files_and_charsets">
+  <title>Text files and character set conversions</title>
+
+  <para>
+   For an in-depth discussion about how all tools in the MKVToolNix suite handle character set conversions, input/output encoding, command
+   line encoding and console encoding please see the identically-named section in the &mkvmerge; man page.
+  </para>
+ </refsect1>
+
  <refsect1 id="mkvextract.output_file_formats">
   <title>Output file formats</title>
 
@@ -469,6 +510,33 @@ source.mkv
     <listitem>
      <para>
       <productname>RealVideo</productname> tracks are written to <productname>RealMedia</productname> files.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>V_THEORA</term>
+    <listitem>
+     <para>
+      <productname>Theora</productname> streams will be written within an <productname>Ogg</productname> container
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>V_VP8, V_VP9</term>
+    <listitem>
+     <para>
+      <abbrev>VP8</abbrev> / <abbrev>VP9</abbrev> tracks are written to <abbrev>IVF</abbrev> files.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>A_MPEG/L2</term>
+    <listitem>
+     <para>
+      MPEG-1 Audio Layer II streams will be extracted to raw <abbrev>MP2</abbrev> files.
      </para>
     </listitem>
    </varlistentry>
@@ -531,6 +599,42 @@ source.mkv
    </varlistentry>
 
    <varlistentry>
+    <term>A_ALAC</term>
+    <listitem>
+     <para>
+      <abbrev>ALAC</abbrev> tracks are written to <abbrev>CAF</abbrev> files.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>A_FLAC</term>
+    <listitem>
+     <para>
+      <abbrev>FLAC</abbrev> tracks are written to raw <abbrev>FLAC</abbrev> files.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>A_WAVPACK4</term>
+    <listitem>
+     <para>
+      <productname>WavPack</productname> tracks are written to <abbrev>WV</abbrev> files.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>A_OPUS</term>
+    <listitem>
+     <para>
+      <productname>Opus</productname> tracks are written to <productname>OggOpus</productname> files.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
     <term>S_TEXT/UTF8</term>
     <listitem>
      <para>
@@ -554,6 +658,34 @@ source.mkv
     <listitem>
      <para>
       <productname>Kate</productname> streams will be written within an <productname>Ogg</productname> container.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>S_VOBSUB</term>
+    <listitem>
+     <para>
+      <productname>VobSub</productname> subtitles will be written as <abbrev>SUB</abbrev> files along with the
+      respective index files, as <abbrev>IDX</abbrev> files.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>S_TEXT/USF</term>
+    <listitem>
+     <para>
+      <abbrev>USF</abbrev> text subtitles will be written as <abbrev>USF</abbrev> files.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>S_HDMV/PGS</term>
+    <listitem>
+     <para>
+      <abbrev>PGS</abbrev> subtitles will be written as <abbrev>SUP</abbrev> files.
      </para>
     </listitem>
    </varlistentry>
@@ -639,6 +771,42 @@ source.mkv
   <para>
    The rules are: ' ' (a space) becomes '\s', '&quot;' (double quotes) becomes '\2', ':' becomes '\c', '#' becomes '\h' and '\' (a single backslash) itself becomes '\\'.
   </para>
+ </refsect1>
+
+ <refsect1 id="mkvextract.environment_variables">
+  <title>Environment variables</title>
+
+  <para>
+   &mkvextract; uses the default variables that determine the system's locale (e.g. <varname>LANG</varname> and the <varname>LC_*</varname>
+   family). Additional variables:
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term><varname>MKVTOOLNIX_DEBUG</varname> and its short form <varname>MTX_DEBUG</varname></term>
+    <listitem>
+     <para>The content is treated as if it had been passed via the <link
+     linkend="mkvextract.description.debug"><option>--debug</option></link> option.</para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><varname>MKVTOOLNIX_ENGAGE</varname> and its short form <varname>MTX_ENGAGE</varname></term>
+    <listitem>
+     <para>The content is treated as if it had been passed via the <link
+     linkend="mkvextract.description.engage"><option>--engage</option></link> option.</para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><varname>MKVTOOLNIX_OPTIONS</varname> and its short form <varname>MTX_OPTIONS</varname></term>
+    <listitem>
+     <para>The content is split on white space. The resulting partial strings are treated as if it had been passed as command line
+     options. If you need to pass special characters (e.g. spaces) then you have to escape them (see <link
+     linkend="mkvextract.escaping">the section about escaping special characters in text</link>).</para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
  </refsect1>
 
  <refsect1 id="mkvextract.seealso">

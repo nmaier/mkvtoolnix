@@ -6,7 +6,7 @@ class T_036X_mp3 < Test
   end
 
   def run
-    return xtr_tracks_s(2)
+    xtr_tracks_s 1
   end
 end
 

@@ -29,10 +29,11 @@
 
 #include "common/chapters/chapters.h"
 #include "common/ebml.h"
+#include "common/hacks.h"
 #include "common/kax_analyzer.h"
 #include "common/math.h"
-#include "common/matroska.h"
 #include "common/mm_io.h"
+#include "common/mm_io_x.h"
 #include "common/strings/formatting.h"
 #include "common/tags/tags.h"
 #include "extract/mkvextract.h"
@@ -48,7 +49,7 @@ find_tag_for_track(int idx,
 
   size_t i;
   for (i = 0; i < m.ListSize(); i++) {
-    if (EbmlId(*m[i]) != EBML_ID(KaxTag))
+    if (!Is<KaxTag>(m[i]))
       continue;
 
     int64_t tag_cuid = get_tag_cuid(*static_cast<KaxTag *>(m[i]));
@@ -63,7 +64,7 @@ find_tag_for_track(int idx,
       return static_cast<KaxTag *>(m[i]);
   }
 
-  return NULL;
+  return nullptr;
 }
 
 static std::string
@@ -71,7 +72,7 @@ get_global_tag(const char *name,
                int64_t tuid,
                KaxTags &tags) {
   KaxTag *tag = find_tag_for_track(-1, tuid, 0, tags);
-  if (NULL == tag)
+  if (!tag)
     return "";
 
   return get_simple_tag_value(name, *tag);
@@ -83,7 +84,7 @@ get_chapter_index(int idx,
   size_t i;
   std::string sidx = (boost::format("INDEX %|1$02d|") % idx).str();
   for (i = 0; i < atom.ListSize(); i++)
-    if ((EbmlId(*atom[i]) == EBML_ID(KaxChapterAtom)) &&
+    if (Is<KaxChapterAtom>(atom[i]) &&
         (get_chapter_name(*static_cast<KaxChapterAtom *>(atom[i])) == sidx))
       return get_chapter_start(*static_cast<KaxChapterAtom *>(atom[i]));
 
@@ -123,7 +124,7 @@ print_comments(const char *prefix,
   size_t i;
 
   for (i = 0; i < tag.ListSize(); i++)
-    if (is_id(tag[i], KaxTagSimple)
+    if (Is<KaxTagSimple>(tag[i])
         && (   (get_simple_tag_name(*static_cast<KaxTagSimple *>(tag[i])) == "COMMENT")
             || (get_simple_tag_name(*static_cast<KaxTagSimple *>(tag[i])) == "COMMENTS")))
       out.puts(boost::format("%1%REM \"%2%\"\n") % prefix % get_simple_tag_value(*static_cast<KaxTagSimple *>(tag[i])));
@@ -138,7 +139,7 @@ write_cuesheet(std::string file_name,
   if (chapters.ListSize() == 0)
     return;
 
-  if (g_no_variable_data)
+  if (hack_engaged(ENGAGE_NO_VARIABLE_DATA))
     file_name = "no-variable-data";
 
   out.write_bom("UTF-8");
@@ -152,7 +153,7 @@ write_cuesheet(std::string file_name,
   print_if_global("DISCID",         "REM DISCID %1%\n");
 
   KaxTag *tag = find_tag_for_track(-1, tuid, 0, tags);
-  if (NULL != tag)
+  if (tag)
     print_comments("", *tag, out);
 
   out.puts(boost::format("FILE \"%1%\" WAVE\n") % file_name);
@@ -163,7 +164,7 @@ write_cuesheet(std::string file_name,
 
     out.puts(boost::format("  TRACK %|1$02d| AUDIO\n") % (i + 1));
     tag = find_tag_for_track(i + 1, tuid, get_chapter_uid(atom), tags);
-    if (NULL == tag)
+    if (!tag)
       continue;
 
     print_if_available("TITLE",               "    TITLE \"%1%\"\n");
@@ -200,36 +201,34 @@ extract_cuesheet(const std::string &file_name,
   // open input file
   try {
     analyzer = kax_analyzer_cptr(new kax_analyzer_c(file_name));
-    if (!analyzer->process(parse_mode, MODE_READ))
+    if (!analyzer->process(parse_mode, MODE_READ, true))
       throw false;
-  } catch (...) {
-    show_error(boost::format(Y("The file '%1%' could not be opened for reading (%2%).")) % file_name % strerror(errno));
+  } catch (mtx::mm_io::exception &ex) {
+    show_error(boost::format(Y("The file '%1%' could not be opened for reading: %2%.\n")) % file_name % ex);
     return;
   }
 
   KaxChapters all_chapters;
-  KaxChapters *chapters = dynamic_cast<KaxChapters *>(analyzer->read_all(EBML_INFO(KaxChapters)));
-  KaxTags *all_tags     = dynamic_cast<KaxTags *>(analyzer->read_all(EBML_INFO(KaxTags)));
+  ebml_master_cptr chapters_m(analyzer->read_all(EBML_INFO(KaxChapters)));
+  ebml_master_cptr tags_m(    analyzer->read_all(EBML_INFO(KaxTags)));
+  KaxChapters *chapters = dynamic_cast<KaxChapters *>(chapters_m.get());
+  KaxTags *all_tags     = dynamic_cast<KaxTags *>(    tags_m.get());
 
-  if ((NULL != chapters) && (NULL != all_tags)) {
-    size_t i;
-    for (i = 0; i < chapters->ListSize(); i++) {
-      if (dynamic_cast<KaxEditionEntry *>((*chapters)[i]) == NULL)
-        continue;
+  if (!chapters || !all_tags)
+    return;
 
-      KaxEditionEntry *eentry = dynamic_cast<KaxEditionEntry *>((*chapters)[i]);
-      size_t k;
-      for (k = 0; k < eentry->ListSize(); k++)
-        if (dynamic_cast<KaxChapterAtom *>((*eentry)[k]) != NULL)
-          all_chapters.PushElement(*(*eentry)[k]);
-    }
+  for (auto chapter_entry : *chapters) {
+    if (!dynamic_cast<KaxEditionEntry *>(chapter_entry))
+      continue;
 
-    write_cuesheet(file_name, all_chapters, *all_tags, -1, *g_mm_stdio);
-
-    while (all_chapters.ListSize() > 0)
-      all_chapters.Remove(0);
+    auto eentry = static_cast<KaxEditionEntry *>(chapter_entry);
+    for (auto edition_entry : *eentry)
+      if (dynamic_cast<KaxChapterAtom *>(edition_entry))
+        all_chapters.PushElement(*edition_entry);
   }
 
-  delete all_tags;
-  delete chapters;
+  write_cuesheet(file_name, all_chapters, *all_tags, -1, *g_mm_stdio);
+
+  while (all_chapters.ListSize() > 0)
+    all_chapters.Remove(0);
 }

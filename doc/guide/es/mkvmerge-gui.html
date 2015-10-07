@@ -1,0 +1,1133 @@
+<html>
+ <head>
+  <title>Guía de uso de la interfaz gráfica de usuario (GUI) de mkvmerge</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Language" content="es">
+ </head>
+ <body>
+  <h1>Guía de uso de la interfaz gráfica de usuario (GUI) de mkvmerge (mmg)</h1>
+
+  <i>Moritz Bunkus</i>
+  <hr>
+
+  <h2>Índice de contenido</h2>
+
+  <p style='text-align:justify'>
+   <ol>
+    <li>
+     <a href="mkvmerge-gui.html#introduction">Introducción</a>
+     <br>
+     <ol>
+      <li>
+       <a href="mkvmerge-gui.html#whatismatroska">¿Qué es Matroska?</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#whatismkvmerge">¿Qué es mkvmerge?
+        ¿Qué es mkvmerge GUI?
+       </a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#latestversion">Obtener la última
+	    versión
+       </a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#scope">Ámbito de aplicación de esta guía</a>
+      </li>
+     </ol>
+    </li>
+    <li>
+     <a href="mkvmerge-gui.html#setup">Configuración de mkvmerge GUI</a>
+    </li>
+    <li>
+     <a href="mkvmerge-gui.html#muxing">Crear archivos Matroska</a>
+     <br>
+     <ol>
+      <li>
+       <a href="mkvmerge-gui.html#basics">Conceptos básicos</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#fileoptions">Opciones para archivos de
+        entrada
+       </a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#trackoptions">Opciones para cada
+        pista
+       </a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#attachments">Adjuntos</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#globaloptions">Opciones generales</a>
+       <br>
+       <ol>
+        <li>
+         <a href="mkvmerge-gui.html#global_title">Título de archivo/segmento
+          </a>
+        </li>
+        <li>
+         <a href="mkvmerge-gui.html#global_split">División automática y vinculación de archivos
+          </a>
+        </li>
+        <li>
+         <a href="mkvmerge-gui.html#global_link">Vinculación manual de archivos/segmentos
+          </a>
+        </li>
+        <li>
+         <a href="mkvmerge-gui.html#global_chapters">Capítulos</a>
+        </li>
+        <li>
+         <a href="mkvmerge-gui.html#global_tags">Etiquetas globales</a>
+        </li>
+       </ol>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#doit">Iniciando el proceso de
+	    creación
+       </a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#saveload">Guardar y cargar
+        ajustes
+       </a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#jobqueue">Poner en cola varios trabajos (Procesamiento por lotes)</a>
+      </li>
+     </ol>
+    </li>
+    <li>
+     <a href="mkvmerge-gui.html#chaptereditor">El editor de capítulos</a>
+     <br>
+     <ol>
+      <li>
+       <a href="mkvmerge-gui.html#chapterconcept">El concepto de
+        los capítulos en Matroska
+		</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#chapterexamples">Ejemplos</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#chapterformats">Formatos admitidos por mkvmerge
+ 	   para los archivos de capítulos
+       </a>
+       <br>
+       <ol>
+        <li>
+         <a href="mkvmerge-gui.html#cfsimple">Archivos de capítulos de estilo
+		  simple/OGM.
+         </a>
+        </li>
+        <li>
+         <a href="mkvmerge-gui.html#cfxml">Archivos de capítulos
+		  con todas las características XML
+         </a>
+        </li>
+        <li>
+         <a href="mkvmerge-gui.html#cfkax">Capítulos encontrados en
+          archivos Matroska
+         </a>
+        </li>
+       </ol>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#creatingchapters">Crear archivos de
+        capítulos
+       </a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#editingchapters">Editar los capítulos
+        existentes
+       </a>
+      </li>
+     </ol>
+    </li>
+    <li>
+     <a href="mkvmerge-gui.html#headereditor">El editor de encabezado</a>
+     <br>
+     <ol>
+      <li>
+       <a href="mkvmerge-gui.html#he_addingremovingheaderfields">Añadir y
+	    eliminar campos del encabezado</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#he_analyzingthefile">Abrir un archivo existente</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#he_editingthefile">Editar campos del encabezado</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#he_validation">Validación</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#he_saving">Guardando el archivo</a>
+      </li>
+     </ol>
+    </li>
+   </ol>
+  </p>
+
+  <hr>
+
+  <a name="wxhh_introduction"></a>
+  <h2><a name="introduction">1. Introducción</a></h2>
+
+  <h3><a name="whatismatroska">1.1. ¿Qué es Matroska?</a></h3>
+
+  <p>(<i>Nota: información copiada de <a href="http://www.matroska.org/">
+     www.matroska.org</a>.</i>)</p>
+
+  <p style='text-align:justify'><b>Matroska</b> pretende llegar a ser el formato estándar de los contenedores
+   multimedia. Deriva de un proyecto similar llamado MCF, pero con
+   diferencias signifivativas ya que está basado en EBML
+   (Extensible Binary Meta idioma), una versión binaria de XML. EBML
+   le permite al equipo de desarrollo de Matroska, obtener ventajas significativas
+   en términos de la futura extensibilidad del formato, sin romper la compatibilidad
+   con antiguos analizadores sintacticos.</p>
+
+  <p style='text-align:justify'>Si necesita más información por favor diríjase a la
+   <a href="http://www.matroska.org/">página de Matroska</a>.</p>
+
+  <h3><a name="whatismkvmerge">1.2. ¿Qué es mkvmerge? ¿Qué es mkvmerge
+    GUI?</a></h3>
+
+  <p style='text-align:justify'><i>mkvmerge</i> y <i>mkvmerge GUI</i> (o simplemente <i>mmg</i>) son dos
+   programas creados por <a href="mailto:moritz@bunkus.org">Moritz
+   Bunkus</a>. Ambos son parte del paquete <i>mkvtoolnix</i>. <i>mkvmerge</i>
+   puede leer una gran cantidad de diferentes archivos multimedia
+   y poner su contenido en archivos Matroska. Desafortunadamente este es un programa
+   que se ejecuta por linea de comandos, y no todo el mundo se siente agusto con eso.
+   Aqui es donde <i>mkvmerge GUI</i> entra en juego. Es una GUI que proporciona al usuario,
+   una intuitiva pero poderosa interface para <i>mkvmerge</i>.</p>
+
+  <p style='text-align:justify'>Ambos programas están disponibles para Windows, GNU/Linux y
+   otros derivados de Unix. El programa está licenciado bajo GPL, por lo que
+   el código fuente está disponible para quien esté interesado.</p>
+
+  <h3><a name="latestversion">1.3. Obtener la última versión</a></h3>
+
+  <p style='text-align:justify'>Puede encontrar la última versión de <i>mkvtoolnix</i> en la
+   <a href="http://www.bunkus.org/videotools/mkvtoolnix/">página web de Moritz
+    Bunkus</a>. Los usuarios de Windows tendrán que descargar las librerias
+   DLLs al igual que los archivos binarios de <i>mkvtoolnix</i>. Los usuarios de Linux/Unix
+   probablemente descargarán el código fuente y compilarán <i>mkvtoolnix</i>.</p>
+
+  <h3><a name="scope">1.4. Ámbito de aplicación de esta guía</a></h3>
+
+  <p style='text-align:justify'>Esta guía está enfocada unicamente en la GUI de estas herramientas. Todas
+   las opciones de la linea de comandos están explicadas, con detalle, en la página
+   de <i>mkvmerge</i>.</p>
+
+  <hr>
+
+  <a name="wxhh_setup"></a>
+  <h2><a name="setup">2. Configuración de mkvmerge GUI</a></h2>
+
+  <p>(<i>Nota: Esta sección no abarca la compilación y la instalación.
+    La documentación de <i>mkvmerge</i> y el archivo
+    <code>README</code> están incluidos en el paquete de
+    <i>mkvtoolnix</i>.</i>)</p>
+
+  <div align="center">
+   <p style='text-align:center'>
+    <img src="images/figura1.png"
+         alt="selecting the mkvmerge executable">
+    <br>
+    <font size="-1">Figura 1: Usa este botón para seleccionar la ruta del programa
+     <i>mkvmerge</i>.</font>
+   </p>
+  </div>
+
+  <p style='text-align:justify'>La única cosa que <i>mmg</i> necesita saber, es la localización del archivo binario
+   <i>mkvmerge</i>. En condiciones normales, lo encontrará automáticamente.
+   Pero si no fuese asi, puede seleccionarlo en <i>Archivo --> Opciones --> mkvmerge</i>.</p>
+
+  <hr>
+
+  <a name="wxhh_muxing"></a>
+  <h2><a name="muxing">3. Crear archivos Matroska</a></h2>
+
+  <h3><a name="basics">3.1. Conceptos básicos</a></h3>
+
+  <p><i>mkvmerge</i> diferencia estrictamente entre <i>archivos</i> y
+   <i>pistas</i>. Un <i>archivo</i> de entrada, por lo general contiene una o más
+   <i>pistas</i>. <i>mkvmerge</i>, antes de poder hacer cualquier cosa, necesita al menos
+   un archivo de entrada y el nombre del archivo Matroska.
+   A partir de este conjunto mínimo de opciones, el usuario puede agregar más archivos de entrada,
+   seleccionar las opciones avanzadas para cada pista, aplicar más opciones globales, etc.</p>
+
+  <p style='text-align:justify'>Los típicos pasos básicos son:<br>
+   <ol>
+    <li>Seleccionar algunos <i>archivos</i> de entrada,</li>
+    <li>establecer las opciones del lenguaje para cada <i>pista</i>,</li>
+    <li>establecer el titulo de la pelicula/archivo,</li>
+    <li>seleccionar el archivo para escribir e</li>
+    <li>iniciar el proceso de creación.</li>
+   </ol>
+  </p>
+
+  <div align="center">
+   <p style='text-align:center'>
+    <img src="images/figura2.png"
+         alt="adding and removing files">
+    <br>
+    <font size="-1">Figura 2: Usa estos botones para añadir y eliminar archivos.</font>
+   </p>
+  </div>
+
+  <p style='text-align:justify'>Cuando <i>mmg</i> se inicia, lo primero que se muestra es probablemente la pestaña
+   más importante: <i>Entrada</i>. Aqui puede ver cuatro elementos
+   diferentes. El cuadro superior muestra todos los <i>archivos</i> de entrada.
+   </p>
+
+  <p style='text-align:justify'>La figura 2 muestra cuatro botones a la derecha del cuadro superior. Para añadir archivos
+   a la lista, puede usar los botones <i>Añadir</i> y <i>Unir</i>. Para eliminar un
+   archivo de la lista, debe seleccionarlo y pulsar <i>Quitar</i>; pero si desea eliminarlos todos,
+   utilice el botón <i>Quitar todos</i>.</p>
+
+  <p style='text-align:justify'>Hay una diferencia entre <i>Añadir</i> y <i>Unir</i> un archivo.
+   Por lo general, las pistas de los todos los archivos <i>añadidos</i> se colocan
+   en paralelo en el archivo Matroska. Este suele ser el caso en el que tiene
+   una pista de vídeo, una o más pistas de audio y una o más pistas de subtítulos.
+   Todos ellos contienen material que pertenece al mismo código de tiempo
+   y que tiene que ser reproducido simultaneamente.</p>
+
+  <p><i>Unir</i> un archivo con otro, provocará que todas las pistas del segundo
+   archivo se concatenen con las pistas del archivo anteriormente <i>añadido</i>.
+   De esta manera, el contenido de estas pistas serán reproducidas una detrás de otra.
+   Solo se pueden concatenar pistas que sean del mismo tipo (pistas de video con video,...),
+   que usen el mismo códec (por ejemplo MP3 con MP3, pero no MP3
+   con AC3) y que tengan los mismos parámetros (por ejemplo la tasa de muestro debe coincidir).</p>
+
+  <p style='text-align:justify'>Puede diferenciar un archivo <i>añadido</i> de uno <i>unido</i>, mirando su nombre.
+   Los archivos y pistas <i>unidas</i>, empiezan con &quot;<code>++&gt;</code>&quot;.</p>
+
+  <div align="center">
+   <p style='text-align:center'>
+    <img src="images/figura3.png"
+         alt="selecting specific tracks">
+    <br>
+    <font size="-1">Figura 3: Habilitar o deshabilitar pista. La segunda
+     pista no será copiada en el archivo de salida.</font>
+   </p>
+  </div>
+
+  <p style='text-align:justify'>Una vez que haya añadido al menos un <i>archivo</i> de entrada en el cuadro superior,
+   aparecerá en el segundo cuadro, una lista de todas las <i>pistas</i> disponibles.
+   Cada pista está habilitada por defecto, y será utilizada en la creación del archivo final.
+   Sin embargo, usted puede cambiar eso simplemente haciendo clic en la casilla de verificación
+   del nombre de la pista.</p>
+
+  <p style='text-align:justify'>Para cada una de estas pistas, el usuario puede seleccionar las opciones especificas usando
+   los cuadros de verificación y texto, que están justo debajo de la lista de pistas.
+   Estas opciones se describirán en las siguientes secciones.</p>
+
+  <p style='text-align:justify'>A la derecha del cuadro de la lista de pistas, hay dos botones con los que usted puede
+   controlar el orden de las pistas, en el archivo de salida. Pulsando el <i>arriba</i> y <i>abajo</i>,
+   la pista seleccionada se mueve en la dirección apropiada. Hay algunas restricciones al
+   mover las pistas <i>unidas</i> (las que comienzan con &quot;<code>++&gt;</code>&quot;),
+   como que la pista <i>unida</i> no puede ser la primera pista, etc.</p>
+
+  <h3><a name="fileoptions">3.2. Opciones para archivos de entrada</a></h3>
+
+  <p style='text-align:justify'>Una vez que el usuario ha añadido y seleccionado un archivo de entrada, puede
+   ajustar las opciones que se aplican a este especifico archivo. Por el momento,
+   estas tres opciones se han implementado, y éstas sólo están disponibles para
+   los archivos Matroska: <code>No capítulos</code>, <code>No adjuntos</code> y
+   <code>No etiquetas</code>. Estas opciones le dicen a <i> mkvmerge </i> que
+   no copie ninguno de los capítulos / adjuntos / etiquetas, del archivo actual.</p>
+
+  <p style='text-align:justify'>Más información sobre capítulos, puede encontrarla en la sección del
+   <a href="mkvmerge-gui.html#chaptereditor">editor de capítulos</a>, de este
+   documento y también en la documentación de <i>mkvmerge</i>.</p>
+
+  <h3><a name="trackoptions">3.3. Opciones para cada pista</a></h3>
+
+  <p style='text-align:justify'>Dependiendo del tipo de pista seleccionada (audio, video, subtítulos)
+   y del tipo de contenido, unicamente estarán disponibles algunas de las
+   opciones especificas de la pista. Estas opciones abarcan más de dos sub-páginas.
+   Están las <em>opciones generales de la pista</em>, <em>opciones específicas del formato</em>,
+   y <em>opciones adicionales</em>.</p>
+
+  <div align="center">
+   <p style='text-align:center'>
+    <img src="images/figura4.png"
+         alt="typical options for a video track">
+    <br>
+    <font size="-1">Figura 4: Opciones comunes para todos los tipos de pistas</font>
+   </p>
+  </div>
+
+  <p><b>Nota:</b> A menos que sea anulado por el usuario, <i>mkvmerge</i> copiará los ajustes
+   de la pista (del archivo de entrada), si el formato de origen admite dicha
+   información; o usará los valores por defecto.</p>
+
+  <p style='text-align:justify'>Las opciones generales que están disponibles son:</p>
+
+  <ul>
+
+   <li><p style='text-align:justify'><code>Nombre de pista:</code> El usuario puede establecer un nombre para la pista
+    actual. Este nombre es una cadena de texto de libre estructura. Ejemplos prácticos
+	podrían ser 'comentarios del director' o 'gran vista de Seattle'. Tenga en cuenta, que
+	estos nombres no están destinados a contener el título de la película.</p></li>
+
+   <li><p style='text-align:justify'><code>Idioma:</code> El usuario puede seleccionar el idioma de cada pista, independientemente
+    del tipo que sea. Este idioma está incluído en el código de idiomas ISO639-2.
+	La lista desplegable, contiene todos los códigos ISO639-2, por lo que el usuario
+	no debe preocuparse de si elige un código de lenguaje equivocado.</p></li>
+
+	<li><p style='text-align:justify'><code>Flag de pista predefinida:</code> si se define un flag en el archivo Matroska,
+	el reproductor le usa para saber que pista específica debe reproducir; en el caso de que el usuario
+	no haya elegido otra. Sólo una pista de cada tipo (audio, vídeo, subtítulos), podrá ser establecida como predefinida.
+	Por ejemplo, suponga que la pista de audio está en Inglés; y la de subtítulos, en Francés.
+	Si ninguna se establece para ser la pista predefinida, <i>mkvmerge</i> asume que la primera pista
+	de cada tipo, es la pista predefinida. Esto coincide con el comportamiento de los
+	diferentes reproductores multimedia.</p></li>
+
+   <li><p style='text-align:justify'><code>Flag de pista forzada:</code> esta opción sirve para insertar un flag en el archivo,
+    de manera que el reproductor esté obligado a mostrar esa pista, sea o no predefinida.</p></li>
+
+   <li><p style='text-align:justify'><code>Etiquetas:</code> Para cada pista puede crear un archivo de etiquetas XML. Para una explicación completa
+    de todas las etiquetas, consulte el archivo de ejemplo y <a href="mkvmerge.html">la documentación de <i>mkvmerge</i></a>.
+    En un 99% de los casos, necesitarás usar ESTA opción y por tanto, asociar etiquetas a una pista específica.
+	El uso de las etiquetas en la pestaña de opciones generales, no es probablemente lo que necesitas.</p></li>
+
+   <li><p style='text-align:justify'><code>Códigos de tiempo (timecodes):</code> Por lo general, <i>mkvmerge</i> obtendrá
+    los códigos de tiempo para cada frame del archivo fuente, pero también puede leer y usar
+	los códigos de tiempo desde un archivo de texto externo cuyo nombre se puede especificar aqui.
+	Esta característica es de uso avanzado. Casi todos los usuarios deben dejar esta entrada vacía.</p></li>
+
+  </ul>
+
+  <div align="center">
+   <p style='text-align:center'>
+    <img src="images/figura5.png"
+         alt="typical options for a video track">
+    <br>
+    <font size="-1">Figura 5: Opciones típicas para una pista de video</font>
+   </p>
+  </div>
+
+  <p style='text-align:justify'>Las opciones de formato específico incluyen:</p>
+
+  <ul>
+   <li><p style='text-align:justify'><code>Relación de aspecto:</code> Con esta opción el usuario establece la
+    relación de aspecto que debería usarse en la reproducción. With this option the user can set the aspect
+    ratio that should be used upon playback. Por defecto, es la relación de aspecto
+	con la que fue codificada la película, pero se puede cambiar. Por ejemplo, para codificaciones anamórficas.
+	La GUI espera que el formato sea un número decimal (p.e.'2.33') o una fracción (p.e.'16/9').
+    <br>
+    Otra posibilidad es establecer manualmente, los valores visualización (Ancho x Alto).
+	Esto puede ser útil si desea ajustar los parámetros para una resolución específica.
+	Si especifica la relación de aspecto, entonces <i>mkvmerge</i> calculará las dimensiones
+	de visualización basadas en el tamaño de la pista de video.
+    <br>
+    Esta opción únicamente están disponibles para las pistas de video.</p></li>
+
+   <li><p style='text-align:justify'><code>FourCC:</code> Matroska, normalmente no almacena el FourCC,
+    para identificar el codec usado, como se usa en otros contenedores. Matroska
+    tiene su propio formato, llamado <i>CodecID</i>, pero también tiene un modo
+	de compatibilidad con AVI. En este modo, el FourCC tambien es almacenado. Con esta
+    opción, el FourCC puede ser forzado para tener un valor diferente. Sin embargo, no puedes
+	cambiar el <i>CodecID</i> usado por <i>mkvmerge</i>.
+    <br>
+    Esta opción unicamente está disponible para pistas de video.</p></li>
+
+   <li><p style='text-align:justify'><code>Estereoscopia:</code> Existe una tecnología que ofrece imágenes pseudo-tridimensionales,
+    mediante la reproducción, al mismo tiempo, de dos pistas de vídeo que se han filmado
+    desde posiciones ligeramente diferentes. Cada ojo ve solamente una de esas pistas.
+	Esto se conoce como el modo estéreo. La mayoría de los usuarios deben
+    dejar el campo vacío.
+   <br>
+    Esta opción sólo está disponible para las pistas de vídeo.</p></li>
+
+   <li><p style='text-align:justify'><code>FPS:</code> Número de <i>fotogramas por segundo</i> para pistas de video
+    AVC/h.264. Cuando añades un archivo primario AVC/h.264, entonces <i>mkvmerge</i>
+	debería informarte de que no puede identificar el número de frames por segundo del archivo.
+	Si tu no seleccionas ninguna opción entonces <i>mkvmerge</i> lo establecera por defecto a 25.
+	Puede introducir un numero decimal (p.e. 29.97) o una fracción(p.e. 30000/1001).
+    <br>
+    Esta opción esta unicamente disponible para pistas de video AVC/h.264, leídas desde un archivo
+	primario AVC/h.264.</p></li>
+
+	<li><p style='text-align:justify'><code>Extensión de tamaño NALU:</code> Establece la extensión de tamaño NALU a
+	 cierto número de bytes. Esta opción sólo está disponible para archivos primarios
+	 AVC/h.264</p></li>
+
+	<li><p style='text-align:justify'><code>Recorte(crooping):</code> Establece los parámetros de recorte del video.
+	 Debe especificar una secuencia de cuatros números separados por comas, según el orden:
+	 izquierda, arriba, derecha y abajo. (4,8,4,8)</p></li>
+
+  </ul>
+
+  <div align="center">
+   <p style='text-align:center'>
+    <img src="images/figura6.png"
+         alt="typical options for an audio track">
+    <br>
+    <font size="-1">Figura 6: Opciones típicas para una pista de audio</font>
+   </p>
+  </div>
+
+  <ul>
+   <li><p style='text-align:justify'><code>Delay (desfase en ms):</code> En algunas ocasiones el audio y el video, no
+    están sincronizados correctamente. Con esta opción puede compensar los códigos de
+	tiempo de cualquier pista por una cantidad determinada, ya sea positivo o negativo.
+	El número que introduzca aqui, es la cantidad en milisegundos que es añadida a cada código
+	de tiempo, después de que el factor de <code>extensión</code> se haya aplicado(ver más abajo).
+    <br>
+    Esta opción está disponible para todo tipo de pistas. Sin embargo, los ajustes de código de tiempo
+	funcionan mejor, durante la reproducción, para las pistas de vídeo y los subtítulos.</p></li>
+
+   <li><p style='text-align:justify'><code>Extendido por:</code> En algunos casos el audio y video, se distancian lentamente
+    durante la reproducción. Esto se puede arreglar proporcionando a <i>mkvmerge</i>, un factor de extensión
+	de los códigos de tiempo. Si nada se introduce, se asume que vale 1.0' y los códigos de tiempo
+	no serán modificados.
+    <br>
+    El valor que inserte, puede ser un número decimal o una fracción, p.e. &quot;1/2&quot;. El factor es aplicado
+	antes de que el <code>Delay</code> sea añadido (ver arriba).
+    <br>
+    Esta opción está disponible para todo tipo de pistas. Sin embargo, los ajustes de código de tiempo
+	funcionan mejor, durante la reproducción, para las pistas de vídeo y los subtítulos.</p></li>
+
+   <li><p style='text-align:justify'><code>AAC es SBR/HE-AAC/AAC+:</code> La nueva tecnología llamada 'High
+    Efficiency AAC' (HE-AAC), tiene algún inconveniente cuando está siendo almacenada en
+    archivos <code>.AAC</code>: no es posible detectar la parte HE-AAC para estos archivos.
+	Por lo tanto, el usuario tiene que activar esta opción manualmente si es necesario.
+	Por favor, tenga en cuenta que este problema no existe para HE-AAC almacenados
+    en archivos <code>.MP4</code>.</p></li>
+
+  </ul>
+
+  <div align="center">
+   <p style='text-align:center'>
+    <img src="images/figura7.png"
+         alt="typical options for a text subtitle track">
+    <br>
+    <font size="-1">Figura 7: Opciones típicas para una pista de subtítulos</font>
+   </p>
+  </div>
+
+  <ul>
+   <li><p style='text-align:justify'><code>Código de caracteres:</code> algunos formato de los subtítulos no almacenan el
+    código de caracteres con los que fueron creados. Estos es importante por que el texto
+	de los subtítulos son automaticamente convertidos a UTF-8, durante el multiplexado.
+	<i>mkvmerge</i> normalmente asumirá que el actual sistema de código de caracteres es el mismo
+	con el que los subtítulos fueron escritos. Pero en caso de que esto no fuese cierto, el usuario
+	puede seleccionar el correcto código de caracteres.
+    <br>
+    Esta opción esta sólo disponible para pistas de subtítulos.</p></li>
+
+
+  </ul>
+
+  </ul>
+  <div align="center">
+   <p style='text-align:center'>
+    <img src="images/figura8.png"
+         alt="typical options for a text subtitle track">
+    <br>
+    <font size="-1">Figura 8: Opciones adicionales</font>
+   </p>
+  </div>
+
+  <p style='text-align:justify'>Opciones adicionales:</p>
+  <ul>
+  <li><p style='text-align:justify'><code>Cues:</code> Los <i>cues</i> son para Matroska lo que
+     el índice es para los archivos AVI. Contienen los vínculos a los fotogramas
+     claves (key frames). Por lo general, esta opción debería dejarse en el
+     valor 'por defecto'. <i>Mkvmerge</i> elegirá automáticamente el mejor método
+     para cualquier tipo de pista. Una completa explicación de las pistas puede
+     ser encontrada en la documentación de <i>mkvmerge</i></p></li>
+
+	<li><p style='text-align:justify'><code>Compresión:</code> Matroska posee una poderosa característica
+     para comprimir pistas mediante algoritmos de compresión sin pérdidas
+     (lossless). Estas compresiones pueden ser aplicadas a cualquier pista,
+     pero algunos reproductores sólo son compatibles con pistas VobSub. Aquí es
+     donde es más útil. Otras pistas, especialmente las de audio y video, ya están
+     comprimidas por lo que una compresión adicional no proporcionará ningún resultado.
+     Para archivos VobSubs, puede aprovecharse de una ganancia adicional de un 30%,
+     si habilita la compresión zlib. Esto es porque es por defecto para las
+     pistas VobSub.
+    <br>
+    Debería dejar este ajuste en <i>por defecto</i>.</p></li>
+
+	<li><p style='text-align:justify'><code>Opciones definidas de usuario:</code> Este campo puede ser
+	 utilizado libremente por el usuario, para definir las opciones adicionales
+	 de esta pista.</p></li>
+
+  <h3><a name="attachments">3.4. Adjuntos</a></h3>
+
+  <p style='text-align:justify'>Los archivos Matroska también contienen otros archivos, llamados adjuntos.
+   Funciona básicamente como lo hace tu programa favorito de correo electrónico. La idea es proporcionar información
+   adicional sobre el archivo. Algunos ejemplos podrían ser: la carátula de un CD, información adicional
+   de la película (en formato de texto) o incluso fuentes para subtítulos.
+   </p>
+
+  <p style='text-align:justify'>Cada adjunto necesita dos cosas: el nombre (obviamente) y el tipo MIME
+   que debería estar asociado al archivo. El uso es muy fácil y similar a añadir archivos en la pestaña
+   de <i>entrada</i>.</p>
+
+  <div align="center">
+   <p style='text-align:center'>
+    <img src="images/figura9.png"
+         alt="adding and removing attachments">
+    <br>
+    <font size="-1">Figura 9: Añade y elimina los adjuntos con estos
+     botones.</font>
+   </p>
+  </div>
+
+  <p style='text-align:justify'>En la segunda pestaña de la GUI (<i>adjuntos</i>), puede añadir
+   un archivo con el botón <i>Añadir</i> y eliminar el adjunto seleccionado con el botón <i>Quitar</i>.
+   Una vez que un adjunto ha sido seleccionado, el resto de controles estarán disponibles.
+   Puede tener que seleccionar el tipo MIME para cada adjunto, pero la descripción es opcional - aunque
+   es una buena idea usarlo. De esta manera es más facil identificar lo que hayas adjuntado al archivo Matroska.</p>
+
+  <div align="center">
+   <p style='text-align:center'>
+    <img src="images/figura10.png"
+         alt="typical options for an attachment">
+    <br>
+    <font size="-1">Figura 10: Opciones típicas para un adjunto</font>
+   </p>
+  </div>
+
+  <p style='text-align:justify'>La última opción, <code>estilo del archivo adjunto</code>,
+   sólo se toma en cuenta si divides el archivo creado en varias partes. (La división está
+   explicada en la siguiente sección). Si la opción <code>Para todos los archivos</code>
+   está seleccionada, entonces el archivo actual será adjuntado a todos los archivos creados.
+   Si la opción <code>Sólo en el primero</code> está seleccionado, entonces el archivo
+   sólo es adjuntado al primer archivo de salida creado.</p>
+
+  <h3><a name="globaloptions">3.5. Opciones generales</a></h3>
+
+  <p style='text-align:justify'>En la tercera pestaña, <i>Opciones generales</i>, es un paquete
+   de opciones que se aplican al archivo completo y no sólo a una o más pistas.</p>
+
+  <h4><a name="global_title">3.5.1. Título de archivo/segmento</a></h4>
+
+  <div align="center">
+   <p style='text-align:center'>
+    <img src="images/figura11.png"
+         alt="selecting a movie title">
+    <br>
+    <font size="-1">Figura 11: Selecciona un título para la película</font>
+   </p>
+  </div>
+
+  <p><code>Título de archivo/segmento:</code> Este título es usado para el título actual
+   de la película, p.e. 'Matrix'.</p>
+
+  <h4><a name="global_split">3.5.2. División automática y vinculación de archivos</a></h4>
+
+  <p style='text-align:justify'>La sección <code>División</code> maneja como el archivo
+   generado, es partido en diversos archivos más pequeños. Si ninguna división está
+   seleccionada entonces se genera un único archivo. Si la división está habilitada
+   entonces le dices a <i>mkvmerge</i> que inicie la creación de un nuevo archivo de
+   salida cuando alcance cierta cantidad de información escrita o después de que haya
+   alcanzado un específico código de tiempo. Los formatos admitidos son:
+   <br>
+   <ul>
+    <li>Por el tamaño: Un número opcionalmente seguido por la letra 'K', 'M'
+     o 'G' indicando kilobytes (1024 bytes), megabytes (1024 * 1024
+     bytes) o gigabytes (1024 * 1024 * 1024 bytes). Ejemplos: '700M' o
+     '100000K'.</li>
+
+    <li>Por el tiempo: El formato es <code>HH:MM:SS.nnn</code> con hasta
+     nueve digitos para una precisión de nanosegundos o un número seguido por la
+	 letra 's', indicando un número de segundos en específico. Diversos códigos
+	 de tiempo pueden ser introducidos, separados por comas.<br>
+     Tenga en cuenta que los códigos de tiempo se refieren a una secuencia de salida
+	 sin dividir. Por lo tanto, introduciendo '00:10:00,00:20:00' obtendrá tres
+     archivos, de los cuales los dos primeros tendrán una duración de
+     diez minutos. La tercera parte contendrá el resto del archivo de entrada.
+     Esto es independiente de la característica 'Archivos vinculados'.<br>
+
+     Ejemplos: '01:20:00' (divide después de 1 hora, 20 minutos) o
+     '1800s' (divide después de 1800 segundos = 30 minutos).</li>
+   </ul>
+  </p>
+
+  <div align="center">
+   <p style='text-align:center'>
+    <img src="images/figura12.png"
+         alt="typical options for splitting">
+    <br>
+    <font size="-1">Figura 12: Opciones típicas para el corte. Crea archivos de 30 minutos de duración</font>
+   </p>
+  </div>
+
+  <p><code>No vincular:</code> Esta opción controla cómo <i>mkvmerge</i> manejará
+   la división. Una pequeña explicación sobre esta característica:</p>
+
+  <p style='text-align:justify'>Matroska admite la vinculación de archivos. Simplemente, consiste
+   en decirle que archivo en específico, es el anterior y posterior; con respecto al actual. Para
+   ser precisos, no son los archivos los que están vinculados sino los segmentos de Matroska.
+   Como la mayoría de archivos únicamente contendrán un segmento Matroska, yo simplemente digo
+   'Archivo vinculado' aunque 'Segmento vinculado' sería más apropiado.</p>
+
+  <p style='text-align:justify'>Cada segmento está identificado por un código UID de 128 bits de extensión.
+   Este UID es generado automáticamente por <i>mkvmerge</i>. La vinculación se realiza
+   insertando el código UID del segmento anterior y posterior, en la información del encabezado del
+   segmento. <i>Mkvinfo</i> imprime estos UIDs si los encuentra.</p>
+
+  <p style='text-align:justify'>Si una archivo es dividido en partes más pequeñas, y a continuación, usamos
+   la vinculación de archivos; entonces los códigos de tiempo no comenzarán desde cero, ya que
+   continuarán donde lo dejo en el último archivo. De esta manera el tiempo absoluto se mantiene igual,
+   por si los archivos previos no están disponibles (p.e. cuando los compartimos). Si no se usa
+   la vinculación, los códigos de tiempo comenzarán desde cero, para cada archivo. Por defecto,
+   <i>mkvmerge</i> no usa la vinculación de archivos porque la mayoría de reproductores aun no
+   manejan los archivos vinculados de la manera correcta. Si desea vincular archivos, habilite la casilla
+   de verificación <code> Archivos vinculados</code>.</p>
+
+   <p style='text-align:justify'>Nota: El UID del segmento, es un IDentificador Único para cada segmento.</p>
+
+  <h4><a name="global_link">3.5.3. Vinculación manual de archivos/segmentos</a></h4>
+
+  <p style='text-align:justify'>Independientemente de que la división esté activa o no, el usuario puede decirle a
+   <i>mkvmerge</i> que vincule los archivos creados, a unos específicos UIDs.
+   Esto se hace insertando un UID del segmento válido, en las ventanas de texto:
+   <code>UID del segmento anterior</code> y <code>UID del segmento siguiente</code>.
+   Estas opciones aceptan un UID del segmento, en el formato que <i>mkvinfo</i> genera:
+   16 números hexadecimales, entre 0x00 y 0xff con el prefijo '0x' y separados con espacios,
+   p.e. <code>0x41 0xda 0x73 0x66 0xd9 0xcf 0xb2 0x1e 0xae 0x78 0xeb 0xb4 0x5e 0xca 0xb3
+    0x93</code>. Una alternativa más simple es usar: 16 números hexadecimales entre
+   0x00 y 0xff, sin el prefijo '0x' y sin espacios; p.e. <code>41da7366d9cfb21eae78ebb45ecab393</code>.</p>
+
+<div align="center">
+   <p style='text-align:center'>
+    <img src="images/figura13.png"
+         alt="typical options for linking segments">
+    <br>
+    <font size="-1">Figura 13: Opciones típicas para enlazar segmentos.</font>
+   </p>
+  </div>
+
+  <p style='text-align:justify'>Si se usa la división, entonces el primer archivo es vinculado al
+   UID que se ha insertado en la caja de texto: <code>UID del segmento anterior</code>; y el último
+   se vincula con el UID de la caja de texto: <code>UID del segmento siguiente</code>.
+   Si no se usa la división, el archivo de salida estará vinculado a cada uno de los dos UIDs.</p>
+
+  <h4><a name="global_chapters">3.5.4. Capítulos</a></h4>
+
+  <div align="center">
+   <p style='text-align:center'>
+    <img src="images/figura14.png"
+         alt="typical options for chapters">
+    <br>
+    <font size="-1">Figura 14: Opciones típicas del archivo de capítulos</font>
+   </p>
+  </div>
+
+  <p style='text-align:justify'>Con el botón del explorador puedes seleccionar los capítulos que se añadirán
+   al archivo creado. Una completa explicación de todos los aspectos que conciernen a los capítulos los puede
+   encontrar en <a href="mkvmerge-gui.html#chaptereditor"> la sección del editor de capítulos</a>.</p>
+
+  <h4><a name="global_tags">3.5.5. Etiquetas globales</a></h4>
+
+  <div align="center">
+   <p style='text-align:center'>
+    <img src="images/figura15.png"
+         alt="typical options for global tags">
+    <br>
+    <font size="-1">Figura 15: Cargamos un archivo etiqueta, que tiene un formato específico escrito en XML.</font>
+   </p>
+  </div>
+
+  <p style='text-align:justify'>A diferencia de la etiquetas que se pueden asignar a cada pista (en la pestaña de
+   entrada), aquí las etiquetas deben contener las UIDs de la pista. Estas etiquetas no se asignan a ninguna
+   pista. En el 99% de los casos, esta NO es la opción que necesita!</p>
+
+  <p style='text-align:justify'>Puede encontrar una explicación más extensa en la documentacion de mkvmerge.</p>
+
+  <h3><a name="doit">3.6. Iniciando el proceso de creación</a></h3>
+
+  <p style='text-align:justify'>Una vez que todo se ha configurado, el proceso de creación puede iniciarse.
+   La última cosa que debe hacer, es seleccionar la carpeta donde se creará el archivo. Con el botón
+   del <code>explorador</code>, puede elegir el nombre del archivo de salida. Después de hacer
+   esto, puede comenzar el proceso apretando el botón de <code>Iniciar multiplexado</code> o
+   seleccionando la misma acción, desde la barra de menu, en la pestaña de multiplexado.</p>
+
+  <p style='text-align:justify'>Si todo se ha configurado correctamente, <i>mmg</i> mostrará el cuadro de diálogo del multiplexado.
+   En la parte superior se muestra el progreso, al igual que una descripción general de lo que <i>mkvmerge</i> está haciendo en ese momento.</p>
+
+  <div align="center">
+   <p style='text-align:center'>
+    <img src="images/figura16.png"
+         alt="the muxing window">
+    <br>
+    <font size="-1">Figura 16: La ventana del multiplexado</font>
+   </p>
+  </div>
+
+  <p><i>mkvmerge</i> clasifica sus mensajes según tres 'niveles de gravedad':
+   infome de estado, advertencias y errores. Todos los mensajes del informe de estado
+   se muestran el la ventana superior. Estos incluyen los tipos de pista y otras cosas
+   interesantes.</p>
+
+  <p style='text-align:justify'>Las advertencias se muestran en la ventana de enmedio. <i>mkvmerge</i>
+   no cancelará el proceso cuando ocurra una advertencias, pero podría no multiplexar la pista
+   que esté relacionada con la advertencia detectada. Preste atención a todos los mensajes
+   de advertencias.</p>
+
+  <p style='text-align:justify'>Los errores se muestran en la ventana inferior. Son siempre estados críticos
+   y <i>mkvmerge</i> finalizará el proceso después de mostrar el mensaje de error. Ese mensaje podría indicar
+   que el disco duro está lleno, que el archivo fuente está dañado o que no puede seguir procesando.</p>
+
+  <p style='text-align:justify'>El botón de <code>Cancelar</code> envia a <i>mkvmerge</i> una señal para finalizar
+   el proceso, que debería acabar inmediatamente al pulsarlo; a menos que <i>mkvmerge</i> esté en un bucle. Con el
+   botón de <code>Guardar informe</code>, obtendrá un registro completo de lo que <i>mkvmerge</i> ha realizado, para
+   su análisis o para remitirme el informe, en el caso de que haya encontrado un fallo en el programa.</p>
+
+  <h3><a name="saveload">3.7. Guardar y cargar ajustes</a></h3>
+
+  <p style='text-align:justify'>Todos sus ajustes personalizados no tienen porque perderse al salir del programa.
+   Puede guardar todos sus ajustes en archivos de textos, con la opción <code>Guardar ajustes</code> en el menu
+   <code>Archivo</code>; y tambien restaurar dichos ajustes con la opción <code>Cargar ajustes</code>. La extensión
+   por defecto es <code>.mmg</code> y es usada por otros programas. Puede asociar la extensión con <i>mmg</i>, para que
+   cargue automáticamente los ajustes definidos en el archivo.</p>
+
+  <h3><a name="jobqueue">3.8. Poner en cola varios trabajos (Procesamiento por lotes)</a></h3>
+
+  <p style='text-align:justify'>En el caso de que desee procesar varios archivos, no tiene que preparar el primer archivo,
+   esperar a que finalice para preparar el segundo, y esperar a que éste finalice, etc... <i>Mkvmerge GUI</i> posee una gestor
+   de archivos que almacena los trabajos a realizar en una lista, y los ejecuta a conveniencia del usuario. Los pasos básicos
+   para utilizar el gestor de trabajos, son:</p>
+
+  <p style='text-align:justify'>
+   <ol>
+    <li>Añada todos lo archivos, ajuste las opciones y elija el nombre de salida.</li>
+    <li>Aprete el botón <code>Añadir a la lista de tareas</code> e introduzca un título para ese trabajo.</li>
+    <li>Repita el proceso tantas veces como lo necesite.</li>
+    <li>Abra el gestor de trabajos seleccionando la opción <code>Gestionar trabajos</code>
+     desde el menu de <code>Multiplexado</code>.</li>
+    <li>Aprete el botón de <code>Iniciar</code>.</li>
+    <li>Vaya a tomarse algo, a comprar o hablar con tu pareja ;)</li>
+   </ol>
+  </p>
+
+  <div align="center">
+   <p style='text-align:center'>
+    <img src="images/figura17.png"
+			alt="the job management dialog">
+    <br>
+    <font size="-1">Figura 17: Gestor de trabajos</font>
+   </p>
+  </div>
+
+  <p style='text-align:justify'>Cada trabajo tiene seis atributos: un ID que es elegido automaticamente por
+   <i>mkvmerge GUI</i>; su estado (<code>pendiente</code> - no ha sido multiplexado aún, <code>hecho</code> - multiplexado correctamente,
+   <code>hecho con advertencias</code> - multiplexado satisfactoriamente con advertencias, <code>fallido</code> - el proceso falló);
+   el nombre que introdujo antes; la hora y fecha en que el trabajo fue añadido a la lista;
+   la hora y fecha del inicio del multiplexado; la hora y fecha de la finalización del trabajo.</p>
+
+  <p style='text-align:justify'>Los controles generales están situados en la parte inferior. El botón <code>Iniciar</code>
+   comenzará el proceso de multiplexado para todos los trabajos añadidos en la lista del gestor y cuyo estado sea
+   <code>pendiente</code>. El botón de <code>Iniciar selección</code> comenzará el proceso de multiplexado
+   para todos los procesos que hayan sido seleccionados indepedientemente de sus estados.</p>
+
+  <p style='text-align:justify'>Los botones de la derecha manipulan los trabajos seleccionados. Los botones
+   <code>Subir</code> y <code>Bajar</code>, mueven los trabajos seleccionados por la lista. El botón <code>Rehabilitar</code>
+   cambia el estado de los trabajos a <code>pendiente</code> por lo que se realizarán la próxima vez que el botón <code>Iniciar</code>
+   es apretado. El botón <code>Deshabilitar</code> ajusta el estado a <code>hecho</code>.</p>
+
+  <p style='text-align:justify'>Mientras los trabajos se ejecutan, <i>mkvmerge</i> no mostrará el proceso pero si lo guarda.
+   Si quieres ver el informe del multiplexado puedes apretar el botón <code>Ver informe</code>. Esto es útil si un trabajo ha finalizado
+   con advertencias o si ha fallado.</p>
+
+  <hr>
+
+  <a name="wxhh_chaptereditor"></a>
+  <h2><a name="chaptereditor">4. El editor de capítulos</a></h2>
+
+  <p style='text-align:justify'>Una de las nuevas características de <i>mmg</i> es un total editor de capítulos.
+   Puede leer texto con la sintaxis de los archivos de capítulos, importarlos desde archivos matroska y crear los archivos de
+   capítulos que pueden ser seleccionados en la pestaña de <code>Opciones generales</code> para insertarlos en los archivos Matroska</p>
+
+  <h3><a name="chapterconcept">4.1. El concepto de los capítulos en Matroska</a></h3>
+
+  <p style='text-align:justify'>A diferencia de otros sistemas Matroska, es compatible con capítulos <i>anidados</i>.
+   Esto significa que puedes definir subcapitulos en los capítulos definidos.</p>
+
+  <p style='text-align:justify'>Un capítulo tiene al menos cuatro campos: El UID de la pista(s) que se aplica al título/nombre del capítulo,
+   el tiempo de inicio y el lenguaje asociado. Los demás elementos son opcionales, como añadir el tiempo de finalización,
+   más códigos de lenguaje y del país. Por lo general, el usuario sólo necesita los campos obligatorios. De estos
+   sólo puede especificar el nombre, el tiempo de inicio y el código del lenguaje. <i>Mkvmerge</i> asignará automáticamente
+   todos los capítulos para completar el archivo.</p>
+
+  <h3><a name="chapterexamples">4.2. Ejemplos</a></h3>
+
+  <p style='text-align:justify'>El primer ejemplo es el más simple. La película en cuestión contiene cuatro partes:
+   La introducción inicial, el primer acto, el segundo acto, y los créditos. Acuerdese que los tiempos de finalización
+   son opcionales.</p>
+
+  <p><code>Intro (desde 00:00:00, idioma Alemán)
+    <br>
+    Acto 1 (desde 00:01:00, idioma Alemán)
+    <br>
+    Acto 2 (desde 00:05:30, idioma Alemán)
+    <br>
+    Créditos (desde 00:12:20 hasta 00;12:55, idioma Alemán)</code></p>
+
+  <p style='text-align:justify'>Un ejemplo mas complicado, incluyen subcapítulos. Tomemos como ejemplo,
+   la ópera de Ludwig van Beethoven, Fidelio. Para resumir, sólo incluyo las tres primeras piezas de los dos actos.</p>
+
+  <p style='text-align:justify'>El primer acto contiene:
+   <ol>
+    <li>Obertura (6:24 de duración),</li>
+    <li>Aria: 'Ahora, querida, estamos solos' (4:46
+     de duración) u</li>
+    <li>Diálogo: 'Pobre Jaquino' (0:10 de duración).</li>
+   </ol>
+   <br>
+   El segundo acto contiene:
+
+   <ol><br>
+    <li>Obertura y Aria: '¡Dios! ¡Qué oscuro aquí!' (10:46
+     de duración),</li>
+    <li>Melodrama y Dueto: 'Qué frío hace en esta cámara subterránea' (5:21 de duración) and</li>
+    <li>Diálogo: '¡Se despierta!' (0:59 de duración).</li>
+   </ol>
+  </p>
+
+  <p style='text-align:justify'>El primer acto, que será nuestro primer capítulo, tiene una longitud de 11:20 minutos.
+   Nuestro segundo acto tiene una longitud de 17:06. Estos capítulos se parecerían a esto:</p>
+
+  <p><code>Primer acto (desde 00:00:00 hasta 00:11:20, idioma Alemán,
+    país Alemania)
+    <br>
+    &nbsp;&nbsp;&nbsp; Obertura (desde 00:00:00 hasta 00:06:24, idioma
+    Alemán, país Alemania)
+    <br>
+    &nbsp;&nbsp;&nbsp; Aria: 'Ahora, querida, estamos solos'
+    (desde 00:06:24 hasta 00:11:10, idioma Alemán, país Alemania)<br>
+    &nbsp;&nbsp;&nbsp; Diálogo: 'Pobre Jaquino' (desde 00:11:10 hasta 00:11:20,
+    idioma Alemán, país Alemania)
+    <br>
+
+    <br>Segundo acto (from 00:11:20 until 00:28:26, idioma Alemán,
+    país Alemania)
+    <br>
+    &nbsp;&nbsp;&nbsp; Obertura y Aria: '¡Dios! ¡Qué oscuro aquí!'
+    (desde 00:11:20 hasta 00:22:06, idioma Alemán, país Alemania)
+    <br>
+    &nbsp;&nbsp;&nbsp; Melodrama y Dueto: 'Qué frío hace en esta cámara subterránea' (desde 00:22:06
+    hasta 00:27:27, idioma Alemán, país Alemania)
+    <br>
+    &nbsp;&nbsp;&nbsp; Diálogo: '¡Se despierta!' (desde 00:27:27 hasta 00:28:26,
+    idioma Alemán, país Alemania)
+   </code>
+  </p>
+
+  <h3><a name="chapterformats">4.3. Formatos admitidos por mkvmerge
+ 	   para los archivos de capítulos
+  </a></h3>
+
+  <p>El editor de capítulos de <i>mkvmerge</i> y <i>mmg</i>, admiten diferentes formatos
+   para los archivos de capítulos.</p>
+
+  <h4><a name="cfsimple">4.3.1. Archivos de capítulos de estilo
+		  simple/OGM.</a></h4>
+
+  <p style='text-align:justify'>Uno de los formatos más básicos es el utilizado en los archivos de OGM.
+   Es un formato basado en texto. Cada capítulo está formado por dos líneas, la primera
+   contiene el tiempo de inicio, y la segunda el nombre/título. Todas las líneas están numeradas.</p>
+
+  <p style='text-align:justify'>El primer ejemplo puede escribirse de esta forma:<br>
+   <br><code>CHAPTER01=00:00:00.000<br>
+    CHAPTER01NAME=Intro<br>
+    CHAPTER02=00:01:00.000<br>
+    CHAPTER02NAME=Act 1<br>
+    CHAPTER03=00:05:30.000<br>
+    CHAPTER03NAME=Act 2<br>
+    CHAPTER04=00:12:20.000<br>
+    CHAPTER04NAME=Credits
+   </code>
+  </p>
+
+  <p style='text-align:justify'>El segundo ejemplo no puede ser expresado de esa manera, ya que no es compatible con las
+   especificaciones del idioma, ni con el tiempo de finalización ni con los capítulos anidados. La ventaja de este
+   tipo de archivos es que son muy fáciles de crear, y hay varias herramientas disponibles para Windows y Unix/Linux,
+   que crean este tipo de archivos directamente desde DVDs.</p>
+
+  <p style='text-align:justify'>Debido a sus limitaciones, <i>mmg</i> no puede generar capítulos en este formato.</p>
+
+  <h4><a name="cfxml">4.3.2. Archivos de capítulos con todas las características XML</a></h4>
+
+  <p style='text-align:justify'>He creado un formato de capítulos basado en XML, que ajusta con el sistema que usa Matroska.
+   Con este formato, usted tiene un control total de las funciones. En esta guía, no describiré este formato, en detalle. Por favor,
+   eche un vistazo los archivos de ejemplo, que vienen con <i>mkvtoolnix</i>.</p>
+
+  <h4><a name="cfkax">4.3.3. Capítulos encontrados en archivos Matroska</a></h4>
+
+  <p style='text-align:justify'>El editor puede leer los capítulos directamente de los archivos Matroska.
+   Estos pueden ser editados/exportados en formato XML, adjuntados al mismo archivo matroska o a otro de nueva creación.
+   Todas las funciones son compatibles.</p>
+
+  <h3><a name="creatingchapters">4.4. Crear archivos de capítulos</a></h3>
+
+  <p style='text-align:justify'>El editor de capítulos consta de tres partes: la vista del esquema de los capítulos,
+   los cuatro botones usados para añadir/eliminar los registros de cada capítulo, y las cajas
+   de texto que son usados para ajustar la información de cada registro.</p>
+
+  <div align="center">
+   <p style='text-align:center'>
+    <img src="images/figura18.png"
+         alt="the chapter editor">
+    <br>
+    <font size="-1">Figura 18: El editor de capítulos, que muestra el ejemplo anterior</font>
+   </p>
+  </div>
+
+  <p style='text-align:justify'>En los archivos Matroska, cada registro de los capítulos están definidos
+   por un tiempo de inicio, un nombre y un idioma que está asociado a ese nombre. Puede tener diversos nombres
+   para cada registro y cada uno asociado con un idioma diferente. También puede agregar el tiempo de finalización
+   pero no es obligatorio.</p>
+
+  <p style='text-align:justify'>Puede crear un nuevo archivo de capítulos seleccionando la opción <code>Nuevo</code> del menu
+   <code>Editor de capítulos</code>. Puede añadir un nuevo registro con los botones <code>Añadir capítulo</code> o
+   <code>Añadir subcapítulo</code>. La diferencia entre ambos, es que el botón <code>Añadir capítulo</code>, agrega
+   un nuevo registro al mismo nivel del capítulo seleccionado, y <code>Añadir subcapítulo</code> inserta un nuevo
+   registro en un nivel inferior del capítulo seleccionado.</p>
+
+  <p style='text-align:justify'>El botón <code>Eliminar capítulo</code> ha de ser usado con cuidado. Elimina el esquema entero sin
+   preguntar confirmación, y no existe aún la opción de deshacer cambios.</p>
+
+  <p style='text-align:justify'>Después de seleccionar un registro, puede cambiar su información. El formato para el tiempo de inicio y
+   finalización es <code>HH:MM:SS.mmm</code> o simplemente <code>HH:MM:SS</code>. Un nombre para el capítulo, ya habrá sido añadido.
+   Puede editarlo y seleccionar el idioma que tendrá este nombre. De esta manera, podría proporcionar nombres en diferentes idiomas,
+   p.e. 'The hero arrives' con 'eng' como idioma, y 'Der Held kommt an' con 'ger'. Aprete el botón <code>Añadir nombre</code> si necesita
+   mas registros y <code>Eliminar nombre</code> para suprimir el que no desee.</p>
+
+  <p style='text-align:justify'>La creación de muchos capítulos editando el idioma, puede ser demasiado engorroso. Por lo tanto,
+   puede seleccionar que idioma y país, <i>mmg</i> debe añadir por defecto. Puede editar los valores, en <code>Archivo --> Opciones -->
+   Opciones del capítulo</code>. El botón <code>Establecer valores</code> hace algo similar. Con éste, puedes aplicar
+   un idioma y/o país, al registro del capítulo seleccionado y todos sus subregistros.</p>
+
+  <p style='text-align:justify'>Los archivos de capítulos pueden guardarse en formato XML con los botones <code>Guardar</code> o
+   <code>Guardar como</code>. <code>Guardar como</code> no se puede usar para escribir los capítulos en el archivo Matroska abierto - para eso
+   tendrás que usar <code>Guardar como Archivo Matroska</code>.</p>
+
+  <h3><a name="editingchapters">4.5. Editar los capítulos existentes</a></h3>
+
+  <p style='text-align:justify'>Puede cargar archivos de capítulos .XML o de archivos Matroska, seleccionando la opción
+   <code>Cargar</code> del menu. <i>mmg</i> detectará automaticamente el tipo de archivos usado y leerá los capítulos.</p>
+
+  <a name="wxhh_headereditor"></a>
+  <h2><a name="headereditor">5. El editor de encabezado</a></h2>
+
+  <p style='text-align:justify'>
+   mmg cuenta con un editor de encabezados para los archivos Matroska. Puede iniciarlo desde el menu &quot;Archivo&quot; -->
+   &quot;Editor de encabezado&quot;.
+  </p>
+
+  <p style='text-align:justify'>
+   El editor de encabezado permite al usuario editar la información de algunos campos de los encabezados de segmentos
+   y pistas, sin tener que volver a multiplexar el archivo. Su uso es simple, carga un archivo,
+   selecciona el campo del encabezado que quieres cambiar, modifica el valor por el que desees y guarda el archivo.
+  </p>
+
+  <div align="center">
+   <p style='text-align:center'>
+    <img src="images/figura19.png"
+         alt="the headers editor">
+    <br>
+    <font size="-1">Figura 19: El editor de encabezado</font>
+   </p>
+  </div>
+
+
+  <h3><a name="he_addingremovingheaderfields">5.1. Añadir y eliminar campos del encabezado</a></h3>
+
+  <p style='text-align:justify'>
+   El formato de los archivos Matroska, permite que estén presentes o ausentes, la mayoría de los campos del encabezado.
+   El editor de encabezado de mmg, mostrará todos los campos del encabezado que soporta, incluso
+   si actualmente no están presentes en el archivo. Esto permite al usuario, añadir campos que no están presentes, y eliminar
+   los campos que si lo están.
+  </p>
+
+  <h3><a name="he_analyzingthefile">5.2. Abrir un archivo existente</a></h3>
+
+  <p style='text-align:justify'>
+   El usuario puede iniciar la edición de un archivo eligiendo &quot;Abrir&quot; desde el menu
+   &quot;Archivo&quot;, del editor del encabezado. Tras seleccionar el archivo apropiado, el editor del encabezado
+   escaneará el archivo para todos los elementos importantes. Esto puede tomar algo de tiempo, dependiendo del
+   tamaño del archivo. Esto es necesario debido la flexible estructura de los archivos Matroska.
+  </p>
+
+  <h3><a name="he_editingthefile">5.3. Editar campos del encabezado</a></h3>
+
+  <p style='text-align:justify'>
+   Después de abrir el archivo, en la izquierda del panel, se mostrará un registro para los encabezados del segmento y
+   un registro para cada pista que se encontró en el archivo. Cada uno contiene un numero de subelementos que representan
+   los valores actuales del encabezado. Cuando el usuario selecciona un subelemento, el panel derecho se actualiza
+   mostrando una serie de campos:
+  </p>
+
+  <p style='text-align:justify'>
+   <ul>
+    <li>su tipo (un número, una cadena de texto, etc),</li>
+    <li>su nombre,</li>
+    <li>una breve descripción de su contenido,</li>
+    <li>si el elemento realmente está presente en el archivo, incluyendo una opción para quitarlo si está o añadirlo si no lo está,</li>
+    <li>si el valor original del elemento estaba presente cuando el archivo fue abierto y</li>
+    <li>un elemento de control para modificar su contenido.</li>
+   </ul>
+  </p>
+
+  <p style='text-align:justify'>
+   La mayoría de los tipos de valor son evidentes: números, cadenas de texto, etc. Sin embargo,
+   el tipo binario se muestra como una secuencia de digitos hexadecimales. Los formatos
+   aceptados, son los mismos que los empleados en varias opciones de mkvmerge,
+   para especificar los UIDs del segmento: ya sea una simple secuencia de dígitos hexadecimales (p.e. 1857a7fe7d ...)
+   o los números hexadecimales con el prefijo "0x" antes de cada par (p.e. 0x18 0x57 0xa7 0xfe 0x7d ...).</p>
+
+  <h3><a name="he_validation">5.4. Validación</a></h3>
+
+  <p style='text-align:justify'>
+   El usuario puede validar los cambios seleccionando &quot;Validar&quot;
+   del menu &quot;Encabezados&quot;. La validación también se ejecuta, de forma
+   automática, cada vez que el usuario quiere guardar los archivos. La validación asegura que los valores
+   que el usuario ha suministrado, pueden ser almacenados en el elemento. Por ejemplo, un elemento de tipo
+   número no puede contener caracteres.
+  </p>
+
+  <p style='text-align:justify'>
+   Si la validación falla, el editor muestra una ventana advirtiéndonos del fallo. El panel de la derecha
+   se actualiza, mostrando el primer elemento erróneo, para que se corrija.
+  </p>
+
+  <h3><a name="he_saving">5.5. Guardando el archivo</a></h3>
+
+  <p style='text-align:justify'>
+   El usuario puede guardar los cambios al seleccionar &quot;Guardar&quot; del menú
+   &quot;Archivo&quot;. Si nungún cambio se ha hecho, entonces mmg lo advertirá y
+   por lo tanto no modificará el archivo.
+  </p>
+
+  <p style='text-align:justify'>
+   Antes de modificar el archivo, mmg comprueba si el archivo ha sido modificado por otra
+   aplicación desde que ha sido abierto. Si este es el caso, entonces mmg advertirá al usuario,
+   descarta todos los cambios y vuelve a cargar el archivo a fin de garantizar que el
+   archivo no está dañado.
+  </p>
+
+  <p style='text-align:justify'>
+   Mmg se esfuerza en encontrar los lugares apropiados para escribir los encabezados modificados.
+   Sobreescribirá los elementos del encabezado existentes a su posición original, los elementos EbmlVoid
+   y todas las demás instancias de los encabezados que encuentre. También actualizará los encabezados meta seek
+   para que los encabezados pueden ser encontrados fácilmente por las aplicaciones de lectura de ese
+   archivo.
+  </p>
+
+  <p style='text-align:justify'>
+   Tras guardar el archivo, el editor de encabezado, le volverá a cargar y lo analizará. Esto se hace para asegurar
+   que no se crea un archivo corrupto. Este proceso provoca un considerable descenso en la velocidad, por lo que
+   será eliminado en futuras revisiones de mmg, cuando se hayan hecho las suficientes pruebas.
+  </p>
+ </body>
+</html>

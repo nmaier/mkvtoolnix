@@ -11,10 +11,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_MP3_COMMON_H
-#define __MTX_COMMON_MP3_COMMON_H
+#ifndef MTX_COMMON_MP3_COMMON_H
+#define MTX_COMMON_MP3_COMMON_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 typedef struct {
   int version;
@@ -32,8 +32,8 @@ typedef struct {
 } mp3_header_t;
 
 int find_mp3_header(const unsigned char *buf, int size);
-int find_consecutive_mp3_headers(const unsigned char *buf, int size, int num);
+int find_consecutive_mp3_headers(const unsigned char *buf, int size, int num, mp3_header_t *header_found = nullptr);
 
 bool decode_mp3_header(const unsigned char *buf, mp3_header_t *h);
 
-#endif // __MTX_COMMON_MP3_COMMON_H
+#endif // MTX_COMMON_MP3_COMMON_H

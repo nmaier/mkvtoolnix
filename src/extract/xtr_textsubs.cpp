@@ -12,10 +12,11 @@
 
 #include "common/common_pch.h"
 
-#include <algorithm>
+#include <sstream>
 
+#include "common/codec.h"
 #include "common/ebml.h"
-#include "common/matroska.h"
+#include "common/mm_io_x.h"
 #include "common/strings/editing.h"
 #include "common/strings/formatting.h"
 #include "common/strings/parsing.h"
@@ -39,29 +40,19 @@ xtr_srt_c::create_file(xtr_base_c *master,
 }
 
 void
-xtr_srt_c::handle_frame(memory_cptr &frame,
-                        KaxBlockAdditions *,
-                        int64_t timecode,
-                        int64_t duration,
-                        int64_t,
-                        int64_t,
-                        bool,
-                        bool,
-                        bool) {
-  m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
-
-  if (-1 == duration) {
+xtr_srt_c::handle_frame(xtr_frame_t &f) {
+  if (-1 == f.duration) {
     mxwarn(boost::format(Y("Track %1%: Subtitle entry number %2% is missing its duration. Assuming a duration of 1s.\n")) % m_tid % (m_num_entries + 1));
-    duration = 1000000000;
+    f.duration = 1000000000;
   }
 
-  int64_t start = timecode / 1000000;
-  int64_t end   = start + duration / 1000000;
+  int64_t start =         f.timecode / 1000000;
+  int64_t end   = start + f.duration / 1000000;
 
   ++m_num_entries;
-  char *text = new char[frame->get_size() + 1];
-  memcpy(text, frame->get_buffer(), frame->get_size());
-  text[frame->get_size()] = 0;
+  char *text = new char[f.frame->get_size() + 1];
+  memcpy(text, f.frame->get_buffer(), f.frame->get_size());
+  text[f.frame->get_size()] = 0;
 
   std::string buffer =
     (boost::format("%1%\n"
@@ -83,7 +74,7 @@ xtr_srt_c::handle_frame(memory_cptr &frame,
 const char *xtr_ssa_c::ms_kax_ssa_fields[10] = {
   "readorder", "layer",   "style",   "name",
   "marginl",   "marginr", "marginv",
-  "effect",    "text",    NULL
+  "effect",    "text",    nullptr
 };
 
 xtr_ssa_c::xtr_ssa_c(const std::string &codec_id,
@@ -99,9 +90,9 @@ xtr_ssa_c::xtr_ssa_c(const std::string &codec_id,
 void
 xtr_ssa_c::create_file(xtr_base_c *master,
                        KaxTrackEntry &track) {
-  KaxCodecPrivate *priv = FINDFIRST(&track, KaxCodecPrivate);
-  if (NULL == priv)
-    mxerror(boost::format(Y("Track %1% with the CodecID '%2%' is missing the \"codec private \" element and cannot be extracted.\n")) % m_tid % m_codec_id);
+  KaxCodecPrivate *priv = FindChild<KaxCodecPrivate>(&track);
+  if (!priv)
+    mxerror(boost::format(Y("Track %1% with the CodecID '%2%' is missing the \"codec private\" element and cannot be extracted.\n")) % m_tid % m_codec_id);
 
   xtr_base_c::create_file(master, track);
   m_out->write_bom(m_sub_charset);
@@ -126,7 +117,7 @@ xtr_ssa_c::create_file(xtr_base_c *master,
   delete []s;
 
   const char *p1;
-  if (((p1 = strstr(sconv.c_str(), "[Events]")) == NULL) || (strstr(p1, "Format:") == NULL)) {
+  if (!(p1 = strstr(sconv.c_str(), "[Events]")) || !strstr(p1, "Format:")) {
     if (m_codec_id == MKV_S_TEXTSSA)
       sconv += "\n[Events]\nFormat: Marked, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n";
     else
@@ -145,7 +136,7 @@ xtr_ssa_c::create_file(xtr_base_c *master,
   if (0 > pos2)
     pos2 = sconv.length();
 
-  std::string format_line = ba::to_lower_copy(sconv.substr(pos1 + 7, pos2 - pos1 - 7));
+  std::string format_line = balg::to_lower_copy(sconv.substr(pos1 + 7, pos2 - pos1 - 7));
   if (std::string::npos == format_line.find("text")) {
     if (format_line[format_line.length() - 1] == '\r') {
       format_line.erase(format_line.length() - 1);
@@ -164,31 +155,21 @@ xtr_ssa_c::create_file(xtr_base_c *master,
 }
 
 void
-xtr_ssa_c::handle_frame(memory_cptr &frame,
-                        KaxBlockAdditions *,
-                        int64_t timecode,
-                        int64_t duration,
-                        int64_t,
-                        int64_t,
-                        bool,
-                        bool,
-                        bool) {
-  m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
-
-  if (0 > duration) {
+xtr_ssa_c::handle_frame(xtr_frame_t &f) {
+  if (0 > f.duration) {
     mxwarn(boost::format(Y("Subtitle track %1% is missing some duration elements. "
                            "Please check the resulting SSA/ASS file for entries that have the same start and end time.\n"))
            % m_tid);
     m_warning_printed = true;
   }
 
-  int64_t start = timecode / 1000000;
-  int64_t end   = start + duration / 1000000;
+  int64_t start =         f.timecode / 1000000;
+  int64_t end   = start + f.duration / 1000000;
 
-  char *s       = (char *)safemalloc(frame->get_size() + 1);
+  char *s       = (char *)safemalloc(f.frame->get_size() + 1);
   memory_c af_s((unsigned char *)s, 0, true);
-  memcpy(s, frame->get_buffer(), frame->get_size());
-  s[frame->get_size()] = 0;
+  memcpy(s, f.frame->get_buffer(), f.frame->get_size());
+  s[f.frame->get_size()] = 0;
 
   // Split the line into the fields.
   // Specs say that the following fields are to put into the block:
@@ -197,7 +178,7 @@ xtr_ssa_c::handle_frame(memory_cptr &frame,
   std::vector<std::string> fields = split(s, ",", 9);
   if (9 < fields.size()) {
     mxwarn(boost::format(Y("Invalid format for a SSA line ('%1%') at timecode %2%: Too many fields found (%3% instead of 9). This entry will be skipped.\n"))
-           % s % format_timecode(timecode * 1000000, 3) % fields.size());
+           % s % format_timecode(f.timecode * 1000000, 3) % fields.size());
     return;
   }
 
@@ -206,9 +187,9 @@ xtr_ssa_c::handle_frame(memory_cptr &frame,
 
   // Convert the ReadOrder entry so that we can re-order the entries later.
   int num;
-  if (!parse_int(fields[0], num)) {
+  if (!parse_number(fields[0], num)) {
     mxwarn(boost::format(Y("Invalid format for a SSA line ('%1%') at timecode %2%: The first field is not an integer. This entry will be skipped.\n"))
-           % s % format_timecode(timecode * 1000000, 3));
+           % s % format_timecode(f.timecode * 1000000, 3));
     return;
   }
 
@@ -225,7 +206,7 @@ xtr_ssa_c::handle_frame(memory_cptr &frame,
   for (i = 0; i < m_ssa_format.size(); i++) {
     std::string format = m_ssa_format[i];
 
-    if (ba::iequals(format, "actor"))
+    if (balg::iequals(format, "actor"))
       format = "name";
 
     if (0 < i)
@@ -244,7 +225,7 @@ xtr_ssa_c::handle_frame(memory_cptr &frame,
 
     else {
       int k;
-      for (k = 0; NULL != ms_kax_ssa_fields[k]; ++k)
+      for (k = 0; ms_kax_ssa_fields[k]; ++k)
         if (format == ms_kax_ssa_fields[k]) {
           line += fields[k];
           break;
@@ -281,13 +262,15 @@ xtr_usf_c::xtr_usf_c(const std::string &codec_id,
 {
   if (m_sub_charset.empty())
     m_sub_charset = "UTF-8";
+
+  m_simplified_sub_charset = boost::regex_replace(balg::to_lower_copy(m_sub_charset), boost::regex("[^a-z0-9]+", boost::regex::perl), "");
 }
 
 void
 xtr_usf_c::create_file(xtr_base_c *master,
                        KaxTrackEntry &track) {
-  KaxCodecPrivate *priv = FINDFIRST(&track, KaxCodecPrivate);
-  if (NULL == priv)
+  KaxCodecPrivate *priv = FindChild<KaxCodecPrivate>(&track);
+  if (!priv)
     mxerror(boost::format(Y("Track %1% with the CodecID '%2%' is missing the \"codec private\" element and cannot be extracted.\n")) % m_tid % m_codec_id);
 
   init_content_decoder(track);
@@ -295,15 +278,15 @@ xtr_usf_c::create_file(xtr_base_c *master,
   memory_cptr new_priv = decode_codec_private(priv);
   m_codec_private.append((const char *)new_priv->get_buffer(), new_priv->get_size());
 
-  KaxTrackLanguage *language = FINDFIRST(&track, KaxTrackLanguage);
-  if (NULL == language)
+  KaxTrackLanguage *language = FindChild<KaxTrackLanguage>(&track);
+  if (!language)
     m_language = "eng";
   else
     m_language = std::string(*language);
 
-  if (NULL != master) {
+  if (master) {
     xtr_usf_c *usf_master = dynamic_cast<xtr_usf_c *>(master);
-    if (NULL == usf_master)
+    if (!usf_master)
       mxerror(boost::format(Y("Cannot write track %1% with the CodecID '%2%' to the file '%3%' because "
                               "track %4% with the CodecID '%5%' is already being written to the same file.\n"))
               % m_tid % m_codec_id % m_file_name % master->m_tid % master->m_codec_id);
@@ -313,79 +296,116 @@ xtr_usf_c::create_file(xtr_base_c *master,
                               "being written to the same file, and their CodecPrivate data (the USF styles etc) do not match.\n"))
               % m_tid % m_codec_id % m_file_name % master->m_tid % master->m_codec_id);
 
-    m_formatter = usf_master->m_formatter;
-    m_master    = usf_master;
+    m_doc    = usf_master->m_doc;
+    m_master = usf_master;
 
   } else {
     try {
-      std::string end_tag           = "</USFSubtitles>";
-      std::string codec_private_mod = m_codec_private;
-      int end_tag_pos               = codec_private_mod.find(end_tag);
-      if (0 <= end_tag_pos)
-        codec_private_mod.erase(end_tag_pos, end_tag.length());
+      m_out = mm_file_io_c::open(m_file_name, MODE_CREATE);
+      m_doc = std::make_shared<pugi::xml_document>();
 
-      m_out       = mm_file_io_c::open(m_file_name, MODE_WRITE);
-      m_formatter = counted_ptr<xml_formatter_c>(new xml_formatter_c(*m_out, m_sub_charset));
+      std::stringstream codec_private{m_codec_private};
+      auto result = m_doc->load(codec_private, pugi::parse_default | pugi::parse_declaration | pugi::parse_doctype | pugi::parse_pi | pugi::parse_comments);
+      if (!result)
+        throw mtx::xml::xml_parser_x{result};
 
-      m_formatter->set_doctype("USFSubtitles", "USFV100.dtd");
-      m_formatter->set_stylesheet("text/xsl", "USFV100.xsl");
-      m_formatter->write_header();
-      m_formatter->format(codec_private_mod + "\n");
+      pugi::xml_node doctype_node, declaration_node, stylesheet_node;
+      for (auto child : *m_doc)
+        if (child.type() == pugi::node_declaration)
+          declaration_node = child;
 
-    } catch (mtx::mm_io::exception &) {
-      mxerror(boost::format(Y("Failed to create the file '%1%': %2% (%3%)\n")) % m_file_name % errno % strerror(errno));
+        else if (child.type() == pugi::node_doctype)
+          doctype_node = child;
 
-    } catch (mtx::xml::formatter_x &error) {
-      mxerror(boost::format(Y("Failed to parse the USF codec private data for track %1%: %2%\n")) % m_tid % error.error());
+        else if ((child.type() == pugi::node_pi) && (std::string{child.name()} == "xml-stylesheet"))
+          stylesheet_node = child;
+
+      if (!declaration_node)
+        declaration_node = m_doc->prepend_child(pugi::node_declaration);
+
+      if (!doctype_node)
+        doctype_node = m_doc->insert_child_after(pugi::node_doctype, declaration_node);
+
+      if (!stylesheet_node)
+        stylesheet_node = m_doc->insert_child_after(pugi::node_pi, declaration_node);
+
+      if (!balg::starts_with(m_simplified_sub_charset, "utf"))
+        declaration_node.append_attribute("encoding").set_value(m_sub_charset.c_str());
+      doctype_node.set_value("USFSubtitles SYSTEM \"USFV100.dtd\"");
+      stylesheet_node.set_name("xml-stylesheet");
+      stylesheet_node.append_attribute("type").set_value("text/xsl");
+      stylesheet_node.append_attribute("href").set_value("USFV100.xsl");
+
+    } catch (mtx::mm_io::exception &ex) {
+      mxerror(boost::format(Y("Failed to create the file '%1%': %2%\n")) % m_file_name % ex);
+
+    } catch (mtx::xml::exception &ex) {
+      mxerror(boost::format(Y("Failed to parse the USF codec private data for track %1%: %2%\n")) % m_tid % ex.what());
     }
   }
 }
 
 void
-xtr_usf_c::handle_frame(memory_cptr &frame,
-                        KaxBlockAdditions *,
-                        int64_t timecode,
-                        int64_t duration,
-                        int64_t,
-                        int64_t,
-                        bool,
-                        bool,
-                        bool) {
-  m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
-
-  usf_entry_t entry("", timecode, timecode + duration);
-  entry.m_text.append((const char *)frame->get_buffer(), frame->get_size());
+xtr_usf_c::handle_frame(xtr_frame_t &f) {
+  usf_entry_t entry("", f.timecode, f.timecode + f.duration);
+  entry.m_text.append((const char *)f.frame->get_buffer(), f.frame->get_size());
   m_entries.push_back(entry);
 }
 
 void
 xtr_usf_c::finish_track() {
-  try {
-    m_formatter->format((boost::format("<subtitles>\n<language code=\"%1%\"/>\n") % m_language).str());
+  auto subtitles = m_doc->document_element().append_child("subtitles");
+  subtitles.append_child("language").append_attribute("code").set_value(m_language.c_str());
 
-    for (auto &entry : m_entries) {
-      std::string text = entry.m_text;
-      strip(text, true);
-      m_formatter->format((boost::format("<subtitle start=\"%1%\" stop=\"%2%\">")
-                           % format_timecode(entry.m_start * 1000000, 3) % format_timecode(entry.m_end * 1000000, 3)).str());
-      m_formatter->format_fixed(text);
-      m_formatter->format("</subtitle>\n");
+  for (auto &entry : m_entries) {
+    std::string text = std::string{"<subtitle>"} + entry.m_text + "</subtitle>";
+    strip(text, true);
+
+    std::stringstream text_in(text);
+    pugi::xml_document subtitle_doc;
+    if (!subtitle_doc.load(text_in, pugi::parse_default | pugi::parse_declaration | pugi::parse_doctype | pugi::parse_pi | pugi::parse_comments)) {
+      mxwarn(boost::format(Y("Track %1%: An USF subtitle entry starting at timecode %2% is not well-formed XML and will be skipped.\n")) % m_tid % format_timecode(entry.m_start * 1000000, 3));
+      continue;
     }
-    m_formatter->format("</subtitles>\n");
 
-  } catch (mtx::xml::formatter_x &error) {
-    mxerror(boost::format(Y("Failed to parse an USF subtitle entry for track %1%: %2%\n")) % m_tid % error.error());
+    auto subtitle = subtitles.append_child("subtitle");
+    subtitle.append_attribute("start").set_value(format_timecode(entry.m_start * 1000000, 3).c_str());
+    subtitle.append_attribute("stop"). set_value(format_timecode(entry.m_end   * 1000000, 3).c_str());
+
+    for (auto child : subtitle_doc.document_element())
+      subtitle.append_copy(child);
   }
 }
 
 void
 xtr_usf_c::finish_file() {
-  try {
-    if (NULL == m_master) {
-      m_formatter->format("</USFSubtitles>");
-      m_out->puts("\n");
-    }
-  } catch (mtx::xml::formatter_x &error) {
-    mxerror(boost::format(Y("Failed to parse the USF end tag for track %1%: %2%\n")) % m_tid % error.error());
-  }
+  if (m_master)
+    return;
+
+  auto is_utf   = true;
+  auto encoding = pugi::encoding_utf8;
+
+  if (m_simplified_sub_charset == "utf8")
+    ;
+  else if (m_simplified_sub_charset == "utf16le")
+    encoding = pugi::encoding_utf16_le;
+  else if (m_simplified_sub_charset == "utf16be")
+    encoding = pugi::encoding_utf16_be;
+  else if (m_simplified_sub_charset == "utf16")
+    encoding = pugi::encoding_utf16;
+
+  else if (m_simplified_sub_charset == "utf32le")
+    encoding = pugi::encoding_utf32_le;
+  else if (m_simplified_sub_charset == "utf32be")
+    encoding = pugi::encoding_utf32_be;
+  else if (m_simplified_sub_charset == "utf32")
+    encoding = pugi::encoding_utf32;
+
+  else
+    is_utf = false;
+
+  std::stringstream out;
+  m_doc->save(out, "  ", pugi::format_default | (is_utf ? pugi::format_write_bom : 0), encoding);
+
+  m_out->puts(is_utf ? out.str() : charset_converter_c::init(m_sub_charset)->native(out.str()));
 }

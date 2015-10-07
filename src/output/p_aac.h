@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __P_AAC_H
-#define __P_AAC_H
+#ifndef MTX_P_AAC_H
+#define MTX_P_AAC_H
 
 #include "common/common_pch.h"
 
@@ -23,7 +23,7 @@
 
 class aac_packetizer_c: public generic_packetizer_c {
 private:
-  int64_t m_bytes_output, m_packetno, m_last_timecode, m_num_packets_same_tc;
+  int64_t m_packetno, m_last_timecode, m_num_packets_same_tc;
   int64_t m_bytes_skipped;
   int m_samples_per_sec, m_channels, m_id, m_profile;
   bool m_headerless, m_emphasis_present;
@@ -38,15 +38,15 @@ public:
   virtual int process(packet_cptr packet);
   virtual void set_headers();
 
-  virtual const std::string get_format_name(bool translate = true) {
-    return translate ? Y("AAC") : "AAC";
+  virtual translatable_string_c get_format_name() const {
+    return YT("AAC");
   }
 
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);
 
 private:
-  virtual unsigned char *get_aac_packet(aac_header_t *aacheader);
+  virtual unsigned char *get_aac_packet(aac_header_c *aacheader);
   virtual int process_headerless(packet_cptr packet);
 };
 
-#endif // __P_AAC_H
+#endif // MTX_P_AAC_H

@@ -11,8 +11,6 @@
 
 #include "common/common_pch.h"
 
-#include <boost/bind.hpp>
-
 #include "common/cli_parser.h"
 #include "common/command_line.h"
 #include "common/strings/editing.h"
@@ -168,7 +166,7 @@ cli_parser_c::add_separator() {
   m_options.push_back(cli_parser_c::option_t(cli_parser_c::option_t::ot_information, translatable_string_c("")));
 }
 
-#define OPT(name, description) add_option(name, boost::bind(&cli_parser_c::dummy_callback, this), description)
+#define OPT(name, description) add_option(name, std::bind(&cli_parser_c::dummy_callback, this), description)
 
 void
 cli_parser_c::add_common_options() {

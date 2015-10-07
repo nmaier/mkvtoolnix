@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __R_REAL_H
-#define __R_REAL_H
+#ifndef MTX_R_REAL_H
+#define MTX_R_REAL_H
 
 #include "common/common_pch.h"
 
@@ -28,7 +28,7 @@ typedef struct {
   uint64_t flags;
 } rv_segment_t;
 
-typedef counted_ptr<rv_segment_t> rv_segment_cptr;
+typedef std::shared_ptr<rv_segment_t> rv_segment_cptr;
 
 struct real_demuxer_t {
   int ptzr;
@@ -48,8 +48,7 @@ struct real_demuxer_t {
   real_audio_v4_props_t *ra4p;
   real_audio_v5_props_t *ra5p;
 
-  unsigned char *private_data, *extra_data;
-  unsigned int private_size, extra_data_size;
+  memory_cptr private_data, extra_data;
 
   bool first_frame;
   int num_packets;
@@ -72,13 +71,9 @@ struct real_demuxer_t {
     force_keyframe_flag(false),
     cook_audio_fix(false),
     fps(0.0),
-    rvp(NULL),
-    ra4p(NULL),
-    ra5p(NULL),
-    private_data(NULL),
-    extra_data(NULL),
-    private_size(0),
-    extra_data_size(0),
+    rvp(nullptr),
+    ra4p(nullptr),
+    ra5p(nullptr),
     first_frame(true),
     num_packets(0),
     last_timecode(0),
@@ -88,21 +83,20 @@ struct real_demuxer_t {
   };
 };
 
-typedef counted_ptr<real_demuxer_t> real_demuxer_cptr;
+typedef std::shared_ptr<real_demuxer_t> real_demuxer_cptr;
 
 class real_reader_c: public generic_reader_c {
 private:
   rmff_file_t *file;
-  std::vector<counted_ptr<real_demuxer_t> > demuxers;
-  int64_t file_size;
+  std::vector<std::shared_ptr<real_demuxer_t> > demuxers;
   bool done;
 
 public:
   real_reader_c(const track_info_c &ti, const mm_io_cptr &in);
   virtual ~real_reader_c();
 
-  virtual const std::string get_format_name(bool translate = true) {
-    return translate ? Y("RealMedia") : "RealMedia";
+  virtual translatable_string_c get_format_name() const {
+    return YT("RealMedia");
   }
 
   virtual void read_headers();
@@ -134,4 +128,4 @@ protected:
   virtual void create_video_packetizer(real_demuxer_cptr dmx);
 };
 
-#endif  // __R_REAL_H
+#endif  // MTX_R_REAL_H

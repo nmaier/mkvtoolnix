@@ -13,9 +13,10 @@
 
 #include "common/common_pch.h"
 
+#include "common/codec.h"
 #include "common/endian.h"
 #include "common/math.h"
-#include "common/matroska.h"
+#include "merge/connection_checks.h"
 #include "output/p_wavpack.h"
 
 using namespace libmatroska;
@@ -37,7 +38,7 @@ wavpack_packetizer_c::wavpack_packetizer_c(generic_reader_c *p_reader,
 void
 wavpack_packetizer_c::set_headers() {
   set_codec_id(MKV_A_WAVPACK4);
-  set_codec_private(m_ti.m_private_data, m_ti.m_private_size);
+  set_codec_private(m_ti.m_private_data);
   set_audio_sampling_freq((float)m_sample_rate);
   set_audio_channels(m_channels);
   set_audio_bit_depth(m_bits_per_sample);
@@ -71,7 +72,7 @@ connection_result_e
 wavpack_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                      std::string &error_message) {
   wavpack_packetizer_c *psrc = dynamic_cast<wavpack_packetizer_c *>(src);
-  if (NULL == psrc)
+  if (!psrc)
     return CAN_CONNECT_NO_FORMAT;
 
   connect_check_a_samplerate(m_sample_rate,   psrc->m_sample_rate);

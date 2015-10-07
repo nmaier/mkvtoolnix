@@ -37,8 +37,9 @@ subtitles_c::process(generic_packetizer_c *p) {
 
 // ------------------------------------------------------------
 
-#define SRT_RE_TIMECODE      "\\s*(-?)\\s*(\\d+):\\s*(\\d+):\\s*(\\d+)[,\\.]\\s*(\\d+)?"
-#define SRT_RE_TIMECODE_LINE "^" SRT_RE_TIMECODE "\\s*-+>\\s*" SRT_RE_TIMECODE "\\s*"
+#define SRT_RE_VALUE         "\\s*(-?)\\s*(\\d+)"
+#define SRT_RE_TIMECODE      SRT_RE_VALUE ":" SRT_RE_VALUE ":" SRT_RE_VALUE "[,\\.:]" SRT_RE_VALUE
+#define SRT_RE_TIMECODE_LINE "^" SRT_RE_TIMECODE "\\s*[\\-\\s]+>\\s*" SRT_RE_TIMECODE "\\s*"
 #define SRT_RE_COORDINATES   "([XY]\\d+:\\d+\\s*){4}\\s*$"
 
 bool
@@ -52,12 +53,12 @@ srt_parser_c::probe(mm_text_io_c *io) {
     } while (s.empty());
 
     int64_t dummy;
-    if (!parse_int(s, dummy))
+    if (!parse_number(s, dummy))
       return false;
 
     s = io->getline();
     boost::regex timecode_re(SRT_RE_TIMECODE_LINE, boost::regex::perl);
-    boost::match_results<std::string::const_iterator> matches;
+    boost::smatch matches;
     if (!boost::regex_search(s, timecode_re))
       return false;
 
@@ -125,29 +126,39 @@ srt_parser_c::parse() {
         break;
       }
       state = STATE_TIME;
-      parse_uint(s, subtitle_number);
+      parse_number(s, subtitle_number);
 
     } else if (STATE_TIME == state) {
-      boost::match_results<std::string::const_iterator> matches;
+      boost::smatch matches;
       if (!boost::regex_search(s, matches, timecode_re)) {
         mxwarn_tid(m_file_name, m_tid, boost::format(Y("Error in line %1%: expected a SRT timecode line but found something else. Aborting this file.\n")) % line_number);
         break;
       }
 
-      int s_h, s_min, s_sec, e_h, e_min, e_sec;
+      int s_h = 0, s_min = 0, s_sec = 0, e_h = 0, e_min = 0, e_sec = 0;
 
-      parse_int(matches[2].str(), s_h);
-      parse_int(matches[3].str(), s_min);
-      parse_int(matches[4].str(), s_sec);
-      parse_int(matches[7].str(), e_h);
-      parse_int(matches[8].str(), e_min);
-      parse_int(matches[9].str(), e_sec);
+      //        1         2       3      4        5     6             7    8
+      // "\\s*(-?)\\s*(\\d+):\\s(-?)*(\\d+):\\s*(-?)(\\d+)[,\\.]\\s*(-?)(\\d+)?"
 
-      std::string s_rest = matches[ 5].str();
-      std::string e_rest = matches[10].str();
+      parse_number(matches[ 2].str(), s_h);
+      parse_number(matches[ 4].str(), s_min);
+      parse_number(matches[ 6].str(), s_sec);
+      parse_number(matches[10].str(), e_h);
+      parse_number(matches[12].str(), e_min);
+      parse_number(matches[14].str(), e_sec);
 
-      int64_t s_neg      = matches[ 1].str() == "-" ? -1 : 1;
-      int64_t e_neg      = matches[ 6].str() == "-" ? -1 : 1;
+      std::string s_rest = matches[ 8].str();
+      std::string e_rest = matches[16].str();
+
+      auto neg_calculator = [&](size_t const start_idx) -> int64_t {
+        int64_t neg = 1;
+        for (size_t idx = start_idx; idx <= (start_idx + 6); idx += 2)
+          neg *= matches[idx].str() == "-" ? -1 : 1;
+        return neg;
+      };
+
+      int64_t s_neg = neg_calculator(1);
+      int64_t e_neg = neg_calculator(9);
 
       if (boost::regex_search(s, coordinates_re) && !m_coordinates_warning_shown) {
         mxwarn_tid(m_file_name, m_tid,
@@ -213,7 +224,7 @@ srt_parser_c::parse() {
 
     } else if (boost::regex_match(s, number_re)) {
       state = STATE_TIME;
-      parse_uint(s, subtitle_number);
+      parse_number(s, subtitle_number);
 
     } else {
       if (!subtitles.empty())
@@ -234,8 +245,9 @@ srt_parser_c::parse() {
 
 bool
 ssa_parser_c::probe(mm_text_io_c *io) {
-  boost::regex script_info_re("^\\s*\\[script\\s+info\\]",   boost::regex::perl | boost::regbase::icase);
-  boost::regex styles_re(     "^\\s*\\[V4\\+?\\s+Styles\\]", boost::regex::perl | boost::regbase::icase);
+  boost::regex script_info_re("^\\s*\\[script\\s+info\\]",   boost::regex::perl | boost::regex::icase);
+  boost::regex styles_re(     "^\\s*\\[V4\\+?\\s+Styles\\]", boost::regex::perl | boost::regex::icase);
+  boost::regex comment_re(    "^\\s*$|^\\s*;",               boost::regex::perl | boost::regex::icase);
 
   try {
     int line_number = 0;
@@ -247,11 +259,18 @@ ssa_parser_c::probe(mm_text_io_c *io) {
 
       // Read at most 100 lines.
       if (100 < line_number)
-        return 0;
+        return false;
+
+      // Skip comments and empty lines.
+      if (boost::regex_search(line, comment_re))
+        continue;
 
       // This is the line mkvmerge is looking for: positive match.
       if (boost::regex_search(line, script_info_re) || boost::regex_search(line, styles_re))
         return true;
+
+      // Neither a wanted line nor an empty one/a comment: negative result.
+      return false;
     }
   } catch (...) {
   }
@@ -275,12 +294,12 @@ ssa_parser_c::ssa_parser_c(generic_reader_c *reader,
 
 void
 ssa_parser_c::parse() {
-  boost::regex sec_styles_ass_re("^\\s*\\[V4\\+\\s+Styles\\]", boost::regex::perl | boost::regbase::icase);
-  boost::regex sec_styles_re(    "^\\s*\\[V4\\s+Styles\\]",    boost::regex::perl | boost::regbase::icase);
-  boost::regex sec_info_re(      "^\\s*\\[Script\\s+Info\\]",  boost::regex::perl | boost::regbase::icase);
-  boost::regex sec_events_re(    "^\\s*\\[Events\\]",          boost::regex::perl | boost::regbase::icase);
-  boost::regex sec_graphics_re(  "^\\s*\\[Graphics\\]",        boost::regex::perl | boost::regbase::icase);
-  boost::regex sec_fonts_re(     "^\\s*\\[Fonts\\]",           boost::regex::perl | boost::regbase::icase);
+  boost::regex sec_styles_ass_re("^\\s*\\[V4\\+\\s+Styles\\]", boost::regex::perl | boost::regex::icase);
+  boost::regex sec_styles_re(    "^\\s*\\[V4\\s+Styles\\]",    boost::regex::perl | boost::regex::icase);
+  boost::regex sec_info_re(      "^\\s*\\[Script\\s+Info\\]",  boost::regex::perl | boost::regex::icase);
+  boost::regex sec_events_re(    "^\\s*\\[Events\\]",          boost::regex::perl | boost::regex::icase);
+  boost::regex sec_graphics_re(  "^\\s*\\[Graphics\\]",        boost::regex::perl | boost::regex::icase);
+  boost::regex sec_fonts_re(     "^\\s*\\[Fonts\\]",           boost::regex::perl | boost::regex::icase);
 
   int num                        = 0;
   ssa_section_e section          = SSA_SECTION_NONE;
@@ -324,7 +343,7 @@ ssa_parser_c::parse() {
       add_to_global = false;
 
     } else if (SSA_SECTION_EVENTS == section) {
-      if (ba::istarts_with(line, "Format: ")) {
+      if (balg::istarts_with(line, "Format: ")) {
         // Analyze the format string.
         m_format = split(&line.c_str()[strlen("Format: ")]);
         strip(m_format);
@@ -332,12 +351,12 @@ ssa_parser_c::parse() {
         // Let's see if "Actor" is used in the format instead of "Name".
         size_t i;
         for (i = 0; m_format.size() > i; ++i)
-          if (ba::iequals(m_format[i], "actor")) {
+          if (balg::iequals(m_format[i], "actor")) {
             name_field = "Actor";
             break;
           }
 
-      } else if (ba::istarts_with(line, "Dialogue: ")) {
+      } else if (balg::istarts_with(line, "Dialogue: ")) {
         if (m_format.empty())
           throw mtx::input::extended_x(Y("ssa_reader: Invalid format. Could not find the \"Format\" line in the \"[Events]\" section."));
 
@@ -394,7 +413,7 @@ ssa_parser_c::parse() {
       }
 
     } else if ((SSA_SECTION_FONTS == section) || (SSA_SECTION_GRAPHICS == section)) {
-      if (ba::istarts_with(line, "fontname:")) {
+      if (balg::istarts_with(line, "fontname:")) {
         add_attachment_maybe(attachment_name, attachment_data_uu, section);
 
         line.erase(0, strlen("fontname:"));
@@ -444,7 +463,7 @@ ssa_parser_c::parse_time(std::string &stime) {
     return -1;
 
   std::string s = stime.substr(0, pos);
-  if (!parse_int(s, th))
+  if (!parse_number(s, th))
     return -1;
   stime.erase(0, pos + 1);
 
@@ -453,7 +472,7 @@ ssa_parser_c::parse_time(std::string &stime) {
     return -1;
 
   s = stime.substr(0, pos);
-  if (!parse_int(s, tm))
+  if (!parse_number(s, tm))
     return -1;
   stime.erase(0, pos + 1);
 
@@ -462,11 +481,11 @@ ssa_parser_c::parse_time(std::string &stime) {
     return -1;
 
   s = stime.substr(0, pos);
-  if (!parse_int(s, ts))
+  if (!parse_number(s, ts))
     return -1;
   stime.erase(0, pos + 1);
 
-  if (!parse_int(stime, tds))
+  if (!parse_number(stime, tds))
     return -1;
 
   return (tds * 10 + ts * 1000 + tm * 60 * 1000 + th * 60 * 60 * 1000) * 1000000;
@@ -511,22 +530,17 @@ ssa_parser_c::add_attachment_maybe(std::string &name,
   attachment.description  = (boost::format(SSA_SECTION_FONTS == section ? Y("Imported font from %1%") : Y("Imported picture from %1%")) % short_name).str();
   attachment.to_all_files = true;
 
-  size_t allocated        = 1024;
-  attachment.data         = memory_c::alloc(allocated);
-  attachment.data->set_size(0);
+  size_t data_size        = data_uu.length() % 4;
+  data_size               = 3 == data_size ? 2 : 2 == data_size ? 1 : 0;
+  data_size              += data_uu.length() / 4 * 3;
+  attachment.data         = memory_c::alloc(data_size);
+  auto out                = attachment.data->get_buffer();
+  auto in                 = reinterpret_cast<unsigned char const *>(data_uu.c_str());
 
-  const unsigned char *p  = (const unsigned char *)data_uu.c_str();
-  for (pos = 0; data_uu.length() > (pos + 4); pos += 4)
-    decode_chars(p[pos], p[pos + 1], p[pos + 2], p[pos + 3], attachment.data, 3, allocated);
+  for (auto end = in + (data_uu.length() / 4) * 4; in < end; in += 4, out += 3)
+    decode_chars(in, out, 4);
 
-  switch (data_uu.length() % 4) {
-    case 2:
-      decode_chars(p[pos], p[pos + 1], 0, 0, attachment.data, 1, allocated);
-      break;
-    case 3:
-      decode_chars(p[pos], p[pos + 1], p[pos + 2], 0, attachment.data, 2, allocated);
-      break;
-  }
+  decode_chars(in, out, data_uu.length() % 4);
 
   attachment.mime_type = guess_mime_type(name, false);
 
@@ -540,29 +554,20 @@ ssa_parser_c::add_attachment_maybe(std::string &name,
 }
 
 void
-ssa_parser_c::decode_chars(unsigned char c1,
-                           unsigned char c2,
-                           unsigned char c3,
-                           unsigned char c4,
-                           memory_cptr &buffer,
-                           size_t bytes_to_add,
-                           size_t &allocated) {
-  unsigned char bytes[3];
+ssa_parser_c::decode_chars(unsigned char const *in,
+                           unsigned char *out,
+                           size_t bytes_in) {
+  if (!bytes_in)
+    return;
 
-  uint32_t value = ((c1 - 33) << 18) + ((c2 - 33) << 12) + ((c3 - 33) << 6) + (c4 - 33);
-  bytes[2]       =  value & 0x0000ff;
-  bytes[1]       = (value & 0x00ff00) >>  8;
-  bytes[0]       = (value & 0xff0000) >> 16;
+  size_t bytes_out = 4 == bytes_in ? 3 : 3 == bytes_in ? 2 : 1;
+  uint32_t value   = 0;
 
-  if ((buffer->get_size() + bytes_to_add) > allocated) {
-    int old_size  = buffer->get_size();
-    allocated    += 1024;
-    buffer->resize(allocated);
-    buffer->set_size(old_size);
-  }
+  for (size_t idx = 0; idx < bytes_in; ++idx)
+    value |= (static_cast<uint32_t>(in[idx]) - 33) << (6 * (3 - idx));
 
-  memcpy(buffer->get_buffer() + buffer->get_size(), bytes, bytes_to_add);
-  buffer->set_size(buffer->get_size() + bytes_to_add);
+  for (size_t idx = 0; idx < bytes_out; ++idx)
+    out[idx] = (value >> ((2 - idx) * 8)) & 0xff;
 }
 
 // ------------------------------------------------------------

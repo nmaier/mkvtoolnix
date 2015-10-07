@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __P_MP3_H
-#define __P_MP3_H
+#ifndef MTX_P_MP3_H
+#define MTX_P_MP3_H
 
 #include "common/common_pch.h"
 
@@ -23,7 +23,7 @@
 
 class mp3_packetizer_c: public generic_packetizer_c {
 private:
-  int64_t m_bytes_output, m_packetno, m_bytes_skipped;
+  int64_t m_packetno, m_bytes_skipped;
   int m_samples_per_sec, m_channels, m_samples_per_frame;
   byte_buffer_c m_byte_buffer;
   bool m_codec_id_set, m_valid_headers_found;
@@ -38,8 +38,8 @@ public:
   virtual int process(packet_cptr packet);
   virtual void set_headers();
 
-  virtual const std::string get_format_name(bool translate = true) {
-    return translate ? Y("MP3") : "MP3";
+  virtual translatable_string_c get_format_name() const {
+    return YT("MP3");
   }
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);
 
@@ -49,4 +49,4 @@ private:
   virtual void handle_garbage(int64_t bytes);
 };
 
-#endif // __P_MP3_H
+#endif // MTX_P_MP3_H

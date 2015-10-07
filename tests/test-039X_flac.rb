@@ -6,7 +6,7 @@ class T_039X_flac < Test
   end
 
   def run
-    return xtr_tracks_s 5
+    xtr_tracks_s 4
   end
 end
 

@@ -11,15 +11,14 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __PACKET_EXTENSIONS_H
-#define __PACKET_EXTENSIONS_H
+#ifndef MTX_PACKET_EXTENSIONS_H
+#define MTX_PACKET_EXTENSIONS_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <deque>
 
 #include "merge/packet.h"
-#include "common/smart_pointers.h"
 
 class multiple_timecodes_packet_extension_c: public packet_extension_c {
 protected:
@@ -33,7 +32,7 @@ public:
   virtual ~multiple_timecodes_packet_extension_c() {
   }
 
-  virtual packet_extension_type_e get_type() {
+  virtual packet_extension_type_e get_type() const {
     return MULTIPLE_TIMECODES;
   }
 
@@ -60,7 +59,7 @@ public:
   }
 };
 
-typedef counted_ptr<multiple_timecodes_packet_extension_c> multiple_timecodes_packet_extension_cptr;
+typedef std::shared_ptr<multiple_timecodes_packet_extension_c> multiple_timecodes_packet_extension_cptr;
 
 class subtitle_number_packet_extension_c: public packet_extension_c {
 private:
@@ -72,7 +71,7 @@ public:
   {
   }
 
-  virtual packet_extension_type_e get_type() {
+  virtual packet_extension_type_e get_type() const {
     return SUBTITLE_NUMBER;
   }
 
@@ -81,6 +80,6 @@ public:
   }
 };
 
-typedef counted_ptr<subtitle_number_packet_extension_c> subtitle_number_packet_extension_cptr;
+typedef std::shared_ptr<subtitle_number_packet_extension_c> subtitle_number_packet_extension_cptr;
 
-#endif  // __PACKET_EXTENSIONS_H
+#endif  // MTX_PACKET_EXTENSIONS_H

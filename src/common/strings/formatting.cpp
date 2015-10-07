@@ -21,13 +21,19 @@
 std::string
 format_timecode(int64_t timecode,
                 unsigned int precision) {
-  static boost::format s_bf_format("%|1$02d|:%|2$02d|:%|3$02d|");
+  static boost::format s_bf_format("%4%%|1$02d|:%|2$02d|:%|3$02d|");
   static boost::format s_bf_decimals(".%|1$09d|");
 
+
+  bool negative = 0 > timecode;
+  if (negative)
+    timecode *= -1;
+
   std::string result = (s_bf_format
-                        % (int)( timecode / 60 / 60 / 1000000000)
-                        % (int)((timecode      / 60 / 1000000000) % 60)
-                        % (int)((timecode           / 1000000000) % 60)).str();
+                        % static_cast<int>( timecode / 60 / 60 / 1000000000)
+                        % static_cast<int>((timecode      / 60 / 1000000000) % 60)
+                        % static_cast<int>((timecode           / 1000000000) % 60)
+                        % (negative ? "-" : "")).str();
 
   if (9 < precision)
     precision = 9;
@@ -44,28 +50,6 @@ format_timecode(int64_t timecode,
   return result;
 }
 
-static boost::format s_bf_single_value("%1%");
-
-std::string
-to_string(int64_t value) {
-  return (s_bf_single_value % value).str();
-}
-
-std::string
-to_string(int value) {
-  return (s_bf_single_value % value).str();
-}
-
-std::string
-to_string(uint64_t value) {
-  return (s_bf_single_value % value).str();
-}
-
-std::string
-to_string(unsigned int value) {
-  return (s_bf_single_value % value).str();
-}
-
 std::string
 to_string(double value,
           unsigned int precision) {
@@ -73,30 +57,31 @@ to_string(double value,
   for (size_t i = 0; i < precision; ++i)
     scale *= 10;
 
-  return to_string((int64_t)(value * scale), scale, precision);
+  return to_string(static_cast<int64_t>(value * scale), scale, precision);
 }
 
 std::string
 to_string(int64_t numerator,
           int64_t denominator,
           unsigned int precision) {
-  std::string output      = (s_bf_single_value % (numerator / denominator)).str();
+  std::string output      = to_string(numerator / denominator);
   int64_t fractional_part = numerator % denominator;
 
-  if (0 != fractional_part) {
-    static boost::format s_bf_precision_format_format(".%%0%1%d");
+  if (0 == fractional_part)
+    return output;
 
-    std::string format         = (s_bf_precision_format_format % precision).str();
-    output                    += (boost::format(format) % fractional_part).str();
-    std::string::iterator end  = output.end() - 1;
+  static boost::format s_bf_precision_format_format(".%%0%1%d");
 
-    while (*end == '0')
-      --end;
-    if (*end == '.')
-      --end;
+  std::string format         = (s_bf_precision_format_format % precision).str();
+  output                    += (boost::format(format) % fractional_part).str();
+  std::string::iterator end  = output.end() - 1;
 
-    output.erase(end + 1, output.end());
-  }
+  while (*end == '0')
+    --end;
+  if (*end == '.')
+    --end;
+
+  output.erase(end + 1, output.end());
 
   return output;
 }
@@ -243,12 +228,14 @@ format_paragraph(const std::string &text_to_wrap,
 
 std::string
 to_hex(const unsigned char *buf,
-       size_t size) {
-  static boost::format s_bf_to_hex("0x%|1$02x| ");
+       size_t size,
+       bool compact) {
+  static boost::format s_bf_to_hex("0x%|1$02x|");
+  static boost::format s_bf_to_hex_compact("%|1$02x|");
 
   std::string hex;
   for (size_t idx = 0; idx < size; ++idx)
-    hex += (s_bf_to_hex % static_cast<unsigned int>(buf[idx])).str();
+    hex += (compact || hex.empty() ? std::string{""} : std::string{" "}) + ((compact ? s_bf_to_hex_compact : s_bf_to_hex) % static_cast<unsigned int>(buf[idx])).str();
 
   return hex;
 }
@@ -267,4 +254,14 @@ create_minutes_seconds_time_string(unsigned int seconds,
   return (  boost::format("%1% %2%")
           % (boost::format(NY("%1% minute", "%1% minutes", minutes)) % minutes)
           % result).str();
+}
+
+std::string
+format_file_size(int64_t size) {
+  auto result = size <       1024ll ? (boost::format(Y("%1% bytes"))   % size)
+              : size <    1048576ll ? (boost::format(Y("%1%.%2% KiB")) % (size / 1024)               % ((size * 10 /               1024) % 10))
+              : size < 1073741824ll ? (boost::format(Y("%1%.%2% MiB")) % (size / 1024 / 1024)        % ((size * 10 /        1024 / 1024) % 10))
+              :                       (boost::format(Y("%1%.%2% GiB")) % (size / 1024 / 1024 / 1024) % ((size * 10 / 1024 / 1024 / 1024) % 10));
+
+  return result.str();
 }

@@ -11,15 +11,14 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __WX_KAX_ANALYZER_H
-#define __WX_KAX_ANALYZER_H
+#ifndef MTX_WX_KAX_ANALYZER_H
+#define MTX_WX_KAX_ANALYZER_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <wx/progdlg.h>
 #include <wx/window.h>
 
-#include "common/common_pch.h"
 #include "common/kax_analyzer.h"
 
 #define ID_B_ANALYZER_ABORT 11000
@@ -42,5 +41,6 @@ public:
 protected:
   virtual void _log_debug_message(const std::string &message);
 };
+typedef std::shared_ptr<wx_kax_analyzer_c> wx_kax_analyzer_cptr;
 
-#endif // __WX_KAX_ANALYZER_H
+#endif // MTX_WX_KAX_ANALYZER_H

@@ -22,7 +22,7 @@ kate_identification_header_t::kate_identification_header_t() {
 }
 
 static int32_t
-get_bits32_le(bit_cursor_c &bc) {
+get_bits32_le(bit_reader_c &bc) {
   int32_t v = 0;
 
   for (int n = 0; n < 4; ++n) {
@@ -36,7 +36,7 @@ void
 kate_parse_identification_header(const unsigned char *buffer,
                                  int size,
                                  kate_identification_header_t &header) {
-  bit_cursor_c bc(buffer, size);
+  bit_reader_c bc(buffer, size);
   int i;
 
   header.headertype = bc.get_bits(8);

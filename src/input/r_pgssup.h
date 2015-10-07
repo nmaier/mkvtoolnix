@@ -11,27 +11,26 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __R_PGS_H
-#define __R_PGS_H
+#ifndef MTX_R_PGS_H
+#define MTX_R_PGS_H
 
 #include "common/common_pch.h"
 
-#include <stdio.h>
-
+#include "common/debugging.h"
 #include "common/error.h"
 #include "common/mm_io.h"
 #include "merge/pr_generic.h"
 
 class pgssup_reader_c: public generic_reader_c {
 private:
-  bool m_debug;
+  debugging_option_c m_debug;
 
 public:
   pgssup_reader_c(const track_info_c &ti, const mm_io_cptr &in);
   virtual ~pgssup_reader_c();
 
-  virtual const std::string get_format_name(bool translate = true) {
-    return translate ? Y("PGSSUP") : "PGSSUP";
+  virtual translatable_string_c get_format_name() const {
+    return YT("PGSSUP");
   }
 
   virtual void read_headers();
@@ -45,4 +44,4 @@ public:
   static int probe_file(mm_io_c *in, uint64_t size);
 };
 
-#endif // __R_PGS_H
+#endif // MTX_R_PGS_H

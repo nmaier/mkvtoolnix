@@ -27,7 +27,7 @@ kax_reference_block_c::UpdateSize(bool bSaveDefault,
                                   bool bForceRender) {
   if (!bTimecodeSet) {
     assert(-1 != m_value);
-    *static_cast<EbmlSInteger*>(this) = (m_value - int64(ParentBlock->GlobalTimecode())) / int64(ParentBlock->GlobalTimecodeScale());
+    SetValue((m_value - static_cast<int64_t>(ParentBlock->GlobalTimecode())) / static_cast<int64_t>(ParentBlock->GlobalTimecodeScale()));
   }
 
   return EbmlSInteger::UpdateSize(bSaveDefault, bForceRender);
@@ -41,16 +41,16 @@ kax_block_group_c::add_frame(const KaxTrackEntry &track,
                              int64_t forw_block,
                              LacingType lacing) {
   KaxBlock & block = GetChild<KaxBlock>(*this);
-  assert(NULL != ParentCluster);
+  assert(ParentCluster);
   block.SetParent(*ParentCluster);
 
   ParentTrack                     = &track;
   bool result                     = block.AddFrame(track, timecode, buffer, lacing);
-  kax_reference_block_c *past_ref = NULL;
+  kax_reference_block_c *past_ref = nullptr;
 
   if (0 <= past_block) {
     past_ref = FindChild<kax_reference_block_c>(*this);
-    if (NULL == past_ref) {
+    if (!past_ref) {
       past_ref = new kax_reference_block_c;
       PushElement(*past_ref);
     }
@@ -85,7 +85,7 @@ kax_block_blob_c::add_frame_auto(const KaxTrackEntry &track,
           && (-1 == past_block)
           && (-1 == forw_block))) {
     assert(true == bUseSimpleBlock);
-    if (NULL == Block.simpleblock) {
+    if (!Block.simpleblock) {
       Block.simpleblock = new KaxSimpleBlock();
       Block.simpleblock->SetParent(*ParentCluster);
     }
@@ -118,15 +118,15 @@ kax_block_blob_c::replace_simple_by_group() {
     return false;
 
   if (!bUseSimpleBlock) {
-    if (NULL == Block.group)
+    if (!Block.group)
       Block.group = new kax_block_group_c();
 
-  } else if (NULL != Block.simpleblock)
+  } else if (Block.simpleblock)
     assert(false);
   else
     Block.group = new kax_block_group_c();
 
-  if (NULL != ParentCluster)
+  if (ParentCluster)
     Block.group->SetParent(*ParentCluster);
 
   bUseSimpleBlock = false;
@@ -140,7 +140,7 @@ kax_block_blob_c::set_block_duration(uint64_t time_length) {
     Block.group->SetBlockDuration(time_length);
 }
 
-// The kax_block_group_c objects are stored in counted_ptrs outside of
+// The kax_block_group_c objects are stored in std::shared_ptrs outside of
 // the cluster structure as well. KaxSimpleBlock objects are deleted
 // when they're replaced with kax_block_group_c. All other object
 // types must be deleted explicitely. This applies to
@@ -150,7 +150,7 @@ kax_cluster_c::delete_non_blocks() {
   unsigned idx;
   for (idx = 0; ListSize() > idx; ++idx) {
     EbmlElement *e = (*this)[idx];
-    if ((NULL == dynamic_cast<kax_block_group_c *>(e)) && (NULL == dynamic_cast<KaxSimpleBlock *>(e)))
+    if (!dynamic_cast<kax_block_group_c *>(e) && !dynamic_cast<KaxSimpleBlock *>(e))
       delete e;
   }
 

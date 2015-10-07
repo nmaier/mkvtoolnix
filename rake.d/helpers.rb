@@ -1,5 +1,6 @@
 $use_tempfile_for_run = defined?(RUBY_PLATFORM) && /mingw/i.match(RUBY_PLATFORM)
-require "tempfile" if $use_tempfile_for_run
+require "tempfile"
+require "fileutils"
 
 if defined? Mutex
   $message_mutex = Mutex.new
@@ -20,12 +21,25 @@ def last_exit_code
   $?.respond_to?(:exitstatus) ? $?.exitstatus : $?.to_i
 end
 
-def run(cmdline, opts = {})
+def run cmdline, opts = {}
+  code = run_wrapper cmdline, opts
+  exit code if (code != 0) && !opts[:allow_failure].to_bool
+end
+
+def run_wrapper cmdline, opts = {}
   cmdline = cmdline.gsub(/\n/, ' ').gsub(/^\s+/, '').gsub(/\s+$/, '').gsub(/\s+/, ' ')
   code    = nil
   shell   = ENV["RUBYSHELL"].blank? ? "c:/msys/bin/sh" : ENV["RUBYSHELL"]
 
   puts cmdline unless opts[:dont_echo].to_bool
+
+  output = nil
+
+  if opts[:filter_output]
+    output   = Tempfile.new("mkvtoolnix-rake-output")
+    cmdline += " > #{output.path} 2>&1"
+  end
+
   if $use_tempfile_for_run
     Tempfile.open("mkvtoolnix-rake-run") do |t|
       t.puts cmdline
@@ -39,7 +53,15 @@ def run(cmdline, opts = {})
     code = last_exit_code
   end
 
-  exit code if (code != 0) && !opts[:allow_failure].to_bool
+  code = opts[:filter_output].call code, output.readlines if opts[:filter_output]
+
+  return code
+
+ensure
+  if output
+    output.close
+    output.unlink
+  end
 end
 
 def runq(msg, cmdline, options = {})
@@ -48,8 +70,46 @@ def runq(msg, cmdline, options = {})
   run cmdline, options.clone.merge(:dont_echo => !verbose)
 end
 
-def handle_deps(target, exit_code)
-  dep_file = target.ext 'd'
+def bin2h bin_file_name, h_file_name
+  bin_name = File.basename(bin_file_name).gsub(/[^a-z\d]/i, '_').gsub(/_+/, '_') + '_bin'
+
+  File.open(h_file_name, "w") do |file|
+    file.puts <<EOT
+// Automatically generated. Do not modify.
+#ifndef BIN2H__#{bin_name.upcase}_INCLUDED
+#define BIN2H__#{bin_name.upcase}_INCLUDED
+
+static unsigned char #{bin_name}[] = {
+EOT
+
+    data = IO.binread(bin_file_name).unpack("C*")
+    data.each_with_index do |byte, idx|
+      file.write sprintf("0x%02x", byte)
+      file.write(((idx + 1) % 13) != 0 ? ", " : ",\n") unless (idx == data.size - 1)
+    end
+
+    file.puts <<EOT
+
+};
+
+#endif // BIN2H__#{bin_name.upcase}_INCLUDED
+EOT
+  end
+end
+
+def create_dependency_dirs
+  [ $dependency_dir, $dependency_tmp_dir ].each do |dir|
+    File.unlink(dir) if  FileTest.exist?(dir) && !FileTest.directory?(dir)
+    Dir.mkdir(dir)   if !FileTest.exist?(dir)
+  end
+end
+
+def dependency_output_name_for file_name
+  $dependency_tmp_dir + "/" + file_name.gsub(/[\/\.]/, '_') + '.d'
+end
+
+def handle_deps(target, exit_code, skip_abspath=false)
+  dep_file = dependency_output_name_for target
   get_out  = lambda do
     File.unlink(dep_file) if FileTest.exist?(dep_file)
     exit exit_code if 0 != exit_code
@@ -58,16 +118,19 @@ def handle_deps(target, exit_code)
 
   FileTest.exist?(dep_file) || get_out.call
 
-  FileTest.exist?($dependency_dir) && !FileTest.directory?($dependency_dir) && File.unlink($dependency_dir)
-  FileTest.exist?($dependency_dir) || Dir.mkdir($dependency_dir)
+  create_dependency_dirs
 
-  File.open("#{$dependency_dir}/" + dep_file.gsub(/\//, '_').ext('rb'), "w") do |out|
+  File.open("#{$dependency_dir}/" + target.gsub(/[\/\.]/, '_') + '.dep', "w") do |out|
     line = IO.readlines(dep_file).collect { |line| line.chomp }.join(" ").gsub(/\\/, ' ').gsub(/\s+/, ' ')
     if /(.+?):\s*([^\s].*)/.match(line)
       target  = $1
       sources = $2.gsub(/^\s+/, '').gsub(/\s+$/, '').split(/\s+/)
 
-      out.puts "file \"#{target}\" => [ " + sources.collect { |entry| "\"#{entry}\"" }.join(", ") + " ]"
+      if skip_abspath
+        sources.delete_if { |entry| entry.start_with? '/' }
+      end
+
+      out.puts(([ target ] + sources).join("\n"))
     end
   end
 
@@ -77,7 +140,12 @@ rescue Exception => e
 end
 
 def import_dependencies
-  Dir.glob("#{$dependency_dir}/*.rb").each { |file| import file } if FileTest.directory?($dependency_dir)
+  return unless FileTest.directory? $dependency_dir
+  Dir.glob("#{$dependency_dir}/*.dep").each do |file_name|
+    lines  = IO.readlines(file_name).collect &:chomp
+    target = lines.shift
+    file target => lines.select { |dep_name| File.exists? dep_name }
+  end
 end
 
 def arrayify(*args)
@@ -105,37 +173,87 @@ def install_data(destination, *files)
   end
 end
 
-def adjust_to_poedit_style(in_name, out_name)
+def adjust_to_poedit_style(in_name, out_name, language)
   File.open(out_name, "w") do |out|
-    lines = IO.readlines(in_name).collect { |line| line.chomp.gsub(/\r/, '') }
-
-    no_nl          = false
+    lines          = IO.readlines(in_name).collect { |line| line.chomp.gsub(/\r/, '') }.reject { |line| /^\s*$/.match(line) }
     state          = :initial
     previous_state = :initial
+    sources        = []
+    one_source     = !%w{es eu it uk pl}.include?(language)
 
     lines.each do |line|
       previous_state = state
 
-      if '' == line
-        state = :blank
-      elsif /^#~/.match(line)
+      if /^#~/.match(line)
         state = :removed
+      elsif /^\"/.match(line)
+        state = :string
+      elsif /^msgstr/.match(line)
+        state = :msgstr
+      elsif /^#[^:]/.match(line)
+        state = :comment
+      else
+        state = :other
       end
 
-      out.puts if /^#(?:,|~\s+msgid)/.match(line) && (:removed == state) && (:blank != previous_state)
+      if /^(?:#,|msgid)/.match(line)
+        if one_source
+          sources.each { |source| out.puts "#: #{source}" }
+        else
+          while !sources.empty?
+            new_line = "#:"
+            while !sources.empty? && ((new_line.length + sources[0].length + 1) < 80)
+              new_line += " " + sources.shift
+            end
+            out.puts new_line
+          end
+        end
+
+        sources = []
+      end
+
+      out.puts if /^#(?:,|:|\s|~\s+msgid)/.match(line) && [:removed, :string, :msgstr].include?(previous_state)
 
       if /^#:/.match(line)
-        out.puts line.gsub(/(\d) /, '\1' + "\n#: ")
-      elsif /^#~/.match(line)
-        # no_nl = true
-        out.puts line
-      elsif !(no_nl && /^\s*$/.match(line))
+        sources += line.gsub(/^#:\s*/, '').split(/\s+/)
+      else
         out.puts line
       end
     end
 
-    out.puts
+    out.puts unless %w{es it}.include?(language)
   end
 
   File.unlink in_name
+end
+
+def remove_files_by_patters patterns
+  verbose = ENV['V'].to_bool
+
+  patterns.collect { |pattern| FileList[pattern].to_a }.flatten.uniq.select { |file_name| File.exists? file_name }.each do |file_name|
+    puts "      rm #{file_name}" if verbose
+    File.unlink file_name
+  end
+end
+
+def read_files *file_names
+  Hash[ *file_names.flatten.collect { |file_name| [ file_name, IO.readlines(file_name) ] }.flatten(1) ]
+end
+
+class Rake::Task
+  def investigate
+    result = "------------------------------\n"
+    result << "Investigating #{name}\n"
+    result << "class: #{self.class}\n"
+    result <<  "task needed: #{needed?}\n"
+    result <<  "timestamp: #{timestamp}\n"
+    result << "pre-requisites:\n"
+    prereqs = @prerequisites.collect { |name| Rake::Task[name] }
+    prereqs.sort! { |a,b| a.timestamp <=> b.timestamp }
+    result += prereqs.collect { |p| "--#{p.name} (#{p.timestamp})\n" }.join("")
+    latest_prereq = @prerequisites.collect{|n| Rake::Task[n].timestamp}.max
+    result <<  "latest-prerequisite time: #{latest_prereq}\n"
+    result << "................................\n\n"
+    return result
+  end
 end

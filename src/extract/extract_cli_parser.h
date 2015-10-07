@@ -8,13 +8,12 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __EXTRACT_EXTRACT_CLI_PARSER_H
-#define __EXTRACT_EXTRACT_CLI_PARSER_H
+#ifndef MTX_EXTRACT_EXTRACT_CLI_PARSER_H
+#define MTX_EXTRACT_EXTRACT_CLI_PARSER_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
-#include <string>
-#include <vector>
+#include <unordered_map>
 
 #include "common/cli_parser.h"
 #include "extract/mkvextract.h"
@@ -29,6 +28,8 @@ protected:
   bool m_extract_cuesheet;
   int m_extract_blockadd_level;
   track_spec_t::target_mode_e m_target_mode;
+
+  std::unordered_map<int64_t, bool> m_used_tids;
 
 public:
   extract_cli_parser_c(const std::vector<std::string> &args);
@@ -51,7 +52,6 @@ protected:
   void set_mode_or_extraction_spec();
   void set_extraction_mode();
   void add_extraction_spec();
-  void set_no_variable_data();
 };
 
-#endif // __EXTRACT_EXTRACT_CLI_PARSER_H
+#endif // MTX_EXTRACT_EXTRACT_CLI_PARSER_H

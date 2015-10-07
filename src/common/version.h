@@ -11,13 +11,17 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_VERSION_H
-#define __MTX_COMMON_VERSION_H
+#ifndef MTX_COMMON_VERSION_H
+#define MTX_COMMON_VERSION_H
 
-#include <string>
+#include "common/common_pch.h"
+
+#include "common/xml/xml.h"
 
 #define MTX_VERSION_CHECK_URL "http://mkvtoolnix-releases.bunkus.org/latest-release.xml"
-#define MTX_VERSION_INFO_URL  "http://mkvtoolnix-releases.bunkus.org/releases.xml"
+#define MTX_RELEASES_INFO_URL "http://mkvtoolnix-releases.bunkus.org/releases.xml"
+#define MTX_DOWNLOAD_URL      "http://www.bunkus.org/videotools/mkvtoolnix/downloads.html"
+#define MTX_CHANGELOG_URL     "http://mkvtoolnix-releases.bunkus.org/doc/ChangeLog"
 
 struct version_number_t {
   unsigned int parts[5];
@@ -35,16 +39,20 @@ struct version_number_t {
 
 struct mtx_release_version_t {
   version_number_t current_version, latest_source, latest_windows_build;
-  std::string source_download_url, windows_build_download_url;
+  std::map<std::string, std::string> urls;
   bool valid;
 
   mtx_release_version_t();
 };
 
 enum version_info_flags_e {
-  vif_default      = 0,
-  vif_full         = 1,
-  vif_untranslated = 2,
+  vif_timestamp    = 0x0001,
+  vif_untranslated = 0x0002,
+  vif_architecture = 0x0004,
+
+  vif_none         = 0x0000,
+  vif_default      = vif_architecture,
+  vif_full         = (0xffff & ~vif_untranslated),
 };
 
 std::string get_version_info(const std::string &program, version_info_flags_e flags = vif_default);
@@ -53,6 +61,7 @@ version_number_t get_current_version();
 
 # if defined(HAVE_CURL_EASY_H)
 mtx_release_version_t get_latest_release_version();
+mtx::xml::document_cptr get_releases_info();
 # endif  // defined(HAVE_CURL_EASY_H)
 
-#endif  // __MTX_COMMON_VERSION_H
+#endif  // MTX_COMMON_VERSION_H

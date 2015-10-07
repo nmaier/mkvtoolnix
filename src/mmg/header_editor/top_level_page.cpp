@@ -11,7 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <wx/dialog.h>
 #include <wx/sizer.h>
@@ -21,14 +21,13 @@
 
 #include "common/ebml.h"
 #include "common/segmentinfo.h"
-#include "common/segment_tracks.h"
 #include "common/wx.h"
 #include "mmg/header_editor/frame.h"
 #include "mmg/header_editor/top_level_page.h"
 
 he_top_level_page_c::he_top_level_page_c(header_editor_frame_c *parent,
                                          const translatable_string_c &title,
-                                         EbmlElement *l1_element)
+                                         ebml_element_cptr l1_element)
   : he_empty_page_c(parent, title, "")
 {
   m_l1_element = l1_element;
@@ -46,11 +45,8 @@ void
 he_top_level_page_c::do_modifications() {
   he_page_base_c::do_modifications();
 
-  if (is_id(m_l1_element, KaxInfo))
-    fix_mandatory_segmentinfo_elements(m_l1_element);
+  if (Is<KaxInfo>(m_l1_element.get()))
+    fix_mandatory_segmentinfo_elements(m_l1_element.get());
 
-  else if (is_id(m_l1_element, KaxTracks))
-    fix_mandatory_segment_tracks_elements(m_l1_element);
-
-  m_l1_element->UpdateSize(true);
+  m_l1_element->UpdateSize(true, true);
 }

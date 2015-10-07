@@ -11,10 +11,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __HE_ASCII_STRING_VALUE_PAGE_H
-#define __HE_ASCII_STRING_VALUE_PAGE_H
+#ifndef MTX_HE_ASCII_STRING_VALUE_PAGE_H
+#define MTX_HE_ASCII_STRING_VALUE_PAGE_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <wx/string.h>
 #include <wx/textctrl.h>
@@ -39,4 +39,4 @@ public:
   virtual void copy_value_to_element();
 };
 
-#endif // __HE_ASCII_STRING_VALUE_PAGE_H
+#endif // MTX_HE_ASCII_STRING_VALUE_PAGE_H

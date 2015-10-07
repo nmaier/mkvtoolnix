@@ -11,17 +11,17 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __HE_PAGE_BASE_H
-#define __HE_PAGE_BASE_H
+#ifndef MTX_HE_PAGE_BASE_H
+#define MTX_HE_PAGE_BASE_H
 
-#include "common/os.h"
-
-#include <vector>
+#include "common/common_pch.h"
 
 #include <wx/panel.h>
 #include <wx/treebase.h>
 
 #include <ebml/EbmlElement.h>
+
+#include "common/ebml.h"
 
 using namespace libebml;
 
@@ -32,7 +32,7 @@ public:
   std::vector<he_page_base_c *> m_children;
   header_editor_frame_c *m_parent;
   wxTreeItemId m_page_id;
-  EbmlElement *m_l1_element;
+  ebml_element_cptr m_l1_element;
   translatable_string_c m_title;
 
 public:
@@ -48,5 +48,6 @@ public:
   virtual void translate_ui() = 0;
   wxString get_title();
 };
+typedef std::shared_ptr<he_page_base_c> he_page_base_cptr;
 
-#endif // __HE_PAGE_BASE_H
+#endif // MTX_HE_PAGE_BASE_H

@@ -15,6 +15,7 @@
 
 #include <algorithm>
 
+#include "common/codec.h"
 #include "common/error.h"
 #include "common/id3.h"
 #include "input/r_aac.h"
@@ -25,8 +26,10 @@ int
 aac_reader_c::probe_file(mm_io_c *in,
                          uint64_t,
                          int64_t probe_range,
-                         int num_headers) {
-  return (find_valid_headers(*in, probe_range, num_headers) != -1) ? 1 : 0;
+                         int num_headers,
+                         bool require_zero_offset) {
+  int offset = find_valid_headers(*in, probe_range, num_headers);
+  return (require_zero_offset && (0 == offset)) || (!require_zero_offset && (0 <= offset));
 }
 
 #define INITCHUNKSIZE 16384
@@ -115,7 +118,7 @@ aac_reader_c::create_packetizer(int64_t) {
 // Try to guess if the MPEG4 header contains the emphasis field (2 bits)
 void
 aac_reader_c::guess_adts_version() {
-  aac_header_t tmp_aacheader;
+  aac_header_c tmp_aacheader;
 
   m_emphasis_present = false;
 
@@ -154,7 +157,7 @@ aac_reader_c::identify() {
   std::string verbose_info = std::string("aac_is_sbr:") + std::string(AAC_PROFILE_SBR == m_aacheader.profile ? "true" : "unknown");
 
   id_result_container();
-  id_result_track(0, ID_RESULT_TRACK_AUDIO, "AAC", verbose_info);
+  id_result_track(0, ID_RESULT_TRACK_AUDIO, codec_c::get_name(CT_A_AAC, "AAC"), verbose_info);
 }
 
 int

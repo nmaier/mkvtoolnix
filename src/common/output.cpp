@@ -13,25 +13,14 @@
 
 #include "common/common_pch.h"
 
+#include <sstream>
+
 #include "common/ebml.h"
 #include "common/endian.h"
-#include "common/mm_io.h"
 #include "common/locale.h"
-#include "common/output.h"
-#include "common/smart_pointers.h"
-#include "common/strings/formatting.h"
+#include "common/logger.h"
+#include "common/mm_io.h"
 #include "common/strings/utf8.h"
-
-#include <ebml/EbmlDate.h>
-#include <ebml/EbmlDummy.h>
-#include <ebml/EbmlMaster.h>
-#include <ebml/EbmlSInteger.h>
-#include <ebml/EbmlString.h>
-#include <ebml/EbmlUInteger.h>
-#include <ebml/EbmlUnicodeString.h>
-#include <ebml/EbmlVoid.h>
-
-using namespace libebml;
 
 bool g_suppress_info              = false;
 bool g_suppress_warnings          = false;
@@ -40,17 +29,33 @@ std::string g_stdio_charset;
 static bool s_mm_stdio_redirected = false;
 
 charset_converter_cptr g_cc_stdio = charset_converter_cptr(new charset_converter_c);
-counted_ptr<mm_io_c> g_mm_stdio   = counted_ptr<mm_io_c>(new mm_stdio_c);
+std::shared_ptr<mm_io_c> g_mm_stdio   = std::shared_ptr<mm_io_c>(new mm_stdio_c);
+
+static mxmsg_handler_t s_mxmsg_info_handler, s_mxmsg_warning_handler, s_mxmsg_error_handler;
 
 void
 redirect_stdio(const mm_io_cptr &stdio) {
   g_mm_stdio            = stdio;
   s_mm_stdio_redirected = true;
+  g_mm_stdio->set_string_output_converter(g_cc_stdio);
 }
 
 bool
 stdio_redirected() {
   return s_mm_stdio_redirected;
+}
+
+void
+set_mxmsg_handler(unsigned int level,
+                  mxmsg_handler_t const &handler) {
+  if (MXMSG_INFO == level)
+    s_mxmsg_info_handler = handler;
+  else if (MXMSG_WARNING == level)
+    s_mxmsg_warning_handler = handler;
+  else if (MXMSG_ERROR == level)
+    s_mxmsg_error_handler = handler;
+  else
+    assert(false);
 }
 
 void
@@ -70,14 +75,14 @@ mxmsg(unsigned int level,
   if (level == MXMSG_ERROR) {
     if (s_saw_cr_after_nl)
       g_mm_stdio->puts("\n");
-    if (!ba::starts_with(message, Y("Error:")))
-      g_mm_stdio->puts(g_cc_stdio->native(Y("Error: ")));
+    if (!balg::starts_with(message, Y("Error:")))
+      g_mm_stdio->puts(Y("Error: "));
 
   } else if (level == MXMSG_WARNING)
-    g_mm_stdio->puts(g_cc_stdio->native(Y("Warning: ")));
+    g_mm_stdio->puts(Y("Warning: "));
 
   else if (level == MXMSG_DEBUG)
-    g_mm_stdio->puts(g_cc_stdio->native(Y("Debug> ")));
+    g_mm_stdio->puts(Y("Debug> "));
 
   size_t idx_cr = message.rfind('\r');
   if (std::string::npos != idx_cr) {
@@ -86,28 +91,34 @@ mxmsg(unsigned int level,
       s_saw_cr_after_nl = true;
   }
 
-  std::string output = g_cc_stdio->native(message);
-  g_mm_stdio->puts(output);
+  g_mm_stdio->puts(message);
   g_mm_stdio->flush();
 }
 
-void
-mxinfo(const std::string &info) {
+static void
+default_mxinfo(unsigned int,
+               std::string const &info) {
   mxmsg(MXMSG_INFO, info);
 }
 
 void
+mxinfo(std::string const &info) {
+  s_mxmsg_info_handler(MXMSG_INFO, info);
+}
+
+void
 mxinfo(const std::wstring &info) {
-  mxmsg(MXMSG_INFO, to_utf8(info));
+  mxinfo(to_utf8(info));
 }
 
 void
 mxinfo(const boost::wformat &info) {
-  mxmsg(MXMSG_INFO, to_utf8(info.str()));
+  mxinfo(to_utf8(info.str()));
 }
 
-void
-mxwarn(const std::string &warning) {
+static void
+default_mxwarn(unsigned int,
+               std::string const &warning) {
   if (g_suppress_warnings)
     return;
 
@@ -117,22 +128,33 @@ mxwarn(const std::string &warning) {
 }
 
 void
-mxerror(const std::string &error) {
+mxwarn(std::string const &warning) {
+  s_mxmsg_warning_handler(MXMSG_WARNING, warning);
+}
+
+static void
+default_mxerror(unsigned int,
+                std::string const &error) {
   mxmsg(MXMSG_ERROR, error);
   mxexit(2);
 }
 
 void
+mxerror(std::string const &error) {
+  s_mxmsg_error_handler(MXMSG_ERROR, error);
+}
+
+void
 mxinfo_fn(const std::string &file_name,
           const std::string &info) {
-  mxmsg(MXMSG_INFO, (boost::format(Y("'%1%': %2%")) % file_name % info).str());
+  mxinfo((boost::format(Y("'%1%': %2%")) % file_name % info).str());
 }
 
 void
 mxinfo_tid(const std::string &file_name,
            int64_t track_id,
            const std::string &info) {
-  mxmsg(MXMSG_INFO, (boost::format(Y("'%1%' track %2%: %3%")) % file_name % track_id % info).str());
+  mxinfo((boost::format(Y("'%1%' track %2%: %3%")) % file_name % track_id % info).str());
 }
 
 void
@@ -168,7 +190,7 @@ mxverb_fn(unsigned int level,
   if (verbose < level)
     return;
 
-  mxmsg(MXMSG_INFO, (boost::format(Y("'%1%': %2%")) % file_name % message).str());
+  mxinfo((boost::format(Y("'%1%': %2%")) % file_name % message).str());
 }
 
 void
@@ -179,114 +201,29 @@ mxverb_tid(unsigned int level,
   if (verbose < level)
     return;
 
-  mxmsg(MXMSG_INFO, (boost::format(Y("'%1%' track %2%: %3%")) % file_name % track_id % message).str());
+  mxinfo((boost::format(Y("'%1%' track %2%: %3%")) % file_name % track_id % message).str());
 }
 
 void
-init_cc_stdio() {
-  set_cc_stdio(get_local_console_charset());
+init_common_output(bool no_charset_detection) {
+  if (no_charset_detection)
+    set_cc_stdio("UTF-8");
+  else
+#if defined(SYS_WINDOWS)
+    set_cc_stdio("UTF-8");
+#else
+    set_cc_stdio(get_local_console_charset());
+#endif
+  set_mxmsg_handler(MXMSG_INFO,    default_mxinfo);
+  set_mxmsg_handler(MXMSG_WARNING, default_mxwarn);
+  set_mxmsg_handler(MXMSG_ERROR,   default_mxerror);
 }
 
 void
 set_cc_stdio(const std::string &charset) {
   g_stdio_charset = charset;
   g_cc_stdio      = charset_converter_c::init(charset);
-}
-
-void
-mxhexdump(unsigned int level,
-          const void *buffer_to_dump,
-          size_t length,
-          const std::string &prefix) {
-  if (verbose < level)
-    return;
-
-  const unsigned char *buffer = static_cast<const unsigned char *>(buffer_to_dump);
-  unsigned int output_idx = 0;
-  unsigned int buffer_idx = 0;
-  char output[24];
-
-  while (buffer_idx < length) {
-    if ((buffer_idx % 16) == 0) {
-      if (0 < buffer_idx) {
-        output[output_idx] = 0;
-        mxinfo(boost::format("%1%\n") % output);
-        output_idx = 0;
-      }
-      mxinfo(boost::format("%2%%|1$08x|  ") % buffer_idx % prefix);
-
-    } else if ((buffer_idx % 8) == 0) {
-      mxinfo(" ");
-      output[output_idx] = ' ';
-      ++output_idx;
-    }
-
-    output[output_idx] = ((32 <= buffer[buffer_idx]) && (128 > buffer[buffer_idx])) ? buffer[buffer_idx] : '.';
-    ++output_idx;
-
-    mxinfo(boost::format("%|1$02x| ") % static_cast<unsigned int>(buffer[buffer_idx]));
-
-    ++buffer_idx;
-  }
-
-  while ((buffer_idx % 16) != 0) {
-    if ((buffer_idx % 8) == 0)
-      mxinfo(" ");
-    mxinfo("   ");
-    ++buffer_idx;
-  }
-  output[output_idx] = 0;
-
-  mxinfo(boost::format("%1%\n") % output);
-}
-
-void
-dump_ebml_elements(EbmlElement *element,
-                   bool with_values,
-                   unsigned int level) {
-  std::string indent_str, value_str;
-  size_t i;
-
-  for (i = 1; i <= level; ++i)
-    indent_str += " ";
-
-  if (with_values) {
-    if (NULL != dynamic_cast<EbmlUInteger *>(element))
-      value_str = to_string(uint64(*static_cast<EbmlUInteger *>(element)));
-
-    else if (NULL != dynamic_cast<EbmlSInteger *>(element))
-      value_str = to_string(int64(*static_cast<EbmlSInteger *>(element)));
-
-    else if (NULL != dynamic_cast<EbmlFloat *>(element))
-      value_str = to_string(double(*static_cast<EbmlFloat *>(element)), 9);
-
-    else if (NULL != dynamic_cast<EbmlUnicodeString *>(element))
-      value_str = UTFstring_to_cstrutf8(UTFstring(*static_cast<EbmlUnicodeString *>(element)));
-
-    else if (NULL != dynamic_cast<EbmlString *>(element))
-      value_str = std::string(*static_cast<EbmlString *>(element));
-
-    else if (NULL != dynamic_cast<EbmlDate *>(element))
-      value_str = to_string(static_cast<EbmlDate *>(element)->GetEpochDate());
-
-    else
-      value_str = (boost::format("(type: %1%)") %
-                   (  NULL != dynamic_cast<EbmlBinary *>(element) ? "binary"
-                    : NULL != dynamic_cast<EbmlMaster *>(element) ? "master"
-                    : NULL != dynamic_cast<EbmlVoid *>(element)   ? "void"
-                    :                                               "unknown")).str();
-
-    value_str = " " + value_str;
-  }
-
-  mxinfo(boost::format("%1%%2%%3%\n") % indent_str % EBML_NAME(element) % value_str);
-
-  EbmlMaster *master = dynamic_cast<EbmlMaster *>(element);
-  if (NULL == master)
-    return;
-
-  for (i = 0; master->ListSize() > i; ++i)
-    dump_ebml_elements((*master)[i], with_values, level + 1);
+  g_mm_stdio->set_string_output_converter(g_cc_stdio);
 }
 
 std::string

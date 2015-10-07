@@ -18,21 +18,21 @@
 #include "common/endian.h"
 #include "common/ivf.h"
 #include "input/r_ivf.h"
-#include "output/p_vp8.h"
+#include "output/p_vpx.h"
 #include "merge/output_control.h"
 
 int
 ivf_reader_c::probe_file(mm_io_c *io,
                          uint64_t size) {
-  if (sizeof(ivf_file_header_t) > size)
+  if (sizeof(ivf::file_header_t) > size)
     return 0;
 
-  ivf_file_header_t header;
+  ivf::file_header_t header;
   io->setFilePointer(0, seek_beginning);
-  if (io->read(&header, sizeof(ivf_file_header_t)) < sizeof(ivf_file_header_t))
+  if (io->read(&header, sizeof(ivf::file_header_t)) < sizeof(ivf::file_header_t))
     return 0;
 
-  if (memcmp(header.file_magic, "DKIF", 4) || memcmp(header.fourcc, "VP80", 4))
+  if (memcmp(header.file_magic, "DKIF", 4) || header.get_codec().is(CT_UNKNOWN))
     return 0;
 
   return 1;
@@ -41,20 +41,20 @@ ivf_reader_c::probe_file(mm_io_c *io,
 ivf_reader_c::ivf_reader_c(const track_info_c &ti,
                            const mm_io_cptr &in)
   : generic_reader_c(ti, in)
-  , m_previous_timestamp(0)
 {
 }
 
 void
 ivf_reader_c::read_headers() {
   try {
-    ivf_file_header_t header;
-    m_in->read(&header, sizeof(ivf_file_header_t));
+    ivf::file_header_t header;
+    m_in->read(&header, sizeof(ivf::file_header_t));
 
     m_width          = get_uint16_le(&header.width);
     m_height         = get_uint16_le(&header.height);
     m_frame_rate_num = get_uint32_le(&header.frame_rate_num);
     m_frame_rate_den = get_uint32_le(&header.frame_rate_den);
+    m_codec          = header.get_codec();
 
     m_ti.m_id        = 0;       // ID for this track.
 
@@ -73,7 +73,7 @@ ivf_reader_c::create_packetizer(int64_t) {
   if (!demuxing_requested('v', 0) || (NPTZR() != 0))
     return;
 
-  vp8_video_packetizer_c *packetizer = new vp8_video_packetizer_c(this, m_ti);
+  auto packetizer = new vpx_video_packetizer_c(this, m_ti, m_codec.get_type());
   add_packetizer(packetizer);
 
   packetizer->set_video_pixel_width(m_width);
@@ -91,11 +91,11 @@ ivf_reader_c::read(generic_packetizer_c *,
                    bool) {
   size_t remaining_bytes = m_size - m_in->getFilePointer();
 
-  ivf_frame_header_t header;
-  if ((sizeof(ivf_frame_header_t) > remaining_bytes) || (m_in->read(&header, sizeof(ivf_frame_header_t)) != sizeof(ivf_frame_header_t)))
+  ivf::frame_header_t header;
+  if ((sizeof(ivf::frame_header_t) > remaining_bytes) || (m_in->read(&header, sizeof(ivf::frame_header_t)) != sizeof(ivf::frame_header_t)))
     return flush_packetizers();
 
-  remaining_bytes     -= sizeof(ivf_frame_header_t);
+  remaining_bytes     -= sizeof(ivf::frame_header_t);
   uint32_t frame_size  = get_uint32_le(&header.frame_size);
 
   if (remaining_bytes < frame_size) {
@@ -110,13 +110,10 @@ ivf_reader_c::read(generic_packetizer_c *,
   }
 
   int64_t timestamp = get_uint64_le(&header.timestamp) * 1000000000ull * m_frame_rate_den / m_frame_rate_num;
-  bool is_keyframe  = (0 != frame_size) && ((buffer->get_buffer()[0] & 0x01) == 0);
 
-  mxverb(3, boost::format("r_ivf.cpp: key %5% header.ts %1% num %2% den %3% res %4%\n") % get_uint64_le(&header.timestamp) % m_frame_rate_num % m_frame_rate_den % timestamp % is_keyframe);
+  mxverb(3, boost::format("r_ivf.cpp: key %5% header.ts %1% num %2% den %3% res %4%\n") % get_uint64_le(&header.timestamp) % m_frame_rate_num % m_frame_rate_den % timestamp % ivf::is_keyframe(buffer, m_codec.get_type()));
 
-  PTZR0->process(new packet_t(buffer, timestamp, -1, is_keyframe ? -1 : m_previous_timestamp));
-
-  m_previous_timestamp  = timestamp;
+  PTZR0->process(new packet_t(buffer, timestamp));
 
   return FILE_STATUS_MOREDATA;
 }
@@ -124,5 +121,5 @@ ivf_reader_c::read(generic_packetizer_c *,
 void
 ivf_reader_c::identify() {
   id_result_container();
-  id_result_track(0, ID_RESULT_TRACK_VIDEO, "VP8");
+  id_result_track(0, ID_RESULT_TRACK_VIDEO, m_codec.get_name());
 }

@@ -11,8 +11,9 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
+#include <wx/app.h>
 #include <wx/log.h>
 #include <wx/progdlg.h>
 
@@ -32,7 +33,7 @@ wx_kax_analyzer_c::~wx_kax_analyzer_c() {
 
 void
 wx_kax_analyzer_c::show_progress_start(int64_t) {
-  m_prog_dlg = new wxProgressDialog(Z("Analysis is running"), Z("The Matroska file is analyzed."), 100, m_parent,
+  m_prog_dlg = new wxProgressDialog(Z("Analysis is running"), Z("The file is being analyzed."), 100, m_parent,
                                     wxPD_AUTO_HIDE | wxPD_APP_MODAL | wxPD_CAN_ABORT | wxPD_REMAINING_TIME);
 
   while (app->Pending())
@@ -51,7 +52,7 @@ wx_kax_analyzer_c::show_progress_running(int percentage) {
 void
 wx_kax_analyzer_c::show_progress_done() {
   delete m_prog_dlg;
-  m_prog_dlg = NULL;
+  m_prog_dlg = nullptr;
 }
 
 void

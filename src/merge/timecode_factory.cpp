@@ -25,9 +25,9 @@ timecode_factory_c::create(const std::string &file_name,
                            const std::string &source_name,
                            int64_t tid) {
   if (file_name.empty())
-    return timecode_factory_cptr(NULL);
+    return timecode_factory_cptr{};
 
-  mm_io_c *in = NULL;           // avoid gcc warning
+  mm_io_c *in = nullptr;           // avoid gcc warning
   try {
     in = new mm_text_io_c(new mm_file_io_c(file_name));
   } catch(...) {
@@ -35,12 +35,12 @@ timecode_factory_c::create(const std::string &file_name,
   }
 
   std::string line;
-  int version;
-  if (!in->getline2(line) || !ba::istarts_with(line, "# timecode format v") || !parse_int(&line[strlen("# timecode format v")], version))
+  int version = -1;
+  if (!in->getline2(line) || !balg::istarts_with(line, "# timecode format v") || !parse_number(&line[strlen("# timecode format v")], version))
     mxerror(boost::format(Y("The timecode file '%1%' contains an unsupported/unrecognized format line. The very first line must look like '# timecode format v1'.\n"))
             % file_name);
 
-  timecode_factory_c *factory = NULL; // avoid gcc warning
+  timecode_factory_c *factory = nullptr; // avoid gcc warning
   if (1 == version)
     factory = new timecode_factory_v1_c(file_name, source_name, tid);
 
@@ -63,7 +63,7 @@ timecode_factory_cptr
 timecode_factory_c::create_fps_factory(int64_t default_duration,
                                        const std::string &source_name,
                                        int64_t tid) {
-  mm_text_io_c text_io(new mm_mem_io_c(NULL, 0, 1024));
+  mm_text_io_c text_io(new mm_mem_io_c(nullptr, 0, 1024));
   text_io.puts("# timecode format v1\n");
   text_io.puts(boost::format("assume %1%\n") % to_string(1000000000.0 / default_duration, 9));
   text_io.setFilePointer(0, seek_beginning);
@@ -91,13 +91,13 @@ timecode_factory_v1_c::parse(mm_io_c &in) {
       break;
   } while (true);
 
-  if (!ba::istarts_with(line, "assume "))
+  if (!balg::istarts_with(line, "assume "))
     mxerror(boost::format(Y("The timecode file '%1%' does not contain a valid 'Assume' line with the default number of frames per second.\n")) % m_file_name);
 
   line.erase(0, 6);
   strip(line);
 
-  if (!parse_double(line.c_str(), m_default_fps))
+  if (!parse_number(line.c_str(), m_default_fps))
     mxerror(boost::format(Y("The timecode file '%1%' does not contain a valid 'Assume' line with the default number of frames per second.\n")) % m_file_name);
 
   while (in.getline2(line)) {
@@ -108,9 +108,9 @@ timecode_factory_v1_c::parse(mm_io_c &in) {
 
     std::vector<std::string> parts = split(line, ",", 3);
     if (   (parts.size() != 3)
-        || !parse_uint(parts[0], t.start_frame)
-        || !parse_uint(parts[1], t.end_frame)
-        || !parse_double(parts[2], t.fps)) {
+        || !parse_number(parts[0], t.start_frame)
+        || !parse_number(parts[1], t.end_frame)
+        || !parse_number(parts[2], t.fps)) {
       mxwarn(boost::format(Y("Line %1% of the timecode file '%2%' could not be parsed.\n")) % line_no % m_file_name);
       continue;
     }
@@ -124,7 +124,7 @@ timecode_factory_v1_c::parse(mm_io_c &in) {
     m_ranges.push_back(t);
   }
 
-  mxverb(3, boost::format("ext_timecodes: Version 1, default fps %1%, %2% entries.\n") % m_default_fps % m_ranges.size());
+  mxdebug_if(m_debug, boost::format("ext_timecodes: Version 1, default fps %1%, %2% entries.\n") % m_default_fps % m_ranges.size());
 
   if (m_ranges.size() == 0)
     t.start_frame = 0;
@@ -166,7 +166,7 @@ timecode_factory_v1_c::parse(mm_io_c &in) {
     iit->base_timecode = pit->base_timecode + ((double)pit->end_frame - (double)pit->start_frame + 1) * 1000000000.0 / pit->fps;
 
   for (iit = m_ranges.begin(); iit < m_ranges.end(); iit++)
-    mxverb(3, boost::format("ranges: entry %1% -> %2% at %3% with %4%\n") % iit->start_frame % iit->end_frame % iit->fps % iit->base_timecode);
+    mxdebug_if(m_debug, boost::format("ranges: entry %1% -> %2% at %3% with %4%\n") % iit->start_frame % iit->end_frame % iit->fps % iit->base_timecode);
 }
 
 bool
@@ -179,7 +179,7 @@ timecode_factory_v1_c::get_next(packet_cptr &packet) {
   if ((m_frameno > m_ranges[m_current_range].end_frame) && (m_current_range < (m_ranges.size() - 1)))
     m_current_range++;
 
-  mxverb(4, boost::format("ext_timecodes v1: tc %1% dur %2% for %3%\n") % packet->assigned_timecode % packet->duration % (m_frameno - 1));
+  mxdebug_if(m_debug, boost::format("ext_timecodes v1: tc %1% dur %2% for %3%\n") % packet->assigned_timecode % packet->duration % (m_frameno - 1));
 
   return false;
 }
@@ -209,7 +209,7 @@ timecode_factory_v2_c::parse(mm_io_c &in) {
       continue;
 
     double timecode;
-    if (!parse_double(line.c_str(), timecode))
+    if (!parse_number(line.c_str(), timecode))
       mxerror(boost::format(Y("The line %1% of the timecode file '%2%' does not contain a valid floating point number.\n")) % line_no % m_file_name);
 
     if ((2 == m_version) && (timecode < previous_timecode))
@@ -239,17 +239,25 @@ timecode_factory_v2_c::parse(mm_io_c &in) {
   if (m_timecodes.empty())
     mxerror(boost::format(Y("The timecode file '%1%' does not contain any valid entry.\n")) % m_file_name);
 
+  if (m_debug) {
+    mxdebug("Absolute probablities with maximum in separate line:\n");
+    mxdebug("Duration  | Absolute probability\n");
+    mxdebug("----------+---------------------\n");
+  }
+
   dur_sum = -1;
   std::pair<int64_t, int64_t> entry;
   for (auto entry : dur_map) {
     if ((0 > dur_sum) || (dur_map[dur_sum] < entry.second))
       dur_sum = entry.first;
-    mxverb(4, boost::format("ext_m_timecodes v2 dur_map %1% = %2%\n") % entry.first % entry.second);
+    mxdebug_if(m_debug, boost::format("%|1$ 9lld| | %|2$ 9lld|\n") % entry.first % entry.second);
   }
-  mxverb(4, boost::format("ext_m_timecodes v2 max is %1% = %2%\n") % dur_sum % dur_map[dur_sum]);
+
+  mxdebug_if(m_debug, "Max-------+---------------------\n");
+  mxdebug_if(m_debug, boost::format("%|1$ 9lld| | %|2$ 9lld|\n") % dur_sum % dur_map[dur_sum]);
 
   if (0 < dur_sum)
-    m_default_fps = (double)1000000000.0 / dur_sum;
+    m_default_duration = dur_sum;
 
   m_durations.push_back(dur_sum);
 }
@@ -304,12 +312,12 @@ timecode_factory_v3_c::parse(mm_io_c &in) {
       break;
   } while (true);
 
-  if (!ba::istarts_with(line, "assume "))
+  if (!balg::istarts_with(line, "assume "))
     mxerror(err_msg_assume);
   line.erase(0, 6);
   strip(line);
 
-  if (!parse_double(line.c_str(), m_default_fps))
+  if (!parse_number(line.c_str(), m_default_fps))
     mxerror(err_msg_assume);
 
   while (in.getline2(line)) {
@@ -319,14 +327,14 @@ timecode_factory_v3_c::parse(mm_io_c &in) {
       continue;
 
     double dur;
-    if (ba::istarts_with(line, "gap,")) {
+    if (balg::istarts_with(line, "gap,")) {
       line.erase(0, 4);
       strip(line);
 
       t.is_gap = true;
       t.fps    = m_default_fps;
 
-      if (!parse_double(line.c_str(), dur))
+      if (!parse_number(line.c_str(), dur))
         mxerror(boost::format(Y("The timecode file '%1%' does not contain a valid 'Gap' line with the duration of the gap.\n")) % m_file_name);
       t.duration = (int64_t)(1000000000.0 * dur);
 
@@ -334,10 +342,10 @@ timecode_factory_v3_c::parse(mm_io_c &in) {
       t.is_gap = false;
       std::vector<std::string> parts = split(line, ",");
 
-      if ((1 == parts.size()) && parse_double(parts[0], dur))
+      if ((1 == parts.size()) && parse_number(parts[0], dur))
         t.fps = m_default_fps;
 
-      else if ((2 != parts.size()) || !parse_double(parts[1], t.fps)) {
+      else if ((2 != parts.size()) || !parse_number(parts[1], t.fps)) {
         mxwarn(boost::format(Y("Line %1% of the timecode file '%2%' could not be parsed.\n")) % line_no % m_file_name);
         continue;
       }
@@ -353,7 +361,7 @@ timecode_factory_v3_c::parse(mm_io_c &in) {
     m_durations.push_back(t);
   }
 
-  mxverb(3, boost::format("ext_timecodes: Version 3, default fps %1%, %2% entries.\n") % m_default_fps % m_durations.size());
+  mxdebug_if(m_debug, boost::format("ext_timecodes: Version 3, default fps %1%, %2% entries.\n") % m_default_fps % m_durations.size());
 
   if (m_durations.size() == 0)
     mxwarn(boost::format(Y("The timecode file '%1%' does not contain any valid entry.\n")) % m_file_name);
@@ -364,7 +372,7 @@ timecode_factory_v3_c::parse(mm_io_c &in) {
   m_durations.push_back(t);
 
   for (iit = m_durations.begin(); iit < m_durations.end(); iit++)
-    mxverb(4, boost::format("durations:%1% entry for %2% with %3% FPS\n") % (iit->is_gap ? " gap" : "") % iit->duration % iit->fps);
+    mxdebug_if(m_debug, boost::format("durations:%1% entry for %2% with %3% FPS\n") % (iit->is_gap ? " gap" : "") % iit->duration % iit->fps);
 }
 
 bool
@@ -397,7 +405,7 @@ timecode_factory_v3_c::get_next(packet_cptr &packet) {
     m_current_duration++;
   }
 
-  mxverb(3, boost::format("ext_timecodes v3: tc %1% dur %2%\n") % packet->assigned_timecode % packet->duration);
+  mxdebug_if(m_debug, boost::format("ext_timecodes v3: tc %1% dur %2%\n") % packet->assigned_timecode % packet->duration);
 
   return result;
 }

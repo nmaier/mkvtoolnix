@@ -12,8 +12,7 @@
 
 #include "common/common_pch.h"
 
-#include <boost/math/common_factor.hpp>
-
+#include "common/codec.h"
 #include "common/ebml.h"
 #include "common/endian.h"
 #include "common/math.h"
@@ -49,13 +48,15 @@ xtr_ivf_c::create_file(xtr_base_c *master,
       m_frame_rate_den = 1;
   }
 
-  if (NULL != master)
+  if (master)
     mxerror(boost::format(Y("Cannot write track %1% with the CodecID '%2%' to the file '%3%' because "
                             "track %4% with the CodecID '%5%' is already being written to the same file.\n"))
             % m_tid % m_codec_id % m_file_name % master->m_tid % master->m_codec_id);
 
+  auto fourcc = m_codec_id == MKV_V_VP8 ? "VP80" : "VP90";
+
   memcpy(m_file_header.file_magic, "DKIF", 4);
-  memcpy(m_file_header.fourcc,     "VP80", 4);
+  memcpy(m_file_header.fourcc,     fourcc, 4);
 
   put_uint16_le(&m_file_header.header_size,    sizeof(m_file_header));
   put_uint16_le(&m_file_header.width,          kt_get_v_pixel_width(track));
@@ -67,29 +68,19 @@ xtr_ivf_c::create_file(xtr_base_c *master,
 }
 
 void
-xtr_ivf_c::handle_frame(memory_cptr &frame,
-                        KaxBlockAdditions *,
-                        int64_t timecode,
-                        int64_t,
-                        int64_t,
-                        int64_t,
-                        bool,
-                        bool,
-                        bool) {
-  m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
-
-  uint64_t frame_number = timecode * m_frame_rate_num / m_frame_rate_den / 1000000000ull;
+xtr_ivf_c::handle_frame(xtr_frame_t &f) {
+  uint64_t frame_number = f.timecode * m_frame_rate_num / m_frame_rate_den / 1000000000ull;
 
   mxverb(2, boost::format("timecode %1% num %2% den %3% frame_number %4% calculated back %5%\n")
-         % timecode % m_frame_rate_num % m_frame_rate_den % frame_number
+         % f.timecode % m_frame_rate_num % m_frame_rate_den % frame_number
          % (frame_number * 1000000000ull * m_frame_rate_den / m_frame_rate_num));
 
-  ivf_frame_header_t frame_header;
-  put_uint32_le(&frame_header.frame_size, frame->get_size());
+  ivf::frame_header_t frame_header;
+  put_uint32_le(&frame_header.frame_size, f.frame->get_size());
   put_uint32_le(&frame_header.timestamp,  frame_number);
 
-  m_out->write(&frame_header,       sizeof(frame_header));
-  m_out->write(frame->get_buffer(), frame->get_size());
+  m_out->write(&frame_header,         sizeof(frame_header));
+  m_out->write(f.frame->get_buffer(), f.frame->get_size());
 
   ++m_frame_count;
 }
@@ -101,4 +92,3 @@ xtr_ivf_c::finish_file() {
   m_out->setFilePointer(0, seek_beginning);
   m_out->write(&m_file_header, sizeof(m_file_header));
 }
-

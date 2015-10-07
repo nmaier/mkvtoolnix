@@ -11,8 +11,8 @@
    Written by Steve Lhomme <steve.lhomme@free.fr>.
 */
 
-#ifndef __P_WAVPACK_H
-#define __P_WAVPACK_H
+#ifndef MTX_P_WAVPACK_H
+#define MTX_P_WAVPACK_H
 
 #include "common/common_pch.h"
 
@@ -32,10 +32,10 @@ public:
   virtual int process(packet_cptr packet);
   virtual void set_headers();
 
-  virtual const std::string get_format_name(bool translate = true) {
-    return translate ? Y("WAVPACK4") : "WAVPACK4";
+  virtual translatable_string_c get_format_name() const {
+    return YT("WAVPACK4");
   }
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);
 };
 
-#endif // __P_WAVPACK_H
+#endif // MTX_P_WAVPACK_H

@@ -6,7 +6,7 @@ class T_012ssa < Test
   end
 
   def run
-    merge("data/textsubs/fe.ssa")
+    merge("data/ssa-ass/fe.ssa")
     return hash_tmp
   end
 end

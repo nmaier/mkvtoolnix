@@ -6,7 +6,7 @@ class T_241ac3_with_id3_tags < Test
   end
 
   def run
-    merge("data/simple/ac3-with-id3-tags.ac3")
+    merge("data/ac3/ac3-with-id3-tags.ac3")
     return hash_tmp
   end
 end

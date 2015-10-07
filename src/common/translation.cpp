@@ -13,7 +13,6 @@
 
 #include "common/common_pch.h"
 
-#include <algorithm>
 #if HAVE_NL_LANGINFO
 # include <langinfo.h>
 #elif HAVE_LOCALE_CHARSET
@@ -30,8 +29,7 @@
 
 #if defined(SYS_WINDOWS)
 # include <windows.h>
-
-# include <boost/filesystem/path.hpp>
+# include <winnls.h>
 
 # include "common/fs_sys_helpers.h"
 # include "common/memory.h"
@@ -45,33 +43,43 @@ translation_c::translation_c(const std::string &unix_locale,
                              const std::string &windows_locale_sysname,
                              const std::string &english_name,
                              const std::string &translated_name,
-                             bool line_breaks_anywhere)
+                             bool line_breaks_anywhere,
+                             int language_id,
+                             int sub_language_id)
   : m_unix_locale(unix_locale)
   , m_windows_locale(windows_locale)
   , m_windows_locale_sysname(windows_locale_sysname)
   , m_english_name(english_name)
   , m_translated_name(translated_name)
   , m_line_breaks_anywhere(line_breaks_anywhere)
+  , m_language_id(language_id)
+  , m_sub_language_id(sub_language_id)
 {
 }
 
+// See http://msdn.microsoft.com/en-us/library/windows/desktop/dd318693(v=vs.85).aspx for the (sub) language IDs.
 void
 translation_c::initialize_available_translations() {
   ms_available_translations.clear();
-  ms_available_translations.push_back(translation_c("en_US", "en",    "english",    "English",             "English",     false));
+  ms_available_translations.emplace_back("en_US", "en",    "english",    "English",              "English",             false, 0x0009, 0x00);
 #if defined(HAVE_LIBINTL_H)
-  ms_available_translations.push_back(translation_c("de_DE", "de",    "german",     "German",              "Deutsch",     false));
-  ms_available_translations.push_back(translation_c("es_ES", "es",    "spanish",    "Spanish",             "Español",     false));
-  ms_available_translations.push_back(translation_c("fr_FR", "fr",    "french",     "French",              "Français",    false));
-  ms_available_translations.push_back(translation_c("it_IT", "it",    "italian",    "Italian",             "Italiano",    false));
-  ms_available_translations.push_back(translation_c("ja_JP", "ja",    "japanese",   "Japanese",            "日本語",      true));
-  ms_available_translations.push_back(translation_c("lt_LT", "lt",    "lithuanian", "Lithuanian",          "Lietuvių",    false));
-  ms_available_translations.push_back(translation_c("nl_NL", "nl",    "dutch",      "Dutch",               "Nederlands",  false));
-  ms_available_translations.push_back(translation_c("ru_RU", "ru",    "russian",    "Russian",             "Русский",     false));
-  ms_available_translations.push_back(translation_c("tr_TR", "tr",    "turkish",    "Turkish",             "Türkçe",      false));
-  ms_available_translations.push_back(translation_c("uk_UA", "uk",    "ukrainian",  "Ukrainian",           "Український", false));
-  ms_available_translations.push_back(translation_c("zh_CN", "zh_CN", "chinese",    "Chinese Simplified",  "简体中文",    true));
-  ms_available_translations.push_back(translation_c("zh_TW", "zh_TW", "chinese",    "Chinese Traditional", "繁體中文",    true));
+  ms_available_translations.emplace_back("cs_CZ", "cs",    "czech",      "Czech",                "Čeština",             false, 0x0005, 0x00);
+  ms_available_translations.emplace_back("de_DE", "de",    "german",     "German",               "Deutsch",             false, 0x0007, 0x00);
+  ms_available_translations.emplace_back("es_ES", "es",    "spanish",    "Spanish",              "Español",             false, 0x000a, 0x00);
+  ms_available_translations.emplace_back("eu_ES", "eu",    "basque",     "Basque",               "Euskara",             false, 0x002d, 0x00);
+  ms_available_translations.emplace_back("fr_FR", "fr",    "french",     "French",               "Français",            false, 0x000c, 0x00);
+  ms_available_translations.emplace_back("it_IT", "it",    "italian",    "Italian",              "Italiano",            false, 0x0010, 0x00);
+  ms_available_translations.emplace_back("ja_JP", "ja",    "japanese",   "Japanese",             "日本語",              true,  0x0011, 0x00);
+  ms_available_translations.emplace_back("lt_LT", "lt",    "lithuanian", "Lithuanian",           "Lietuvių",            false, 0x0027, 0x00);
+  ms_available_translations.emplace_back("nl_NL", "nl",    "dutch",      "Dutch",                "Nederlands",          false, 0x0013, 0x00);
+  ms_available_translations.emplace_back("pl_PL", "pl",    "polish",     "Polish",               "Polski",              false, 0x0015, 0x00);
+  ms_available_translations.emplace_back("pt_BR", "pt_BR", "portuguese", "Brazilian Portuguese", "Português do Brasil", false, 0x0016, 0x01);
+  ms_available_translations.emplace_back("pt_PT", "pt",    "portuguese", "Portuguese",           "Português",           false, 0x0016, 0x02);
+  ms_available_translations.emplace_back("ru_RU", "ru",    "russian",    "Russian",              "Русский",             false, 0x0019, 0x00);
+  ms_available_translations.emplace_back("tr_TR", "tr",    "turkish",    "Turkish",              "Türkçe",              false, 0x001f, 0x00);
+  ms_available_translations.emplace_back("uk_UA", "uk",    "ukrainian",  "Ukrainian",            "Український",         false, 0x0022, 0x00);
+  ms_available_translations.emplace_back("zh_CN", "zh_CN", "chinese",    "Chinese Simplified",   "简体中文",            true,  0x0004, 0x02);
+  ms_available_translations.emplace_back("zh_TW", "zh_TW", "chinese",    "Chinese Traditional",  "繁體中文",            true,  0x0004, 0x01);
 #endif
 
   ms_active_translation_idx = 0;
@@ -85,9 +93,9 @@ translation_c::look_up_translation(const std::string &locale) {
     int idx                                = 0;
 
     while (i != ms_available_translations.end()) {
-      if (   ba::iequals(locale_country_lang, i->get_locale())
+      if (   balg::iequals(locale_country_lang, i->get_locale())
 #if defined(SYS_WINDOWS)
-          || ba::iequals(locale_country_lang, i->m_windows_locale_sysname)
+          || balg::iequals(locale_country_lang, i->m_windows_locale_sysname)
 #endif
            )
         return idx;
@@ -101,9 +109,22 @@ translation_c::look_up_translation(const std::string &locale) {
   return -1;
 }
 
+int
+translation_c::look_up_translation(int language_id, int sub_language_id) {
+  auto ptr = brng::find_if(ms_available_translations, [language_id,sub_language_id](translation_c const &tr) {
+      return (tr.m_language_id == language_id) && (!tr.m_sub_language_id || (tr.m_sub_language_id == sub_language_id));
+    });
+
+  int idx = ptr == ms_available_translations.end() ? -1 : std::distance(ms_available_translations.begin(), ptr);
+  mxdebug_if(debugging_c::requested("locale"), boost::format("look_up_translation for 0x%|1$04x|/0x%|2$02x|: %3%\n") % language_id % sub_language_id % idx);
+
+  return idx;
+}
+
 std::string
 translation_c::get_default_ui_locale() {
   std::string locale;
+  bool debug = debugging_c::requested("locale");
 
 #if defined(HAVE_LIBINTL_H)
 # if defined(SYS_WINDOWS)
@@ -115,39 +136,30 @@ translation_c::get_default_ui_locale() {
   if (!env_var.empty() && (-1 != look_up_translation(env_var)))
     return env_var;
 
-  char *data;
-  int len = GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SENGLANGUAGE, NULL, 0);
-  if (0 < len) {
-    data = (char *)safemalloc(len);
-    memset(data, 0, len);
-    if (0 != GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SENGLANGUAGE, data, len))
-      locale = data;
-    safefree(data);
+  auto lang_id = GetUserDefaultUILanguage();
+  int idx      = translation_c::look_up_translation(lang_id & 0x3ff, (lang_id >> 10) & 0x3f);
+  if (-1 != idx)
+    locale = ms_available_translations[idx].get_locale();
 
-    int idx = translation_c::look_up_translation(locale);
-    if (-1 != idx)
-      locale = ms_available_translations[idx].get_locale();
-  }
+  mxdebug_if(debug, boost::format("[lang_id %|1$04x| idx %2% locale %3%\n") % lang_id % idx % locale);
 
 # else  // SYS_WINDOWS
 
-  char *data = setlocale(LC_MESSAGES, NULL);
-  if (NULL != data) {
+  char *data = setlocale(LC_MESSAGES, nullptr);
+  if (data) {
     std::string previous_locale = data;
-    if (debugging_requested("locale"))
-      mxinfo(boost::format("[get_default_ui_locale previous %1%]\n") % previous_locale);
+    mxdebug_if(debug, boost::format("[get_default_ui_locale previous %1%]\n") % previous_locale);
     setlocale(LC_MESSAGES, "");
-    data = setlocale(LC_MESSAGES, NULL);
+    data = setlocale(LC_MESSAGES, nullptr);
 
-    if (NULL != data)
+    if (data)
       locale = data;
 
-    if (debugging_requested("locale"))
-      mxinfo(boost::format("[get_default_ui_locale new %1%]\n") % locale);
+    mxdebug_if(debug, boost::format("[get_default_ui_locale new %1%]\n") % locale);
 
     setlocale(LC_MESSAGES, previous_locale.c_str());
-  } else if (debugging_requested("locale"))
-    mxinfo(boost::format("[get_default_ui_locale get previous failed]\n"));
+  } else
+    mxdebug_if(debug, boost::format("[get_default_ui_locale get previous failed]\n"));
 
 # endif // SYS_WINDOWS
 #endif  // HAVE_LIBINTL_H
@@ -174,7 +186,7 @@ translation_c::set_active_translation(const std::string &locale) {
   int idx                   = look_up_translation(locale);
   ms_active_translation_idx = std::max(idx, 0);
 
-  if (debugging_requested("locale"))
+  if (debugging_c::requested("locale"))
     mxinfo(boost::format("[translation_c::set_active_translation() active_translation_idx %1% for locale %2%]\n") % ms_active_translation_idx % locale);
 }
 
@@ -216,21 +228,21 @@ void
 init_locales(std::string locale) {
   translation_c::initialize_available_translations();
 
-  if (debugging_requested("locale"))
+  if (debugging_c::requested("locale"))
     mxinfo(boost::format("[init_locales start: locale %1%]\n") % locale);
 
   std::string locale_dir;
   std::string default_locale = translation_c::get_default_ui_locale();
 
   if (-1 == translation_c::look_up_translation(locale)) {
-    if (debugging_requested("locale"))
+    if (debugging_c::requested("locale"))
       mxinfo(boost::format("[init_locales lookup failed; clearing locale]\n"));
     locale = "";
   }
 
   if (locale.empty()) {
     locale = default_locale;
-    if (debugging_requested("locale"))
+    if (debugging_c::requested("locale"))
       mxinfo(boost::format("[init_locales setting to default locale %1%]\n") % locale);
   }
 
@@ -258,7 +270,7 @@ init_locales(std::string locale) {
     boost::filesystem::path::imbue(utf8_locale);
   }
 
-  locale_dir = get_installation_path() + "\\locale";
+  locale_dir = (mtx::get_installation_path() / "locale").string();
 
 # else  // SYS_WINDOWS
   std::string chosen_locale;
@@ -267,30 +279,30 @@ init_locales(std::string locale) {
     locale_string_c loc_default(default_locale);
     std::string loc_req_with_default_codeset(locale_string_c(locale).set_codeset_and_modifier(loc_default).str());
 
-    if (setlocale(LC_MESSAGES, loc_req_with_default_codeset.c_str()) != NULL)
+    if (setlocale(LC_MESSAGES, loc_req_with_default_codeset.c_str()))
       chosen_locale = loc_req_with_default_codeset;
 
-    else if (setlocale(LC_MESSAGES, locale.c_str()) != NULL)
+    else if (setlocale(LC_MESSAGES, locale.c_str()))
       chosen_locale = locale;
 
     else {
       std::string loc_req_with_utf8 = locale_string_c(locale).set_codeset_and_modifier(locale_string_c("dummy.UTF-8")).str();
-      if (setlocale(LC_MESSAGES, loc_req_with_utf8.c_str()) != NULL)
+      if (setlocale(LC_MESSAGES, loc_req_with_utf8.c_str()))
         chosen_locale = loc_req_with_utf8;
     }
 
   } catch (mtx::locale_string_format_x &error) {
-    if (debugging_requested("locale"))
+    if (debugging_c::requested("locale"))
       mxinfo(boost::format("[init_locales format error in %1%]\n") % error.error());
   }
 
-  if (debugging_requested("locale"))
+  if (debugging_c::requested("locale"))
     mxinfo(boost::format("[init_locales chosen locale %1%]\n") % chosen_locale);
 
   // Hard fallback to "C" locale if no suitable locale was
   // selected. This can happen if the system has no locales for
   // "en_US" or "en_US.UTF-8" compiled.
-  if (chosen_locale.empty() && (setlocale(LC_MESSAGES, "C") != NULL))
+  if (chosen_locale.empty() && setlocale(LC_MESSAGES, "C"))
     chosen_locale = "C";
 
   if (chosen_locale.empty())
@@ -306,7 +318,7 @@ init_locales(std::string locale) {
 
 # if defined(SYS_APPLE)
   int result = setenv("LC_MESSAGES", chosen_locale.c_str(), 1);
-  if (debugging_requested("locale"))
+  if (debugging_c::requested("locale"))
     mxinfo(boost::format("[init_locales setenv() return code: %1%]\n") % result);
 # endif
 

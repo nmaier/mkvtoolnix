@@ -14,8 +14,9 @@
 #include "common/common_pch.h"
 
 #include "common/aac.h"
+#include "common/codec.h"
 #include "common/hacks.h"
-#include "common/matroska.h"
+#include "merge/connection_checks.h"
 #include "output/p_aac.h"
 
 using namespace libmatroska;
@@ -29,7 +30,6 @@ aac_packetizer_c::aac_packetizer_c(generic_reader_c *p_reader,
                                    bool emphasis_present,
                                    bool headerless)
   : generic_packetizer_c(p_reader, p_ti)
-  , m_bytes_output(0)
   , m_packetno(0)
   , m_last_timecode(-1)
   , m_num_packets_same_tc(0)
@@ -51,7 +51,7 @@ aac_packetizer_c::~aac_packetizer_c() {
 }
 
 unsigned char *
-aac_packetizer_c::get_aac_packet(aac_header_t *aacheader) {
+aac_packetizer_c::get_aac_packet(aac_header_c *aacheader) {
   unsigned char *packet_buffer = m_byte_buffer.get_buffer();
   int size                     = m_byte_buffer.get_size();
   int pos                      = find_aac_header(packet_buffer, size, aacheader, m_emphasis_present);
@@ -61,10 +61,10 @@ aac_packetizer_c::get_aac_packet(aac_header_t *aacheader) {
       m_bytes_skipped += size - 10;
       m_byte_buffer.remove(size - 10);
     }
-    return NULL;
+    return nullptr;
   }
   if ((pos + aacheader->bytes) > size)
-    return NULL;
+    return nullptr;
 
   m_bytes_skipped += pos;
   if (verbose && (0 < m_bytes_skipped))
@@ -131,8 +131,8 @@ aac_packetizer_c::set_headers() {
   set_audio_sampling_freq((float)m_samples_per_sec);
   set_audio_channels(m_channels);
 
-  if ((NULL != m_ti.m_private_data) && (0 < m_ti.m_private_size))
-    set_codec_private(m_ti.m_private_data, m_ti.m_private_size);
+  if (m_ti.m_private_data && (0 < m_ti.m_private_data->get_size()))
+    set_codec_private(m_ti.m_private_data);
 
   else if (!hack_engaged(ENGAGE_OLD_AAC_CODECID)) {
     unsigned char buffer[5];
@@ -141,7 +141,7 @@ aac_packetizer_c::set_headers() {
                                  m_channels, m_samples_per_sec,
                                  AAC_PROFILE_SBR == m_profile ? m_samples_per_sec * 2 : m_samples_per_sec,
                                  AAC_PROFILE_SBR == m_profile);
-    set_codec_private(buffer, length);
+    set_codec_private(memory_c::clone(buffer, length));
   }
 
   generic_packetizer_c::set_headers();
@@ -180,10 +180,10 @@ aac_packetizer_c::process(packet_cptr packet) {
     return process_headerless(packet);
 
   unsigned char *aac_packet;
-  aac_header_t aacheader;
+  aac_header_c aacheader;
 
   m_byte_buffer.add(packet->data->get_buffer(), packet->data->get_size());
-  while ((aac_packet = get_aac_packet(&aacheader)) != NULL) {
+  while ((aac_packet = get_aac_packet(&aacheader))) {
     add_packet(new packet_t(new memory_c(aac_packet, aacheader.data_byte_size, true), -1 == packet->timecode ? m_packetno * m_s2tc : packet->timecode, m_single_packet_duration));
     m_packetno++;
   }
@@ -195,7 +195,7 @@ connection_result_e
 aac_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                  std::string &error_message) {
   aac_packetizer_c *asrc = dynamic_cast<aac_packetizer_c *>(src);
-  if (NULL == asrc)
+  if (!asrc)
     return CAN_CONNECT_NO_FORMAT;
 
   connect_check_a_samplerate(m_samples_per_sec, asrc->m_samples_per_sec);

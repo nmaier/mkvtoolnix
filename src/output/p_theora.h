@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __P_THEORA_H
-#define __P_THEORA_H
+#ifndef MTX_P_THEORA_H
+#define MTX_P_THEORA_H
 
 #include "common/common_pch.h"
 
@@ -24,12 +24,12 @@ public:
   virtual void set_headers();
   virtual int process(packet_cptr packet);
 
-  virtual const std::string get_format_name(bool translate = true) {
-    return translate ? Y("Theora") : "Theora";
+  virtual translatable_string_c get_format_name() const {
+    return YT("Theora");
   }
 
 protected:
   virtual void extract_aspect_ratio();
 };
 
-#endif  // __P_THEORA_H
+#endif  // MTX_P_THEORA_H

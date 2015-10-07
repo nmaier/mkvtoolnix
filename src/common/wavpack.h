@@ -12,8 +12,8 @@
    Based on a software from David Bryant <dbryant@impulse.net>.
 */
 
-#ifndef __MTX_COMMON_WAVPACK_COMMON_H
-#define __MTX_COMMON_WAVPACK_COMMON_H
+#ifndef MTX_COMMON_WAVPACK_COMMON_H
+#define MTX_COMMON_WAVPACK_COMMON_H
 
 #include "common/common_pch.h"
 
@@ -83,4 +83,4 @@ struct wavpack_meta_t {
 
 int32_t wv_parse_frame(mm_io_c &mm_io, wavpack_header_t &header, wavpack_meta_t &meta, bool read_blocked_frames, bool keep_initial_position);
 
-#endif // __MTX_COMMON_WAVPACK_COMMON_H
+#endif // MTX_COMMON_WAVPACK_COMMON_H

@@ -12,10 +12,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __LIBMATROSKA_EXTENSIONS
-#define __LIBMATROSKA_EXTENSIONS
+#ifndef MTX_LIBMATROSKA_EXTENSIONS
+#define MTX_LIBMATROSKA_EXTENSIONS
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <ebml/EbmlVersion.h>
 #include <matroska/KaxBlock.h>
@@ -82,6 +82,18 @@ public:
   void set_block_duration(uint64_t time_length);
   bool replace_simple_by_group();
 };
-typedef counted_ptr<kax_block_blob_c> kax_block_blob_cptr;
+typedef std::shared_ptr<kax_block_blob_c> kax_block_blob_cptr;
 
-#endif // __LIBMATROSKA_EXTENSIONS
+class kax_cues_position_dummy_c: public KaxCues {
+public:
+  kax_cues_position_dummy_c()
+    : KaxCues{}
+  {
+  }
+
+  filepos_t Render(IOCallback &output) {
+    return EbmlElement::Render(output, true, false, true);
+  }
+};
+
+#endif // MTX_LIBMATROSKA_EXTENSIONS

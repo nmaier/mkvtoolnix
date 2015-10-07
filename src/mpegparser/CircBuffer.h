@@ -20,9 +20,10 @@
 
  **/
 
-#ifndef __CIRC_BUFFER_H__
+#ifndef MTX_CIRC_BUFFER_H
+#define MTX_CIRC_BUFFER_H
 
-#define __CIRC_BUFFER_H__
+#include "common/common_pch.h"
 
 #include "Types.h"
 
@@ -110,5 +111,5 @@ public:
 
 };
 
-#endif // __CIRC_BUFFER_H__
+#endif // MTX_CIRC_BUFFER_H
 

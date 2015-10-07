@@ -1,5 +1,3 @@
-#include "common/os.h"
-
 #if defined(SYS_WINDOWS)
 
 # include <windows.h>
@@ -11,6 +9,22 @@ typedef interface ITaskbarList3 ITaskbarList3;
 
 # if !defined(__ITaskbarList3_INTERFACE_DEFINED__)
 #  define __ITaskbarList3_INTERFACE_DEFINED__
+
+#ifndef GUID_SECT
+#if defined (__GNUC__) && (__GNUC__ <= 2 && __GNUC_MINOR__ < 95)
+#define GUID_SECT __attribute__ ((section (GUID_SECTION)))
+#else
+#define GUID_SECT
+#endif
+#endif
+
+#ifndef GUID_EXT
+#if !defined(INITGUID) || (defined(INITGUID) && defined(__cplusplus))
+#define GUID_EXT EXTERN_C
+#else
+#define GUID_EXT
+#endif
+#endif
 
 GUID_EXT const GUID MTX_CLSID_TaskbarList;
 static const GUID IID_ITaskbarList3 = { 0xea1afb91, 0x9e28, 0x4b86, { 0x90, 0xE9, 0x9e, 0x9f, 0x8a, 0x5e, 0xef, 0xaf } };

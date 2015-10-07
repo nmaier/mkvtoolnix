@@ -11,13 +11,11 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_WEBM_H
-#define __MTX_COMMON_WEBM_H
+#ifndef MTX_COMMON_WEBM_H
+#define MTX_COMMON_WEBM_H
 
-#include "common/os.h"
-
-#include <string>
+#include "common/common_pch.h"
 
 bool is_webm_file_name(const std::string &file_name);
 
-#endif // __MTX_COMMON_WEBM_H
+#endif // MTX_COMMON_WEBM_H

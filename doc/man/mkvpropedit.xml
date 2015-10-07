@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "/usr/share/xml/docbook/schema/dtd/4.5/docbookx.dtd"
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd"
 [
 <!ENTITY product "mkvpropedit">
-<!ENTITY version "5.1.0">
-<!ENTITY date "2011-11-27">
+<!ENTITY version "6.9.1">
+<!ENTITY date "2014-04-18">
 
 <!ENTITY mkvmerge "<citerefentry><refentrytitle>mkvmerge</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
 <!ENTITY mkvinfo "<citerefentry><refentrytitle>mkvinfo</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
@@ -93,7 +93,7 @@
   </variablelist>
 
   <para>
-   Actions:
+   Actions that deal with track and segment info properties:
   </para>
 
   <variablelist>
@@ -145,7 +145,13 @@
      </para>
     </listitem>
    </varlistentry>
+  </variablelist>
 
+  <para>
+   Actions that deal with tags and chapters:
+  </para>
+
+  <variablelist>
    <varlistentry id="mkvpropedit.description.tags">
     <term><option>-t</option>, <option>--tags</option> <parameter>selector</parameter>:<parameter>filename</parameter></term>
     <listitem>
@@ -175,6 +181,114 @@
      <para>
       Add or replace chapters in the file with the ones from <filename>filename</filename> or remove them if <filename>filename</filename> is
       empty. &mkvpropedit; reads the same XML and simple chapter formats that &mkvmerge; reads as well.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <para>
+   Actions for handling attachments:
+  </para>
+
+  <variablelist>
+   <varlistentry id="mkvpropedit.description.add_attachment">
+    <term><option>--add-attachment</option> <parameter>filename</parameter></term>
+    <listitem>
+     <para>
+      Adds a new attachment from <parameter>filename</parameter>.
+     </para>
+
+     <para>
+      If the option <option>--attachment-name</option> has been used prior to this option then its value is used as the new attachment's
+      name. Otherwise it is derived from <parameter>filename</parameter>.
+     </para>
+
+     <para>
+      If the option <option>--attachment-mime-type</option> has been used prior to this option then its value is used as the new
+      attachment's MIME type. Otherwise it is auto-detected from the content of <parameter>filename</parameter>.
+     </para>
+
+     <para>
+      If the option <option>--attachment-description</option> has been used prior to this option then its value is used as the new
+      attachment's description. Otherwise no description will be set.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvpropedit.description.replace_attachment">
+    <term><option>--replace-attachment</option> <parameter>selector</parameter><literal>:</literal><parameter>filename</parameter></term>
+    <listitem>
+     <para>
+      Replaces one or more attachments that match <parameter>selector</parameter> with the file <parameter>filename</parameter>. If more
+      than one existing attachment matches <parameter>selector</parameter> then all of their contents will be replaced by the content of
+      <parameter>filename</parameter>.
+     </para>
+
+     <para>
+      The <parameter>selector</parameter> can have one of four forms. They're exlained below in the section <link
+      linkend="mkvpropedit.attachment_selectors">attachment selectors</link>.
+     </para>
+
+     <para>
+      If the option <option>--attachment-name</option> has been used prior to this option then its value is used as the replaced
+      attachment's name. Otherwise the name is not changed.
+     </para>
+
+     <para>
+      If the option <option>--attachment-mime-type</option> has been used prior to this option then its value is used as the replaced
+      attachment's MIME type. Otherwise the MIME type is not changed.
+     </para>
+
+     <para>
+      If the option <option>--attachment-description</option> has been used prior to this option then its value is used as the replaced
+      attachment's description. Otherwise no description is not changed.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvpropedit.description.delete_attachment">
+    <term><option>--delete-attachment</option> <parameter>selector</parameter></term>
+    <listitem>
+     <para>
+      Deletes one or more attachments that match <parameter>selector</parameter>.
+     </para>
+
+     <para>
+      The <parameter>selector</parameter> can have one of four forms. They're exlained below in the section <link
+      linkend="mkvpropedit.attachment_selectors">attachment selectors</link>.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <para>
+   Options for attachment actions:
+  </para>
+
+  <variablelist>
+   <varlistentry id="mkvpropedit.description.attachment_name">
+    <term><option>--attachment-name</option> <parameter>name</parameter></term>
+    <listitem>
+     <para>
+      Sets the name to use for the following <option>--add-attachment</option> or <option>--replace-attachment</option> operation.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvpropedit.description.attachment_mime_type">
+    <term><option>--attachment-mime-type</option> <parameter>mime-type</parameter></term>
+    <listitem>
+     <para>
+      Sets the MIME type to use for the following <option>--add-attachment</option> or <option>--replace-attachment</option> operation.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvpropedit.description.attachment_description">
+    <term><option>--attachment-description</option> <parameter>description</parameter></term>
+    <listitem>
+     <para>
+      Sets the description to use for the following <option>--add-attachment</option> or <option>--replace-attachment</option> operation.
      </para>
     </listitem>
    </varlistentry>
@@ -229,6 +343,37 @@
     </listitem>
    </varlistentry>
 
+   <varlistentry id="mkvpropedit.description.debug">
+    <term><option>--debug</option> <parameter>topic</parameter></term>
+    <listitem>
+     <para>
+      Turn on debugging for a specific feature. This option is only useful for developers.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvpropedit.description.engage">
+    <term><option>--engage</option> <parameter>feature</parameter></term>
+    <listitem>
+     <para>
+      Turn on experimental features. A list of available features can be requested with <command>mkvpropedit --engage list</command>. These
+      features are not meant to be used in normal situations.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvpropedit.description.gui_mode">
+    <term><option>--gui-mode</option></term>
+    <listitem>
+     <para>
+      Turns on GUI mode. In this mode specially-formatted lines may be output that can tell a controlling GUI what's happening. These
+      messages follow the format '<literal>#GUI#message</literal>'. The message may be followed by key/value pairs as in
+      '<literal>#GUI#message#key1=value1#key2=value2…</literal>'. Neither the messages nor the keys are ever translated and always output
+      in English.
+     </para>
+    </listitem>
+   </varlistentry>
+
    <varlistentry>
     <term><option>-v</option>, <option>--verbose</option></term>
     <listitem>
@@ -260,10 +405,11 @@
     <term><option>--check-for-updates</option></term>
     <listitem>
      <para>
-      Checks online for new releases by downloading the URL <uri>http://mkvtoolnix-releases.bunkus.org/latest-release.xml</uri>. Four lines
-      will be output in <literal>key=value</literal> style: the URL from where the information was retrieved (key
-      <literal>version_check_url</literal>), the currently running version (key <literal>running_version</literal>), the latest release's
-      version (key <literal>available_version</literal>) and the download URL (key <literal>download_url</literal>).
+       Checks online for new releases by downloading the URL <ulink
+       url="http://mkvtoolnix-releases.bunkus.org/latest-release.xml">http://mkvtoolnix-releases.bunkus.org/latest-release.xml</ulink>. Four
+       lines will be output in <literal>key=value</literal> style: the URL from where the information was retrieved (key
+       <literal>version_check_url</literal>), the currently running version (key <literal>running_version</literal>), the latest release's
+       version (key <literal>available_version</literal>) and the download URL (key <literal>download_url</literal>).
      </para>
 
      <para>
@@ -303,7 +449,7 @@ source.mkv
 track:a2
 # and set the title to 'Comments'
 --set
-title=Comments</programlisting>
+name=Comments</programlisting>
     </listitem>
    </varlistentry>
   </variablelist>
@@ -346,6 +492,10 @@ title=Comments</programlisting>
        If the parameter <parameter>n</parameter> is a number then the <parameter>n</parameter>th track will be selected. The track order is
        the same that &mkvmerge;'s <option>--identify</option> option outputs.
       </para>
+
+      <para>
+       Numbering starts at 1.
+      </para>
      </listitem>
     </varlistentry>
 
@@ -358,6 +508,10 @@ title=Comments</programlisting>
        one of these four characters: '<literal>a</literal>' for an audio track, '<literal>b</literal>' for a button track,
        '<literal>s</literal>' for a subtitle track and '<literal>v</literal>' for a video track. The track order is the same that
        &mkvmerge;'s <option>--identify</option> option outputs.
+      </para>
+
+      <para>
+       Numbering starts at 1.
       </para>
      </listitem>
     </varlistentry>
@@ -391,6 +545,49 @@ title=Comments</programlisting>
     all actions for those edit selectors will be combined and executed in the order in which they're given on the command line.
    </para>
   </refsect2>
+ </refsect1>
+
+ <refsect1 id="mkvpropedit.attachment_selectors">
+  <title>Attachment selectors</title>
+
+  <para>
+   An attachment selector is used with the two actions <link
+   linkend="mkvpropedit.description.replace_attachment"><option>--replace-attachment</option></link> and <link
+   linkend="mkvpropedit.description.delete_attachment"><option>--delete-attachment</option></link>. It can have one of the following four
+   forms:
+  </para>
+
+  <orderedlist>
+   <listitem>
+    <para>
+     Selection by attachment ID. In this form the selector is simply a number, the attachment's ID as output by &mkvmerge;'s
+     identification command.
+    </para>
+   </listitem>
+
+   <listitem>
+    <para>
+     Selection by attachment UID (unique ID). In this form the selector is the equal sign <literal>=</literal> followed by a number, the
+     attachment's unique ID as output by &mkvmerge;'s verbose identification command.
+    </para>
+   </listitem>
+
+   <listitem>
+    <para>
+     Selection by attachment name. In this form the selector is the literal word <literal>name:</literal> followed by the existing
+     attachment's name. If this selector is used with <option>--replace-attachment</option> then colons within the name to match must be
+     escaped as <literal>\c</literal>.
+    </para>
+   </listitem>
+
+   <listitem>
+    <para>
+     Selection by MIME type. In this form the selector is the literal word <literal>mime-type:</literal> followed by the existing
+     attachment's MIME type. If this selector is used with <option>--replace-attachment</option> then colons within the MIME type to match
+     must be escaped as <literal>\c</literal>.
+    </para>
+   </listitem>
+  </orderedlist>
  </refsect1>
 
  <refsect1 id="mkvpropedit.examples">
@@ -435,6 +632,36 @@ title=Comments</programlisting>
   </para>
 
   <screen>$ mkvpropedit movie.mkv --chapters ''</screen>
+
+  <para>
+   Adding a font file (<literal>Arial.ttf</literal>) as an attachment:
+  </para>
+
+  <screen>$ mkvpropedit movie.mkv --add-attachment Arial.ttf</screen>
+
+  <para>
+   Adding a font file (<literal>89719823.ttf</literal>) as an attachment and providing some information as it really is just Arial:
+  </para>
+
+  <screen>$ mkvpropedit movie.mkv --attachment-name Arial.ttf --attachment-description 'The Arial font as a TrueType font' --attachment-mime-type application/x-truetype-font --add-attachment 89719823.ttf</screen>
+
+  <para>
+   Replacing one attached font (<literal>Comit.ttf</literal>) file with another one (<literal>Arial.ttf</literal>):
+  </para>
+
+  <screen>$ mkvpropedit movie.mkv --attachment-name Arial.ttf --attachment-description 'The Arial font as a TrueType font' --replace-attachment name:Comic.ttf:Arial.ttf</screen>
+
+  <para>
+   Deleting the second attached file, whatever it may be:
+  </para>
+
+  <screen>$ mkvpropedit movie.mkv --delete-attachment 2</screen>
+
+  <para>
+   Deleting all attached fonts by MIME type:
+  </para>
+
+  <screen>$ mkvpropedit movie.mkv --delete-attachment mime-type:application/x-truetype-font</screen>
  </refsect1>
 
  <refsect1>
@@ -468,6 +695,15 @@ title=Comments</programlisting>
   </itemizedlist>
  </refsect1>
 
+ <refsect1 id="mkvinfo.text_files_and_charsets">
+  <title>Text files and character set conversions</title>
+
+  <para>
+   For an in-depth discussion about how all tools in the MKVToolNix suite handle character set conversions, input/output encoding, command
+   line encoding and console encoding please see the identically-named section in the &mkvmerge; man page.
+  </para>
+ </refsect1>
+
  <refsect1 id="mkvpropedit.escaping">
   <title>Escaping special chars in text</title>
   <para>
@@ -478,6 +714,42 @@ title=Comments</programlisting>
   <para>
    The rules are: ' ' (a space) becomes '\s', '&quot;' (double quotes) becomes '\2', ':' becomes '\c', '#' becomes '\h' and '\' (a single backslash) itself becomes '\\'.
   </para>
+ </refsect1>
+
+ <refsect1 id="mkvpropedit.environment_variables">
+  <title>Environment variables</title>
+
+  <para>
+   &mkvpropedit; uses the default variables that determine the system's locale (e.g. <varname>LANG</varname> and the <varname>LC_*</varname>
+   family). Additional variables:
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term><varname>MKVTOOLNIX_DEBUG</varname> and its short form <varname>MTX_DEBUG</varname></term>
+    <listitem>
+     <para>The content is treated as if it had been passed via the <link
+     linkend="mkvpropedit.description.debug"><option>--debug</option></link> option.</para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><varname>MKVTOOLNIX_ENGAGE</varname> and its short form <varname>MTX_ENGAGE</varname></term>
+    <listitem>
+     <para>The content is treated as if it had been passed via the <link
+     linkend="mkvpropedit.description.engage"><option>--engage</option></link> option.</para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><varname>MKVTOOLNIX_OPTIONS</varname> and its short form <varname>MTX_OPTIONS</varname></term>
+    <listitem>
+     <para>The content is split on white space. The resulting partial strings are treated as if it had been passed as command line
+     options. If you need to pass special characters (e.g. spaces) then you have to escape them (see <link
+     linkend="mkvpropedit.escaping">the section about escaping special characters in text</link>).</para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
  </refsect1>
 
  <refsect1 id="mkvpropedit.seealso">

@@ -11,7 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <wx/textctrl.h>
 
@@ -29,7 +29,7 @@ he_bool_value_page_c::he_bool_value_page_c(header_editor_frame_c *parent,
                                            const translatable_string_c &title,
                                            const translatable_string_c &description)
   : he_value_page_c(parent, toplevel_page, master, callbacks, vt_bool, title, description)
-  , m_cb_bool(NULL)
+  , m_cb_bool(nullptr)
   , m_original_value(false)
 {
 }
@@ -43,7 +43,7 @@ he_bool_value_page_c::translate_ui() {
   m_values.Add(Z("no"));
   m_values.Add(Z("yes"));
 
-  if (NULL != m_cb_bool) {
+  if (m_cb_bool) {
     size_t i;
     int selection = m_cb_bool->GetSelection();
     for (i = 0; m_values.size() > i; ++i)
@@ -56,8 +56,8 @@ he_bool_value_page_c::translate_ui() {
 
 wxControl *
 he_bool_value_page_c::create_input_control() {
-  if (NULL != m_element)
-    m_original_value = uint64(*static_cast<EbmlUInteger *>(m_element)) > 0;
+  if (m_element)
+    m_original_value = static_cast<EbmlUInteger *>(m_element)->GetValue() > 0;
 
   if (m_values.empty())
     translate_ui();
@@ -69,7 +69,7 @@ he_bool_value_page_c::create_input_control() {
 
 wxString
 he_bool_value_page_c::get_original_value_as_string() {
-  if (NULL != m_element)
+  if (m_element)
     return m_values[m_original_value ? 1 : 0];
 
   return m_values[0];
@@ -92,5 +92,5 @@ he_bool_value_page_c::validate_value() {
 
 void
 he_bool_value_page_c::copy_value_to_element() {
-  *static_cast<EbmlUInteger *>(m_element) = m_cb_bool->GetValue() == m_values[1];
+  static_cast<EbmlUInteger *>(m_element)->SetValue(m_cb_bool->GetValue() == m_values[1]);
 }

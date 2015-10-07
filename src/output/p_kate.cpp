@@ -16,29 +16,23 @@
 
 #include <ogg/ogg.h>
 
+#include "common/codec.h"
 #include "common/endian.h"
 #include "common/kate.h"
-#include "common/matroska.h"
-#include "merge/pr_generic.h"
+#include "merge/connection_checks.h"
 #include "output/p_kate.h"
 
 using namespace libmatroska;
 
-kate_packetizer_c::kate_packetizer_c(generic_reader_c *p_reader,
-                                     track_info_c &p_ti,
-                                     const void *global_data,
-                                     int global_size)
-  : generic_packetizer_c(p_reader, p_ti)
-  , m_global_data(new memory_c((unsigned char *)safememdup(global_data ? global_data : m_ti.m_private_data,
-                                                           global_data ? global_size : m_ti.m_private_size),
-                               global_data ? global_size : m_ti.m_private_size, true))
-  , m_previous_timecode(0)
+kate_packetizer_c::kate_packetizer_c(generic_reader_c *reader,
+                                     track_info_c &ti)
+  : generic_packetizer_c{reader, ti}
+  , m_previous_timecode{}
 {
   set_track_type(track_subtitle);
 
   // the number of headers to expect is stored in the first header
-  memory_cptr temp(new memory_c((unsigned char *)m_global_data->get_buffer(), m_global_data->get_size(), false));
-  std::vector<memory_cptr> blocks = unlace_memory_xiph(temp);
+  auto blocks = unlace_memory_xiph(m_ti.m_private_data);
 
   kate_parse_identification_header(blocks[0]->get_buffer(), blocks[0]->get_size(), m_kate_id);
   if (blocks.size() != m_kate_id.nheaders)
@@ -56,9 +50,7 @@ kate_packetizer_c::~kate_packetizer_c() {
 void
 kate_packetizer_c::set_headers() {
   set_codec_id(MKV_S_KATE);
-
-  memory_cptr codec_private = lace_memory_xiph(m_headers);
-  set_codec_private(codec_private->get_buffer(), codec_private->get_size());
+  set_codec_private(lace_memory_xiph(m_headers));
 
   generic_packetizer_c::set_headers();
 }
@@ -103,15 +95,10 @@ connection_result_e
 kate_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                   std::string &error_message) {
   kate_packetizer_c *psrc = dynamic_cast<kate_packetizer_c *>(src);
-  if (NULL == psrc)
+  if (!psrc)
     return CAN_CONNECT_NO_FORMAT;
 
-  if (   ((NULL == m_ti.m_private_data) && (NULL != src->m_ti.m_private_data))
-      || ((NULL != m_ti.m_private_data) && (NULL == src->m_ti.m_private_data))
-      || (m_ti.m_private_size != src->m_ti.m_private_size)) {
-    error_message = (boost::format(Y("The codec's private data does not match (lengths: %1% and %2%).")) % m_ti.m_private_size % src->m_ti.m_private_size).str();
-    return CAN_CONNECT_MAYBE_CODECPRIVATE;
-  }
+  connect_check_codec_private(src);
 
   return CAN_CONNECT_YES;
 }

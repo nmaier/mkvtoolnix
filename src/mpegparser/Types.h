@@ -1,9 +1,9 @@
-#ifndef __TYPES_H__
-#define __TYPES_H__
+#ifndef MTX_TYPES_H
+#define MTX_TYPES_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 typedef int64_t MediaTime;
 typedef uint8_t binary;
 
-#endif // __TYPES_H__
+#endif // MTX_TYPES_H

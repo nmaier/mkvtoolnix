@@ -14,12 +14,14 @@
 #include "common/common_pch.h"
 
 #include "common/ac3.h"
+#include "common/debugging.h"
 #include "common/endian.h"
 #include "common/error.h"
 #include "common/math.h"
 #include "common/mp3.h"
 #include "common/mpeg1_2.h"
 #include "common/mpeg4_p2.h"
+#include "common/strings/formatting.h"
 #include "common/truehd.h"
 #include "input/r_mpeg_ps.h"
 #include "merge/output_control.h"
@@ -33,12 +35,6 @@
 #include "output/p_vc1.h"
 
 #define PS_PROBE_SIZE 10 * 1024 * 1024
-
-static bool
-operator <(const mpeg_ps_track_ptr &a,
-           const mpeg_ps_track_ptr &b) {
-  return a->sort_key < b->sort_key;
-}
 
 int
 mpeg_ps_reader_c::probe_file(mm_io_c *in,
@@ -68,6 +64,7 @@ mpeg_ps_reader_c::mpeg_ps_reader_c(const track_info_c &ti,
                                    const mm_io_cptr &in)
   : generic_reader_c(ti, in)
   , file_done(false)
+  , m_debug_timecodes{"mpeg_ps|mpeg_ps_timecodes"}
 {
 }
 
@@ -76,8 +73,12 @@ mpeg_ps_reader_c::read_headers() {
   try {
     uint8_t byte;
 
-    m_in.clear();               // Close the source file first before opening it a second time.
-    m_in            = mm_multi_file_io_c::open_multi(m_ti.m_fname, m_ti.m_disable_multi_file);
+    if (!m_ti.m_disable_multi_file) {
+      m_in.reset();               // Close the source file first before opening it a second time.
+      m_in = mm_multi_file_io_c::open_multi(m_ti.m_fname, false);
+    }
+
+    m_size          = m_in->get_size();
     uint32_t header = m_in->read_uint32_be();
     bool done       = m_in->eof();
     version         = -1;
@@ -165,7 +166,9 @@ mpeg_ps_reader_c::read_headers() {
 
   if (verbose) {
     show_demuxer_info();
-    static_cast<mm_multi_file_io_c &>(*m_in).display_other_file_info();
+    auto multi_in = dynamic_cast<mm_multi_file_io_c *>(get_underlying_input());
+    if (multi_in)
+      multi_in->display_other_file_info();
   }
 }
 
@@ -200,20 +203,22 @@ mpeg_ps_reader_c::calculate_global_timecode_offset() {
   if (tracks.empty())
     return;
 
-  size_t i;
-  global_timecode_offset = tracks[0]->timecode_offset;
-  for (i = 1; i < tracks.size(); i++)
-    if ((-1 == global_timecode_offset) || (tracks[i]->timecode_offset < global_timecode_offset))
-      global_timecode_offset = tracks[i]->timecode_offset;
+  for (auto &track : tracks)
+    track->timecode_offset -= track->timecode_b_frame_offset;
 
-  if (-1 != global_timecode_offset)
-    for (i = 0; i < tracks.size(); i++)
-      tracks[i]->timecode_offset -= global_timecode_offset;
+  auto const &track_min_offset = *brng::min_element(tracks, [](mpeg_ps_track_ptr const &a, mpeg_ps_track_ptr const &b) { return a->timecode_offset < b->timecode_offset; });
+  global_timecode_offset       = std::numeric_limits<int64_t>::max() == track_min_offset->timecode_offset ? 0 : track_min_offset->timecode_offset;
 
-  mxverb(2, boost::format("mpeg_ps: Timecode offset: min was %1% ") % global_timecode_offset);
-  for (i = 0; i < tracks.size(); i++)
-    mxverb(2, boost::format("0x%|1$02x|(0x%|2$02x|)=%3% ") % tracks[i]->id.id % tracks[i]->id.sub_id % tracks[i]->timecode_offset);
-  mxverb(2, "\n");
+  for (auto &track : tracks)
+    track->timecode_offset = std::numeric_limits<int64_t>::max() == track->timecode_offset ? global_timecode_offset : track->timecode_offset - global_timecode_offset;
+
+  if (!m_debug_timecodes)
+    return;
+
+  std::string output = (boost::format("mpeg_ps: Timecode offset: min was %1% ") % global_timecode_offset).str();
+  for (auto const &track : tracks)
+    output += (boost::format("%1%=%2% ") % track->id % track->timecode_offset).str();
+  mxdebug(output + "\n");
 }
 
 bool
@@ -231,7 +236,7 @@ mpeg_ps_reader_c::read_timestamp(int c,
 }
 
 bool
-mpeg_ps_reader_c::read_timestamp(bit_cursor_c &bc,
+mpeg_ps_reader_c::read_timestamp(bit_reader_c &bc,
                                  int64_t &timestamp) {
   bc.skip_bits(4);
   int64_t temp_timestamp = bc.get_bits(3);
@@ -285,106 +290,108 @@ mpeg_ps_reader_c::parse_program_stream_map() {
   m_in->setFilePointer(pos + len);
 }
 
-bool
-mpeg_ps_reader_c::parse_packet(mpeg_ps_id_t &id,
-                               int64_t &timestamp,
-                               unsigned int &length,
-                               unsigned int &full_length) {
-  length      = m_in->read_uint16_be();
-  full_length = length;
+mpeg_ps_packet_c
+mpeg_ps_reader_c::parse_packet(mpeg_ps_id_t id,
+                               bool read_data) {
+  mpeg_ps_packet_c packet{id};
 
-  if (   (0xbc > id.id)
-      || ((0xf0 <= id.id) && (0xfd != id.id))
-      || (0xbf == id.id)) {        // private 2 stream
-    m_in->skip(length);
-    return false;
+  packet.m_id.sub_id   = 0;
+  packet.m_length      = m_in->read_uint16_be();
+  packet.m_full_length = packet.m_length;
+
+  if (    (0xbc >  packet.m_id.id)
+      || ((0xf0 <= packet.m_id.id) && (0xfd != packet.m_id.id))
+      ||  (0xbf == packet.m_id.id)) {        // private 2 stream
+    m_in->skip(packet.m_length);
+    return packet;
   }
 
-  if (0xbe == id.id) {        // padding stream
+  if (0xbe == packet.m_id.id) {        // padding stream
     int64_t pos = m_in->getFilePointer();
-    m_in->skip(length);
+    m_in->skip(packet.m_length);
     uint32_t header = m_in->read_uint32_be();
-    if ( mpeg_is_start_code(header) ) {
-      m_in->setFilePointer(pos + length);
-    } else {
+    if (mpeg_is_start_code(header))
+      m_in->setFilePointer(pos + packet.m_length);
+
+    else {
       mxverb(2, boost::format("mpeg_ps: [begin] padding stream length incorrect at %1%, find next header...\n") % (pos - 6));
       m_in->setFilePointer(pos);
       header = 0xffffffff;
       if (resync_stream(header)) {
-        full_length = m_in->getFilePointer() - pos - 4;
-        mxverb(2, boost::format("mpeg_ps: [end] padding stream length adjusted from %1% to %2%\n") % length % full_length);
-        m_in->setFilePointer(pos + full_length);
+        packet.m_full_length = m_in->getFilePointer() - pos - 4;
+        mxverb(2, boost::format("mpeg_ps: [end] padding stream length adjusted from %1% to %2%\n") % packet.m_length % packet.m_full_length);
+        m_in->setFilePointer(pos + packet.m_full_length);
       }
     }
-    return false;
+
+    return packet;
   }
 
-  if (0 == length)
-    return false;
-
-  id.sub_id = 0;
-  timestamp = -1;
+  if (0 == packet.m_length)
+    return packet;
 
   uint8_t c = 0;
   // Skip stuFFing bytes
-  while (0 < length) {
+  while (0 < packet.m_length) {
     c = m_in->read_uint8();
-    length--;
+    packet.m_length--;
     if (c != 0xff)
       break;
   }
 
   // Skip STD buffer size
   if ((c & 0xc0) == 0x40) {
-    if (2 > length)
-      return false;
-    length -= 2;
+    if (2 > packet.m_length)
+      return packet;
+    packet.m_length -= 2;
     m_in->skip(1);
     c = m_in->read_uint8();
   }
 
   // Presentation time stamp
   if ((c & 0xf0) == 0x20) {
-    if (!read_timestamp(c, timestamp))
-      return false;
-    length -= 4;
+    if ((4 > packet.m_length) || !read_timestamp(c, packet.m_pts))
+      return packet;
+    packet.m_length -= 4;
 
   } else if ((c & 0xf0) == 0x30) {
-    if (!read_timestamp(c, timestamp))
-      return false;
-    m_in->skip(5);
-    length -= 4 + 5;
+    if ((9 > packet.m_length) || !read_timestamp(c, packet.m_pts) || !read_timestamp(m_in->read_uint8(), packet.m_dts))
+      return packet;
+    packet.m_length -= 4 + 5;
 
   } else if ((c & 0xc0) == 0x80) {
     if ((c & 0x30) != 0x00)
       mxerror_fn(m_ti.m_fname, Y("Reading encrypted VOBs is not supported.\n"));
 
+    if (2 > packet.m_length)
+      return packet;
+
     unsigned int flags   = m_in->read_uint8();
     unsigned int hdrlen  = m_in->read_uint8();
-    length              -= 2;
+    packet.m_length     -= 2;
 
-    if (hdrlen > length)
-      return false;
+    if (hdrlen > packet.m_length)
+      return packet;
 
-    length -= hdrlen;
+    packet.m_length -= hdrlen;
 
-    memory_c af_header(safemalloc(hdrlen), hdrlen, true);
-    if (m_in->read(af_header.get_buffer(), hdrlen) != hdrlen)
-      return false;
+    auto af_header = memory_c::alloc(hdrlen);
+    if (m_in->read(af_header->get_buffer(), hdrlen) != hdrlen)
+      return packet;
 
-    bit_cursor_c bc(af_header.get_buffer(), hdrlen);
+    bit_reader_c bc(af_header->get_buffer(), hdrlen);
 
     try {
       // PTS
       if (0x80 == (flags & 0x80))
-        read_timestamp(bc, timestamp);
+        read_timestamp(bc, packet.m_pts);
 
       // DTS
       if (0x40 == (flags & 0x40))
-        bc.skip_bits(5 * 8);
+        read_timestamp(bc, packet.m_dts);
 
       // PES extension?
-      if ((0xfd == id.id) && (0x01 == (flags & 0x01))) {
+      if ((0xfd == packet.m_id.id) && (0x01 == (flags & 0x01))) {
         int pes_ext_flags = bc.get_bits(8);
 
         if (0x80 == (pes_ext_flags & 0x80)) {
@@ -413,38 +420,50 @@ mpeg_ps_reader_c::parse_packet(mpeg_ps_id_t &id,
           int pes_ext2_len = bc.get_bits(7);
 
           if (0 < pes_ext2_len)
-            id.sub_id = bc.get_bits(8);
+            packet.m_id.sub_id = bc.get_bits(8);
         }
       }
     } catch (...) {
     }
 
-    if (0xbd == id.id) {        // DVD audio substream
-      if (4 > length)
-        return false;
-      id.sub_id = m_in->read_uint8();
-      length--;
+    if (0xbd == packet.m_id.id) {        // DVD audio substream
+      if (4 > packet.m_length)
+        return packet;
+      packet.m_id.sub_id = m_in->read_uint8();
+      packet.m_length--;
 
-      if ((id.sub_id & 0xe0) == 0x20) {
+      if ((packet.m_id.sub_id & 0xe0) == 0x20)
         // Subtitles, not supported yet.
-        return false;
+        return packet;
 
-      } else if (   ((0x80 <= id.sub_id) && (0x8f >= id.sub_id))
-                 || ((0x98 <= id.sub_id) && (0xcf >= id.sub_id))) {
+      else if (   ((0x80 <= packet.m_id.sub_id) && (0x8f >= packet.m_id.sub_id))
+               || ((0x98 <= packet.m_id.sub_id) && (0xcf >= packet.m_id.sub_id))) {
         // Number of frames, startpos. MLP/TrueHD audio has a 4 byte header.
-        int audio_header_len = (0xb0 <= id.sub_id) && (0xbf >= id.sub_id) ? 4 : 3;
+        auto audio_header_len = (0xb0 <= packet.m_id.sub_id) && (0xbf >= packet.m_id.sub_id) ? 4u : 3u;
+        if (audio_header_len > packet.m_length)
+          return packet;
+
         m_in->skip(audio_header_len);
-        length -= audio_header_len;
+        packet.m_length -= audio_header_len;
       }
     }
 
   } else if (0x0f != c)
-    return false;
+    return packet;
 
-  if (0 >= length)
-    return false;
+  if (!read_data)
+    packet.m_valid = true;
 
-  return true;
+  else if (0 != packet.m_length)
+    try {
+      packet.m_buffer = memory_c::alloc(packet.m_length);
+      packet.m_valid  = m_in->read(packet.m_buffer, packet.m_length) == packet.m_length;
+
+    } catch (mtx::mm_io::exception &ex) {
+      packet.m_valid  = false;
+    }
+
+  return packet;
 }
 
 void
@@ -468,6 +487,24 @@ mpeg_ps_reader_c::new_stream_v_avc_or_mpeg_1_2(mpeg_ps_id_t id,
 
     uint64_t marker            = 0;
     int pos                    = 0;
+
+    while (4 > buffer.get_size()) {
+      if (!find_next_packet_for_id(id, PS_PROBE_SIZE))
+        throw false;
+
+      auto packet = parse_packet(id);
+      if (!packet)
+        continue;
+
+      buffer.add(packet.m_buffer->get_buffer(), packet.m_length);
+    }
+
+    marker = get_uint32_be(buffer.get_buffer());
+    if (NALU_START_CODE == marker) {
+      m_in->restore_pos();
+      new_stream_v_avc(id, buf, length, track);
+      return;
+    }
 
     while (1) {
       unsigned char *ptr = buffer.get_buffer();
@@ -503,19 +540,12 @@ mpeg_ps_reader_c::new_stream_v_avc_or_mpeg_1_2(mpeg_ps_id_t id,
               avc_access_unit_found = true;
               break;
           }
-
-          if (avc_seq_param_found && avc_pic_param_found && (avc_access_unit_found || avc_slice_found)) {
-            m_in->restore_pos();
-            new_stream_v_avc(id, buf, length, track);
-            return;
-          }
-
         }
 
         if (mpeg_is_start_code(marker)) {
           // MPEG-1 or -2
           switch (marker & 0xffffffff) {
-            case MPEGVIDEO_SEQUENCE_START_CODE:
+            case MPEGVIDEO_SEQUENCE_HEADER_START_CODE:
               mpeg_12_seqhdr_found  = true;
               break;
 
@@ -533,19 +563,21 @@ mpeg_ps_reader_c::new_stream_v_avc_or_mpeg_1_2(mpeg_ps_id_t id,
       }
 
       if (!find_next_packet_for_id(id, PS_PROBE_SIZE))
-        throw false;
+        break;
 
-      int64_t timecode;
-      unsigned int full_length, new_length;
-      if (!parse_packet(id, timecode, new_length, full_length))
+      auto packet = parse_packet(id);
+      if (!packet)
         continue;
 
-      memory_cptr new_buf = memory_c::alloc(new_length);
-      if (m_in->read(new_buf->get_buffer(), new_length) != new_length)
-        throw false;
-
-      buffer.add(new_buf->get_buffer(), new_length);
+      buffer.add(packet.m_buffer->get_buffer(), packet.m_length);
     }
+
+    if (avc_seq_param_found && avc_pic_param_found && (avc_access_unit_found || avc_slice_found)) {
+      m_in->restore_pos();
+      new_stream_v_avc(id, buf, length, track);
+      return;
+    }
+
   } catch (...) {
   }
 
@@ -558,48 +590,77 @@ mpeg_ps_reader_c::new_stream_v_mpeg_1_2(mpeg_ps_id_t id,
                                         unsigned char *buf,
                                         unsigned int length,
                                         mpeg_ps_track_ptr &track) {
-  counted_ptr<M2VParser> m2v_parser(new M2VParser);
+  std::shared_ptr<M2VParser> m2v_parser(new M2VParser);
 
   m2v_parser->SetProbeMode();
   m2v_parser->WriteData(buf, length);
 
-  int state = m2v_parser->GetState();
-  while ((MPV_PARSER_STATE_FRAME != state) && (PS_PROBE_SIZE >= m_in->getFilePointer())) {
+  int num_leading_b_fields = 0;
+  int state                = m2v_parser->GetState();
+
+  bool found_i_frame       = false;
+  bool found_non_b_frame   = false;
+  MPEG2SequenceHeader seq_hdr;
+
+  while (   (MPV_PARSER_STATE_EOS   != state)
+         && (MPV_PARSER_STATE_ERROR != state)
+         && (PS_PROBE_SIZE >= m_in->getFilePointer())) {
     if (!find_next_packet_for_id(id, PS_PROBE_SIZE))
       break;
 
-    int64_t timecode;
-    unsigned int full_length;
-    if (!parse_packet(id, timecode, length, full_length))
+    auto packet = parse_packet(id);
+    if (!packet)
       break;
 
-    memory_c new_buf((unsigned char *)safemalloc(length), 0, true);
-    if (m_in->read(new_buf.get_buffer(), length) != length)
-      break;
-
-    m2v_parser->WriteData(new_buf.get_buffer(), length);
+    m2v_parser->WriteData(packet.m_buffer->get_buffer(), packet.m_length);
 
     state = m2v_parser->GetState();
+
+    while (true) {
+      std::shared_ptr<MPEGFrame> frame(m2v_parser->ReadFrame());
+      if (!frame)
+        break;
+
+      if (!found_i_frame) {
+        if ('I' != frame->frameType)
+          continue;
+
+        found_i_frame = true;
+        seq_hdr       = m2v_parser->GetSequenceHeader();
+
+        continue;
+      }
+
+      if ('B' != frame->frameType) {
+        found_non_b_frame = true;
+        break;
+      }
+
+      num_leading_b_fields += MPEG2_PICTURE_TYPE_FRAME == frame->pictureStructure ? 2 : 1;
+    }
+
+    if (found_i_frame && found_non_b_frame)
+      break;
   }
 
-  if (MPV_PARSER_STATE_FRAME != state) {
+  if ((MPV_PARSER_STATE_FRAME != state) || !found_i_frame || !m2v_parser->GetMPEGVersion() || !seq_hdr.width || !seq_hdr.height) {
     mxverb(3, boost::format("MPEG PS: blacklisting id 0x%|1$02x|(%|2$02x|) for supposed type MPEG1/2\n") % id.id % id.sub_id);
     blacklisted_ids[id.idx()] = true;
-    return;
+    throw false;
   }
 
-  MPEG2SequenceHeader seq_hdr = m2v_parser->GetSequenceHeader();
-  counted_ptr<MPEGFrame> frame(m2v_parser->ReadFrame());
-  if (!frame.is_set())
-    throw false;
-
-  track->fourcc         = FOURCC('M', 'P', 'G', '0' + m2v_parser->GetMPEGVersion());
+  track->codec          = codec_c::look_up(CT_V_MPEG12);
   track->v_interlaced   = !seq_hdr.progressiveSequence;
   track->v_version      = m2v_parser->GetMPEGVersion();
   track->v_width        = seq_hdr.width;
   track->v_height       = seq_hdr.height;
   track->v_frame_rate   = seq_hdr.progressiveSequence ? seq_hdr.frameOrFieldRate : seq_hdr.frameOrFieldRate * 2.0f;
   track->v_aspect_ratio = seq_hdr.aspectRatio;
+  track->timecode_b_frame_offset = 1000000000ll * num_leading_b_fields / seq_hdr.frameOrFieldRate / 2;
+
+  mxdebug_if(m_debug_timecodes,
+             boost::format("Leading B fields %1% rate %2% progressive? %3% calculated_offset %4% found_i? %5% found_non_b? %6%\n")
+             % num_leading_b_fields % seq_hdr.frameOrFieldRate % !!seq_hdr.progressiveSequence % track->timecode_b_frame_offset % found_i_frame % found_non_b_frame);
 
   if ((0 >= track->v_aspect_ratio) || (1 == track->v_aspect_ratio))
     track->v_dwidth = track->v_width;
@@ -608,7 +669,7 @@ mpeg_ps_reader_c::new_stream_v_mpeg_1_2(mpeg_ps_id_t id,
   track->v_dheight  = track->v_height;
 
   MPEGChunk *raw_seq_hdr = m2v_parser->GetRealSequenceHeader();
-  if (NULL != raw_seq_hdr) {
+  if (raw_seq_hdr) {
     track->raw_seq_hdr      = (unsigned char *)safememdup(raw_seq_hdr->GetPointer(), raw_seq_hdr->GetSize());
     track->raw_seq_hdr_size = raw_seq_hdr->GetSize();
   }
@@ -635,86 +696,24 @@ mpeg_ps_reader_c::new_stream_v_avc(mpeg_ps_id_t id,
     if (!find_next_packet_for_id(id, PS_PROBE_SIZE))
       break;
 
-    unsigned int full_length;
-    int64_t timecode;
-    if (!parse_packet(id, timecode, length, full_length))
-      break;
-    memory_c new_buf((unsigned char *)safemalloc(length), 0, true);
-    if (m_in->read(new_buf.get_buffer(), length) != length)
+    auto packet = parse_packet(id);
+    if (!packet)
       break;
 
-    parser.add_bytes(new_buf.get_buffer(), length);
+    parser.add_bytes(packet.m_buffer->get_buffer(), packet.m_length);
   }
 
   if (!parser.headers_parsed())
     throw false;
 
-  track->v_avcc = parser.get_avcc();
+  track->codec    = codec_c::look_up(CT_V_MPEG4_P10);
+  track->v_width  = parser.get_width();
+  track->v_height = parser.get_height();
 
-  try {
-    mm_mem_io_c avcc(track->v_avcc->get_buffer(), track->v_avcc->get_size());
-    mm_mem_io_c new_avcc(NULL, track->v_avcc->get_size(), 1024);
-    memory_cptr nalu(new memory_c());
-    int num_sps, sps, sps_length;
-    sps_info_t sps_info;
-
-    avcc.read(nalu, 5);
-    new_avcc.write(nalu);
-
-    num_sps = avcc.read_uint8();
-    new_avcc.write_uint8(num_sps);
-    num_sps &= 0x1f;
-
-    for (sps = 0; sps < num_sps; sps++) {
-      bool abort;
-
-      sps_length = avcc.read_uint16_be();
-      if ((sps_length + avcc.getFilePointer()) >= track->v_avcc->get_size())
-        sps_length = track->v_avcc->get_size() - avcc.getFilePointer();
-      avcc.read(nalu, sps_length);
-
-      abort = false;
-      if ((0 < sps_length) && ((nalu->get_buffer()[0] & 0x1f) == 7)) {
-        nalu_to_rbsp(nalu);
-        if (!mpeg4::p10::parse_sps(nalu, sps_info, true))
-          throw false;
-        rbsp_to_nalu(nalu);
-        abort = true;
-      }
-
-      new_avcc.write_uint16_be(nalu->get_size());
-      new_avcc.write(nalu);
-
-      if (abort) {
-        avcc.read(nalu, track->v_avcc->get_size() - avcc.getFilePointer());
-        new_avcc.write(nalu);
-        break;
-      }
-    }
-
-    track->fourcc   = FOURCC('A', 'V', 'C', '1');
-    track->v_avcc   = memory_cptr(new memory_c(new_avcc.get_and_lock_buffer(), new_avcc.getFilePointer(), true));
-    track->v_width  = sps_info.width;
-    track->v_height = sps_info.height;
-
-    if (sps_info.ar_found) {
-      float aspect_ratio = (float)sps_info.width / (float)sps_info.height * (float)sps_info.par_num / (float)sps_info.par_den;
-      track->v_aspect_ratio = aspect_ratio;
-
-      if (aspect_ratio > ((float)track->v_width / (float)track->v_height)) {
-        track->v_dwidth  = irnd(track->v_height * aspect_ratio);
-        track->v_dheight = track->v_height;
-
-      } else {
-        track->v_dwidth  = track->v_width;
-        track->v_dheight = irnd(track->v_width / aspect_ratio);
-      }
-    }
-
-    track->use_buffer(256000);
-
-  } catch (...) {
-    throw false;
+  if (parser.has_par_been_found()) {
+    auto dimensions  = parser.get_display_dimensions();
+    track->v_dwidth  = dimensions.first;
+    track->v_dheight = dimensions.second;
   }
 }
 
@@ -731,16 +730,11 @@ mpeg_ps_reader_c::new_stream_v_vc1(mpeg_ps_id_t id,
     if (!find_next_packet_for_id(id, PS_PROBE_SIZE))
       break;
 
-    unsigned int full_length;
-    int64_t timecode;
-    if (!parse_packet(id, timecode, length, full_length))
+    auto packet = parse_packet(id);
+    if (!packet)
       break;
 
-    memory_cptr new_buf = memory_c::alloc(length);
-    if (m_in->read(new_buf->get_buffer(), length) != length)
-      break;
-
-    parser.add_bytes(new_buf->get_buffer(), length);
+    parser.add_bytes(packet.m_buffer->get_buffer(), packet.m_length);
   }
 
   if (!parser.is_sequence_header_available())
@@ -749,7 +743,7 @@ mpeg_ps_reader_c::new_stream_v_vc1(mpeg_ps_id_t id,
   vc1::sequence_header_t seqhdr;
   parser.get_sequence_header(seqhdr);
 
-  track->fourcc            = FOURCC('W', 'V', 'C', '1');
+  track->codec             = codec_c::look_up(CT_V_VC1);
   track->v_width           = seqhdr.pixel_width;
   track->v_height          = seqhdr.pixel_height;
   track->provide_timecodes = true;
@@ -764,13 +758,12 @@ mpeg_ps_reader_c::new_stream_a_mpeg(mpeg_ps_id_t,
                                     mpeg_ps_track_ptr &track) {
   mp3_header_t header;
 
-  if (-1 == find_mp3_header(buf, length))
+  if (-1 == find_consecutive_mp3_headers(buf, length, 1, &header))
     throw false;
 
-  decode_mp3_header(buf, &header);
   track->a_channels    = header.channels;
   track->a_sample_rate = header.sampling_frequency;
-  track->fourcc        = FOURCC('M', 'P', '0' + header.layer, ' ');
+  track->codec         = codec_c::look_up(CT_A_MP3);
 }
 
 void
@@ -778,18 +771,17 @@ mpeg_ps_reader_c::new_stream_a_ac3(mpeg_ps_id_t,
                                    unsigned char *buf,
                                    unsigned int length,
                                    mpeg_ps_track_ptr &track) {
-  ac3_header_t header;
-
-  if (-1 == find_ac3_header(buf, length, &header, false))
+  ac3::frame_c header;
+  if (-1 == header.find_in(buf, length))
     throw false;
 
   mxverb(2,
          boost::format("first ac3 header bsid %1% channels %2% sample_rate %3% bytes %4% samples %5%\n")
-         % header.bsid % header.channels % header.sample_rate % header.bytes % header.samples);
+         % header.m_bs_id % header.m_channels % header.m_sample_rate % header.m_bytes % header.m_samples);
 
-  track->a_channels    = header.channels;
-  track->a_sample_rate = header.sample_rate;
-  track->a_bsid        = header.bsid;
+  track->a_channels    = header.m_channels;
+  track->a_sample_rate = header.m_sample_rate;
+  track->a_bsid        = header.m_bs_id;
 }
 
 void
@@ -805,20 +797,11 @@ mpeg_ps_reader_c::new_stream_a_dts(mpeg_ps_id_t id,
     if (!find_next_packet_for_id(id, PS_PROBE_SIZE))
       throw false;
 
-    unsigned int full_length;
-    int64_t timecode;
-    mpeg_ps_id_t new_id(id.id);
-    if (!parse_packet(new_id, timecode, length, full_length))
+    auto packet = parse_packet(id);
+    if (!packet || (id.sub_id != packet.m_id.sub_id))
       continue;
 
-    if (id.sub_id != new_id.sub_id)
-      continue;
-
-    memory_cptr new_buf = memory_c::alloc(length);
-    if (m_in->read(new_buf->get_buffer(), length) != length)
-      throw false;
-
-    buffer.add(new_buf->get_buffer(), length);
+    buffer.add(packet.m_buffer->get_buffer(), packet.m_length);
   }
 }
 
@@ -853,20 +836,11 @@ mpeg_ps_reader_c::new_stream_a_truehd(mpeg_ps_id_t id,
     if (!find_next_packet_for_id(id, PS_PROBE_SIZE))
       throw false;
 
-    unsigned int full_length;
-    int64_t timecode;
-    mpeg_ps_id_t new_id(id.id);
-    if (!parse_packet(new_id, timecode, length, full_length))
+    auto packet = parse_packet(id);
+    if (!packet || (id.sub_id != packet.m_id.sub_id))
       continue;
 
-    if (id.sub_id != new_id.sub_id)
-      continue;
-
-    memory_cptr new_buf = memory_c::alloc(length);
-    if (m_in->read(new_buf->get_buffer(), length) != length)
-      throw false;
-
-    parser.add_data(new_buf->get_buffer(), length);
+    parser.add_data(packet.m_buffer->get_buffer(), packet.m_length);
   }
 }
 
@@ -895,11 +869,11 @@ mpeg_ps_reader_c::found_new_stream(mpeg_ps_id_t id) {
     return;
 
   try {
-    int64_t timecode;
-    unsigned int length, full_length;
-
-    if (!parse_packet(id, timecode, length, full_length))
+    auto packet = parse_packet(id);
+    if (!packet)
       throw false;
+
+    id = packet.m_id;
 
     if (0xbd == id.id) {        // DVD audio substream
       mxverb(2, boost::format("MPEG PS:   audio substream id 0x%|1$02x|\n") % id.sub_id);
@@ -907,52 +881,59 @@ mpeg_ps_reader_c::found_new_stream(mpeg_ps_id_t id) {
         return;
     }
 
+    mxdebug_if(m_debug_timecodes && packet.has_pts(),
+               boost::format("Timecode for track %1%: %2% [%3%] (DTS: %4%)\n")
+               % id % format_timecode(packet.pts()) % (packet.pts() * 90 / 1000000ll)
+               % (packet.has_dts() ? (boost::format("%1% [%2%]") % format_timecode(packet.dts()) % (packet.dts() * 90 / 1000000ll)).str() : std::string{"none"}));
+
     if (map_has_key(blacklisted_ids, id.idx()))
       return;
 
+    int64_t timecode_for_offset = packet.pts();
+    if (std::numeric_limits<int64_t>::max() == timecode_for_offset)
+      timecode_for_offset = -1;
+
     if (map_has_key(id2idx, id.idx())) {
       mpeg_ps_track_ptr &track = tracks[id2idx[id.idx()]];
-      if ((-1 != timecode) && ((-1 == track->timecode_offset) || (timecode < track->timecode_offset)))
-        track->timecode_offset = timecode;
+      if ((-1 != timecode_for_offset) && (-1 == track->timecode_offset))
+        track->timecode_offset = timecode_for_offset;
       return;
     }
 
     mpeg_ps_track_ptr track(new mpeg_ps_track_t);
-    track->timecode_offset = timecode;
+    track->timecode_offset = timecode_for_offset;
     track->type            = '?';
 
     int es_type = es_map[id.id];
     if (0 != es_type) {
       switch (es_type) {
         case 0x01:
-          track->type   = 'v';
-          track->fourcc = FOURCC('M', 'P', 'G', '1');
-          break;
         case 0x02:
-          track->type   = 'v';
-          track->fourcc = FOURCC('M', 'P', 'G', '2');
+          track->type  = 'v';
+          track->codec = codec_c::look_up(CT_V_MPEG12);
+          break;
           break;
         case 0x03:
         case 0x04:
-          track->type   = 'a';
-          track->fourcc = FOURCC('M', 'P', '2', ' ');
+          track->type  = 'a';
+          track->codec = codec_c::look_up(CT_A_MP3);
           break;
         case 0x0f:
         case 0x11:
-          track->type   = 'a';
-          track->fourcc = FOURCC('A', 'A', 'C', ' ');
+          track->type  = 'a';
+          track->codec = codec_c::look_up(CT_A_AAC);
           break;
         case 0x10:
-          track->type   = 'v';
-          track->fourcc = FOURCC('M', 'P', 'G', '4');
+          track->type  = 'v';
+          track->codec = codec_c::look_up(CT_V_MPEG4_P2);
           break;
         case 0x1b:
-          track->type   = 'v';
-          track->fourcc = FOURCC('A', 'V', 'C', '1');
+          track->type  = 'v';
+          track->codec = codec_c::look_up(CT_V_MPEG4_P10);
           break;
         case 0x81:
-          track->type   = 'a';
-          track->fourcc = FOURCC('A', 'C', '3', ' ');
+          track->type  = 'a';
+          track->codec = codec_c::look_up(CT_A_AC3);
           break;
       }
 
@@ -960,62 +941,57 @@ mpeg_ps_reader_c::found_new_stream(mpeg_ps_id_t id) {
       track->type = 'a';
 
       if ((0x20 <= id.sub_id) && (0x3f >= id.sub_id)) {
-        track->type   = 's';
-        track->fourcc = FOURCC('V', 'S', 'U', 'B');
+        track->type  = 's';
+        track->codec = codec_c::look_up(CT_S_VOBSUB);
 
       } else if (((0x80 <= id.sub_id) && (0x87 >= id.sub_id)) || ((0xc0 <= id.sub_id) && (0xc7 >= id.sub_id)))
-        track->fourcc = FOURCC('A', 'C', '3', ' ');
+        track->codec = codec_c::look_up(CT_A_AC3);
 
       else if ((0x88 <= id.sub_id) && (0x9f >= id.sub_id))
-        track->fourcc = FOURCC('D', 'T', 'S', ' ');
+        track->codec = codec_c::look_up(CT_A_DTS);
 
       else if ((0xa0 <= id.sub_id) && (0xa7 >= id.sub_id))
-        track->fourcc = FOURCC('P', 'C', 'M', ' ');
+        track->codec = codec_c::look_up(CT_A_PCM);
 
       else if ((0xb0 <= id.sub_id) && (0xbf >= id.sub_id))
-        track->fourcc = FOURCC('T', 'R', 'H', 'D');
+        track->codec = codec_c::look_up(CT_A_TRUEHD);
 
       else
         track->type = '?';
 
     } else if ((0xc0 <= id.id) && (0xdf >= id.id)) {
-      track->type   = 'a';
-      track->fourcc = FOURCC('M', 'P', '2', ' ');
+      track->type  = 'a';
+      track->codec = codec_c::look_up(CT_A_MP3);
 
     } else if ((0xe0 <= id.id) && (0xef >= id.id)) {
-      track->type   = 'v';
-      track->fourcc = FOURCC('M', 'P', 'G', '0' + version);
+      track->type  = 'v';
+      track->codec = codec_c::look_up(CT_V_MPEG12);
 
     } else if (0xfd == id.id) {
-      track->type   = 'v';
-      track->fourcc = FOURCC('W', 'V', 'C', '1');
+      track->type  = 'v';
+      track->codec = codec_c::look_up(CT_V_VC1);
     }
 
     if ('?' == track->type)
       return;
 
-    memory_c af_buf((unsigned char *)safemalloc(length), 0, true);
-    unsigned char *buf = af_buf.get_buffer();
-    if (m_in->read(buf, length) != length)
-      throw false;
+    if (track->codec.is(CT_V_MPEG12))
+      new_stream_v_avc_or_mpeg_1_2(id, packet.m_buffer->get_buffer(), packet.m_length, track);
 
-    if ((FOURCC('M', 'P', 'G', '1') == track->fourcc) || (FOURCC('M', 'P', 'G', '2') == track->fourcc))
-      new_stream_v_avc_or_mpeg_1_2(id, buf, length, track);
+    else if (track->codec.is(CT_A_MP3))
+      new_stream_a_mpeg(id, packet.m_buffer->get_buffer(), packet.m_length, track);
 
-    else if (FOURCC('M', 'P', '2', ' ') == track->fourcc)
-      new_stream_a_mpeg(id, buf, length, track);
+    else if (track->codec.is(CT_A_AC3))
+      new_stream_a_ac3(id, packet.m_buffer->get_buffer(), packet.m_length, track);
 
-    else if (FOURCC('A', 'C', '3', ' ') == track->fourcc)
-      new_stream_a_ac3(id, buf, length, track);
+    else if (track->codec.is(CT_A_DTS))
+      new_stream_a_dts(id, packet.m_buffer->get_buffer(), packet.m_length, track);
 
-    else if (FOURCC('D', 'T', 'S', ' ') == track->fourcc)
-      new_stream_a_dts(id, buf, length, track);
+    else if (track->codec.is(CT_V_VC1))
+      new_stream_v_vc1(id, packet.m_buffer->get_buffer(), packet.m_length, track);
 
-    else if (FOURCC('W', 'V', 'C', '1') == track->fourcc)
-      new_stream_v_vc1(id, buf, length, track);
-
-    else if (FOURCC('T', 'R', 'H', 'D') == track->fourcc)
-      new_stream_a_truehd(id, buf, length, track);
+    else if (track->codec.is(CT_A_TRUEHD))
+      new_stream_a_truehd(id, packet.m_buffer->get_buffer(), packet.m_length, track);
 
     else
       // Unsupported track type
@@ -1151,24 +1127,25 @@ mpeg_ps_reader_c::create_packetizer(int64_t id) {
   if (!demuxing_requested(tracks[id]->type, id))
     return;
 
+  m_ti.m_private_data.reset();
   m_ti.m_id = id;
-  mpeg_ps_track_ptr &track = tracks[id];
+
+  auto &track = tracks[id];
+
   if ('a' == track->type) {
-    if (   (FOURCC('M', 'P', '1', ' ') == track->fourcc)
-        || (FOURCC('M', 'P', '2', ' ') == track->fourcc)
-        || (FOURCC('M', 'P', '3', ' ') == track->fourcc)) {
+    if (track->codec.is(CT_A_MP3)) {
       track->ptzr = add_packetizer(new mp3_packetizer_c(this, m_ti, track->a_sample_rate, track->a_channels, true));
       show_packetizer_info(id, PTZR(track->ptzr));
 
-    } else if (FOURCC('A', 'C', '3', ' ') == track->fourcc) {
+    } else if (track->codec.is(CT_A_AC3)) {
       track->ptzr = add_packetizer(new ac3_packetizer_c(this, m_ti, track->a_sample_rate, track->a_channels, track->a_bsid));
       show_packetizer_info(id, PTZR(track->ptzr));
 
-    } else if (FOURCC('D', 'T', 'S', ' ') == track->fourcc) {
-      track->ptzr = add_packetizer(new dts_packetizer_c(this, m_ti, track->dts_header, true));
+    } else if (track->codec.is(CT_A_DTS)) {
+      track->ptzr = add_packetizer(new dts_packetizer_c(this, m_ti, track->dts_header));
       show_packetizer_info(id, PTZR(track->ptzr));
 
-    } else if (FOURCC('T', 'R', 'H', 'D') == track->fourcc) {
+    } else if (track->codec.is(CT_A_TRUEHD)) {
       track->ptzr = add_packetizer(new truehd_packetizer_c(this, m_ti, truehd_frame_t::truehd, track->a_sample_rate, track->a_channels));
       show_packetizer_info(id, PTZR(track->ptzr));
 
@@ -1176,25 +1153,22 @@ mpeg_ps_reader_c::create_packetizer(int64_t id) {
       mxerror(boost::format(Y("mpeg_ps_reader: Should not have happened #1. %1%")) % BUGMSG);
 
   } else {                      // if (track->type == 'a')
-    if (   (FOURCC('M', 'P', 'G', '1') == track->fourcc)
-        || (FOURCC('M', 'P', 'G', '2') == track->fourcc)) {
+    if (track->codec.is(CT_V_MPEG12)) {
       generic_packetizer_c *m2vpacketizer;
 
-      m_ti.m_private_data = track->raw_seq_hdr;
-      m_ti.m_private_size = track->raw_seq_hdr_size;
+      m_ti.m_private_data = memory_c::clone(track->raw_seq_hdr, track->raw_seq_hdr_size);
       m2vpacketizer       = new mpeg1_2_video_packetizer_c(this, m_ti, track->v_version, track->v_frame_rate, track->v_width, track->v_height,
                                                            track->v_dwidth, track->v_dheight, false);
       track->ptzr         = add_packetizer(m2vpacketizer);
       show_packetizer_info(id, PTZR(track->ptzr));
       m2vpacketizer->set_video_interlaced_flag(track->v_interlaced);
-      m_ti.m_private_data = NULL;
-      m_ti.m_private_size = 0;
 
-    } else if (track->fourcc == FOURCC('A', 'V', 'C', '1')) {
-      track->ptzr = add_packetizer(new mpeg4_p10_es_video_packetizer_c(this, m_ti, track->v_avcc, track->v_width, track->v_height));
+    } else if (track->codec.is(CT_V_MPEG4_P10)) {
+      track->ptzr = add_packetizer(new mpeg4_p10_es_video_packetizer_c(this, m_ti));
+      PTZR(track->ptzr)->set_video_pixel_dimensions(track->v_width, track->v_height);
       show_packetizer_info(id, PTZR(track->ptzr));
 
-    } else if (FOURCC('W', 'V', 'C', '1') == track->fourcc) {
+    } else if (track->codec.is(CT_V_VC1)) {
       track->ptzr = add_packetizer(new vc1_video_packetizer_c(this, m_ti));
       show_packetizer_info(id, PTZR(track->ptzr));
 
@@ -1204,6 +1178,8 @@ mpeg_ps_reader_c::create_packetizer(int64_t id) {
 
   if (-1 != track->timecode_offset)
     PTZR(track->ptzr)->m_ti.m_tcsync.displacement += track->timecode_offset;
+
+  m_ptzr_to_track_map[ PTZR(track->ptzr) ] = track;
 }
 
 void
@@ -1216,55 +1192,55 @@ mpeg_ps_reader_c::create_packetizers() {
 
 void
 mpeg_ps_reader_c::add_available_track_ids() {
-  size_t i;
-
-  for (i = 0; i < tracks.size(); i++)
-    add_available_track_id(i);
+  add_available_track_id_range(tracks.size());
 }
 
 file_status_e
-mpeg_ps_reader_c::read(generic_packetizer_c *,
-                       bool) {
-  int64_t timecode, packet_pos;
-  unsigned int length, full_length;
-  unsigned char *buf;
-
+mpeg_ps_reader_c::read(generic_packetizer_c *requested_ptzr,
+                       bool force) {
   if (file_done)
     return flush_packetizers();
+
+  auto num_queued_bytes = get_queued_bytes();
+  if (!force && (20 * 1024 * 1024 < num_queued_bytes)) {
+    mpeg_ps_track_ptr requested_ptzr_track = m_ptzr_to_track_map[requested_ptzr];
+    if (!requested_ptzr_track || (('a' != requested_ptzr_track->type) && ('v' != requested_ptzr_track->type)) || (64 * 1024 * 1024 < num_queued_bytes))
+      return FILE_STATUS_HOLDING;
+  }
 
   try {
     mpeg_ps_id_t new_id;
     while (find_next_packet(new_id)) {
-      packet_pos = m_in->getFilePointer() - 4;
-      if (!parse_packet(new_id, timecode, length, full_length)) {
+      auto packet_pos = m_in->getFilePointer() - 4;
+      auto packet     = parse_packet(new_id, false);
+      new_id          = packet.m_id;
+
+      if (!packet) {
         if (    (0xbe != new_id.id)       // padding stream
              && (0xbf != new_id.id))      // private 2 stream (navigation data)
-          mxverb(2, boost::format("mpeg_ps: parse_packet failed at %1%, skipping %2%\n") % packet_pos % full_length);
-        m_in->setFilePointer(packet_pos + 4 + 2 + full_length);
+          mxverb(2, boost::format("mpeg_ps: parse_packet failed at %1%, skipping %2%\n") % packet_pos % packet.m_full_length);
+        m_in->setFilePointer(packet_pos + 4 + 2 + packet.m_full_length);
         continue;
       }
 
       if (!map_has_key(id2idx, new_id.idx()) || (-1 == tracks[id2idx[new_id.idx()]]->ptzr)) {
-        m_in->setFilePointer(packet_pos + 4 + 2 + full_length);
+        m_in->setFilePointer(packet_pos + 4 + 2 + packet.m_full_length);
         continue;
       }
 
-      mpeg_ps_track_t *track = tracks[id2idx[new_id.idx()]].get_object();
+      mxverb(3, boost::format("mpeg_ps: packet at %1%: %2%\n") % packet_pos % packet);
 
-      mxverb(3,
-             boost::format("mpeg_ps: packet for 0x%|1$02x|(%|2$02x|) length %3% at %4% timecode %5%\n")
-             % new_id.id % new_id.sub_id % length % packet_pos % timecode);
+      auto track = tracks[id2idx[new_id.idx()]];
 
-      if ((-1 != timecode) && track->provide_timecodes) {
-        timecode -= global_timecode_offset;
-        if (0 > timecode)
-          timecode = -1;
+      int64_t timecode = packet.has_pts() ? packet.pts() : -1;
+      if ((-1 != timecode) && track->provide_timecodes)
+        timecode = std::max<int64_t>(timecode - global_timecode_offset, -1);
 
-      } else
+      else
         timecode = -1;
 
       if (0 < track->buffer_size) {
-        if (((track->buffer_usage + length) > track->buffer_size)) {
+        if (((track->buffer_usage + packet.m_length) > track->buffer_size)) {
           packet_t *new_packet = new packet_t(new memory_c(track->buffer, track->buffer_usage, false));
 
           if (!track->multiple_timecodes_packet_extension->empty()) {
@@ -1276,9 +1252,9 @@ mpeg_ps_reader_c::read(generic_packetizer_c *,
           track->buffer_usage = 0;
         }
 
-        track->assert_buffer_size(length);
+        track->assert_buffer_size(packet.m_length);
 
-        if (m_in->read(&track->buffer[track->buffer_usage], length) != length) {
+        if (m_in->read(&track->buffer[track->buffer_usage], packet.m_length) != packet.m_length) {
           mxverb(2, "mpeg_ps: file_done: m_in->read\n");
           return finish();
         }
@@ -1286,18 +1262,17 @@ mpeg_ps_reader_c::read(generic_packetizer_c *,
         if (-1 != timecode)
           track->multiple_timecodes_packet_extension->add(timecode, track->buffer_usage);
 
-        track->buffer_usage += length;
+        track->buffer_usage += packet.m_length;
 
       } else {
-        buf = (unsigned char *)safemalloc(length);
+        auto buf = memory_c::alloc(packet.m_length);
 
-        if (m_in->read(buf, length) != length) {
-          safefree(buf);
+        if (m_in->read(buf, packet.m_length) != packet.m_length) {
           mxverb(2, "mpeg_ps: file_done: m_in->read\n");
           return finish();
         }
 
-        PTZR(track->ptzr)->process(new packet_t(new memory_c(buf, length, true), timecode));
+        PTZR(track->ptzr)->process(new packet_t(buf, timecode));
       }
 
       return FILE_STATUS_MOREDATA;
@@ -1318,7 +1293,7 @@ mpeg_ps_reader_c::finish() {
 
   for (auto &track : tracks)
     if (0 < track->buffer_usage)
-      PTZR(track->ptzr)->process(new packet_t(clone_memory(track->buffer, track->buffer_usage)));
+      PTZR(track->ptzr)->process(new packet_t(memory_c::clone(track->buffer, track->buffer_usage)));
 
   file_done = true;
 
@@ -1329,7 +1304,9 @@ void
 mpeg_ps_reader_c::identify() {
   std::vector<std::string> verbose_info;
 
-  static_cast<mm_multi_file_io_c &>(*m_in).create_verbose_identification_info(verbose_info);
+  auto multi_in = dynamic_cast<mm_multi_file_io_c *>(get_underlying_input());
+  if (multi_in)
+    multi_in->create_verbose_identification_info(verbose_info);
 
   id_result_container(verbose_info);
 
@@ -1339,32 +1316,14 @@ mpeg_ps_reader_c::identify() {
 
     verbose_info.clear();
 
-    if (FOURCC('A', 'V', 'C', '1') == track->fourcc) {
-      if (0 != track->v_aspect_ratio)
-        verbose_info.push_back((boost::format("display_dimensions:%1%x%2%") % track->v_dwidth % track->v_dheight).str());
+    if (track->codec.is(CT_V_MPEG4_P10))
       verbose_info.push_back("packetizer:mpeg4_p10_es_video");
-    }
 
     verbose_info.push_back((boost::format("stream_id:%|1$02x| sub_stream_id:%|2$02x|") % track->id.id % track->id.sub_id).str());
 
     if ((0 != track->v_dwidth) && (0 != track->v_dheight))
       verbose_info.push_back((boost::format("display_dimensions:%1%x%2%") % track->v_dwidth % track->v_dheight).str());
 
-    id_result_track(i, 'a' == track->type ? ID_RESULT_TRACK_AUDIO : ID_RESULT_TRACK_VIDEO,
-                      FOURCC('M', 'P', 'G', '1') == track->fourcc ? "MPEG-1"
-                    : FOURCC('M', 'P', 'G', '2') == track->fourcc ? "MPEG-2"
-                    : FOURCC('A', 'V', 'C', '1') == track->fourcc ? "AVC/h.264"
-                    : FOURCC('W', 'V', 'C', '1') == track->fourcc ? "VC1"
-                    : FOURCC('M', 'P', '1', ' ') == track->fourcc ? "MPEG-1 layer 1"
-                    : FOURCC('M', 'P', '2', ' ') == track->fourcc ? "MPEG-1 layer 2"
-                    : FOURCC('M', 'P', '3', ' ') == track->fourcc ? "MPEG-1 layer 3"
-                    : FOURCC('A', 'C', '3', ' ') == track->fourcc ? (16 == track->a_bsid ? "EAC3" : "AC3")
-                    : FOURCC('D', 'T', 'S', ' ') == track->fourcc ? "DTS"
-                    : FOURCC('T', 'R', 'H', 'D') == track->fourcc ? "TrueHD"
-                    : FOURCC('P', 'C', 'M', ' ') == track->fourcc ? "PCM"
-                    : FOURCC('L', 'P', 'C', 'M') == track->fourcc ? "LPCM"
-                    :                                               Y("unknown"),
-                    verbose_info);
+    id_result_track(i, 'a' == track->type ? ID_RESULT_TRACK_AUDIO : ID_RESULT_TRACK_VIDEO, track->codec.get_name(), verbose_info);
   }
 }
-

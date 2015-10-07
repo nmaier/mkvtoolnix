@@ -11,50 +11,43 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MMG_OPTIONS_MMG_H
-#define __MMG_OPTIONS_MMG_H
+#ifndef MTX_MMG_OPTIONS_MMG_H
+#define MTX_MMG_OPTIONS_MMG_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <vector>
 #include <wx/log.h>
 
 #include "mmg/options/tab_base.h"
 
-#define ID_CB_AUTOSET_OUTPUT_FILENAME   15103
-#define ID_CB_ASK_BEFORE_OVERWRITING    15104
 #define ID_CB_ON_TOP                    15105
 #define ID_CB_NEW_AFTER_ADD_TO_JOBQUEUE 15106
 #define ID_CB_WARN_USAGE                15107
 #define ID_CB_GUI_DEBUGGING             15108
 #define ID_CB_SET_DELAY_FROM_FILENAME   15110
-#define ID_TC_OUTPUT_DIRECTORY          15111
-#define ID_B_BROWSE_OUTPUT_DIRECTORY    15112
-#define ID_RB_ODM_INPUT_FILE            15113
-#define ID_RB_ODM_PREVIOUS              15114
-#define ID_RB_ODM_FIXED                 15115
 #define ID_COB_UI_LANGUAGE              15116
 #define ID_CB_NEW_AFTER_SUCCESSFUL_MUX  15117
-#define ID_CB_DISABLE_HRC               15118
 #define ID_CB_CHECK_FOR_UPDATES         15119
+#define ID_COB_CLEAR_JOB_AFTER_RUN_MODE 15120
+#define ID_CB_CLEAR_JOB_AFTER_RUN       15121
+#define ID_COB_SCAN_DIRECTORY_FOR_PLAYLISTS 15124
 
 class optdlg_mmg_tab: public optdlg_base_tab {
   DECLARE_CLASS(optdlg_mmg_tab);
   DECLARE_EVENT_TABLE();
 public:
-  wxTextCtrl *tc_output_directory;
-  wxCheckBox *cb_autoset_output_filename;
-  wxCheckBox *cb_ask_before_overwriting, *cb_on_top;
+  wxCheckBox *cb_on_top;
   wxCheckBox *cb_filenew_after_add_to_jobqueue;
   wxCheckBox *cb_filenew_after_successful_mux;
   wxCheckBox *cb_warn_usage, *cb_gui_debugging;
   wxCheckBox *cb_set_delay_from_filename;
-  wxCheckBox *cb_disable_header_removal_compression;
 #if defined(HAVE_CURL_EASY_H)
   wxCheckBox *cb_check_for_updates;
 #endif  // defined(HAVE_CURL_EASY_H)
-  wxRadioButton *rb_odm_input_file, *rb_odm_previous, *rb_odm_fixed;
-  wxButton *b_browse_output_directory;
+  wxCheckBox *cb_clear_job_after_run;
+  wxMTX_COMBOBOX_TYPE *cob_clear_job_after_run_mode, *cob_scan_directory_for_playlists, *cob_default_subtitle_charset;
+  wxTextCtrl *tc_min_playlist_duration;
 
 #if defined(HAVE_LIBINTL_H)
   wxMTX_COMBOBOX_TYPE *cob_ui_language;
@@ -67,12 +60,8 @@ public:
 public:
   optdlg_mmg_tab(wxWindow *parent, mmg_options_t &options);
 
-  void on_browse_output_directory(wxCommandEvent &evt);
-  void on_autoset_output_filename_selected(wxCommandEvent &evt);
   void on_ok(wxCommandEvent &evt);
-  void on_output_directory_mode(wxCommandEvent &evt);
-
-  void enable_output_filename_controls(bool enable);
+  void on_clear_job_after_run_pressed(wxCommandEvent &evt);
 
   std::string get_selected_ui_language();
 
@@ -80,4 +69,4 @@ public:
   virtual wxString get_title();
 };
 
-#endif // __MMG_OPTIONS_MMG_H
+#endif // MTX_MMG_OPTIONS_MMG_H

@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __P_VIDEO_H
-#define __P_VIDEO_H
+#ifndef MTX_P_VIDEO_H
+#define MTX_P_VIDEO_H
 
 #include "common/common_pch.h"
 
@@ -41,8 +41,8 @@ public:
   virtual int process(packet_cptr packet);
   virtual void set_headers();
 
-  virtual const std::string get_format_name(bool translate = true) {
-    return translate ? Y("VfW compatible video") : "VfW compatible video";
+  virtual translatable_string_c get_format_name() const {
+    return YT("VfW compatible video");
   }
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);
 
@@ -53,4 +53,4 @@ protected:
   virtual void rederive_frame_type_mpeg4_p2(packet_cptr &packet);
 };
 
-#endif // __P_VIDEO_H
+#endif // MTX_P_VIDEO_H

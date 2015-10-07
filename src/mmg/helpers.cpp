@@ -11,7 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <wx/wx.h>
 #include <wx/datetime.h>
@@ -20,6 +20,7 @@
 
 #include "mmg/mmg.h"
 #include "common/common_pch.h"
+#include "common/fs_sys_helpers.h"
 #include "common/strings/formatting.h"
 #include "common/wx.h"
 
@@ -146,16 +147,15 @@ split(const wxString &src,
 
 wxString
 join(const wxString &pattern,
-     std::vector<wxString> &strings) {
-  wxString dst;
-  uint32_t i;
-
-  if (strings.size() == 0)
+     std::vector<wxString> const &strings) {
+  if (strings.empty())
     return wxEmptyString;
-  dst = strings[0];
-  for (i = 1; i < strings.size(); i++) {
-    dst += pattern;
-    dst += strings[i];
+
+  wxString dst;
+  for (auto &string : strings) {
+    if (!dst.IsEmpty())
+      dst += pattern;
+    dst += string;
   }
 
   return dst;
@@ -163,7 +163,7 @@ join(const wxString &pattern,
 
 wxString
 join(const wxString &pattern,
-     wxArrayString &strings) {
+     wxArrayString const &strings) {
   wxString dst;
   uint32_t i;
 
@@ -263,26 +263,21 @@ format_date_time(time_t date_time) {
   return wxDateTime(date_time).Format(wxT("%Y-%m-%d %H:%M:%S"));
 }
 
-#if defined(SYS_WINDOWS)
+#if defined(SYS_WINDOWS) && !wxCHECK_VERSION(3, 0, 0)
 wxString
 format_tooltip(const wxString &s) {
   return format_paragraph(static_cast<const wchar_t *>(s.wc_str()), 0, L"", L"", 80);
 }
+#else
+wxString
+format_tooltip(const wxString &s) {
+  return s;
+}
 #endif
 
 wxString
-get_temp_dir() {
-  wxString temp_dir;
-
-  wxGetEnv(wxT("TMP"), &temp_dir);
-  if (temp_dir == wxEmptyString)
-    wxGetEnv(wxT("TEMP"), &temp_dir);
-  if ((temp_dir == wxEmptyString) && wxDirExists(wxT("/tmp")))
-    temp_dir = wxT("/tmp");
-  if (temp_dir != wxEmptyString)
-    temp_dir += wxT(PATHSEP);
-
-  return temp_dir;
+get_temp_settings_file_name() {
+  return wxU((bfs::temp_directory_path() / (boost::format("mmg-mkvmerge-options-%1%-%2%") % wxGetProcessId() % get_current_time_millis()).str()).string());
 }
 
 wxString
@@ -319,7 +314,12 @@ create_append_mapping() {
 
     if (!result.IsEmpty())
       result += wxT(",");
-    result += wxString::Format(format, tracks[i]->source, tracks[i]->id, tracks[i - 1]->source, tracks[i - 1]->id);
+
+    auto to = i - 1;
+    while ((0 < to) && !tracks[to]->enabled)
+      --to;
+
+    result += wxString::Format(format, tracks[i]->source, tracks[i]->id, tracks[to]->source, tracks[to]->id);
   }
 
   return result;
@@ -336,36 +336,6 @@ default_track_checked(char type) {
 }
 
 void
-set_combobox_selection(wxComboBox *cb,
-                       const wxString wanted) {
-  int i, count;
-
-  cb->SetValue(wanted);
-  count = cb->GetCount();
-  for (i = 0; count > i; ++i)
-    if (cb->GetString(i) == wanted) {
-      cb->SetSelection(i);
-      break;
-    }
-}
-
-#if defined(USE_WXBITMAPCOMBOBOX)
-void
-set_combobox_selection(wxBitmapComboBox *cb,
-                       const wxString wanted) {
-  int i, count;
-
-  cb->SetValue(wanted);
-  count = cb->GetCount();
-  for (i = 0; count > i; ++i)
-    if (cb->GetString(i) == wanted) {
-      cb->SetSelection(i);
-      break;
-    }
-}
-#endif  // USE_WXBITMAPCOMBOBOX
-
-void
 wxdie(const wxString &errmsg) {
   wxMessageBox(errmsg, wxT("A serious error has occured"),
                wxOK | wxICON_ERROR);
@@ -378,7 +348,7 @@ set_menu_item_strings(wxFrame *frame,
                       const wxString &title,
                       const wxString &help_text) {
   wxMenuItem *item = frame->GetMenuBar()->FindItem(id);
-  if (NULL != item) {
+  if (item) {
 #if defined(HAVE_WXMENUITEM_SETITEMLABEL)
     item->SetItemLabel(title);
 #else
@@ -398,4 +368,15 @@ set_menu_label(wxFrame *frame,
 #else
   frame->GetMenuBar()->SetLabelTop(pos, label);
 #endif
+}
+
+void
+append_combobox_items(wxMTX_COMBOBOX_TYPE *combo_box,
+                      wxArrayString const &items) {
+#if defined(USE_WXBITMAPCOMBOBOX) && (wxGENERIC_BITMAPCOMBOBOX || !wxCHECK_VERSION(3, 0, 0))
+  for (auto const &item : items)
+    combo_box->Append(item);
+#else  // defined(USE_WXBITMAPCOMBOBOX)
+  combo_box->Append(items);
+#endif // defined(USE_WXBITMAPCOMBOBOX)
 }

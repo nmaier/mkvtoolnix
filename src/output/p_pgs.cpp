@@ -15,8 +15,8 @@
 
 #include <matroska/KaxContentEncoding.h>
 
+#include "common/codec.h"
 #include "common/compression.h"
-#include "common/matroska.h"
 #include "common/pgssup.h"
 #include "output/p_pgs.h"
 
@@ -50,7 +50,7 @@ pgs_packetizer_c::process(packet_cptr packet) {
     return FILE_STATUS_MOREDATA;
   }
 
-  if (!m_aggregated.is_set()) {
+  if (!m_aggregated) {
     m_aggregated = packet;
     m_aggregated->data->grab();
 
@@ -60,7 +60,7 @@ pgs_packetizer_c::process(packet_cptr packet) {
   if (   (0                      != packet->data->get_size())
       && (PGSSUP_DISPLAY_SEGMENT == packet->data->get_buffer()[0])) {
     add_packet(m_aggregated);
-    m_aggregated.clear();
+    m_aggregated.reset();
   }
 
   return FILE_STATUS_MOREDATA;
@@ -69,5 +69,5 @@ pgs_packetizer_c::process(packet_cptr packet) {
 connection_result_e
 pgs_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                  std::string &) {
-  return dynamic_cast<pgs_packetizer_c *>(src) == NULL ? CAN_CONNECT_NO_FORMAT : CAN_CONNECT_YES;
+  return !dynamic_cast<pgs_packetizer_c *>(src) ? CAN_CONNECT_NO_FORMAT : CAN_CONNECT_YES;
 }

@@ -11,12 +11,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MERGE_ITEM_SELECTOR_H
-#define __MERGE_ITEM_SELECTOR_H
+#ifndef MTX_MERGE_ITEM_SELECTOR_H
+#define MTX_MERGE_ITEM_SELECTOR_H
 
-#include "common/os.h"
-
-#include <map>
+#include "common/common_pch.h"
 
 template<typename T>
 class item_selector_c {
@@ -73,4 +71,4 @@ public:
   }
 };
 
-#endif  // __MERGE_ITEM_SELECTOR_H
+#endif  // MTX_MERGE_ITEM_SELECTOR_H

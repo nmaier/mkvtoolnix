@@ -17,8 +17,8 @@
 #include "common/checksums.h"
 #include "common/ebml.h"
 #include "common/iso639.h"
-#include "common/mm_write_cache_io.h"
-#include "common/smart_pointers.h"
+#include "common/mm_io_x.h"
+#include "common/mm_write_buffer_io.h"
 #include "common/tta.h"
 #include "extract/xtr_vobsub.h"
 
@@ -60,8 +60,8 @@ xtr_vobsub_c::xtr_vobsub_c(const std::string &codec_id,
 void
 xtr_vobsub_c::create_file(xtr_base_c *master,
                           KaxTrackEntry &track) {
-  KaxCodecPrivate *priv = FINDFIRST(&track, KaxCodecPrivate);
-  if (NULL == priv)
+  KaxCodecPrivate *priv = FindChild<KaxCodecPrivate>(&track);
+  if (!priv)
     mxerror(boost::format(Y("Track %1% with the CodecID '%2%' is missing the \"codec private\" element and cannot be extracted.\n")) % m_tid % m_codec_id);
 
   init_content_decoder(track);
@@ -72,19 +72,19 @@ xtr_vobsub_c::create_file(xtr_base_c *master,
   m_master   = master;
   m_language = kt_get_language(track);
 
-  if (NULL == master) {
+  if (!master) {
     std::string sub_file_name = m_base_name + ".sub";
 
     try {
-      m_out = mm_write_cache_io_c::open(sub_file_name, 128 * 1024);
-    } catch (...) {
-      mxerror(boost::format(Y("Failed to create the VobSub data file '%1%': %2% (%3%)\n")) % sub_file_name % errno % strerror(errno));
+      m_out = mm_write_buffer_io_c::open(sub_file_name, 128 * 1024);
+    } catch (mtx::mm_io::exception &ex) {
+      mxerror(boost::format(Y("Failed to create the VobSub data file '%1%': %2%\n")) % sub_file_name % ex);
     }
 
   } else {
     xtr_vobsub_c *vmaster = dynamic_cast<xtr_vobsub_c *>(m_master);
 
-    if (NULL == vmaster)
+    if (!vmaster)
       mxerror(boost::format(Y("Cannot extract tracks of different kinds to the same file. This was requested for the tracks %1% and %2%.\n"))
               % m_tid % m_master->m_tid);
 
@@ -99,31 +99,21 @@ xtr_vobsub_c::create_file(xtr_base_c *master,
 }
 
 void
-xtr_vobsub_c::handle_frame(memory_cptr &frame,
-                           KaxBlockAdditions *,
-                           int64_t timecode,
-                           int64_t,
-                           int64_t,
-                           int64_t,
-                           bool,
-                           bool,
-                           bool) {
+xtr_vobsub_c::handle_frame(xtr_frame_t &f) {
   static unsigned char padding_data[8] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 
-  xtr_vobsub_c *vmaster = (NULL == m_master) ? this : static_cast<xtr_vobsub_c *>(m_master);
+  xtr_vobsub_c *vmaster = !m_master ? this : static_cast<xtr_vobsub_c *>(m_master);
 
-  m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
-
-  unsigned char *data = frame->get_buffer();
-  size_t size         = frame->get_size();
+  unsigned char *data = f.frame->get_buffer();
+  size_t size         = f.frame->get_size();
 
   m_positions.push_back(vmaster->m_out->getFilePointer());
-  m_timecodes.push_back(timecode);
+  m_timecodes.push_back(f.timecode);
 
   uint32_t padding = (2048 - (size + sizeof(mpeg_ps_header_t) + sizeof(mpeg_es_header_t))) & 2047;
   uint32_t first   = size + sizeof(mpeg_ps_header_t) + sizeof(mpeg_es_header_t) > 2048 ? 2048 - sizeof(mpeg_ps_header_t) - sizeof(mpeg_es_header_t) : size;
 
-  uint64_t c       = timecode * 9 / 100000;
+  uint64_t c       = f.timecode * 9 / 100000;
 
   mpeg_ps_header_t ps;
   memset(&ps, 0, sizeof(mpeg_ps_header_t));
@@ -154,7 +144,7 @@ xtr_vobsub_c::handle_frame(memory_cptr &frame,
   es.pts[2]    = ((uint8_t)(c >> 14) & 0xfe) | 0x01;
   es.pts[3]    = (uint8_t)(c >> 7);
   es.pts[4]    = (uint8_t)(c << 1) | 0x01;
-  es.lidx      = (NULL == m_master) ? 0x20 : m_stream_id;
+  es.lidx      = !m_master ? 0x20 : m_stream_id;
   if ((6 > padding) && (first == size)) {
     es.hlen += (uint8_t)padding;
     es.len[0]  = (uint8_t)((first + 9 + padding) >> 8);
@@ -209,7 +199,7 @@ xtr_vobsub_c::handle_frame(memory_cptr &frame,
 
 void
 xtr_vobsub_c::finish_file() {
-  if (NULL != m_master)
+  if (m_master)
     return;
 
   try {
@@ -217,9 +207,9 @@ xtr_vobsub_c::finish_file() {
 
     m_base_name += ".idx";
 
-    m_out.clear();
+    m_out.reset();
 
-    mm_write_cache_io_c idx(new mm_file_io_c(m_base_name, MODE_CREATE), 128 * 1024);
+    mm_write_buffer_io_c idx(new mm_file_io_c(m_base_name, MODE_CREATE), 128 * 1024);
     mxinfo(boost::format(Y("Writing the VobSub index file '%1%'.\n")) % m_base_name);
 
     if ((25 > m_private_data->get_size()) || strncasecmp((char *)m_private_data->get_buffer(), header_line, 25))
@@ -231,16 +221,16 @@ xtr_vobsub_c::finish_file() {
     for (slave = 0; slave < m_slaves.size(); slave++)
       m_slaves[slave]->write_idx(idx, slave + 1);
 
-  } catch (...) {
-    mxerror(boost::format(Y("Failed to create the file '%1%': %2% (%3%)\n")) % m_base_name % errno % strerror(errno));
+  } catch (mtx::mm_io::exception &ex) {
+    mxerror(boost::format(Y("Failed to create the file '%1%': %2%\n")) % m_base_name % ex);
   }
 }
 
 void
 xtr_vobsub_c::write_idx(mm_io_c &idx,
                         int index) {
-  const char *iso639_1 = map_iso639_2_to_iso639_1(m_language.c_str());
-  idx.puts(boost::format("\nid: %1%, index: %2%\n") % (NULL == iso639_1 ? "en" : iso639_1) %index);
+  auto iso639_1 = map_iso639_2_to_iso639_1(m_language);
+  idx.puts(boost::format("\nid: %1%, index: %2%\n") % (iso639_1.empty() ? "en" : iso639_1) % index);
 
   size_t i;
   for (i = 0; i < m_positions.size(); i++) {

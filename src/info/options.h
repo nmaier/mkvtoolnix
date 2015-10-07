@@ -8,13 +8,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __INFO_OPTIONS_H
-#define __INFO_OPTIONS_H
+#ifndef MTX_INFO_OPTIONS_H
+#define MTX_INFO_OPTIONS_H
 
-#include "common/os.h"
-
-#include <string>
-#include <vector>
+#include "common/common_pch.h"
 
 class options_c {
 public:
@@ -25,4 +22,4 @@ public:
   options_c();
 };
 
-#endif // __INFO_OPTIONS_H
+#endif // MTX_INFO_OPTIONS_H

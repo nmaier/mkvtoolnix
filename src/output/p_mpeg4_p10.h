@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __P_MPEG4_P10_H
-#define __P_MPEG4_P10_H
+#ifndef MTX_P_MPEG4_P10_H
+#define MTX_P_MPEG4_P10_H
 
 #include "common/common_pch.h"
 
@@ -30,14 +30,15 @@ public:
 
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);
 
-  virtual const std::string get_format_name(bool translate = true) {
-    return translate ? Y("AVC/h.264") : "AVC/h.264";
+  virtual translatable_string_c get_format_name() const {
+    return YT("AVC/h.264");
   }
 
 protected:
   virtual void extract_aspect_ratio();
   virtual void setup_nalu_size_len_change();
   virtual void change_nalu_size_len(packet_cptr packet);
+  virtual void remove_filler_nalus(memory_c &data) const;
 };
 
-#endif  // __P_MPEG4_P10_H
+#endif  // MTX_P_MPEG4_P10_H

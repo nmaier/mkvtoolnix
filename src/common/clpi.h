@@ -11,16 +11,14 @@
   Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_CLPI_COMMON_H
-#define __MTX_COMMON_CLPI_COMMON_H
+#ifndef MTX_COMMON_CLPI_COMMON_H
+#define MTX_COMMON_CLPI_COMMON_H
 
 #include "common/common_pch.h"
 
 #include <vector>
 
 #include "common/bit_cursor.h"
-#include "common/memory.h"
-#include "common/smart_pointers.h"
 
 #define CLPI_FILE_MAGIC   FOURCC('H', 'D', 'M', 'V')
 #define CLPI_FILE_MAGIC2A FOURCC('0', '2', '0', '0')
@@ -41,7 +39,7 @@ namespace clpi {
 
     void dump();
   };
-  typedef counted_ptr<program_stream_t> program_stream_cptr;
+  typedef std::shared_ptr<program_stream_t> program_stream_cptr;
 
   struct program_t {
     uint32_t spn_program_sequence_start;
@@ -54,12 +52,13 @@ namespace clpi {
 
     void dump();
   };
-  typedef counted_ptr<program_t> program_cptr;
+  typedef std::shared_ptr<program_t> program_cptr;
 
   class parser_c {
   protected:
     std::string m_file_name;
-    bool m_ok, m_debug;
+    bool m_ok;
+    debugging_option_c m_debug;
 
     size_t m_sequence_info_start, m_program_info_start;
 
@@ -78,11 +77,11 @@ namespace clpi {
     virtual void dump();
 
   protected:
-    virtual void parse_header(bit_cursor_cptr &bc);
-    virtual void parse_program_info(bit_cursor_cptr &bc);
-    virtual void parse_program_stream(bit_cursor_cptr &bc, program_cptr &program);
+    virtual void parse_header(bit_reader_cptr &bc);
+    virtual void parse_program_info(bit_reader_cptr &bc);
+    virtual void parse_program_stream(bit_reader_cptr &bc, program_cptr &program);
   };
-  typedef counted_ptr<parser_c> parser_cptr;
+  typedef std::shared_ptr<parser_c> parser_cptr;
 
 };
-#endif // __MTX_COMMON_CLPI_COMMON_H
+#endif // MTX_COMMON_CLPI_COMMON_H

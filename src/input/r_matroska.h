@@ -12,14 +12,13 @@
    Modified by Steve Lhomme <s.lhomme@free.fr>.
 */
 
-#ifndef __R_MATROSKA_H
-#define __R_MATROSKA_H
+#ifndef MTX_INPUT_R_MATROSKA_H
+#define MTX_INPUT_R_MATROSKA_H
 
 #include "common/common_pch.h"
 
-#include <boost/logic/tribool.hpp>
-
-#include "common/compression.h"
+#include "common/codec.h"
+#include "common/content_decoder.h"
 #include "common/error.h"
 #include "common/kax_file.h"
 #include "common/mm_io.h"
@@ -36,9 +35,10 @@ using namespace libebml;
 using namespace libmatroska;
 
 struct kax_track_t {
-  uint64_t tnum, tuid;
+  uint64_t tnum, track_number, track_uid;
 
   std::string codec_id;
+  codec_c codec;
   bool ms_compat;
 
   char type; // 'v' = video, 'a' = audio, 't' = text subs, 'b' = buttons
@@ -48,19 +48,20 @@ struct kax_track_t {
   uint32_t min_cache, max_cache, max_blockadd_id;
   bool lacing_flag;
   uint64_t default_duration;
+  timecode_c seek_pre_roll, codec_delay;
 
   // Parameters for video tracks
   uint64_t v_width, v_height, v_dwidth, v_dheight;
   unsigned int v_display_unit;
   uint64_t v_pcleft, v_pctop, v_pcright, v_pcbottom;
   stereo_mode_c::mode v_stereo_mode;
-  float v_frate;
+  double v_frate;
   char v_fourcc[5];
   bool v_bframes;
 
   // Parameters for audio tracks
   uint64_t a_channels, a_bps, a_formattag;
-  float a_sfreq, a_osfreq;
+  double a_sfreq, a_osfreq;
 
   void *private_data;
   unsigned int private_size;
@@ -68,7 +69,7 @@ struct kax_track_t {
   unsigned char *headers[3];
   uint32_t header_sizes[3];
 
-  boost::logic::tribool default_track, forced_track;
+  boost::logic::tribool default_track, forced_track, enabled_track;
   std::string language;
 
   int64_t units_processed;
@@ -93,7 +94,8 @@ struct kax_track_t {
 
   kax_track_t()
     : tnum(0)
-    , tuid(0)
+    , track_number(0)
+    , track_uid(0)
     , ms_compat(false)
     , type(' ')
     , sub_type(' ')
@@ -120,17 +122,18 @@ struct kax_track_t {
     , a_formattag(0)
     , a_sfreq(8000.0)
     , a_osfreq(0.0)
-    , private_data(NULL)
+    , private_data(nullptr)
     , private_size(0)
     , default_track(true)
     , forced_track(boost::logic::indeterminate)
+    , enabled_track(true)
     , language("eng")
     , units_processed(0)
     , ok(false)
     , previous_timecode(0)
-    , tags(NULL)
+    , tags(nullptr)
     , ptzr(-1)
-    , ptzr_ptr(NULL)
+    , ptzr_ptr(nullptr)
     , headers_set(false)
     , ignore_duration_hack(false)
   {
@@ -141,7 +144,7 @@ struct kax_track_t {
 
   ~kax_track_t() {
     safefree(private_data);
-    if (NULL != tags)
+    if (tags)
       delete tags;
   }
 
@@ -152,7 +155,7 @@ struct kax_track_t {
   void handle_packetizer_default_duration();
   void fix_display_dimension_parameters();
 };
-typedef counted_ptr<kax_track_t> kax_track_cptr;
+typedef std::shared_ptr<kax_track_t> kax_track_cptr;
 
 class kax_reader_c: public generic_reader_c {
 private:
@@ -162,6 +165,8 @@ private:
     dl1t_chapters,
     dl1t_tags,
     dl1t_tracks,
+    dl1t_seek_head,
+    dl1t_info,
   };
 
   std::vector<kax_track_cptr> m_tracks;
@@ -171,7 +176,7 @@ private:
 
   kax_file_cptr m_in_file;
 
-  counted_ptr<EbmlStream> m_es;
+  std::shared_ptr<EbmlStream> m_es;
 
   int64_t m_segment_duration, m_last_timecode, m_first_timecode;
   std::string m_title;
@@ -182,18 +187,22 @@ private:
   std::string m_writing_app, m_muxing_app;
   int64_t m_writing_app_ver;
 
+  memory_cptr m_segment_uid, m_next_segment_uid, m_previous_segment_uid;
+
   int64_t m_attachment_id;
 
-  counted_ptr<KaxTags> m_tags;
+  std::shared_ptr<KaxTags> m_tags;
 
   file_status_e m_file_status;
+
+  bool m_opus_experimental_warning_shown;
 
 public:
   kax_reader_c(const track_info_c &ti, const mm_io_cptr &in);
   virtual ~kax_reader_c();
 
-  virtual const std::string get_format_name(bool translate = true) {
-    return translate ? Y("Matroska") : "Matroska";
+  virtual translatable_string_c get_format_name() const {
+    return YT("Matroska");
   }
 
   virtual void read_headers();
@@ -213,11 +222,13 @@ protected:
   virtual void init_passthrough_packetizer(kax_track_t *t);
   virtual void set_packetizer_headers(kax_track_t *t);
   virtual void read_first_frames(kax_track_t *t, unsigned num_wanted = 1);
-  virtual kax_track_t *find_track_by_num(uint64_t num, kax_track_t *c = NULL);
-  virtual kax_track_t *find_track_by_uid(uint64_t uid, kax_track_t *c = NULL);
+  virtual kax_track_t *find_track_by_num(uint64_t num, kax_track_t *c = nullptr);
+  virtual kax_track_t *find_track_by_uid(uint64_t uid, kax_track_t *c = nullptr);
 
   virtual bool verify_acm_audio_track(kax_track_t *t);
+  virtual bool verify_alac_audio_track(kax_track_t *t);
   virtual bool verify_flac_audio_track(kax_track_t *t);
+  virtual bool verify_opus_audio_track(kax_track_t *t);
   virtual bool verify_vorbis_audio_track(kax_track_t *t);
   virtual void verify_audio_track(kax_track_t *t);
   virtual bool verify_mscomp_video_track(kax_track_t *t);
@@ -229,9 +240,10 @@ protected:
   virtual void verify_button_track(kax_track_t *t);
   virtual void verify_tracks();
 
-  virtual int packets_available();
+  virtual bool packets_available();
   virtual void handle_attachments(mm_io_c *io, EbmlElement *l0, int64_t pos);
   virtual void handle_chapters(mm_io_c *io, EbmlElement *l0, int64_t pos);
+  virtual void handle_seek_head(mm_io_c *io, EbmlElement *l0, int64_t pos);
   virtual void handle_tags(mm_io_c *io, EbmlElement *l0, int64_t pos);
   virtual void process_global_tags();
 
@@ -244,11 +256,15 @@ protected:
 
   virtual void create_aac_audio_packetizer(kax_track_t *t, track_info_c &nti);
   virtual void create_ac3_audio_packetizer(kax_track_t *t, track_info_c &nti);
+  virtual void create_alac_audio_packetizer(kax_track_t *t, track_info_c &nti);
   virtual void create_dts_audio_packetizer(kax_track_t *t, track_info_c &nti);
 #if defined(HAVE_FLAC_FORMAT_H)
   virtual void create_flac_audio_packetizer(kax_track_t *t, track_info_c &nti);
 #endif
+  virtual void create_hevc_video_packetizer(kax_track_t *t, track_info_c &nti);
+  virtual void create_hevc_es_video_packetizer(kax_track_t *t, track_info_c &nti);
   virtual void create_mp3_audio_packetizer(kax_track_t *t, track_info_c &nti);
+  virtual void create_opus_audio_packetizer(kax_track_t *t, track_info_c &nti);
   virtual void create_pcm_audio_packetizer(kax_track_t *t, track_info_c &nti);
   virtual void create_tta_audio_packetizer(kax_track_t *t, track_info_c &nti);
   virtual void create_vorbis_audio_packetizer(kax_track_t *t, track_info_c &nti);
@@ -258,21 +274,19 @@ protected:
   virtual void create_mpeg4_p10_video_packetizer(kax_track_t *t, track_info_c &nti);
   virtual void create_mpeg4_p10_es_video_packetizer(kax_track_t *t, track_info_c &nti);
 
-  virtual void read_headers_info(EbmlElement *&l1, EbmlElement *&l2, int &upper_lvl_el);
+  virtual void read_headers_info(mm_io_c *io, EbmlElement *l0, int64_t position);
   virtual void read_headers_info_writing_app(KaxWritingApp *&kwriting_app);
   virtual void read_headers_track_audio(kax_track_t *track, KaxTrackAudio *ktaudio);
   virtual void read_headers_track_video(kax_track_t *track, KaxTrackVideo *ktvideo);
   virtual void read_headers_tracks(mm_io_c *io, EbmlElement *l0, int64_t position);
-  virtual void read_headers_seek_head(EbmlElement *l0, EbmlElement *l1);
   virtual bool read_headers_internal();
 
   virtual void process_simple_block(KaxCluster *cluster, KaxSimpleBlock *block_simple);
   virtual void process_block_group(KaxCluster *cluster, KaxBlockGroup *block_group);
-
-  virtual mpeg4::p10::avc_es_parser_cptr parse_first_mpeg4_p10_frame(kax_track_t *t, track_info_c &nti);
+  virtual void process_block_group_common(KaxBlockGroup *block_group, packet_t *packet);
 
   void init_l1_position_storage(deferred_positions_t &storage);
   virtual bool has_deferred_element_been_processed(deferred_l1_type_e type, int64_t position);
 };
 
-#endif  // __R_MATROSKA_H
+#endif  // MTX_INPUT_R_MATROSKA_H

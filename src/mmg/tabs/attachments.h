@@ -11,12 +11,12 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __TAB_ATTACHMENTS_H
-#define __TAB_ATTACHMENTS_H
+#ifndef MTX_TAB_ATTACHMENTS_H
+#define MTX_TAB_ATTACHMENTS_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
-#include <wx/config.h>
+#include <wx/wx.h>
 
 #define ID_B_ADDATTACHMENT                 12001
 #define ID_B_REMOVEATTACHMENT              12002
@@ -79,4 +79,4 @@ public:
   void translate_ui();
 };
 
-#endif // __TAB_ATTACHMENTS_H
+#endif // MTX_TAB_ATTACHMENTS_H

@@ -11,7 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <wx/statline.h>
 #include <wx/stattext.h>
@@ -31,13 +31,13 @@ he_value_page_c::he_value_page_c(header_editor_frame_c *parent,
   : he_page_base_c(parent, title)
   , m_master(master)
   , m_callbacks(callbacks)
-  , m_sub_master_callbacks(NULL)
+  , m_sub_master_callbacks(nullptr)
   , m_description(description)
   , m_value_type(value_type)
   , m_present(false)
-  , m_cb_add_or_remove(NULL)
-  , m_input(NULL)
-  , m_b_reset(NULL)
+  , m_cb_add_or_remove(nullptr)
+  , m_input(nullptr)
+  , m_b_reset(nullptr)
   , m_element(find_ebml_element_by_id(m_master, m_callbacks.GlobalId))
   , m_toplevel_page(toplevel_page)
 {
@@ -80,14 +80,14 @@ he_value_page_c::init() {
 
   m_st_add_or_remove = new wxStaticText(this, wxID_ANY, wxEmptyString);
 
-  if (NULL == m_element)
+  if (!m_element)
     m_present        = false;
 
   else {
     m_present        = true;
 
     const EbmlSemantic *semantic = find_ebml_semantic(KaxSegment::ClassInfos, m_callbacks.GlobalId);
-    if ((NULL != semantic) && semantic->Mandatory)
+    if (semantic && semantic->Mandatory)
       m_cb_add_or_remove->Disable();
   }
 
@@ -120,9 +120,9 @@ he_value_page_c::init() {
   siz->Add(siz_line, 0, wxGROW | wxLEFT | wxRIGHT, 5);
   siz->AddSpacer(5);
 
-  SetSizer(siz);
+  SetSizerAndFit(siz);
 
-  if (NULL == m_toplevel_page)
+  if (!m_toplevel_page)
     m_parent->append_page(this);
   else
     m_parent->append_sub_page(this, m_toplevel_page->m_page_id);
@@ -134,7 +134,7 @@ he_value_page_c::init() {
 
 void
 he_value_page_c::translate_ui() {
-  if (NULL == m_b_reset)
+  if (!m_b_reset)
     return;
 
   m_b_reset->SetLabel(Z("&Reset"));
@@ -156,7 +156,7 @@ he_value_page_c::translate_ui() {
     m_st_description->SetLabel(wxU(m_description.get_translated()));
   }
 
-  if (NULL == m_element) {
+  if (!m_element) {
     m_st_add_or_remove->SetLabel(Z("This element is not currently present in the file.\nYou can let the header editor add the element\nto the file."));
     m_st_value_label->SetLabel(Z("New value:"));
     m_cb_add_or_remove->SetLabel(Z("Add element"));
@@ -167,7 +167,7 @@ he_value_page_c::translate_ui() {
     m_cb_add_or_remove->SetLabel(Z("Remove element"));
 
     const EbmlSemantic *semantic = find_ebml_semantic(KaxSegment::ClassInfos, m_callbacks.GlobalId);
-    if ((NULL != semantic) && semantic->Mandatory)
+    if (semantic && semantic->Mandatory)
       m_st_add_or_remove->SetLabel(Z("This element is currently present in the file.\nIt cannot be removed because it is a\nmandatory header field."));
   }
 
@@ -206,17 +206,17 @@ he_value_page_c::modify_this() {
   if (!has_this_been_modified())
     return;
 
-  EbmlMaster *actual_master = NULL;
-  if (NULL != m_sub_master_callbacks) {
+  EbmlMaster *actual_master = nullptr;
+  if (m_sub_master_callbacks) {
     actual_master = static_cast<EbmlMaster *>(find_ebml_element_by_id(m_master, m_sub_master_callbacks->GlobalId));
 
-    if (NULL == actual_master) {
+    if (!actual_master) {
       actual_master = static_cast<EbmlMaster *>(&m_sub_master_callbacks->Create());
       m_master->PushElement(*actual_master);
     }
   }
 
-  if (NULL == actual_master)
+  if (!actual_master)
     actual_master = m_master;
 
   if (m_present && m_cb_add_or_remove->IsChecked()) {
@@ -249,7 +249,7 @@ he_value_page_c::set_sub_master_callbacks(const EbmlCallbacks &callbacks) {
   m_sub_master_callbacks = &callbacks;
 
   EbmlMaster *sub_master = static_cast<EbmlMaster *>(find_ebml_element_by_id(m_master, m_sub_master_callbacks->GlobalId));
-  if (NULL != sub_master)
+  if (sub_master)
     m_element = find_ebml_element_by_id(sub_master, m_callbacks.GlobalId);
 }
 

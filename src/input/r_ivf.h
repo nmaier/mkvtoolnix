@@ -11,11 +11,13 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __R_IVF_H
-#define __R_IVF_H
+#ifndef MTX_R_IVF_H
+#define MTX_R_IVF_H
 
 #include "common/common_pch.h"
 
+#include "common/codec.h"
+#include "common/ivf.h"
 #include "common/mm_io.h"
 #include "merge/pr_generic.h"
 
@@ -23,14 +25,14 @@ class ivf_reader_c: public generic_reader_c {
 private:
   uint16_t m_width, m_height;
   uint64_t m_frame_rate_num, m_frame_rate_den;
-  int64_t m_previous_timestamp;
+  codec_c m_codec;
 
 public:
   ivf_reader_c(const track_info_c &ti, const mm_io_cptr &in);
   virtual ~ivf_reader_c();
 
-  virtual const std::string get_format_name(bool translate = true) {
-    return translate ? Y("IVF (VP8)") : "IVF (VP8)";
+  virtual translatable_string_c get_format_name() const {
+    return YT("IVF (VP8/VP9)");
   }
 
   virtual void read_headers();
@@ -41,4 +43,4 @@ public:
   static int probe_file(mm_io_c *in, uint64_t size);
 };
 
-#endif // __R_IVF_H
+#endif // MTX_R_IVF_H

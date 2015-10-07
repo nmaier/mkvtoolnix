@@ -10,13 +10,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_WXCOMMON_H
-#define __MTX_COMMON_WXCOMMON_H
+#ifndef MTX_COMMON_WXCOMMON_H
+#define MTX_COMMON_WXCOMMON_H
 
-#include "common/os.h"
-
-#include <boost/format.hpp>
-#include <string>
+#include "common/common_pch.h"
 
 #include <ebml/EbmlString.h>
 
@@ -25,6 +22,14 @@
 #if !defined(wxUSE_UNICODE) || !wxUSE_UNICODE
 # error wxWidgets was not compiled with Unicode support.
 #endif
+
+#include <wx/wx.h>
+#include <wx/bitmap.h>
+#include <wx/icon.h>
+#include <wx/mstream.h>
+#include <wx/treebase.h>
+
+#include "common/logger.h"
 
 using namespace libebml;
 
@@ -55,7 +60,7 @@ wxU(const EbmlString &s) {
 
 inline wxString
 wxU(EbmlString *s) {
-  if (NULL == s)
+  if (!s)
     return wxEmptyString;
   return wxU(static_cast<const std::string &>(*s));
 }
@@ -64,6 +69,25 @@ inline const wxString &
 wxU(const wxString &s) {
   return s;
 }
+
+inline std::string
+to_utf8(wxString const &source) {
+  return static_cast<char const *>(source.mb_str(wxConvUTF8));
+}
+
+inline std::wstring
+to_wide(wxString const &source) {
+  return static_cast<wchar_t const *>(source.wc_str());
+}
+
+#if !wxUSE_STD_IOSTREAM
+inline std::ostream &
+operator <<(std::ostream &out,
+            wxString const &s) {
+  out << to_utf8(s);
+  return out;
+}
+#endif
 
 #define wxUCS(s) wxU(s).c_str()
 #define wxMB(s)  ((const char *)(s).mb_str(wxConvUTF8))
@@ -76,11 +100,22 @@ wxU(const wxString &s) {
 #  define NZ(s_singular, s_plural, count) wxU(ngettext(s_singular, s_plural, count))
 # endif
 #else /* HAVE_LIBINTL_H */
-# if !defined Y
-#  define Z(s) (s)
-#  define NZ(s_singular, s_plural, count) (s_singular)
+# if !defined Z
+#  define Z(s) wxU(s)
+#  define NZ(s_singular, s_plural, count) wxU(s_singular)
 # endif
 #endif
+
+inline std::ostream &
+operator <<(std::ostream &out,
+            wxTreeItemId const &id) {
+#if wxCHECK_VERSION(2, 9, 0)
+  out << "ItemID[" << id.IsOk() << "@" << id.GetID() << "]";
+#else
+  out << "ItemID[" << id.IsOk() << "@" << id.m_pItem << "]";
+#endif
+  return out;
+}
 
 // Use wxComboBox on non-Windows builds with wxWidgets 2.8.0 and newer
 // because GTK's combo box has serious problems (see bug 339).
@@ -98,5 +133,34 @@ wxU(const wxString &s) {
 
 # endif
 #endif
+
+// PNG or icon loading
+
+#define wx_get_png(X) wx_get_bitmap_from_memory_impl(X ## _png_bin, sizeof(X ## _png_bin))
+
+inline wxBitmap
+wx_get_bitmap_from_memory_impl(void const *data,
+                               size_t length) {
+  wxMemoryInputStream is(data, length);
+  return wxBitmap{ wxImage{is, wxBITMAP_TYPE_ANY, -1}, -1 };
+}
+
+#if defined(SYS_WINDOWS)
+
+# define wx_get_png_or_icon(X) wxIcon(wxT(#X))
+
+#else  // defined(SYS_WINDOWS)
+
+# define wx_get_png_or_icon(X) wx_get_icon_from_memory_impl(X ## _png_bin, sizeof(X ## _png_bin))
+
+inline wxIcon
+wx_get_icon_from_memory_impl(unsigned char const *data,
+                             unsigned int length) {
+  wxIcon icon;
+  icon.CopyFromBitmap(wx_get_bitmap_from_memory_impl(data, length));
+  return icon;
+}
+
+#endif  // defined(SYS_WINDOWS)
 
 #endif /* __WXCOMMON_H */

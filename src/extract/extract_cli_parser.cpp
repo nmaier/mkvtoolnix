@@ -13,11 +13,6 @@
 
 #include "common/common_pch.h"
 
-#include <algorithm>
-#include <boost/bind.hpp>
-#include <stdexcept>
-#include <typeinfo>
-
 #include "common/ebml.h"
 #include "common/strings/formatting.h"
 #include "common/strings/parsing.h"
@@ -40,7 +35,7 @@ extract_cli_parser_c::set_default_values() {
   m_target_mode            = track_spec_t::tm_normal;
 }
 
-#define OPT(spec, func, description) add_option(spec, boost::bind(&extract_cli_parser_c::func, this), description)
+#define OPT(spec, func, description) add_option(spec, std::bind(&extract_cli_parser_c::func, this), description)
 
 void
 extract_cli_parser_c::init_parser() {
@@ -63,7 +58,6 @@ extract_cli_parser_c::init_parser() {
 
   add_section_header(YT("Global options"));
   OPT("f|parse-fully",    set_parse_fully,      YT("Parse the whole file instead of relying on the index."));
-  OPT("no-variable-data", set_no_variable_data, YT("Don't write variable parts to output files (only for debugging)."));
 
   add_common_options();
 
@@ -99,7 +93,7 @@ extract_cli_parser_c::init_parser() {
 
   add_section_header(YT("Chapter extraction"));
   add_information(YT("The fourth mode extracts the chapters and converts them to XML. The output is written to the standard output. The output can be used as a source for mkvmerge."));
-  OPT("s|simple", set_simple, YT("Exports the chapter infomartion in the simple format used in OGM tools (CHAPTER01=... CHAPTER01NAME=...)."));
+  OPT("s|simple", set_simple, YT("Exports the chapter information in the simple format used in OGM tools (CHAPTER01=... CHAPTER01NAME=...)."));
 
   add_section_header(YT("Example"));
 
@@ -122,7 +116,7 @@ extract_cli_parser_c::init_parser() {
 
   add_information(YT("mkvextract timecodes_v2 \"a movie.mkv\" 1:timecodes_track1.txt"));
 
-  add_hook(cli_parser_c::ht_unknown_option, boost::bind(&extract_cli_parser_c::set_mode_or_extraction_spec, this));
+  add_hook(cli_parser_c::ht_unknown_option, std::bind(&extract_cli_parser_c::set_mode_or_extraction_spec, this));
 }
 
 #undef OPT
@@ -156,7 +150,7 @@ extract_cli_parser_c::set_cuesheet() {
 void
 extract_cli_parser_c::set_blockadd() {
   assert_mode(options_c::em_tracks);
-  if (!parse_int(m_next_arg, m_extract_blockadd_level) || (-1 > m_extract_blockadd_level))
+  if (!parse_number(m_next_arg, m_extract_blockadd_level) || (-1 > m_extract_blockadd_level))
     mxerror(boost::format(Y("Invalid BlockAddition level in argument '%1%'.\n")) % m_next_arg);
 }
 
@@ -193,11 +187,6 @@ extract_cli_parser_c::set_mode_or_extraction_spec() {
 }
 
 void
-extract_cli_parser_c::set_no_variable_data() {
-  g_no_variable_data = true;
-}
-
-void
 extract_cli_parser_c::set_extraction_mode() {
   static struct {
     const char *name;
@@ -209,11 +198,11 @@ extract_cli_parser_c::set_extraction_mode() {
     { "chapters",     options_c::em_chapters     },
     { "cuesheet",     options_c::em_cuesheet     },
     { "timecodes_v2", options_c::em_timecodes_v2 },
-    { NULL,           options_c::em_unknown      },
+    { nullptr,        options_c::em_unknown      },
   };
 
   int i;
-  for (i = 0; NULL != s_mode_map[i].name; ++i)
+  for (i = 0; s_mode_map[i].name; ++i)
     if (m_current_arg == s_mode_map[i].name) {
       m_options.m_extraction_mode = s_mode_map[i].extraction_mode;
       return;
@@ -231,7 +220,7 @@ extract_cli_parser_c::add_extraction_spec() {
 
   boost::regex s_track_id_re("^(\\d+)(:(.+))?$", boost::regex::perl);
 
-  boost::match_results<std::string::const_iterator> matches;
+  boost::smatch matches;
   if (!boost::regex_search(m_current_arg, matches, s_track_id_re)) {
     if (options_c::em_attachments == m_options.m_extraction_mode)
       mxerror(boost::format(Y("Invalid attachment ID/file name specification in argument '%1%'.\n")) % m_current_arg);
@@ -241,7 +230,11 @@ extract_cli_parser_c::add_extraction_spec() {
 
   track_spec_t track;
 
-  parse_int(matches[1].str(), track.tid);
+  parse_number(matches[1].str(), track.tid);
+
+  if (m_used_tids[track.tid])
+    mxerror(boost::format(Y("The ID '%1%' has already been used for another output file.\n")) % track.tid);
+  m_used_tids[track.tid] = true;
 
   std::string output_file_name;
   if (matches[3].matched)
@@ -272,4 +265,3 @@ extract_cli_parser_c::run() {
 
   return m_options;
 }
-

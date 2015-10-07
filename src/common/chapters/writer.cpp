@@ -13,15 +13,14 @@
 
 #include "common/common_pch.h"
 
-#include <expat.h>
-
 #include <matroska/KaxChapters.h>
 
 #include "common/chapters/chapters.h"
 #include "common/ebml.h"
 #include "common/locale.h"
 #include "common/mm_io.h"
-#include "common/xml/element_writer.h"
+#include "common/strings/formatting.h"
+#include "common/xml/ebml_chapters_converter.h"
 
 using namespace libmatroska;
 
@@ -96,10 +95,10 @@ write_chapter_display_simple(KaxChapterDisplay *display,
 
   for (i = 0; i < display->ListSize(); i++) {
     EbmlElement *e = (*display)[i];
-    if (is_id(e, KaxChapterString))
-      handle_name(level - 1, UTFstring_to_cstrutf8(UTFstring(*static_cast<EbmlUnicodeString *>(e)).c_str()));
+    if (Is<KaxChapterString>(e))
+      handle_name(level - 1, static_cast<EbmlUnicodeString *>(e)->GetValueUTF8().c_str());
 
-    else if (is_id(e, KaxChapterAtom))
+    else if (Is<KaxChapterAtom>(e))
       write_chapter_atom_simple((KaxChapterAtom *)e, level + 1);
 
   }
@@ -113,7 +112,7 @@ write_chapter_track_simple(KaxChapterTrack *track,
   for (i = 0; i < track->ListSize(); i++) {
     EbmlElement *e = (*track)[i];
 
-    if (is_id(e, KaxChapterAtom))
+    if (Is<KaxChapterAtom>(e))
       write_chapter_atom_simple(static_cast<KaxChapterAtom *>(e), level + 1);
 
   }
@@ -127,16 +126,16 @@ write_chapter_atom_simple(KaxChapterAtom *atom,
   for (i = 0; i < atom->ListSize(); i++) {
     EbmlElement *e = (*atom)[i];
 
-    if (is_id(e, KaxChapterTimeStart))
-      handle_start_time(level, uint64(*static_cast<EbmlUInteger *>(e)) / 1000000);
+    if (Is<KaxChapterTimeStart>(e))
+      handle_start_time(level, static_cast<EbmlUInteger *>(e)->GetValue() / 1000000);
 
-    else if (is_id(e, KaxChapterTrack))
+    else if (Is<KaxChapterTrack>(e))
       write_chapter_track_simple(static_cast<KaxChapterTrack *>(e), level + 1);
 
-    else if (is_id(e, KaxChapterDisplay))
+    else if (Is<KaxChapterDisplay>(e))
       write_chapter_display_simple(static_cast<KaxChapterDisplay *>(e), level + 1);
 
-    else if (is_id(e, KaxChapterAtom))
+    else if (Is<KaxChapterAtom>(e))
       write_chapter_atom_simple(static_cast<KaxChapterAtom *>(e), level + 1);
 
   }
@@ -152,12 +151,12 @@ write_chapters_simple(int &chapter_num,
 
   size_t chapter_idx;
   for (chapter_idx = 0; chapters->ListSize() > chapter_idx; chapter_idx++) {
-    if (is_id((*chapters)[chapter_idx], KaxEditionEntry)) {
+    if (Is<KaxEditionEntry>((*chapters)[chapter_idx])) {
       KaxEditionEntry *edition = static_cast<KaxEditionEntry *>((*chapters)[chapter_idx]);
 
       size_t edition_idx;
       for (edition_idx = 0; edition->ListSize() > edition_idx; edition_idx++)
-        if (is_id((*edition)[edition_idx], KaxChapterAtom))
+        if (Is<KaxChapterAtom>((*edition)[edition_idx]))
           write_chapter_atom_simple(static_cast<KaxChapterAtom *>((*edition)[edition_idx]), 2);
     }
   }
@@ -173,69 +172,4 @@ write_chapters_simple(int &chapter_num,
   s_chapter_start_times.clear();
   s_chapter_names.clear();
   s_chapter_entries.clear();
-}
-
-static void
-pt(xml_writer_cb_t *cb,
-   const char *tag) {
-  int i;
-
-  for (i = 0; i < cb->level; i++)
-    cb->out->puts("  ");
-  cb->out->puts(tag);
-}
-
-static int
-cet_index(const char *name) {
-  int i;
-
-  for (i = 0; NULL != chapter_elements[i].name; i++)
-    if (!strcmp(name, chapter_elements[i].name))
-      return i;
-
-  mxerror(boost::format(Y("cet_index: '%1%' not found\n")) % name);
-
-  return -1;
-}
-
-static void
-end_write_chapter_atom(void *data) {
-  xml_writer_cb_t *cb  = static_cast<xml_writer_cb_t *>(data);
-  KaxChapterAtom *atom = dynamic_cast<KaxChapterAtom *>(cb->e);
-
-  assert(NULL != atom);
-
-  if (FINDFIRST(atom, KaxChapterTimeStart) == NULL)
-    pt(cb, "<ChapterTimeStart>00:00:00.000</ChapterTimeStart>\n");
-}
-
-static void
-end_write_chapter_display(void *data) {
-  xml_writer_cb_t *cb        = static_cast<xml_writer_cb_t *>(data);
-  KaxChapterDisplay *display = dynamic_cast<KaxChapterDisplay *>(cb->e);
-
-  assert(NULL != display);
-
-  if (FINDFIRST(display, KaxChapterString) == NULL)
-    pt(cb, "<ChapterString></ChapterString>\n");
-
-  if (FINDFIRST(display, KaxChapterLanguage) == NULL)
-    pt(cb, "<ChapterLanguage>eng</ChapterLanguage>\n");
-}
-
-void
-write_chapters_xml(KaxChapters *chapters,
-                   mm_io_c *out) {
-  size_t i;
-
-  for (i = 0; NULL != chapter_elements[i].name; i++) {
-    chapter_elements[i].start_hook = NULL;
-    chapter_elements[i].end_hook   = NULL;
-  }
-
-  chapter_elements[cet_index("ChapterAtom")].end_hook    = end_write_chapter_atom;
-  chapter_elements[cet_index("ChapterDisplay")].end_hook = end_write_chapter_display;
-
-  for (i = 0; chapters->ListSize() > i; i++)
-    write_xml_element_rec(1, 0, (*chapters)[i], out, chapter_elements);
 }

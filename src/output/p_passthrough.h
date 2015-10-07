@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __P_PASSTHROUGH_H
-#define __P_PASSTHROUGH_H
+#ifndef MTX_P_PASSTHROUGH_H
+#define MTX_P_PASSTHROUGH_H
 
 #include "common/common_pch.h"
 
@@ -25,10 +25,10 @@ public:
   virtual int process(packet_cptr packet);
   virtual void set_headers();
 
-  virtual const std::string get_format_name(bool translate = true) {
-    return translate ? Y("passthrough") : "passthrough";
+  virtual translatable_string_c get_format_name() const {
+    return YT("passthrough");
   }
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);
 };
 
-#endif // __P_PASSTHROUGH_H
+#endif // MTX_P_PASSTHROUGH_H

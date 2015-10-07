@@ -12,17 +12,18 @@
    Modified by Steve Lhomme <steve.lhomme@free.fr>.
 */
 
-#ifndef __OUTPUT_CONTROL_H
-#define __OUTPUT_CONTROL_H
+#ifndef MTX_OUTPUT_CONTROL_H
+#define MTX_OUTPUT_CONTROL_H
 
 #include "common/common_pch.h"
 
 #include <deque>
+#include <unordered_map>
 
 #include "common/bitvalue.h"
 #include "common/file_types.h"
-#include "common/smart_pointers.h"
-#include "merge/mkvmerge.h"
+#include "common/mm_mpls_multi_file_io.h"
+#include "common/segmentinfo.h"
 #include "merge/pr_generic.h"
 
 namespace libmatroska {
@@ -45,10 +46,7 @@ class generic_packetizer_c;
 class generic_reader_c;
 
 struct append_spec_t {
-  int64_t src_file_id;
-  int64_t src_track_id;
-  int64_t dst_file_id;
-  int64_t dst_track_id;
+  size_t src_file_id, src_track_id, dst_file_id, dst_track_id;
 };
 
 inline
@@ -66,6 +64,13 @@ bool operator !=(const append_spec_t &a1,
   return !(a1 == a2);
 }
 
+inline std::ostream &
+operator<<(std::ostream &str,
+           append_spec_t const &spec) {
+  str << spec.src_file_id << ":" << spec.src_track_id << ":" << spec.dst_file_id << ":" << spec.dst_track_id;
+  return str;
+}
+
 struct packetizer_t {
   file_status_e status, old_status;
   packet_cptr pack;
@@ -73,11 +78,16 @@ struct packetizer_t {
   int64_t file, orig_file;
   bool deferred;
 
-  packetizer_t():
-    status(FILE_STATUS_MOREDATA), old_status(FILE_STATUS_MOREDATA),
-    packetizer(NULL), orig_packetizer(NULL),
-    file(0), orig_file(0),
-    deferred(false) { }
+  packetizer_t()
+    : status{FILE_STATUS_MOREDATA}
+    , old_status{FILE_STATUS_MOREDATA}
+    , packetizer{}
+    , orig_packetizer{}
+    , file{}
+    , orig_file{}
+    , deferred{}
+  {
+  }
 };
 
 struct deferred_connection_t {
@@ -89,6 +99,7 @@ struct filelist_t {
   std::string name;
   std::vector<std::string> all_names;
   int64_t size;
+  size_t id;
 
   file_type_e type;
 
@@ -103,17 +114,35 @@ struct filelist_t {
   std::vector<deferred_connection_t> deferred_connections;
   int64_t deferred_max_timecode_seen;
 
-  filelist_t():
-    size(0), type(FILE_TYPE_IS_UNKNOWN),
-    reader(NULL),
-    ti(NULL), appending(false), appended_to(false), done(false),
-    num_unfinished_packetizers(0), old_num_unfinished_packetizers(0),
-    deferred_max_timecode_seen(-1) {}
+  bool is_playlist;
+  std::vector<generic_reader_c *> playlist_readers;
+  size_t playlist_index, playlist_previous_filelist_id;
+  mm_mpls_multi_file_io_cptr playlist_mpls_in;
+
+  timecode_c restricted_timecode_min, restricted_timecode_max;
+
+  filelist_t()
+    : size{}
+    , id{}
+    , type{FILE_TYPE_IS_UNKNOWN}
+    , reader{}
+    , ti{}
+    , appending{}
+    , appended_to{}
+    , done{}
+    , num_unfinished_packetizers{}
+    , old_num_unfinished_packetizers{}
+    , deferred_max_timecode_seen{-1}
+    , is_playlist{}
+    , playlist_index{}
+    , playlist_previous_filelist_id{}
+  {
+  }
 };
 
 struct attachment_t {
   std::string name, stored_name, mime_type, description;
-  int64_t id;
+  uint64_t id;
   bool to_all_files;
   memory_cptr data;
   int64_t ui_id;
@@ -129,7 +158,7 @@ struct attachment_t {
     id           = 0;
     ui_id        = 0;
     to_all_files = false;
-    data         = memory_cptr(NULL);
+    data.reset();
   }
 };
 
@@ -159,19 +188,20 @@ extern std::vector<filelist_t> g_files;
 extern std::vector<attachment_t> g_attachments;
 extern std::vector<track_order_t> g_track_order;
 extern std::vector<append_spec_t> g_append_mapping;
+extern std::unordered_map<int64_t, generic_packetizer_c *> g_packetizers_by_track_num;
 
 extern std::string g_outfile;
 
 extern double g_timecode_scale;
 extern timecode_scale_mode_e g_timecode_scale_mode;
 
-typedef counted_ptr<bitvalue_c> g_bitvalue_cptr;
+typedef std::shared_ptr<bitvalue_c> g_bitvalue_cptr;
 
 extern bitvalue_cptr g_seguid_link_previous, g_seguid_link_next;
 extern std::deque<bitvalue_cptr> g_forced_seguids;
 extern family_uids_c g_segfamily_uids;
 
-extern KaxInfo *g_kax_info_chap;
+extern kax_info_cptr g_kax_info_chap;
 
 extern bool g_write_meta_seek_for_clusters;
 
@@ -186,12 +216,12 @@ extern KaxTags *g_tags_from_cue_chapters;
 extern KaxSegment *g_kax_segment;
 extern KaxTracks *g_kax_tracks;
 extern KaxTrackEntry *g_kax_last_entry;
-extern KaxCues *g_kax_cues;
 extern KaxSeekHead *g_kax_sh_main, *g_kax_sh_cues;
-extern KaxChapters *g_kax_chapters;
+extern kax_chapters_cptr g_kax_chapters;
 extern int64_t g_tags_size;
 extern std::string g_segment_title;
 extern bool g_segment_title_set;
+extern std::string g_segment_filename, g_previous_segment_filename, g_next_segment_filename;
 extern std::string g_default_language;
 
 extern float g_video_fps;
@@ -210,13 +240,20 @@ extern int g_default_tracks[3], g_default_tracks_priority[3];
 
 extern bool g_splitting;
 extern int g_split_max_num_files;
+extern std::string g_splitting_by_chapters_arg;
 
 extern append_mode_e g_append_mode;
 
 extern bool g_stereo_mode_used;
 
 void get_file_type(filelist_t &file);
+
 void create_readers();
+void create_packetizers();
+void calc_attachment_sizes();
+void calc_max_chapter_size();
+void check_track_id_validity();
+void check_append_mapping();
 
 void cleanup();
 void main_loop();
@@ -225,7 +262,7 @@ void add_packetizer_globally(generic_packetizer_c *packetizer);
 void add_tags(KaxTag *tags);
 
 void create_next_output_file();
-int64_t finish_file(bool last_file = false);
+void finish_file(bool last_file, bool create_new_file = false, bool previously_discarding = false);
 void rerender_track_headers();
 void rerender_ebml_head();
 std::string create_output_name();
@@ -236,4 +273,4 @@ int64_t add_attachment(attachment_t attachment);
 void sighandler(int signum);
 #endif
 
-#endif // __OUTPUT_CONTROL_H
+#endif // MTX_OUTPUT_CONTROL_H

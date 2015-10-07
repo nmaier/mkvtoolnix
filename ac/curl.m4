@@ -2,7 +2,11 @@ dnl
 dnl Check for libcurl
 dnl
 
-PKG_CHECK_MODULES([CURL], [libcurl], [curl_found=yes])
+AC_ARG_WITH([curl], AC_HELP_STRING([--without-curl], [do not build with CURL support]),
+            [ with_curl=${withval} ], [ with_curl=yes ])
+if test "x$with_curl" != "xno"; then
+  PKG_CHECK_MODULES([CURL], [libcurl], [curl_found=yes])
+fi
 
 if test "$curl_found" = "yes"; then
   opt_features_yes="$opt_features_yes\n   * online update checks (via libcurl)"

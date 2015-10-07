@@ -18,6 +18,12 @@
 # if defined(HAVE_SYS_IOCTL_H) || defined(GWINSZ_IN_SYS_IOCTL)
 #  include <sys/ioctl.h>
 # endif // HAVE_SYS_IOCTL_H || GWINSZ_IN_SYS_IOCTL
+# if defined(HAVE_UNISTD_H)
+#  include <unistd.h>
+# endif // HAVE_UNISTD_H
+# if defined(HAVE_STROPTS_H)
+#  include <stropts.h>
+# endif // HAVE_STROPTS_H
 #endif  // HAVE_TIOCGWINSZ
 
 #include "common/terminal.h"
@@ -37,4 +43,3 @@ get_terminal_columns() {
   return DEFAULT_TERMINAL_COLUMNS;
 #endif  // HAVE_TIOCGWINSZ
 }
-

@@ -11,30 +11,30 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __R_USF_H
-#define __R_USF_H
+#ifndef MTX_R_USF_H
+#define MTX_R_USF_H
 
 #include "common/common_pch.h"
 
-#include <expat.h>
-
-#include "common/mm_io.h"
 #include "merge/pr_generic.h"
-#include "common/xml/element_parser.h"
 
 struct usf_entry_t {
   int64_t m_start, m_end;
   std::string m_text;
 
-  usf_entry_t():
-    m_start(-1),
-    m_end(-1) {
+  usf_entry_t()
+    : m_start(-1)
+    , m_end(-1)
+  {
   }
 
-  usf_entry_t(int64_t start, int64_t end, const std::string &text):
-    m_start(start),
-    m_end(end),
-    m_text(text) {
+  usf_entry_t(int64_t start,
+              int64_t end,
+              std::string const &text)
+    : m_start(start)
+    , m_end(end)
+    , m_text(text)
+  {
   }
 
   bool operator <(const usf_entry_t &cmp) const {
@@ -49,29 +49,25 @@ struct usf_track_t {
   std::vector<usf_entry_t> m_entries;
   std::vector<usf_entry_t>::const_iterator m_current_entry;
 
-  usf_track_t():
-    m_ptzr(-1) {
+  usf_track_t()
+    : m_ptzr(-1)
+  {
   }
 };
+typedef std::shared_ptr<usf_track_t> usf_track_cptr;
 
-class usf_reader_c: public generic_reader_c, public xml_parser_c {
+class usf_reader_c: public generic_reader_c {
 private:
-  int m_copy_depth;
-
-  std::vector<usf_track_t> m_tracks;
+  std::vector<usf_track_cptr> m_tracks;
   std::string m_private_data, m_default_language;
-  int m_longest_track;
-
-  std::vector<std::string> m_parents;
-  std::string m_data_buffer, m_copy_buffer, m_previous_start;
-  bool m_strip;
+  usf_track_cptr m_longest_track;
 
 public:
   usf_reader_c(const track_info_c &ti, const mm_io_cptr &in);
   virtual ~usf_reader_c();
 
-  virtual const std::string get_format_name(bool translate = true) {
-    return translate ? Y("USF subtitles") : "USF subtitles";
+  virtual translatable_string_c get_format_name() const {
+    return YT("USF subtitles");
   }
 
   virtual void read_headers();
@@ -86,12 +82,12 @@ public:
 
   static int probe_file(mm_text_io_c *in, uint64_t size);
 
-  virtual void start_element_cb(const char *name, const char **atts);
-  virtual void end_element_cb(const char *name);
-  virtual void add_data_cb(const XML_Char *s, int len);
-
-private:
+protected:
   virtual int64_t try_to_parse_timecode(const char *s);
+  virtual void parse_metadata(mtx::xml::document_cptr &doc);
+  virtual void parse_subtitles(mtx::xml::document_cptr &doc);
+  virtual void create_codec_private(mtx::xml::document_cptr &doc);
+
 };
 
-#endif  // __R_USF_H
+#endif  // MTX_R_USF_H

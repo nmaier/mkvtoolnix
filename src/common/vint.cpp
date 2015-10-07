@@ -99,12 +99,12 @@ vint_c::read_ebml_id(mm_io_c *in) {
 vint_c
 vint_c::read(mm_io_cptr &in,
              vint_c::read_mode_e read_mode) {
-  return read(in.get_object(), read_mode);
+  return read(in.get(), read_mode);
 }
 
 vint_c
 vint_c::read_ebml_id(mm_io_cptr &in) {
-  return read(in.get_object(), rm_ebml_id);
+  return read(in.get(), rm_ebml_id);
 }
 
 vint_c::operator EbmlId()

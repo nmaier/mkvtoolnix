@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __R_SSA_H
-#define __R_SSA_H
+#ifndef MTX_R_SSA_H
+#define MTX_R_SSA_H
 
 #include "common/common_pch.h"
 
@@ -28,8 +28,8 @@ public:
   ssa_reader_c(const track_info_c &ti, const mm_io_cptr &in);
   virtual ~ssa_reader_c();
 
-  virtual const std::string get_format_name(bool translate = true) {
-    return translate ? Y("SSA/ASS subtitles") : "SSA/ASS subtitles";
+  virtual translatable_string_c get_format_name() const {
+    return YT("SSA/ASS subtitles");
   }
 
   virtual void read_headers();
@@ -44,4 +44,4 @@ public:
   static int probe_file(mm_text_io_c *in, uint64_t size);
 };
 
-#endif  // __R_SSA_H
+#endif  // MTX_R_SSA_H

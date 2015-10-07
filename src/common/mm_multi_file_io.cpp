@@ -13,17 +13,13 @@
 
 #include "common/common_pch.h"
 
-#include <algorithm>
-#include <boost/regex.hpp>
 #include <sstream>
-#include <vector>
 
+#include "common/mm_io_x.h"
 #include "common/mm_multi_file_io.h"
 #include "common/output.h"
 #include "common/strings/editing.h"
 #include "common/strings/parsing.h"
-
-namespace bfs = boost::filesystem;
 
 mm_multi_file_io_c::file_t::file_t(const bfs::path &file_name,
                                    uint64_t global_start,
@@ -169,6 +165,12 @@ mm_multi_file_io_c::display_other_file_info() {
     mxinfo(boost::format(Y("'%1%': Processing the following files as well: %2%\n")) % m_display_file_name % out.str());
 }
 
+void
+mm_multi_file_io_c::enable_buffering(bool enable) {
+  for (auto &file : m_files)
+    file.m_file->enable_buffering(enable);
+}
+
 struct path_sorter_t {
   bfs::path m_path;
   int m_number;
@@ -189,7 +191,7 @@ mm_multi_file_io_c::open_multi(const std::string &display_file_name,
                                bool single_only) {
   bfs::path first_file_name(bfs::system_complete(bfs::path(display_file_name)));
   std::string base_name = bfs::basename(first_file_name);
-  std::string extension = ba::to_lower_copy(bfs::extension(first_file_name));
+  std::string extension = balg::to_lower_copy(bfs::extension(first_file_name));
   boost::regex file_name_re("(.+[_\\-])(\\d+)$", boost::regex::perl);
   boost::smatch matches;
 
@@ -200,9 +202,9 @@ mm_multi_file_io_c::open_multi(const std::string &display_file_name,
   }
 
   int start_number = 1;
-  parse_int(matches[2].str(), start_number);
+  parse_number(matches[2].str(), start_number);
 
-  base_name = ba::to_lower_copy(matches[1].str());
+  base_name = balg::to_lower_copy(matches[1].str());
 
   std::vector<path_sorter_t> paths;
   paths.push_back(path_sorter_t(first_file_name, start_number));
@@ -210,15 +212,15 @@ mm_multi_file_io_c::open_multi(const std::string &display_file_name,
   bfs::directory_iterator end_itr;
   for (bfs::directory_iterator itr(first_file_name.branch_path()); itr != end_itr; ++itr) {
     if (   bfs::is_directory(itr->status())
-        || !ba::iequals(bfs::extension(itr->path()), extension))
+        || !balg::iequals(bfs::extension(itr->path()), extension))
       continue;
 
     std::string stem   = bfs::basename(itr->path());
     int current_number = 0;
 
     if (   !boost::regex_match(stem, matches, file_name_re)
-        || !ba::iequals(matches[1].str(), base_name)
-        || !parse_int(matches[2].str(), current_number)
+        || !balg::iequals(matches[1].str(), base_name)
+        || !parse_number(matches[2].str(), current_number)
         || (current_number <= start_number))
       continue;
 

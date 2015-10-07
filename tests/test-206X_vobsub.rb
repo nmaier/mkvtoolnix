@@ -6,10 +6,10 @@ class T_206X_vobsub < Test
   end
 
   def run
-    xtr_tracks("data/mkv/vobsubs.mks", "4:#{tmp}")
+    xtr_tracks("data/mkv/vobsubs.mks", "3:#{tmp}")
     hash = hash_file("#{tmp}.idx") + "-" + hash_file("#{tmp}.sub")
     arg = ""
-    1.upto(7) { |i| arg += "#{i}:#{tmp} " }
+    0.upto(6) { |i| arg += "#{i}:#{tmp} " }
     xtr_tracks("data/mkv/vobsubs.mks", arg)
     hash += "-" + hash_file("#{tmp}.idx") + "-" + hash_file("#{tmp}.sub")
     merge("#{tmp}.idx")

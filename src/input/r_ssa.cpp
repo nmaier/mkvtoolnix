@@ -14,9 +14,9 @@
 #include "common/common_pch.h"
 
 #include "common/base64.h"
+#include "common/codec.h"
 #include "common/extern_data.h"
 #include "common/locale.h"
-#include "common/matroska.h"
 #include "input/r_ssa.h"
 #include "merge/output_control.h"
 #include "merge/pr_generic.h"
@@ -39,12 +39,12 @@ ssa_reader_c::read_headers() {
   mm_text_io_cptr text_in;
 
   try {
-    text_in = counted_ptr<mm_text_io_c>(new mm_text_io_c(m_in.get_object(), false));
+    text_in = std::shared_ptr<mm_text_io_c>(new mm_text_io_c(m_in.get(), false));
   } catch (...) {
     throw mtx::input::open_x();
   }
 
-  if (!ssa_reader_c::probe_file(text_in.get_object(), 0))
+  if (!ssa_reader_c::probe_file(text_in.get(), 0))
     throw mtx::input::invalid_format_x();
 
   charset_converter_cptr cc_utf8 = map_has_key(m_ti.m_sub_charsets,  0) ? charset_converter_c::init(m_ti.m_sub_charsets[ 0])
@@ -53,7 +53,7 @@ ssa_reader_c::read_headers() {
                                  :                                        g_cc_local_utf8;
 
   m_ti.m_id = 0;
-  m_subs    = ssa_parser_cptr(new ssa_parser_c(this, text_in.get_object(), m_ti.m_fname, 0));
+  m_subs    = ssa_parser_cptr(new ssa_parser_c(this, text_in.get(), m_ti.m_fname, 0));
 
   m_subs->set_charset_converter(cc_utf8);
   m_subs->parse();
@@ -69,8 +69,8 @@ ssa_reader_c::create_packetizer(int64_t) {
   if (!demuxing_requested('s', 0) || (NPTZR() != 0))
     return;
 
-  std::string global = m_subs->get_global();
-  add_packetizer(new textsubs_packetizer_c(this, m_ti, m_subs->is_ass() ?  MKV_S_TEXTASS : MKV_S_TEXTSSA, global.c_str(), global.length(), false, false));
+  m_ti.m_private_data = memory_c::clone(m_subs->get_global());
+  add_packetizer(new textsubs_packetizer_c(this, m_ti, m_subs->is_ass() ?  MKV_S_TEXTASS : MKV_S_TEXTSSA, false, false));
   show_packetizer_info(0, PTZR0);
 }
 
@@ -93,7 +93,7 @@ ssa_reader_c::get_progress() {
 void
 ssa_reader_c::identify() {
   id_result_container();
-  id_result_track(0, ID_RESULT_TRACK_SUBTITLES, "SSA/ASS");
+  id_result_track(0, ID_RESULT_TRACK_SUBTITLES, codec_c::get_name(CT_S_SSA_ASS, "SSA/ASS"));
 
   size_t i;
   for (i = 0; i < g_attachments.size(); i++)

@@ -11,15 +11,12 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __PACKET_H
-#define __PACKET_H
+#ifndef MTX_PACKET_H
+#define MTX_PACKET_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
-#include <vector>
-
-#include "common/memory.h"
-#include "common/smart_pointers.h"
+#include "common/timecode.h"
 
 namespace libmatroska {
   class KaxBlock;
@@ -45,13 +42,11 @@ public:
   virtual ~packet_extension_c() {
   }
 
-  virtual packet_extension_type_e get_type() = 0;
+  virtual packet_extension_type_e get_type() const = 0;
 };
-typedef counted_ptr<packet_extension_c> packet_extension_cptr;
+typedef std::shared_ptr<packet_extension_c> packet_extension_cptr;
 
 struct packet_t {
-  static int64_t sm_packet_number_counter;
-
   memory_cptr data;
   std::vector<memory_cptr> data_adds;
   memory_cptr codec_state;
@@ -60,34 +55,35 @@ struct packet_t {
   KaxBlock *block;
   KaxCluster *cluster;
   int ref_priority, time_factor;
-  int64_t timecode, bref, fref, duration, packet_num, assigned_timecode;
+  int64_t timecode, bref, fref, duration, assigned_timecode;
   int64_t timecode_before_factory;
   int64_t unmodified_assigned_timecode, unmodified_duration;
+  timecode_c discard_padding, output_order_timecode;
   bool duration_mandatory, superseeded, gap_following, factory_applied;
   generic_packetizer_c *source;
 
   std::vector<packet_extension_cptr> extensions;
 
   packet_t()
-    : group(NULL)
-    , block(NULL)
-    , cluster(NULL)
-    , ref_priority(0)
+    : group{}
+    , block{}
+    , cluster{}
+    , ref_priority{}
     , time_factor(1)
-    , timecode(0)
-    , bref(0)
-    , fref(0)
+    , timecode{}
+    , bref{}
+    , fref{}
     , duration(-1)
-    , packet_num(sm_packet_number_counter++)
-    , assigned_timecode(0)
-    , timecode_before_factory(0)
-    , unmodified_assigned_timecode(0)
-    , unmodified_duration(0)
-    , duration_mandatory(false)
-    , superseeded(false)
-    , gap_following(false)
-    , factory_applied(false)
-    , source(NULL)
+    , assigned_timecode{}
+    , timecode_before_factory{}
+    , unmodified_assigned_timecode{}
+    , unmodified_duration{}
+    , discard_padding{}
+    , duration_mandatory{}
+    , superseeded{}
+    , gap_following{}
+    , factory_applied{}
+    , source{}
   {
   }
 
@@ -97,25 +93,25 @@ struct packet_t {
            int64_t p_bref     = -1,
            int64_t p_fref     = -1)
     : data(p_memory)
-    , group(NULL)
-    , block(NULL)
-    , cluster(NULL)
-    , ref_priority(0)
+    , group{}
+    , block{}
+    , cluster{}
+    , ref_priority{}
     , time_factor(1)
     , timecode(p_timecode)
     , bref(p_bref)
     , fref(p_fref)
     , duration(p_duration)
-    , packet_num(sm_packet_number_counter++)
-    , assigned_timecode(0)
-    , timecode_before_factory(0)
-    , unmodified_assigned_timecode(0)
-    , unmodified_duration(0)
-    , duration_mandatory(false)
-    , superseeded(false)
-    , gap_following(false)
-    , factory_applied(false)
-    , source(NULL)
+    , assigned_timecode{}
+    , timecode_before_factory{}
+    , unmodified_assigned_timecode{}
+    , unmodified_duration{}
+    , discard_padding{}
+    , duration_mandatory{}
+    , superseeded{}
+    , gap_following{}
+    , factory_applied{}
+    , source{}
   {
   }
 
@@ -125,66 +121,103 @@ struct packet_t {
            int64_t p_bref     = -1,
            int64_t p_fref     = -1)
     : data(memory_cptr(n_memory))
-    , group(NULL)
-    , block(NULL)
-    , cluster(NULL)
-    , ref_priority(0)
+    , group{}
+    , block{}
+    , cluster{}
+    , ref_priority{}
     , time_factor(1)
     , timecode(p_timecode)
     , bref(p_bref)
     , fref(p_fref)
     , duration(p_duration)
-    , packet_num(sm_packet_number_counter++)
-    , assigned_timecode(0)
-    , timecode_before_factory(0)
-    , unmodified_assigned_timecode(0)
-    , unmodified_duration(0)
-    , duration_mandatory(false)
-    , superseeded(false)
-    , gap_following(false)
-    , factory_applied(false)
-    , source(NULL)
+    , assigned_timecode{}
+    , timecode_before_factory{}
+    , unmodified_assigned_timecode{}
+    , unmodified_duration{}
+    , discard_padding{}
+    , duration_mandatory{}
+    , superseeded{}
+    , gap_following{}
+    , factory_applied{}
+    , source{}
   {
   }
 
-  ~packet_t();
+  ~packet_t() {
+  }
 
-  bool has_timecode() {
+  bool
+  has_timecode()
+    const {
     return 0 <= timecode;
   }
 
-  bool has_bref() {
+  bool
+  has_bref()
+    const {
     return 0 <= bref;
   }
 
-  bool has_fref() {
+  bool
+  has_fref()
+    const {
     return 0 <= fref;
   }
 
-  bool has_duration() {
+  bool
+  has_duration()
+    const {
     return 0 <= duration;
   }
 
-  bool is_key_frame() {
+  bool
+  has_discard_padding()
+    const {
+    return discard_padding.valid();
+  }
+
+  int64_t
+  get_duration()
+    const {
+    return has_duration() ? duration : 0;
+  }
+
+  int64_t
+  get_unmodified_duration()
+    const {
+    return has_duration() ? unmodified_duration : 0;
+  }
+
+  bool
+  is_key_frame()
+    const {
     return !has_bref() && !has_fref();
   }
 
-  bool is_p_frame() {
+  bool
+  is_p_frame()
+    const {
     return (has_bref() || has_fref()) && (has_bref() != has_fref());
   }
 
-  bool is_b_frame() {
+  bool
+  is_b_frame()
+    const {
     return has_bref() && has_fref();
   }
 
-  packet_extension_c *find_extension(packet_extension_c::packet_extension_type_e type) {
+  packet_extension_c *
+  find_extension(packet_extension_c::packet_extension_type_e type)
+    const {
     for (auto &extension : extensions)
       if (extension->get_type() == type)
-        return extension.get_object();
+        return extension.get();
 
-    return NULL;
+    return nullptr;
   }
-};
-typedef counted_ptr<packet_t> packet_cptr;
 
-#endif // __PACKET_H
+  void normalize_timecodes();
+};
+typedef std::shared_ptr<packet_t> packet_cptr;
+
+#endif // MTX_PACKET_H

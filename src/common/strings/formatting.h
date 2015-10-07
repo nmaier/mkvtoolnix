@@ -11,14 +11,16 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_STRING_FORMATTING_H
-#define __MTX_COMMON_STRING_FORMATTING_H
+#ifndef MTX_COMMON_STRINGS_FORMATTING_H
+#define MTX_COMMON_STRINGS_FORMATTING_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
-#include <string>
+#include <ostream>
+#include <sstream>
 
 #include "common/strings/editing.h"
+#include "common/timecode.h"
 
 #define FMT_TIMECODE "%02d:%02d:%02d.%03d"
 #define ARG_TIMECODEINT(t) (int32_t)( (t) / 60 /   60 / 1000),         \
@@ -37,35 +39,88 @@
 #define WRAP_AT_TERMINAL_WIDTH -1
 
 std::string format_timecode(int64_t timecode, unsigned int precision = 9);
+
+template<typename T>
+std::string
+format_timecode(basic_timecode_c<T> const &timecode,
+                unsigned int precision = 9) {
+  return format_timecode(timecode.to_ns(), precision);
+}
+
+template<typename T>
+std::ostream &
+operator <<(std::ostream &out,
+            basic_timecode_c<T> const &timecode) {
+  if (timecode.valid())
+    out << format_timecode(timecode);
+  else
+    out << "<InvTC>";
+  return out;
+}
+
+std::string format_file_size(int64_t size);
+
 std::string format_paragraph(const std::string &text_to_wrap,
-                                         int indent_column                    = 0,
-                                         const std::string &indent_first_line = empty_string,
-                                         std::string indent_following_lines   = empty_string,
-                                         int wrap_column                      = WRAP_AT_TERMINAL_WIDTH,
-                                         const char *break_chars              = " ,.)/:");
+                             int indent_column                    = 0,
+                             const std::string &indent_first_line = empty_string,
+                             std::string indent_following_lines   = empty_string,
+                             int wrap_column                      = WRAP_AT_TERMINAL_WIDTH,
+                             const char *break_chars              = " ,.)/:");
 
 std::wstring format_paragraph(const std::wstring &text_to_wrap,
-                                          int indent_column                     = 0,
-                                          const std::wstring &indent_first_line = L" ",
-                                          std::wstring indent_following_lines   = L" ",
-                                          int wrap_column                       = WRAP_AT_TERMINAL_WIDTH,
-                                          const std::wstring &break_chars       = L" ,.)/:");
+                              int indent_column                     = 0,
+                              const std::wstring &indent_first_line = L" ",
+                              std::wstring indent_following_lines   = L" ",
+                              int wrap_column                       = WRAP_AT_TERMINAL_WIDTH,
+                              const std::wstring &break_chars       = L" ,.)/:");
 
 void fix_format(const char *fmt, std::string &new_fmt);
 
-std::string to_string(int value);
-std::string to_string(unsigned int value);
-std::string to_string(int64_t value);
-std::string to_string(uint64_t value);
+inline std::string
+to_string(std::string const &value) {
+  return value;
+}
+
 std::string to_string(double value, unsigned int precision);
 std::string to_string(int64_t numerator, int64_t denominator, unsigned int precision);
 
-std::string to_hex(const unsigned char *buf, size_t size);
+template<typename T>
+std::string
+to_string(basic_timecode_c<T> const &timecode) {
+  return format_timecode(timecode.to_ns());
+}
+
+
+template<typename T>
+std::string
+to_string(T const &value) {
+  std::stringstream ss;
+  ss << value;
+  return ss.str();
+}
+
+std::string to_hex(const unsigned char *buf, size_t size, bool compact = false);
 inline std::string
-to_hex(const std::string &buf) {
-  return to_hex(reinterpret_cast<const unsigned char *>(buf.c_str()), buf.length());
+to_hex(const std::string &buf,
+       bool compact = false) {
+  return to_hex(reinterpret_cast<const unsigned char *>(buf.c_str()), buf.length(), compact);
+}
+inline std::string
+to_hex(memory_cptr const &buf,
+       bool compact = false) {
+  return to_hex(buf->get_buffer(), buf->get_size(), compact);
+}
+inline std::string
+to_hex(EbmlBinary *bin,
+       bool compact = false) {
+  return to_hex(bin->GetBuffer(), bin->GetSize(), compact);
+}
+inline std::string
+to_hex(EbmlBinary &bin,
+       bool compact = false) {
+  return to_hex(bin.GetBuffer(), bin.GetSize(), compact);
 }
 
 std::string create_minutes_seconds_time_string(unsigned int seconds, bool omit_minutes_if_zero = false);
 
-#endif  // __MTX_COMMON_STRING_FORMATTING_H
+#endif  // MTX_COMMON_STRINGS_FORMATTING_H

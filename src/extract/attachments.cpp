@@ -29,20 +29,21 @@
 
 #include "common/ebml.h"
 #include "common/kax_analyzer.h"
+#include "common/mm_io_x.h"
 #include "extract/mkvextract.h"
 
 using namespace libmatroska;
 
 struct attachment_t {
   std::string name, type;
-  int64_t size, id;
+  uint64_t size, id;
   KaxFileData *fdata;
   bool valid;
 
   attachment_t()
-    : size(-1)
-    , id(-1)
-    , fdata(NULL)
+    : size{std::numeric_limits<uint64_t>::max()}
+    , id{}
+    , fdata(nullptr)
     , valid(false)
   {
   };
@@ -63,22 +64,22 @@ attachment_t::parse(KaxAttached &att) {
   for (k = 0; att.ListSize() > k; ++k) {
     EbmlElement *e = att[k];
 
-    if (EbmlId(*e) == EBML_ID(KaxFileName))
-      name = UTFstring_to_cstrutf8(UTFstring(*static_cast<KaxFileName *>(e)));
+    if (Is<KaxFileName>(e))
+      name = static_cast<KaxFileName *>(e)->GetValueUTF8();
 
-    else if (EbmlId(*e) == EBML_ID(KaxMimeType))
-      type = std::string(*static_cast<KaxMimeType *>(e));
+    else if (Is<KaxMimeType>(e))
+      type = static_cast<KaxMimeType *>(e)->GetValue();
 
-    else if (EbmlId(*e) == EBML_ID(KaxFileUID))
-      id = uint32(*static_cast<KaxFileUID *>(e));
+    else if (Is<KaxFileUID>(e))
+      id = static_cast<KaxFileUID *>(e)->GetValue();
 
-    else if (EbmlId(*e) == EBML_ID(KaxFileData)) {
-      fdata = (KaxFileData *)e;
+    else if (Is<KaxFileData>(e)) {
+      fdata = static_cast<KaxFileData *>(e);
       size  = fdata->GetSize();
     }
   }
 
-  valid = (-1 != id) && (-1 != size) && !type.empty();
+  valid = (std::numeric_limits<uint64_t>::max() != size) && !type.empty();
 
   return *this;
 }
@@ -92,7 +93,7 @@ handle_attachments(KaxAttachments *atts,
   size_t i;
   for (i = 0; atts->ListSize() > i; ++i) {
     KaxAttached *att = dynamic_cast<KaxAttached *>((*atts)[i]);
-    assert(NULL != att);
+    assert(att);
 
     attachment_t attachment = attachment_t::parse_new(*att);
     if (!attachment.valid)
@@ -117,8 +118,8 @@ handle_attachments(KaxAttachments *atts,
     try {
       mm_file_io_c out(track.out_name, MODE_CREATE);
       out.write(attachment.fdata->GetBuffer(), attachment.fdata->GetSize());
-    } catch (...) {
-      mxerror(boost::format(Y("The file '%1%' could not be opened for writing (%2%, %3%).\n")) % track.out_name % errno % strerror(errno));
+    } catch (mtx::mm_io::exception &ex) {
+      mxerror(boost::format(Y("The file '%1%' could not be opened for writing: %2%.\n")) % track.out_name % ex);
     }
   }
 }
@@ -135,16 +136,15 @@ extract_attachments(const std::string &file_name,
   // open input file
   try {
     analyzer = kax_analyzer_cptr(new kax_analyzer_c(file_name));
-    if (!analyzer->process(parse_mode, MODE_READ))
+    if (!analyzer->process(parse_mode, MODE_READ, true))
       throw false;
-  } catch (...) {
-    show_error(boost::format(Y("The file '%1%' could not be opened for reading (%2%).")) % file_name % strerror(errno));
+  } catch (mtx::mm_io::exception &ex) {
+    show_error(boost::format(Y("The file '%1%' could not be opened for reading: %2%.\n")) % file_name % ex);
     return;
   }
 
-  KaxAttachments *attachments = dynamic_cast<KaxAttachments *>(analyzer->read_all(EBML_INFO(KaxAttachments)));
-  if (NULL != attachments) {
+  ebml_master_cptr attachments_m(analyzer->read_all(EBML_INFO(KaxAttachments)));
+  KaxAttachments *attachments = dynamic_cast<KaxAttachments *>(attachments_m.get());
+  if (attachments)
     handle_attachments(attachments, tracks);
-    delete attachments;
-  }
 }

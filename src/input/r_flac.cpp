@@ -16,8 +16,8 @@
 #include <ogg/ogg.h>
 #include <vorbis/codec.h>
 
+#include "common/codec.h"
 #include "common/flac.h"
-#include "common/matroska.h"
 #include "input/r_flac.h"
 #include "merge/output_control.h"
 #include "merge/pr_generic.h"
@@ -166,7 +166,7 @@ flac_reader_c::parse_file() {
 
   mxinfo(Y("+-> Parsing the FLAC file. This can take a LONG time.\n"));
   decoder = FLAC__stream_decoder_new();
-  if (decoder == NULL)
+  if (!decoder)
     mxerror(Y("flac_reader: FLAC__stream_decoder_new() failed.\n"));
   if (!FLAC__stream_decoder_set_metadata_respond_all(decoder))
     mxerror(Y("flac_reader: Could not set metadata_respond_all.\n"));
@@ -343,17 +343,17 @@ flac_reader_c::identify() {
 #else  // HAVE_FLAC_FORMAT_H
 
 bool
-flac_reader_c::probe_file(mm_io_c *io,
+flac_reader_c::probe_file(mm_io_c *in,
                           uint64_t size) {
   if (4 > size)
     return false;
 
   std::string data;
   try {
-    io->setFilePointer(0, seek_beginning);
-    if (io->read(data, 4) != 4)
+    in->setFilePointer(0, seek_beginning);
+    if (in->read(data, 4) != 4)
       return false;
-    io->setFilePointer(0, seek_beginning);
+    in->setFilePointer(0, seek_beginning);
 
     if (data == "fLaC")
       id_result_container_unsupported(in->get_file_name(), "FLAC");

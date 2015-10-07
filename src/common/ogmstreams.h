@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_OGGSTREAMS_H
-#define __MTX_COMMON_OGGSTREAMS_H
+#ifndef MTX_COMMON_OGGSTREAMS_H
+#define MTX_COMMON_OGGSTREAMS_H
 
 /*
    Taken from http://tobias.everwicked.com/packfmt.htm

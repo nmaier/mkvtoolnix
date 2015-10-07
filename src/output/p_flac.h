@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __P_FLAC_H
-#define __P_FLAC_H
+#ifndef MTX_P_FLAC_H
+#define MTX_P_FLAC_H
 
 #include "common/common_pch.h"
 
@@ -35,12 +35,12 @@ public:
   virtual int process(packet_cptr packet);
   virtual void set_headers();
 
-  virtual const std::string get_format_name(bool translate = true) {
-    return translate ? Y("FLAC") : "FLAC";
+  virtual translatable_string_c get_format_name() const {
+    return YT("FLAC");
   }
 
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);
 };
 
 #endif  // HAVE_FLAC_STREAM_DECODER_H
-#endif  // __P_FLAC_H
+#endif  // MTX_P_FLAC_H

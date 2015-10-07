@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __R_SRT_H
-#define __R_SRT_H
+#ifndef MTX_R_SRT_H
+#define MTX_R_SRT_H
 
 #include "common/common_pch.h"
 
@@ -29,8 +29,8 @@ public:
   srt_reader_c(const track_info_c &ti, const mm_io_cptr &in);
   virtual ~srt_reader_c();
 
-  virtual const std::string get_format_name(bool translate = true) {
-    return translate ? Y("SRT subtitles") : "SRT subtitles";
+  virtual translatable_string_c get_format_name() const {
+    return YT("SRT subtitles");
   }
 
   virtual void read_headers();
@@ -45,4 +45,4 @@ public:
   static int probe_file(mm_text_io_c *in, uint64_t size);
 };
 
-#endif  // __R_SRT_H
+#endif  // MTX_R_SRT_H

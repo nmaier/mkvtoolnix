@@ -11,10 +11,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __HEADER_EDITOR_FRAME_H
-#define __HEADER_EDITOR_FRAME_H
+#ifndef MTX_HEADER_EDITOR_FRAME_H
+#define MTX_HEADER_EDITOR_FRAME_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <wx/filename.h>
 #include <wx/frame.h>
@@ -27,6 +27,7 @@
 
 #include "common/translation.h"
 #include "mmg/header_editor/page_base.h"
+#include "mmg/window_geometry_saver.h"
 #include "mmg/wx_kax_analyzer.h"
 
 #define ID_M_HE_FILE_OPEN            20000
@@ -54,7 +55,8 @@ class header_editor_frame_c: public wxFrame {
   DECLARE_CLASS(header_editor_frame_c);
   DECLARE_EVENT_TABLE();
 public:
-  std::vector<he_page_base_c *> m_pages, m_top_level_pages;
+  std::vector<he_page_base_cptr> m_pages;
+  std::vector<he_page_base_c *> m_top_level_pages;
 
   wxFileName m_file_name;
   wxDateTime m_file_mtime;
@@ -70,11 +72,14 @@ public:
   wxTreeCtrl *m_tc_tree;
   wxTreeItemId m_root_id;
 
-  wx_kax_analyzer_c *m_analyzer;
+  wx_kax_analyzer_cptr m_analyzer;
 
-  EbmlElement *m_e_segment_info, *m_e_tracks;
+  std::shared_ptr<EbmlElement> m_e_segment_info, m_e_tracks;
 
   bool m_ignore_tree_selection_changes;
+
+protected:
+  window_geometry_saver_c m_geometry_saver;
 
 public:
   header_editor_frame_c(wxWindow *parent);
@@ -135,4 +140,4 @@ protected:
   void set_window_title();
 };
 
-#endif // __HEADER_EDITOR_FRAME_H
+#endif // MTX_HEADER_EDITOR_FRAME_H

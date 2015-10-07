@@ -71,7 +71,7 @@ clpi::program_stream_t::dump() {
 clpi::parser_c::parser_c(const std::string &file_name)
   : m_file_name(file_name)
   , m_ok(false)
-  , m_debug(debugging_requested("clpi") || debugging_requested("clpi_parser"))
+  , m_debug{"clpi|clpi_parser"}
 {
 }
 
@@ -101,7 +101,7 @@ clpi::parser_c::parse() {
       throw false;
     m_file.close();
 
-    bit_cursor_cptr bc(new bit_cursor_c(content->get_buffer(), file_size));
+    bit_reader_cptr bc(new bit_reader_c(content->get_buffer(), file_size));
 
     parse_header(bc);
     parse_program_info(bc);
@@ -119,7 +119,7 @@ clpi::parser_c::parse() {
 }
 
 void
-clpi::parser_c::parse_header(bit_cursor_cptr &bc) {
+clpi::parser_c::parse_header(bit_reader_cptr &bc) {
   bc->set_bit_position(0);
 
   uint32_t magic = bc->get_bits(32);
@@ -137,7 +137,7 @@ clpi::parser_c::parse_header(bit_cursor_cptr &bc) {
 }
 
 void
-clpi::parser_c::parse_program_info(bit_cursor_cptr &bc) {
+clpi::parser_c::parse_program_info(bit_reader_cptr &bc) {
   bc->set_bit_position(m_program_info_start * 8);
 
   bc->skip_bits(40);            // 32 bits length, 8 bits reserved
@@ -160,7 +160,7 @@ clpi::parser_c::parse_program_info(bit_cursor_cptr &bc) {
 }
 
 void
-clpi::parser_c::parse_program_stream(bit_cursor_cptr &bc,
+clpi::parser_c::parse_program_stream(bit_reader_cptr &bc,
                                      clpi::program_cptr &program) {
   program_stream_cptr stream(new program_stream_t);
   program->program_streams.push_back(stream);

@@ -10,7 +10,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <ebml/EbmlVersion.h>
 #include <matroska/KaxVersion.h>
@@ -31,7 +31,7 @@ using namespace libmatroska;
 
 main_window_c::main_window_c():
   last_percent(-1), num_elements(0),
-  root(NULL) {
+  root(nullptr) {
 
   setupUi(this);
 
@@ -237,7 +237,7 @@ rightclick_tree_widget::mousePressEvent(QMouseEvent *event) {
   }
 
   QTreeWidgetItem *item = itemAt(event->pos());
-  if (NULL != item) {
+  if (item) {
 #if QT_VERSION >= 0x040200
     gui->expand_all_elements(item, !item->isExpanded());
 #else   // QT_VERSION >= 0x040200
@@ -293,4 +293,3 @@ bool
 ui_graphical_available() {
   return true;
 }
-

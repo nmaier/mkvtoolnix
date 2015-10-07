@@ -11,10 +11,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MMG_DIALOG_H
-#define __MMG_DIALOG_H
+#ifndef MTX_MMG_DIALOG_H
+#define MTX_MMG_DIALOG_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <wx/html/helpctrl.h>
 #include <wx/log.h>
@@ -23,10 +23,12 @@
 # include <wx/thread.h>
 
 # include "common/version.h"
+# include "common/xml/xml.h"
 # include "mmg/update_checker.h"
 #endif  // defined(HAVE_CURL_EASY_H)
 
 #include "mmg/mmg.h"
+#include "mmg/window_geometry_saver.h"
 
 #define ID_TC_OUTPUT                      10000
 #define ID_B_BROWSEOUTPUT                 10001
@@ -38,6 +40,8 @@
 #define ID_B_ADD_TO_JOBQUEUE              10008
 #define ID_HLC_DOWNLOAD_URL               10009
 #define ID_B_UPDATE_CHECK_CLOSE           10010
+#define ID_RE_CHANGELOG                   10011
+#define ID_B_UPDATE_CHECK_DOWNLOAD        10012
 
 #define ID_M_FILE_NEW                     30000
 #define ID_M_FILE_LOAD                    30001
@@ -81,6 +85,7 @@
 #define ID_M_HELP_ABOUT                   31000
 #define ID_M_HELP_HELP                    31001
 #define ID_M_HELP_CHECK_FOR_UPDATES       31002
+#define ID_M_HELP_TROUBLESHOOTING         31003
 
 #define HELP_ID_CONTENTS                      1
 #define HELP_ID_INTRODUCTION              10000
@@ -146,6 +151,7 @@ public:
   bool m_checking_for_updates, m_interactive_update_check;
   wxMutex m_update_check_mutex;
   mtx_release_version_t m_release_version;
+  mtx::xml::document_cptr m_releases_info;
   update_check_dlg_c *m_update_check_dlg;
 #endif  // defined(HAVE_CURL_EASY_H)
 
@@ -153,6 +159,9 @@ public:
 public:
   static size_t ms_dpi_x, ms_dpi_y;
 #endif
+
+protected:
+  window_geometry_saver_c m_geometry_saver;
 
 public:
   mmg_dialog();
@@ -172,6 +181,7 @@ public:
   void on_file_options(wxCommandEvent &evt);
   void on_help(wxCommandEvent &evt);
   void on_about(wxCommandEvent &evt);
+  void on_troubleshooting(wxCommandEvent &evt);
 
   void on_update_command_line(wxTimerEvent &evt);
   void update_command_line();
@@ -246,7 +256,8 @@ public:
 #if defined(HAVE_CURL_EASY_H)
   void maybe_check_for_updates();
   void check_for_updates(bool interactive);
-  void set_release_version(mtx_release_version_t &release_version);
+  void set_release_version(mtx_release_version_t const &release_version);
+  void set_releases_info(mtx::xml::document_cptr const &releases_info);
 
   void on_check_for_updates(wxCommandEvent &evt);
   void on_update_check_state_changed(wxCommandEvent &evt);
@@ -267,8 +278,12 @@ protected:
 
   void set_menu_item_strings(int id, const wxString &title, const wxString &help_text = wxEmptyString);
   void create_menus();
+
+  void show_update_notices();
+  void show_update_notice(wxString const &version, std::vector<wxString> const &info);
+  void show_update_notice_600();
 };
 
 extern mmg_dialog *mdlg;
 
-#endif // __MMG_DIALOG_H
+#endif // MTX_MMG_DIALOG_H

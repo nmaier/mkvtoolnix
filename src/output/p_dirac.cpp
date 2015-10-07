@@ -13,10 +13,8 @@
 
 #include "common/common_pch.h"
 
-#include <cstring>
-
+#include "common/codec.h"
 #include "common/math.h"
-#include "common/matroska.h"
 #include "merge/output_control.h"
 #include "output/p_dirac.h"
 
@@ -27,12 +25,8 @@ dirac_video_packetizer_c::dirac_video_packetizer_c(generic_reader_c *p_reader, t
   , m_headers_found(false)
   , m_previous_timecode(-1)
 {
-  if (get_cue_creation() == CUE_STRATEGY_UNSPECIFIED)
-    set_cue_creation(CUE_STRATEGY_IFRAMES);
-
   set_track_type(track_video);
   set_codec_id(MKV_V_DIRAC);
-  set_default_compression_method(COMPRESSION_DIRAC);
 
   // Dummy values
   m_seqhdr.pixel_width  = 123;
@@ -97,10 +91,9 @@ dirac_video_packetizer_c::headers_found() {
 }
 
 void
-dirac_video_packetizer_c::flush() {
+dirac_video_packetizer_c::flush_impl() {
   m_parser.flush();
   flush_frames();
-  generic_packetizer_c::flush();
 }
 
 void
@@ -118,9 +111,8 @@ connection_result_e
 dirac_video_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                          std::string &) {
   dirac_video_packetizer_c *vsrc = dynamic_cast<dirac_video_packetizer_c *>(src);
-  if (vsrc == NULL)
+  if (!vsrc)
     return CAN_CONNECT_NO_FORMAT;
 
   return CAN_CONNECT_YES;
 }
-

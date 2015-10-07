@@ -1,13 +1,13 @@
 '\" t
 .\"     Title: mkvextract
 .\"    Author: Moritz Bunkus <moritz@bunkus.org>
-.\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
-.\"      Date: 2011-11-27
+.\" Generator: DocBook XSL Stylesheets v1.78.1 <http://docbook.sf.net/>
+.\"      Date: 2014-04-18
 .\"    Manual: 用户命令
-.\"    Source: MKVToolNix 5.1.0
+.\"    Source: MKVToolNix 6.9.1
 .\"  Language: Chinese
 .\"
-.TH "MKVEXTRACT" "1" "2011\-11\-27" "MKVToolNix 5\&.1\&.0" "用户命令"
+.TH "MKVEXTRACT" "1" "2014\-04\-18" "MKVToolNix 6\&.9\&.1" "用户命令"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -85,6 +85,23 @@ Matroska(TM)
 将输出可用翻译列表。
 .RE
 .PP
+\fB\-\-debug\fR \fI主题\fR
+.RS 4
+为特定功能开启调试。该选项仅对开发者有用。
+.RE
+.PP
+\fB\-\-engage\fR \fI功能\fR
+.RS 4
+开启实验性功能。可用功能列表可通过
+\fBmkvextract \-\-engage list\fR
+得到。这些功能在正常情况下不应该使用。
+.RE
+.PP
+\fB\-\-gui\-mode\fR
+.RS 4
+Turns on GUI mode\&. In this mode specially\-formatted lines may be output that can tell a controlling GUI what\*(Aqs happening\&. These messages follow the format \*(Aq#GUI#message\*(Aq\&. The message may be followed by key/value pairs as in \*(Aq#GUI#message#key1=value1#key2=value2\&...\*(Aq\&. Neither the messages nor the keys are ever translated and always output in English\&.
+.RE
+.PP
 \fB\-v\fR, \fB\-\-verbose\fR
 .RS 4
 使输出信息更详尽，且每当读取到重要的
@@ -105,12 +122,12 @@ Matroska(TM)
 \fB\-\-check\-for\-updates\fR
 .RS 4
 联机下载 URL
-http://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xml
-检查新版本。将以
+\m[blue]\fBhttp://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xml\fR\m[]
+以检查新版本。将以
 键=值
 的样式输出四行: 检索信息的 URL（键
 version_check_url），当前运行的版本（键
-running_version），最新版本（键
+running_version），最新版本号（键
 available_version）及其下载 URL（键
 download_url）。
 .sp
@@ -119,7 +136,7 @@ download_url）。
 此选项仅当程序附带 libcurl 支持编译时可用。
 .RE
 .PP
-\fB@\fR\fIoptions\-file\fR
+\fB@\fR\fI选项文件\fR
 .RS 4
 从文件
 \fI选项文件\fR
@@ -133,12 +150,12 @@ download_url）。
 .RS 4
 .\}
 .nf
-# Extract a track from source\&.mkv
+# 从 源\&.mkv 提取轨道
 tracks
-source\&.mkv
-# Output the track as raw data\&.
+源\&.mkv
+# 将轨道以原始数据的形式输出。
 \-\-raw
-1:destination\&.raw
+1:目标\&.raw
 .fi
 .if n \{\
 .RE
@@ -146,13 +163,8 @@ source\&.mkv
 .RE
 .SS "轨道提取模式"
 .PP
-语法:
-\fBmkvextract\fR
-\fBtracks\fR
-\fI源文件名\fR
-[\fI选项\fR]
-\fITID1:目标文件名1\fR
-[\fITID2:目标文件名2\fR \&.\&.\&.]
+Syntax:
+\fBmkvextract \fR\fB\fBtracks\fR\fR\fB \fR\fB\fIsource\-filename\fR\fR\fB \fR\fB[\fIoptions\fR]\fR\fB \fR\fB\fITID1:dest\-filename1\fR\fR\fB \fR\fB[\fITID2:dest\-filename2\fR \&.\&.\&.]\fR
 .PP
 以下命令行在 \*(Aqtracks\*(Aq 轨道提取模式下对各轨道可用。它们应当在所应用到的轨道指令（参阅下文）之前出现。
 .PP
@@ -216,7 +228,7 @@ CodecIDs
 .RS 4
 .\}
 .nf
-$ mkvextract tracks input\&.mkv 1:output\-two\-tracks\&.rm 2:output\-two\-tracks\&.rm
+$ mkvextract tracks 输入\&.mkv 1:输出两条轨道\&.rm 2:输出两条轨道\&.rm
 .fi
 .if n \{\
 .RE
@@ -224,26 +236,18 @@ $ mkvextract tracks input\&.mkv 1:output\-two\-tracks\&.rm 2:output\-two\-tracks
 .RE
 .SS "标签提取模式"
 .PP
-语法:
-\fBmkvextract\fR
-\fBtags\fR
-\fI源文件名\fR
-[\fI选项\fR]
+Syntax:
+\fBmkvextract \fR\fB\fBtags\fR\fR\fB \fR\fB\fIsource\-filename\fR\fR\fB \fR\fB[\fIoptions\fR]\fR
 .PP
 提取出的标签将被输出到命令行，除非输出被重定向（详情参见关于
 输出重定向
 的章节）。
 .SS "附件提取模式"
 .PP
-语法:
-\fBmkvextract\fR
-\fBattachments\fR
-\fI源文件名\fR
-[\fI选项\fR]
-\fIAID1:输出文件名1\fR
-[\fIAID2:输出文件名2\fR \&.\&.\&.]
+Syntax:
+\fBmkvextract \fR\fB\fBattachments\fR\fR\fB \fR\fB\fIsource\-filename\fR\fR\fB \fR\fB[\fIoptions\fR]\fR\fB \fR\fB\fIAID1:outname1\fR\fR\fB \fR\fB[\fIAID2:outname2\fR \&.\&.\&.]\fR
 .PP
-\fIAID\fR:\fIoutname\fR
+\fIAID\fR:\fI输出文件名\fR
 .RS 4
 如果源文件中存在 ID 为
 \fIAID\fR
@@ -260,11 +264,8 @@ Matroska(TM)
 .RE
 .SS "章节提取模式"
 .PP
-语法:
-\fBmkvextract\fR
-\fBchapters\fR
-\fI源文件名\fR
-[\fI选项\fR]
+Syntax:
+\fBmkvextract \fR\fB\fBchapters\fR\fR\fB \fR\fB\fIsource\-filename\fR\fR\fB \fR\fB[\fIoptions\fR]\fR
 .PP
 \fB\-s\fR, \fB\-\-simple\fR
 .RS 4
@@ -280,24 +281,16 @@ XML
 的章节）。
 .SS "Cue 表单提取模式"
 .PP
-语法:
-\fBmkvextract\fR
-\fBcuesheet\fR
-\fI源文件名\fR
-[\fI选项\fR]
+Syntax:
+\fBmkvextract \fR\fB\fBcuesheet\fR\fR\fB \fR\fB\fIsource\-filename\fR\fR\fB \fR\fB[\fIoptions\fR]\fR
 .PP
 提取出的 cue 表单将被输出到命令行，除非输出被重定向（详情参见关于
 输出重定向
 的章节）。
 .SS "时间码提取模式"
 .PP
-语法:
-\fBmkvextract\fR
-\fBtimecodes_v2\fR
-\fI源文件名\fR
-[\fI选项\fR]
-\fITID1:目标文件名1\fR
-[\fITID2:目标文件名2\fR \&.\&.\&.]
+Syntax:
+\fBmkvextract \fR\fB\fBtimecodes_v2\fR\fR\fB \fR\fB\fIsource\-filename\fR\fR\fB \fR\fB[\fIoptions\fR]\fR\fB \fR\fB\fITID1:dest\-filename1\fR\fR\fB \fR\fB[\fITID2:dest\-filename2\fR \&.\&.\&.]\fR
 .PP
 提取出的时间码将被输出到命令行，除非输出被重定向（详情参见关于
 输出重定向
@@ -320,7 +313,7 @@ XML
 .RS 4
 .\}
 .nf
-$ mkvextract timecodes_v2 input\&.mkv 1:tc\-track1\&.txt 2:tc\-track2\&.txt
+$ mkvextract timecodes_v2 输入\&.mkv 1:轨道1的时间码\&.txt 2:轨道2的时间码\&.txt
 .fi
 .if n \{\
 .RE
@@ -340,13 +333,12 @@ shell 的报告重定向功能可以通过在命令行后追加 \*(Aq> 输出文
 .RS 4
 .\}
 .nf
-$ mkvextract tags source\&.mkv > tags\&.xml
+$ mkvextract tags 源\&.mkv > 标签\&.xml
 .fi
 .if n \{\
 .RE
 .\}
 .PP
-
 \fBmkvextract\fR(1)
 自身的重定向功能可通过
 \fB\-\-redirect\-output\fR
@@ -356,7 +348,7 @@ $ mkvextract tags source\&.mkv > tags\&.xml
 .RS 4
 .\}
 .nf
-$ mkvextract tags source\&.mkv \-\-redirect\-output tags\&.xml
+$ mkvextract tags 源\&.mkv \-\-redirect\-output 标签\&.xml
 .fi
 .if n \{\
 .RE
@@ -381,13 +373,17 @@ $ mkvextract tags source\&.mkv \-\-redirect\-output tags\&.xml
 有时会在写入文件之前对特殊字符进行转义，导致输出文件损坏。
 .sp .5v
 .RE
+.SH "文本文件与字符集转换"
+.PP
+For an in\-depth discussion about how all tools in the MKVToolNix suite handle character set conversions, input/output encoding, command line encoding and console encoding please see the identically\-named section in the
+\fBmkvmerge\fR(1)
+man page\&.
 .SH "输出文件格式"
 .PP
 输出文件的格式取决于轨道的类型，而不是输出文件名的扩展名。目前支持以下轨道类型：
 .PP
 V_MPEG4/ISO/AVC
 .RS 4
-
 H\&.264
 /
 AVC
@@ -413,10 +409,34 @@ AVI
 .PP
 V_REAL/*
 .RS 4
-
 RealVideo(TM)
 轨道将被输出为
 RealMedia(TM)
+文件。
+.RE
+.PP
+V_THEORA
+.RS 4
+Theora(TM)
+流将以
+Ogg(TM)
+为容器输出
+.RE
+.PP
+V_VP8, V_VP9
+.RS 4
+VP8
+/
+VP9
+tracks are written to
+IVF
+files\&.
+.RE
+.PP
+A_MPEG/L2
+.RS 4
+MPEG\-1 Audio Layer II 流将提取为原始的
+MP2
 文件。
 .RE
 .PP
@@ -459,7 +479,6 @@ OggVorbis(TM)
 .PP
 A_REAL/*
 .RS 4
-
 RealAudio(TM)
 轨道将被输出为
 RealMedia(TM)
@@ -468,7 +487,6 @@ RealMedia(TM)
 .PP
 A_TTA1
 .RS 4
-
 TrueAudio(TM)
 轨道将被输出为
 TTA
@@ -477,6 +495,38 @@ Matroska(TM)
 时间码的精度限制，解开来的文件的头部有两个字段不同：\fIdata_length\fR
 (文件的总采样数) 与
 CRC。
+.RE
+.PP
+A_ALAC
+.RS 4
+ALAC
+轨道将输出为
+CAF
+文件。
+.RE
+.PP
+A_FLAC
+.RS 4
+FLAC
+轨道将输出为原始的
+FLAC
+文件。
+.RE
+.PP
+A_WAVPACK4
+.RS 4
+WavPack(TM)
+轨道将输出为
+WV
+文件。
+.RE
+.PP
+A_OPUS
+.RS 4
+Opus(TM)
+tracks are written to
+OggOpus(TM)
+files\&.
 .RE
 .PP
 S_TEXT/UTF8
@@ -488,7 +538,6 @@ SRT
 .PP
 S_TEXT/SSA, S_TEXT/ASS
 .RS 4
-
 SSA
 与
 ASS
@@ -499,11 +548,35 @@ SSA/ASS
 .PP
 S_KATE
 .RS 4
-
 Kate(TM)
 流将以
 Ogg(TM)
 为容器输出。
+.RE
+.PP
+S_VOBSUB
+.RS 4
+VobSub(TM)
+字幕将输出为
+SUB
+文件及相应的索引文件（后缀为
+IDX）。
+.RE
+.PP
+S_TEXT/USF
+.RS 4
+USF
+文本字幕将输出为
+USF
+文件。
+.RE
+.PP
+S_HDMV/PGS
+.RS 4
+PGS
+字幕将输出为
+SUP
+文件。
 .RE
 .PP
 标签
@@ -538,7 +611,6 @@ OGM
 .RE
 .SH "退出代码"
 .PP
-
 \fBmkvextract\fR(1)
 退出时会返回以下三个退出代码中的一个：
 .sp
@@ -550,7 +622,6 @@ OGM
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB0\fR
 \-\- 此退出代码说明已成功完成提取。
 .RE
@@ -563,7 +634,6 @@ OGM
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB1\fR
 \-\- 这种情况下
 \fBmkvextract\fR(1)
@@ -578,7 +648,6 @@ OGM
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB2\fR
 \-\- 此退出代码用于错误发生之后。
 \fBmkvextract\fR(1)
@@ -588,10 +657,36 @@ OGM
 .PP
 有时文本中的特殊字符必须或应该转义。转义规则很简单: 用反斜杠后接一字符替换需要转义的各字符。
 .PP
-The rules are: \*(Aq \*(Aq (a space) becomes \*(Aq\es\*(Aq, \*(Aq"\*(Aq (double quotes) becomes \*(Aq\e2\*(Aq, \*(Aq:\*(Aq becomes \*(Aq\ec\*(Aq, \*(Aq#\*(Aq becomes \*(Aq\eh\*(Aq and \*(Aq\e\*(Aq (a single backslash) itself becomes \*(Aq\e\e\*(Aq\&.
+规则为: \*(Aq \*(Aq (空格) 变为 \*(Aq\es\*(Aq、\*(Aq"\*(Aq (双引号) 变为 \*(Aq\e2\*(Aq、\*(Aq:\*(Aq 变为 \*(Aq\ec\*(Aq、\*(Aq#\*(Aq 变为 \*(Aq\eh\*(Aq，而 \*(Aq\e\*(Aq (单个反斜杠) 自己则变为 \*(Aq\e\e\*(Aq。
+.SH "环境变量"
+.PP
+\fBmkvextract\fR(1)
+使用决定系统区域设置的默认变量 (如
+\fILANG\fR
+与
+\fILC_*\fR
+族)。其他变量包括:
+.PP
+\fIMKVTOOLNIX_DEBUG\fR 及其缩写形式 \fIMTX_DEBUG\fR
+.RS 4
+内容将被当作通过
+\fB\-\-debug\fR
+选项传递的参数对待。
+.RE
+.PP
+\fIMKVTOOLNIX_ENGAGE\fR 及其缩写形式 \fIMTX_ENGAGE\fR
+.RS 4
+内容将被当作通过
+\fB\-\-engage\fR
+选项传递的参数对待。
+.RE
+.PP
+\fIMKVTOOLNIX_OPTIONS\fR 及其缩写形式 \fIMTX_OPTIONS\fR
+.RS 4
+内容将在空白处切割。最终得到的字符串部分将按命令行选项的格式处理。如果您需要传递特殊字符 (如空白) 则需要转义 (参见关于转义文本中特殊字符的段落)。
+.RE
 .SH "参阅"
 .PP
-
 \fBmkvmerge\fR(1),
 \fBmkvinfo\fR(1),
 \fBmkvpropedit\fR(1),

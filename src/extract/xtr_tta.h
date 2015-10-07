@@ -10,8 +10,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __XTR_TTA_H
-#define __XTR_TTA_H
+#ifndef MTX_XTR_TTA_H
+#define MTX_XTR_TTA_H
 
 #include "common/common_pch.h"
 
@@ -30,8 +30,7 @@ public:
   xtr_tta_c(const std::string &codec_id, int64_t tid, track_spec_t &tspec);
 
   virtual void create_file(xtr_base_c *master, KaxTrackEntry &track);
-  virtual void handle_frame(memory_cptr &frame, KaxBlockAdditions *additions, int64_t timecode, int64_t duration, int64_t bref, int64_t fref,
-                            bool keyframe, bool discardable, bool references_valid);
+  virtual void handle_frame(xtr_frame_t &f);
   virtual void finish_file();
 
   virtual const char *get_container_name() {

@@ -1,0 +1,86 @@
+'\" t
+.\"     Title: mmg
+.\"    Author: Moritz Bunkus <moritz@bunkus.org>
+.\" Generator: DocBook XSL Stylesheets v1.78.1 <http://docbook.sf.net/>
+.\"      Date: 2014-04-18
+.\"    Manual: Benutzerbefehle
+.\"    Source: MKVToolNix 6.9.1
+.\"  Language: German
+.\"
+.TH "MMG" "1" "2014\-04\-18" "MKVToolNix 6\&.9\&.1" "Benutzerbefehle"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+mmg \- eine grafische Benutzeroberfl\(:ache f\(:ur \fBmkvmerge\fR(1) einschlie\(sslich eines Editors f\(:ur Kapitel und Kopfdaten
+.SH "\(:UBERSICHT"
+.HP \w'\fBmmg\fR\ 'u
+\fBmmg\fR [[\-\-edit\-headers\ {Dateiname\&.mkv}] | [Voreinstellungsdatei\&.mmg] | [Quelldatei\&.ext]]
+.SH "BESCHREIBUNG"
+.PP
+\fBmmg\fR(1)
+ist eine auf
+wxWindows(TM)
+basierende
+GUI
+f\(:ur
+\fBmkvmerge\fR(1)\&. Es bietet einfachen Zugriff auf alle Optionen von
+\fBmkvmerge\fR(1)\&. Alle Einstellungen (z\&.B\&. Quelldateien, Spuroptionen etc\&.) k\(:onnen gespeichert und wiederhergestellt werden\&. Enthalten ist ein Kapiteleditor, der Dateien im
+OGM\- und
+XML\-Stil lesen, Kapitel im
+XML\-Stil schreiben und sogar Kapitel aus
+Matroska(TM)\-Dateien lesen und direkt in
+Matroska(TM)\-Dateien schreiben kann\&. Ebenfalls enthalten ist ein Kopfdateneditor, der zum schnellen \(:Andern von Eigenschaften existierender
+Matroska(TM)\-Dateien benutzt werden kann, ohne dass ein komplett neues Muxing erforderlich ist\&.
+.PP
+\fBmmg\fR(1)
+kennt wenige Optionen\&. Die erste M\(:oglichkeit besteht darin, mit einem einzelnen Dateinamen zu starten\&. Falls die Dateinamenserweiterung \(Fc\&.mmg\(Fo ist, wird sie als eine Voreinstellungsdatei behandelt und
+\fBmmg\fR(1)
+wird ihre Einstellungen beim Start laden\&. Andernfalls wird der Name als Name einer Eingabedatei interpretiert, die hinzugef\(:ugt wird\&.
+.PP
+Der zweite Betriebsmodus wird mit der Option
+\fB\-\-edit\-headers\fR
+und einem Dateinamen aufgerufen\&. Dies l\(:asst
+\fBmmg\fR(1)
+seinen Kopfdateneditor starten und die Datei laden\&.
+.PP
+Die vollst\(:andige Dokumentation ist in HTML\-Form verf\(:ugbar (doc/mkvmerge\-gui\&.html)\&.
+.SH "SIEHE AUCH"
+.PP
+\fBmkvmerge\fR(1),
+\fBmkvextract\fR(1),
+\fBmkvinfo\fR(1),
+\fBmkvpropedit\fR(1)
+.SH "WWW"
+.PP
+Die neuste Version kann immer auf
+\m[blue]\fBder MKVToolNix\-Homepage\fR\m[]\&\s-2\u[1]\d\s+2
+gefunden werden\&.
+.SH "AUTOR"
+.PP
+\fBMoritz Bunkus\fR <\&moritz@bunkus\&.org\&>
+.RS 4
+Entwickler
+.RE
+.SH "FU\(ssNOTEN"
+.IP " 1." 4
+der MKVToolNix-Homepage
+.RS 4
+\%http://www.bunkus.org/videotools/mkvtoolnix/
+.RE

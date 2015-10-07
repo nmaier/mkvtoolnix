@@ -14,6 +14,7 @@
 
 #include "common/common_pch.h"
 
+#include "common/codec.h"
 #include "common/dts.h"
 #include "common/error.h"
 #include "input/r_dts.h"
@@ -23,7 +24,8 @@
 
 int
 dts_reader_c::probe_file(mm_io_c *in,
-                         uint64_t size) {
+                         uint64_t size,
+                         bool strict_mode) {
   if (size < READ_SIZE)
     return 0;
 
@@ -36,7 +38,11 @@ dts_reader_c::probe_file(mm_io_c *in,
       return 0;
     in->setFilePointer(0, seek_beginning);
 
-    if (detect_dts(buf, READ_SIZE, dts14_to_16, swap_bytes))
+    if (!strict_mode && detect_dts(buf, READ_SIZE, dts14_to_16, swap_bytes))
+      return 1;
+
+    int pos = find_consecutive_dts_headers(buf, READ_SIZE, 5);
+    if ((!strict_mode && (0 <= pos)) || (strict_mode && (0 == pos)))
       return 1;
 
   } catch (...) {
@@ -52,7 +58,7 @@ dts_reader_c::dts_reader_c(const track_info_c &ti,
   , m_cur_buf(0)
   , m_dts14_to_16(false)
   , m_swap_bytes(false)
-  , m_debug(debugging_requested("dts") || debugging_requested("dts_reader"))
+  , m_debug{"dts|dts_reader"}
 {
   m_buf[0] = reinterpret_cast<unsigned short *>(m_af_buf->get_buffer());
   m_buf[1] = reinterpret_cast<unsigned short *>(m_af_buf->get_buffer() + READ_SIZE);
@@ -136,5 +142,5 @@ dts_reader_c::read(generic_packetizer_c *,
 void
 dts_reader_c::identify() {
   id_result_container();
-  id_result_track(0, ID_RESULT_TRACK_AUDIO, "DTS");
+  id_result_track(0, ID_RESULT_TRACK_AUDIO, codec_c::get_name(CT_A_DTS, "DTS"));
 }

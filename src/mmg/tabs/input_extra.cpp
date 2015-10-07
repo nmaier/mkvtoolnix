@@ -11,9 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
-
-#include <wx/wxprec.h>
+#include "common/common_pch.h"
 
 #include <wx/wx.h>
 #include <wx/dnd.h>
@@ -23,10 +21,8 @@
 #include <wx/regex.h>
 #include <wx/statline.h>
 
-#include "common/common_pch.h"
 #include "common/extern_data.h"
 #include "common/iso639.h"
-#include "merge/mkvmerge.h"
 #include "mmg/mmg.h"
 #include "mmg/mmg_dialog.h"
 #include "mmg/tabs/input.h"
@@ -51,7 +47,7 @@ tab_input_extra::tab_input_extra(wxWindow *parent,
   st_cues->Enable(false);
   siz_fg->Add(st_cues, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  cob_cues = new wxMTX_COMBOBOX_TYPE(this, ID_CB_CUES, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+  cob_cues = new wxMTX_COMBOBOX_TYPE(this, ID_CB_CUES, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_DROPDOWN | wxCB_READONLY);
   cob_cues->SetSizeHints(0, -1);
   siz_fg->Add(cob_cues, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
@@ -59,7 +55,7 @@ tab_input_extra::tab_input_extra(wxWindow *parent,
   st_compression->Enable(false);
   siz_fg->Add(st_compression, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  cob_compression = new wxMTX_COMBOBOX_TYPE(this, ID_CB_COMPRESSION, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+  cob_compression = new wxMTX_COMBOBOX_TYPE(this, ID_CB_COMPRESSION, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_DROPDOWN | wxCB_READONLY);
   cob_compression->SetSizeHints(0, -1);
   siz_fg->Add(cob_compression, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
@@ -76,7 +72,7 @@ tab_input_extra::tab_input_extra(wxWindow *parent,
 
   siz_all->AddSpacer(TOPBOTTOMSPACING);
 
-  SetSizer(siz_all);
+  SetSizerAndFit(siz_all);
 }
 
 void
@@ -87,14 +83,18 @@ tab_input_extra::setup_cues() {
   cob_cues_translations.add(wxT("for all frames"),    Z("for all frames"));
   cob_cues_translations.add(wxT("none"),              Z("none"));
 
-  size_t i;
-  if (0 == cob_cues->GetCount())
-    for (i = 0; cob_cues_translations.entries.size() > i; ++i)
-      cob_cues->Append(cob_cues_translations.entries[i].translated);
-  else {
-    size_t selection = cob_cues->GetSelection();
-    for (i = 0; cob_cues_translations.entries.size() > i; ++i)
-      cob_cues->SetString(i, cob_cues_translations.entries[i].translated);
+  if (!cob_cues->GetCount()) {
+    auto entries = wxArrayString{};
+    entries.Alloc(cob_cues_translations.entries.size());
+    for (auto const &entry : cob_cues_translations.entries)
+      entries.Add(entry.translated);
+    append_combobox_items(cob_cues, entries);
+
+  } else {
+    auto selection = cob_cues->GetSelection();
+    auto idx       = 0;
+    for (auto const &entry : cob_cues_translations.entries)
+      cob_cues->SetString(idx++, entry.translated);
     cob_cues->SetSelection(selection);
   }
 }
@@ -103,14 +103,14 @@ void
 tab_input_extra::setup_compression() {
   int selection = cob_compression->GetSelection();
 
+  auto entries  = wxArrayString{};
+  entries.Alloc(3);
+  entries.Add(wxEmptyString);
+  entries.Add(wxEmptyString);
+  entries.Add(wxT("zlib"));
+
   cob_compression->Clear();
-  cob_compression->Append(wxEmptyString);
-  cob_compression->Append(wxEmptyString);
-  cob_compression->Append(wxT("zlib"));
-  if (capabilities[wxT("BZ2")] == wxT("true"))
-    cob_compression->Append(wxT("bz2"));
-  if (capabilities[wxT("LZO")] == wxT("true"))
-    cob_compression->Append(wxT("lzo"));
+  append_combobox_items(cob_compression, entries);
 
   cob_compression_translations.clear();
   cob_compression_translations.add(wxT("none"), Z("none"));
@@ -140,8 +140,8 @@ tab_input_extra::translate_ui() {
 
 void
 tab_input_extra::set_track_mode(mmg_track_t *t) {
-  bool not_appending = (NULL != t) && !t->appending;
-  bool normal_track  = (NULL != t) && (('a' == t->type) || ('s' == t->type) || ('v' == t->type));
+  bool not_appending = t && !t->appending;
+  bool normal_track  = t && (('a' == t->type) || ('s' == t->type) || ('v' == t->type));
   wxString ctype     = t ? t->ctype.Lower() : wxT("");
 
   st_cues->Enable(not_appending && normal_track);
@@ -151,7 +151,7 @@ tab_input_extra::set_track_mode(mmg_track_t *t) {
   st_user_defined->Enable(normal_track);
   tc_user_defined->Enable(normal_track);
 
-  if (NULL != t)
+  if (t)
     return;
 
   bool saved_dcvn             = input->dont_copy_values_now;

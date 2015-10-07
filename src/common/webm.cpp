@@ -15,9 +15,6 @@
 
 #include "common/webm.h"
 
-#include <boost/regex.hpp>
-#include <string>
-
 bool
 is_webm_file_name(const std::string &file_name) {
   static boost::regex s_webm_file_name_re("\\.webm(?:a|v)?$", boost::regex::perl);

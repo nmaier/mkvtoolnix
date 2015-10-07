@@ -11,13 +11,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MKVINFO_H
-#define __MKVINFO_H
+#ifndef MTX_MKVINFO_H
+#define MTX_MKVINFO_H
 
-#include "common/os.h"
-
-#include <string>
-#include <vector>
+#include "common/common_pch.h"
 
 #include "info/options.h"
 
@@ -27,7 +24,7 @@ extern options_c g_options;
 
 int console_main();
 bool process_file(const std::string &file_name);
-void setup(const std::string &locale = "");
+void setup(char const *argv0, const std::string &locale = "");
 void cleanup();
 
 std::string create_element_text(const std::string &text, int64_t position, int64_t size);
@@ -40,4 +37,4 @@ bool ui_graphical_available();
 void console_show_error(const std::string &text);
 void console_show_element(int level, const std::string &text, int64_t position, int64_t size);
 
-#endif // __MKVINFO_H
+#endif // MTX_MKVINFO_H

@@ -39,7 +39,7 @@ MPEGFrame::MPEGFrame(binary *n_data, uint32_t n_size, bool n_bCopy):
   invisible      = false;
   firstRef       = -1;
   secondRef      = -1;
-  seqHdrData     = NULL;
+  seqHdrData     = nullptr;
   seqHdrDataSize = 0;
 }
 
@@ -124,10 +124,9 @@ M2VParser::M2VParser(){
   gopPts = 0;
   highestPts = 0;
   usePictureFrames = false;
-  seqHdrChunk = NULL;
-  gopChunk = NULL;
+  seqHdrChunk = nullptr;
+  gopChunk = nullptr;
   keepSeqHdrsInBitstream = true;
-  bFrameMissingReferenceWarning = false;
 }
 
 int32_t M2VParser::InitParser(){
@@ -159,9 +158,6 @@ int32_t M2VParser::InitParser(){
 
 M2VParser::~M2VParser(){
   DumpQueues();
-  if (!probing && !waitQueue.empty()) {
-    mxwarn(Y("Video ended with a shortened group of pictures. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"));
-  }
   FlushWaitQueue();
   delete seqHdrChunk;
   delete gopChunk;
@@ -311,13 +307,13 @@ int32_t M2VParser::PrepareFrame(MPEGChunk* chunk, MediaTime timecode, MPEG2Pictu
       memcpy(pData, seqHdrChunk->GetPointer(), seqHdrChunk->GetSize());
       pos += seqHdrChunk->GetSize();
       delete seqHdrChunk;
-      seqHdrChunk = NULL;
+      seqHdrChunk = nullptr;
     }
     if (gopChunk) {
       memcpy(pData + pos, gopChunk->GetPointer(), gopChunk->GetSize());
       pos += gopChunk->GetSize();
       delete gopChunk;
-      gopChunk = NULL;
+      gopChunk = nullptr;
     }
     memcpy(pData + pos, chunk->GetPointer(), chunk->GetSize());
   }
@@ -331,7 +327,7 @@ int32_t M2VParser::PrepareFrame(MPEGChunk* chunk, MediaTime timecode, MPEG2Pictu
     memcpy(outBuf->seqHdrData, seqHdrChunk->GetPointer(),
            outBuf->seqHdrDataSize);
     delete seqHdrChunk;
-    seqHdrChunk = NULL;
+    seqHdrChunk = nullptr;
   }
 
   if(picHdr.frameType == MPEG2_I_FRAME){
@@ -395,13 +391,6 @@ int32_t M2VParser::FillQueues(){
         if(waitSecondField){
           mxerror(Y("Single field frame before GOP header detected. Fix the MPEG2 video stream before attempting to multiplex it.\n"));
         }
-        if(!waitQueue.empty()){
-          mxwarn(Y("Shortened GOP detected. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"));
-          FlushWaitQueue();
-        }
-        if(m_gopHdr.brokenLink){
-          mxinfo(Y("Found group of picture with broken link. You may want use smart reencode before attempting to multiplex it.\n"));
-        }
         // There are too many broken videos to do the following so ReferenceBlock will be wrong for broken videos.
         /*
         if(m_gopHdr.closedGOP){
@@ -444,14 +433,8 @@ int32_t M2VParser::FillQueues(){
         break;
       default: //B-frames
         if(firstRef == -1 || secondRef == -1){
-          if(!m_gopHdr.closedGOP && !m_gopHdr.brokenLink){
-            if(gopNum > 0){
-              mxerror(Y("Found B frame without second reference in a non closed GOP. Fix the MPEG2 video stream before attempting to multiplex it.\n"));
-            } else if (!probing && !bFrameMissingReferenceWarning){
-              mxwarn(Y("Found one or more B frames without second reference in the first GOP. You may want to fix the MPEG2 video stream or use smart reencode before attempting to multiplex it.\n"));
-              bFrameMissingReferenceWarning = true;
-            }
-          }
+          if(!m_gopHdr.closedGOP && !m_gopHdr.brokenLink && (0 < gopNum))
+            mxerror(Y("Found B frame without second reference in a non closed GOP. Fix the MPEG2 video stream before attempting to multiplex it.\n"));
           invisible = true;
         }
         PrepareFrame(chunk, myTime, picHdr);
@@ -466,12 +449,12 @@ int32_t M2VParser::FillQueues(){
 }
 
 MPEGFrame* M2VParser::ReadFrame(){
-  //if(m_eos) return NULL;
+  //if(m_eos) return nullptr;
   if(GetState() != MPV_PARSER_STATE_FRAME){
-    return NULL;
+    return nullptr;
   }
   if(buffers.empty()){
-    return NULL; // OOPS!
+    return nullptr; // OOPS!
   }
   MPEGFrame* frame = buffers.front();
   buffers.pop();

@@ -27,7 +27,9 @@
 #include "common/chapters/chapters.h"
 #include "common/ebml.h"
 #include "common/mm_io.h"
+#include "common/mm_io_x.h"
 #include "common/kax_analyzer.h"
+#include "common/xml/ebml_chapters_converter.h"
 #include "extract/mkvextract.h"
 
 using namespace libmatroska;
@@ -41,34 +43,25 @@ extract_chapters(const std::string &file_name,
   // open input file
   try {
     analyzer = kax_analyzer_cptr(new kax_analyzer_c(file_name));
-    if (!analyzer->process(parse_mode, MODE_READ))
+    if (!analyzer->process(parse_mode, MODE_READ, true))
       throw false;
-  } catch (...) {
-    show_error(boost::format(Y("The file '%1%' could not be opened for reading (%2%).")) % file_name % strerror(errno));
+  } catch (mtx::mm_io::exception &ex) {
+    show_error(boost::format(Y("The file '%1%' could not be opened for reading: %2%.\n")) % file_name % ex);
     return;
   }
 
-  EbmlMaster *master = analyzer->read_all(EBML_INFO(KaxChapters));
-  if (NULL == master)
+  ebml_master_cptr master = analyzer->read_all(EBML_INFO(KaxChapters));
+  if (!master)
     return;
 
-  KaxChapters *chapters = dynamic_cast<KaxChapters *>(master);
-  assert(NULL != chapters);
+  KaxChapters *chapters = dynamic_cast<KaxChapters *>(master.get());
+  assert(chapters);
 
-  if (!chapter_format_simple) {
-    g_mm_stdio->write_bom("UTF-8");
-    g_mm_stdio->puts("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-                     "\n"
-                     "<!-- <!DOCTYPE Tags SYSTEM \"matroskatags.dtd\"> -->\n"
-                     "\n"
-                     "<Chapters>\n");
-    write_chapters_xml(chapters, g_mm_stdio.get_object());
-    g_mm_stdio->puts("</Chapters>\n");
+  if (!chapter_format_simple)
+    mtx::xml::ebml_chapters_converter_c::write_xml(*chapters, *g_mm_stdio);
 
-  } else {
+  else {
     int dummy = 1;
-    write_chapters_simple(dummy, chapters, g_mm_stdio.get_object());
+    write_chapters_simple(dummy, chapters, g_mm_stdio.get());
   }
-
-  delete chapters;
 }

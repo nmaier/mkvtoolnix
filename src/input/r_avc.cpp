@@ -13,16 +13,8 @@
 
 #include "common/common_pch.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
-
-#include <algorithm>
-#include <deque>
-#include <list>
-
 #include "common/byte_buffer.h"
+#include "common/codec.h"
 #include "common/error.h"
 #include "common/memory.h"
 #include "input/r_avc.h"
@@ -35,6 +27,8 @@
 #define MAX_PROBE_BUFFERS 50
 
 using namespace mpeg4::p10;
+
+debugging_option_c avc_es_reader_c::ms_debug{"avc_reader"};
 
 int
 avc_es_reader_c::probe_file(mm_io_c *in,
@@ -50,7 +44,6 @@ avc_es_reader_c::probe_file(mm_io_c *in,
     avc_es_parser_c parser;
     parser.ignore_nalu_size_length_errors();
     parser.set_nalu_size_length(4);
-    parser.enable_timecode_generation(40000000);
 
     in->setFilePointer(0, seek_beginning);
     for (i = 0; MAX_PROBE_BUFFERS > i; ++i) {
@@ -70,10 +63,10 @@ avc_es_reader_c::probe_file(mm_io_c *in,
     }
 
   } catch (mtx::exception &e) {
-    mxinfo(boost::format(Y("Error %1%\n")) % e.error());
+    mxdebug_if(ms_debug, (boost::format(Y("Error %1%\n")) % e.error()));
 
   } catch (...) {
-    mxinfo(Y("have an xcptn\n"));
+    mxdebug_if(ms_debug, Y("have an xcptn\n"));
   }
 
   return 0;
@@ -91,12 +84,6 @@ avc_es_reader_c::read_headers() {
   try {
     avc_es_parser_c parser;
     parser.ignore_nalu_size_length_errors();
-    parser.enable_timecode_generation(40000000);
-
-    if (map_has_key(m_ti.m_nalu_size_lengths, 0))
-      parser.set_nalu_size_length(m_ti.m_nalu_size_lengths[0]);
-    else if (map_has_key(m_ti.m_nalu_size_lengths, -1))
-      parser.set_nalu_size_length(m_ti.m_nalu_size_lengths[-1]);
 
     int num_read, i;
 
@@ -112,7 +99,6 @@ avc_es_reader_c::read_headers() {
     if (parser.headers_parsed())
       parser.flush();
 
-    m_avcc   = parser.get_avcc();
     m_width  = parser.get_width();
     m_height = parser.get_height();
 
@@ -130,7 +116,8 @@ avc_es_reader_c::create_packetizer(int64_t) {
   if (!demuxing_requested('v', 0) || (NPTZR() != 0))
     return;
 
-  add_packetizer(new mpeg4_p10_es_video_packetizer_c(this, m_ti, m_avcc, m_width, m_height));
+  add_packetizer(new mpeg4_p10_es_video_packetizer_c(this, m_ti));
+  PTZR0->set_video_pixel_dimensions(m_width, m_height);
 
   show_packetizer_info(0, PTZR0);
 }
@@ -151,6 +138,5 @@ avc_es_reader_c::read(generic_packetizer_c *,
 void
 avc_es_reader_c::identify() {
   id_result_container();
-  id_result_track(0, ID_RESULT_TRACK_VIDEO, "MPEG-4 part 10 ES", "packetizer:mpeg4_p10_es_video");
+  id_result_track(0, ID_RESULT_TRACK_VIDEO, codec_c::get_name(CT_V_MPEG4_P10, "MPEG-4 part 10 ES"), "packetizer:mpeg4_p10_es_video");
 }
-

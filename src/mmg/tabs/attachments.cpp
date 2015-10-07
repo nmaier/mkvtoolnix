@@ -11,14 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-// This order is required. wx/wxprec.h includes wx's winundef.h which
-// cannot be included after windows.h has been included. But
-// mkvtoolnix' common.h includes windows.h.
-#undef __STRICT_ANSI__
-
-#include <wx/wxprec.h>
-
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include <wx/wx.h>
 #include <wx/dnd.h>
@@ -80,16 +73,18 @@ tab_attachments::tab_attachments(wxWindow *parent):
   tc_description->SetSizeHints(0, -1);
 
   st_mimetype    = new wxStaticText(this, wxID_STATIC, wxEmptyString);
-  cob_mimetype   = new wxMTX_COMBOBOX_TYPE(this, ID_CB_MIMETYPE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
-  cob_mimetype->Append(wxEmptyString);
-  int i;
-  for (i = 0; mime_types[i].name != NULL; i++)
-    cob_mimetype->Append(wxU(mime_types[i].name));
+  cob_mimetype   = new wxMTX_COMBOBOX_TYPE(this, ID_CB_MIMETYPE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_DROPDOWN);
+  auto entries   = wxArrayString{};
+  entries.Alloc(mime_types.size() + 1);
+  entries.Add(wxEmptyString);
+  for (auto &mime_type : mime_types)
+    entries.Add(wxU(mime_type.name));
+  append_combobox_items(cob_mimetype, entries);
   cob_mimetype->SetSizeHints(0, -1);
 
   st_style  = new wxStaticText(this, wxID_STATIC, wxEmptyString);
 
-  cob_style = new wxMTX_COMBOBOX_TYPE(this, ID_CB_ATTACHMENTSTYLE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY | wxCB_DROPDOWN);
+  cob_style = new wxMTX_COMBOBOX_TYPE(this, ID_CB_ATTACHMENTSTYLE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY | wxCB_DROPDOWN);
   cob_style->Append(wxEmptyString);
   cob_style->Append(wxEmptyString);
   cob_style->SetSizeHints(0, -1);
@@ -142,7 +137,7 @@ tab_attachments::tab_attachments(wxWindow *parent):
   siz_all->Add(siz_box_attached_files, 1, wxALL | wxGROW, 5);
   siz_all->Add(siz_box_attachments,    1, wxALL | wxGROW, 5);
 
-  SetSizer(siz_all);
+  SetSizerAndFit(siz_all);
 
   enable(false);
   selected_attachment = -1;
@@ -195,7 +190,7 @@ tab_attachments::enable_attached_files_buttons() {
 
 void
 tab_attachments::on_add_attachment(wxCommandEvent &) {
-  wxFileDialog dlg(NULL, Z("Choose an attachment file"), last_open_dir, wxEmptyString, ALLFILES, wxFD_OPEN | wxFD_MULTIPLE);
+  wxFileDialog dlg(nullptr, Z("Choose an attachment file"), last_open_dir, wxEmptyString, ALLFILES, wxFD_OPEN | wxFD_MULTIPLE);
 
   if(dlg.ShowModal() == wxID_OK) {
     wxArrayString selected_files;
@@ -414,7 +409,7 @@ void
 tab_attachments::remove_attached_files_for(mmg_file_cptr &f) {
   int i;
   for (i = m_attached_files.size() - 1; 0 <= i; --i) {
-    if (m_attached_files[i]->source == f.get_object()) {
+    if (m_attached_files[i]->source == f.get()) {
       clb_attached_files->Delete(i);
       m_attached_files.erase(m_attached_files.begin() + i);
     }

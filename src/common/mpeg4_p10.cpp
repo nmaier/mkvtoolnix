@@ -19,6 +19,8 @@
 
 #include "common/common_pch.h"
 
+#include <unordered_map>
+
 #include "common/bit_cursor.h"
 #include "common/byte_buffer.h"
 #include "common/checksums.h"
@@ -30,45 +32,211 @@
 #include "common/strings/formatting.h"
 
 namespace mpeg4 {
-  namespace p10 {
-    struct poc_t {
-      int poc, dec;
-      int64_t timecode, duration;
+namespace p10 {
 
-      poc_t(int p, int d):
-        poc(p), dec(d), timecode(0), duration(0) {
-      };
-    };
+static auto s_debug_fix_bistream_timing_info = debugging_option_c{"fix_bitstream_timing_info"};
+static auto s_debug_remove_bistream_ar_info  = debugging_option_c{"remove_bitstream_ar_info"};
 
-    static bool compare_poc_by_poc(const poc_t &poc1, const poc_t &poc2);
-    static bool compare_poc_by_dec(const poc_t &poc1, const poc_t &poc2);
+avcc_c::avcc_c()
+  : m_profile_idc{}
+  , m_profile_compat{}
+  , m_level_idc{}
+  , m_nalu_size_length{}
+{
+}
 
-    static const struct {
-      int numerator, denominator;
-    } s_predefined_pars[AVC_NUM_PREDEFINED_PARS] = {
-      {   0,  0 },
-      {   1,  1 },
-      {  12, 11 },
-      {  10, 11 },
-      {  16, 11 },
-      {  40, 33 },
-      {  24, 11 },
-      {  20, 11 },
-      {  32, 11 },
-      {  80, 33 },
-      {  18, 11 },
-      {  15, 11 },
-      {  64, 33 },
-      { 160, 99 },
-      {   4,  3 },
-      {   3,  2 },
-      {   2,  1 },
-    };
+avcc_c::avcc_c(unsigned int nalu_size_length,
+               std::vector<memory_cptr> const &sps_list,
+               std::vector<memory_cptr> const &pps_list)
+  : m_profile_idc{}
+  , m_profile_compat{}
+  , m_level_idc{}
+  , m_nalu_size_length{nalu_size_length}
+  , m_sps_list{sps_list}
+  , m_pps_list{pps_list}
+{
+}
+
+avcc_c::operator bool()
+  const {
+  return m_nalu_size_length
+      && !m_sps_list.empty()
+      && !m_pps_list.empty()
+      && (m_sps_info_list.empty() || (m_sps_info_list.size() == m_sps_list.size()))
+      && (m_pps_info_list.empty() || (m_pps_info_list.size() == m_pps_list.size()));
+}
+
+bool
+avcc_c::parse_sps_list(bool ignore_errors) {
+  if (m_sps_info_list.size() == m_sps_list.size())
+    return true;
+
+  m_sps_info_list.clear();
+  for (auto &sps: m_sps_list) {
+    sps_info_t sps_info;
+    auto sps_as_rbsp = sps->clone();
+    nalu_to_rbsp(sps_as_rbsp);
+
+    if (ignore_errors) {
+      try {
+        parse_sps(sps_as_rbsp, sps_info);
+      } catch (mtx::mm_io::end_of_file_x &) {
+      }
+    } else if (!parse_sps(sps_as_rbsp, sps_info))
+      return false;
+
+    m_sps_info_list.push_back(sps_info);
+  }
+
+  return true;
+}
+
+bool
+avcc_c::parse_pps_list(bool ignore_errors) {
+  if (m_pps_info_list.size() == m_pps_list.size())
+    return true;
+
+  m_pps_info_list.clear();
+  for (auto &pps: m_pps_list) {
+    pps_info_t pps_info;
+    auto pps_as_rbsp = pps->clone();
+    nalu_to_rbsp(pps_as_rbsp);
+
+    if (ignore_errors) {
+      try {
+        parse_pps(pps_as_rbsp, pps_info);
+      } catch (mtx::mm_io::end_of_file_x &) {
+      }
+    } else if (!parse_pps(pps_as_rbsp, pps_info))
+      return false;
+
+    m_pps_info_list.push_back(pps_info);
+  }
+
+  return true;
+}
+
+memory_cptr
+avcc_c::pack() {
+  parse_sps_list(true);
+  if (!*this)
+    return memory_cptr{};
+
+  unsigned int total_size = 6 + 1;
+
+  for (auto &mem : m_sps_list)
+    total_size += mem->get_size() + 2;
+  for (auto &mem : m_pps_list)
+    total_size += mem->get_size() + 2;
+
+  if (m_trailer)
+    total_size += m_trailer->get_size();
+
+  auto destination = memory_c::alloc(total_size);
+  auto buffer      = destination->get_buffer();
+  auto &sps        = *m_sps_info_list.begin();
+  auto write_list  = [&buffer](std::vector<memory_cptr> const &list, uint8_t num_byte_bits) {
+    *buffer = list.size() | num_byte_bits;
+    ++buffer;
+
+    for (auto &mem : list) {
+      auto size = mem->get_size();
+      put_uint16_be(buffer, size);
+      memcpy(buffer + 2, mem->get_buffer(), size);
+      buffer += 2 + size;
+    }
   };
+
+  buffer[0] = 1;
+  buffer[1] = m_profile_idc    ? m_profile_idc    : sps.profile_idc;
+  buffer[2] = m_profile_compat ? m_profile_compat : sps.profile_compat;
+  buffer[3] = m_level_idc      ? m_level_idc      : sps.level_idc;
+  buffer[4] = 0xfc | (m_nalu_size_length - 1);
+  buffer   += 5;
+
+  write_list(m_sps_list, 0xe0);
+  write_list(m_pps_list, 0x00);
+
+  if (m_trailer)
+    memcpy(buffer, m_trailer->get_buffer(), m_trailer->get_size());
+
+  return destination;
+}
+
+avcc_c
+avcc_c::unpack(memory_cptr const &mem) {
+  avcc_c avcc;
+
+  if (!mem || (6 > mem->get_size()))
+    return avcc;
+
+  try {
+    mm_mem_io_c in{*mem};
+
+    auto read_list = [&in](std::vector<memory_cptr> &list, unsigned int num_entries_mask) {
+      auto num_entries = in.read_uint8() & num_entries_mask;
+      while (num_entries) {
+        auto size = in.read_uint16_be();
+        list.push_back(in.read(size));
+        --num_entries;
+      }
+    };
+
+    in.skip(1);                 // always 1
+    avcc.m_profile_idc      = in.read_uint8();
+    avcc.m_profile_compat   = in.read_uint8();
+    avcc.m_level_idc        = in.read_uint8();
+    avcc.m_nalu_size_length = (in.read_uint8() & 0x03) + 1;
+
+    read_list(avcc.m_sps_list, 0x0f);
+    read_list(avcc.m_pps_list, 0xff);
+
+    if (in.getFilePointer() < static_cast<uint64_t>(in.get_size()))
+      avcc.m_trailer = in.read(in.get_size() - in.getFilePointer());
+
+    return avcc;
+
+  } catch (mtx::mm_io::exception &) {
+    return avcc_c{};
+  }
+}
+
+
+
+
+static const struct {
+  int numerator, denominator;
+} s_predefined_pars[AVC_NUM_PREDEFINED_PARS] = {
+  {   0,  0 },
+  {   1,  1 },
+  {  12, 11 },
+  {  10, 11 },
+  {  16, 11 },
+  {  40, 33 },
+  {  24, 11 },
+  {  20, 11 },
+  {  32, 11 },
+  {  80, 33 },
+  {  18, 11 },
+  {  15, 11 },
+  {  64, 33 },
+  { 160, 99 },
+  {   4,  3 },
+  {   3,  2 },
+  {   2,  1 },
+};
+
+bool
+par_extraction_t::is_valid()
+  const {
+  return successful && numerator && denominator;
+}
+
+};
 };
 
 static int
-gecopy(bit_cursor_c &r,
+gecopy(bit_reader_c &r,
        bit_writer_c &w) {
   int	n = 0, bit;
 
@@ -85,7 +253,7 @@ gecopy(bit_cursor_c &r,
 }
 
 static int
-geread(bit_cursor_c &r) {
+geread(bit_reader_c &r) {
   int	n = 0, bit;
 
   while ((bit = r.get_bit()) == 0)
@@ -97,20 +265,20 @@ geread(bit_cursor_c &r) {
 }
 
 static int
-sgeread(bit_cursor_c &r) {
+sgeread(bit_reader_c &r) {
   int v = geread(r);
   return v & 1 ? (v + 1) / 2 : -(v / 2);
 }
 
 static int
-sgecopy(bit_cursor_c &r,
+sgecopy(bit_reader_c &r,
         bit_writer_c &w) {
   int v = gecopy(r, w);
   return v & 1 ? (v + 1) / 2 : -(v / 2);
 }
 
 static void
-hrdcopy(bit_cursor_c &r,
+hrdcopy(bit_reader_c &r,
         bit_writer_c &w) {
   int ncpb = gecopy(r,w);       // cpb_cnt_minus1
   w.copy_bits(4, r);            // bit_rate_scale
@@ -127,7 +295,7 @@ hrdcopy(bit_cursor_c &r,
 }
 
 static void
-slcopy(bit_cursor_c &r,
+slcopy(bit_reader_c &r,
        bit_writer_c &w,
        int size) {
   int delta, next = 8, j;
@@ -136,6 +304,55 @@ slcopy(bit_cursor_c &r,
     delta = sgecopy(r, w);
     next  = (next + delta + 256) % 256;
   }
+}
+
+struct common_default_duration_t {
+  int64_t duration;
+  int num_units_in_tick, time_scale;
+};
+
+std::vector<common_default_duration_t> s_common_default_durations{
+  { 1000000000ll / 120,             1,    120 }, // 120 fps
+  { 1000000000ll / 100,             1,    100 }, // 100 fps
+  { 1000000000ll /  50,             1,     50 }, //  50 fps
+  { 1000000000ll /  48,             1,     48 }, //  48 fps
+  { 1000000000ll /  24,             1,     24 }, //  24 fps
+  { 1000000000ll /  25,             1,     25 }, //  25 fps
+  { 1000000000ll /  60,             1,     60 }, //  60 fps
+  { 1000000000ll /  30,             1,     30 }, //  30 fps
+  { 1000000000ll * 1001 / 48000, 1001,  48000 }, //  47.952 fps
+  { 1000000000ll * 1001 / 24000, 1001,  24000 }, //  23.976 fps
+  { 1000000000ll * 1001 / 50000, 1001,  50000 }, //  24.975 frames per second telecined PAL
+  { 1000000000ll * 1001 / 60000, 1001,  60000 }, //  59.94 fps
+  { 1000000000ll * 1001 / 30000, 1001,  30000 }, //  29.97 fps
+};
+
+static std::pair<int, int>
+find_timing_info(int64_t duration) {
+  // search in the common FPS list
+  typedef std::pair<int64_t, common_default_duration_t> common_default_duration_diff_t;
+  auto potentials = std::vector<common_default_duration_diff_t>{};
+
+  for (auto const &common_default_duration : s_common_default_durations) {
+    auto difference = std::abs(duration - common_default_duration.duration);
+    if (difference < 20000)
+      potentials.emplace_back(difference, common_default_duration);
+  }
+
+  if (potentials.empty())
+    return std::make_pair((duration * 0x80000000) / 1000000000ll, 0x80000000);
+
+  brng::sort(potentials, [](common_default_duration_diff_t const &a, common_default_duration_diff_t const &b) {
+      return a.first < b.first;
+    });
+
+  return std::make_pair(potentials[0].second.num_units_in_tick, potentials[0].second.time_scale);
+}
+
+int64_t
+mpeg4::p10::timing_info_t::default_duration()
+  const {
+  return 1000000000ll * num_units_in_tick / time_scale;
 }
 
 void
@@ -184,10 +401,10 @@ mpeg4::p10::sps_info_t::dump() {
          % ar_found
          % par_num
          % par_den
-         % timing_info_present
-         % num_units_in_tick
-         % time_scale
-         % fixed_frame_rate
+         % timing_info.is_present
+         % timing_info.num_units_in_tick
+         % timing_info.time_scale
+         % timing_info.fixed_frame_rate
          % crop_left
          % crop_top
          % crop_right
@@ -195,6 +412,14 @@ mpeg4::p10::sps_info_t::dump() {
          % width
          % height
          % checksum);
+}
+
+bool
+mpeg4::p10::sps_info_t::timing_info_valid()
+  const {
+  return timing_info.is_present
+      && (0 != timing_info.num_units_in_tick)
+      && (0 != timing_info.time_scale);
 }
 
 void
@@ -211,7 +436,8 @@ mpeg4::p10::pps_info_t::dump() {
 }
 
 void
-mpeg4::p10::slice_info_t::dump() {
+mpeg4::p10::slice_info_t::dump()
+  const {
   mxinfo(boost::format("slice_info dump:\n"
                        "  nalu_type:                  %1%\n"
                        "  nal_ref_idc:                %2%\n"
@@ -246,7 +472,7 @@ mpeg4::p10::slice_info_t::dump() {
 void
 mpeg4::p10::nalu_to_rbsp(memory_cptr &buffer) {
   int pos, size = buffer->get_size();
-  mm_mem_io_c d(NULL, size, 100);
+  mm_mem_io_c d(nullptr, size, 100);
   unsigned char *b = buffer->get_buffer();
 
   for (pos = 0; pos < size; ++pos) {
@@ -268,7 +494,7 @@ mpeg4::p10::nalu_to_rbsp(memory_cptr &buffer) {
 void
 mpeg4::p10::rbsp_to_nalu(memory_cptr &buffer) {
   int pos, size = buffer->get_size();
-  mm_mem_io_c d(NULL, size, 100);
+  mm_mem_io_c d(nullptr, size, 100);
   unsigned char *b = buffer->get_buffer();
 
   for (pos = 0; pos < size; ++pos) {
@@ -291,12 +517,19 @@ mpeg4::p10::rbsp_to_nalu(memory_cptr &buffer) {
 bool
 mpeg4::p10::parse_sps(memory_cptr &buffer,
                       sps_info_t &sps,
-                      bool keep_ar_info) {
+                      bool keep_ar_info,
+                      bool fix_bitstream_frame_rate,
+                      int64_t duration) {
+  static auto s_high_level_profile_ids = std::unordered_map<unsigned int, bool>{
+    {  44, true }, {  83, true }, {  86, true }, { 100, true }, { 110, true }, { 118, true }, { 122, true }, { 128, true }, { 244, true }
+  };
+
+  int const add_space   = 100;
   int size              = buffer->get_size();
-  unsigned char *newsps = (unsigned char *)safemalloc(size + 100);
-  memory_cptr mcptr_newsps(new memory_c(newsps, size, true));
-  bit_cursor_c r(buffer->get_buffer(), size);
-  bit_writer_c w(newsps, size);
+  auto mcptr_newsps     = memory_c::alloc(size + add_space);
+  auto newsps           = mcptr_newsps->get_buffer();
+  bit_reader_c r(buffer->get_buffer(), size);
+  bit_writer_c w(newsps, size + add_space);
   int i, nref, mb_width, mb_height;
 
   keep_ar_info = !hack_engaged(ENGAGE_REMOVE_BITSTREAM_AR_INFO);
@@ -307,6 +540,19 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
   sps.par_den  = 1;
   sps.ar_found = false;
 
+  int num_units_in_tick = 0, time_scale = 0;
+
+  if (-1 == duration)
+    fix_bitstream_frame_rate = false;
+
+  else {
+    auto timing_info  = find_timing_info(duration);
+    num_units_in_tick = timing_info.first;
+    time_scale        = timing_info.second;
+  }
+
+  mxdebug_if(s_debug_fix_bistream_timing_info, boost::format("fix_bitstream_timing_info: duration %1%: units/tick: %2% time_scale: %3%\n") % duration % num_units_in_tick % time_scale);
+
   w.copy_bits(3, r);            // forbidden_zero_bit, nal_ref_idc
   if (w.copy_bits(5, r) != 7)   // nal_unit_type
     return false;
@@ -314,9 +560,9 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
   sps.profile_compat = w.copy_bits(8, r); // constraints
   sps.level_idc      = w.copy_bits(8, r); // level_idc
   sps.id             = gecopy(r, w);      // sps id
-  if (sps.profile_idc >= 100) {           // high profile
-    if (gecopy(r, w) == 3)                // chroma_format_idc
-      w.copy_bits(1, r);                  // residue_transform_flag
+  if (s_high_level_profile_ids[sps.profile_idc]) {   // high profile
+    if ((sps.chroma_format_idc = gecopy(r, w)) == 3) // chroma_format_idc
+      w.copy_bits(1, r);                  // separate_colour_plane_flag
     gecopy(r, w);                         // bit_depth_luma_minus8
     gecopy(r, w);                         // bit_depth_chroma_minus8
     w.copy_bits(1, r);                    // qpprime_y_zero_transform_bypass_flag
@@ -324,7 +570,9 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
       for (i = 0; i < 8; ++i)
         if (w.copy_bits(1, r) == 1)       // seq_scaling_list_present_flag
           slcopy(r, w, i < 6 ? 16 : 64);
-  }
+  } else
+    sps.chroma_format_idc = 1;            // 4:2:0 assumed
+
   sps.log2_max_frame_num = gecopy(r, w) + 4; // log2_max_frame_num_minus4
   sps.pic_order_cnt_type = gecopy(r, w);     // pic_order_cnt_type
   switch (sps.pic_order_cnt_type) {
@@ -363,19 +611,38 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
   sps.height = (2 - sps.frame_mbs_only) * mb_height * 16;
 
   w.copy_bits(1, r);            // direct_8x8_inference_flag
-  if (w.copy_bits(1, r) == 1) {
+  if (w.copy_bits(1, r) == 1) { // frame_cropping_flag
+    unsigned int crop_unit_x;
+    unsigned int crop_unit_y;
+    if (0 == sps.chroma_format_idc) { // monochrome
+      crop_unit_x = 1;
+      crop_unit_y = 2 - sps.frame_mbs_only;
+    } else if (1 == sps.chroma_format_idc) { // 4:2:0
+      crop_unit_x = 2;
+      crop_unit_y = 2 * (2 - sps.frame_mbs_only);
+    } else if (2 == sps.chroma_format_idc) { // 4:2:2
+      crop_unit_x = 2;
+      crop_unit_y = 2 - sps.frame_mbs_only;
+    } else { // 3 == sps.chroma_format_idc   // 4:4:4
+      crop_unit_x = 1;
+      crop_unit_y = 2 - sps.frame_mbs_only;
+    }
     sps.crop_left   = gecopy(r, w); // frame_crop_left_offset
     sps.crop_right  = gecopy(r, w); // frame_crop_right_offset
     sps.crop_top    = gecopy(r, w); // frame_crop_top_offset
     sps.crop_bottom = gecopy(r, w); // frame_crop_bottom_offset
 
-    sps.width   = 16 * mb_width - 2 * (sps.crop_left + sps.crop_right);
-    sps.height -= (2 - sps.frame_mbs_only) * 2 *
-      (sps.crop_top + sps.crop_bottom);
+    sps.width      -= crop_unit_x * (sps.crop_left + sps.crop_right);
+    sps.height     -= crop_unit_y * (sps.crop_top  + sps.crop_bottom);
   }
-  sps.vui_present = w.copy_bits(1, r);
-  if (sps.vui_present == 1) {
-    if (r.get_bit() == 1) {     // ar_info_present
+
+  sps.vui_present = r.get_bit();
+  mxdebug_if(s_debug_fix_bistream_timing_info || s_debug_remove_bistream_ar_info, boost::format("VUI present? %1%\n") % sps.vui_present);
+  if (sps.vui_present) {
+    w.put_bit(1);
+    bool ar_info_present = r.get_bit();
+    mxdebug_if(s_debug_remove_bistream_ar_info, boost::format("ar_info_present? %1%\n") % ar_info_present);
+    if (ar_info_present) {     // ar_info_present
       int ar_type = r.get_bits(8);
 
       if (keep_ar_info) {
@@ -402,6 +669,10 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
       } else
         sps.ar_found = false;
 
+      mxdebug_if(s_debug_remove_bistream_ar_info,
+                 boost::format("keep_ar_info %1% ar_type %2% par_num %3% par_den %4%\n")
+                 % keep_ar_info % ar_type % sps.par_num % sps.par_den);
+
     } else
       w.put_bit(0);             // ar_info_present
 
@@ -417,12 +688,38 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
       gecopy(r, w);               // chroma_sample_loc_type_top_field
       gecopy(r, w);               // chroma_sample_loc_type_bottom_field
     }
-    sps.timing_info_present = w.copy_bits(1, r);
-    if (sps.timing_info_present) {
-      sps.num_units_in_tick = w.copy_bits(32, r) * 2;
-      sps.time_scale        = w.copy_bits(32, r);
-      sps.fixed_frame_rate  = w.copy_bits(1, r);
+
+    sps.timing_info.is_present = r.get_bit();
+
+    if (sps.timing_info.is_present) {                    // Read original values.
+      sps.timing_info.num_units_in_tick = r.get_bits(32);
+      sps.timing_info.time_scale        = r.get_bits(32);
+      sps.timing_info.fixed_frame_rate  = r.get_bit();
     }
+
+    mxdebug_if(s_debug_fix_bistream_timing_info,
+               boost::format("timing info present? %1% #units %2% time_scale %3% fixed rate %4%\n")
+               % sps.timing_info.is_present % sps.timing_info.num_units_in_tick % sps.timing_info.time_scale % sps.timing_info.fixed_frame_rate);
+
+    if (fix_bitstream_frame_rate) {                      // write the new timing info
+      w.put_bit(1);                                      // timing_info_present
+      w.put_bits(32, num_units_in_tick);                 // num_units_in_tick
+      w.put_bits(32, time_scale);                        // time_scale
+      w.put_bit(1);                                      // fixed_frame_rate
+
+      sps.timing_info.is_present        = true;
+      sps.timing_info.num_units_in_tick = num_units_in_tick;
+      sps.timing_info.time_scale        = time_scale;
+      sps.timing_info.fixed_frame_rate  = true;
+
+    } else if (sps.timing_info.is_present) {             // copy the old timing info
+      w.put_bit(1);                                      // timing_info_present
+      w.put_bits(32, sps.timing_info.num_units_in_tick); // num_units_in_tick
+      w.put_bits(32, sps.timing_info.time_scale);        // time_scale
+      w.put_bit(sps.timing_info.fixed_frame_rate);       // fixed_frame_rate
+
+    } else
+      w.put_bit(0);                                      // timing_info_present
 
     bool f = false;
     if (w.copy_bits(1, r) == 1) { // nal_hrd_parameters_present
@@ -446,7 +743,32 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
       gecopy(r, w);               // num_reorder_frames
       gecopy(r, w);               // max_dec_frame_buffering
     }
-  }
+
+  } else if (fix_bitstream_frame_rate) { // vui_present == 0: build new video usability information
+    w.put_bit(1);                        // vui_present
+    w.put_bit(0);                        // aspect_ratio_info_present_flag
+    w.put_bit(0);                        // overscan_info_present_flag
+    w.put_bit(0);                        // video_signal_type_present_flag
+    w.put_bit(0);                        // chroma_loc_info_present_flag
+
+                                         // Timing info
+    w.put_bit(1);                        // timing_info_present
+    w.put_bits(32, num_units_in_tick);   // num_units_in_tick
+    w.put_bits(32, time_scale);          // time_scale
+    w.put_bit(1);                        // fixed_frame_rate
+
+    sps.timing_info.is_present        = true;
+    sps.timing_info.num_units_in_tick = num_units_in_tick;
+    sps.timing_info.time_scale        = time_scale;
+    sps.timing_info.fixed_frame_rate  = 1;
+
+    w.put_bit(0);                      // nal_hrd_parameters_present_flag
+    w.put_bit(0);                      // vcl_hrd_parameters_present_flag
+    w.put_bit(0);                      // pic_struct_present_flag
+    w.put_bit(0);                      // bitstream_restriction_flag
+
+  } else
+    w.put_bit(0);
 
   w.put_bit(1);
   w.byte_align();
@@ -463,7 +785,7 @@ bool
 mpeg4::p10::parse_pps(memory_cptr &buffer,
                       pps_info_t &pps) {
   try {
-    bit_cursor_c r(buffer->get_buffer(), buffer->get_size());
+    bit_reader_c r(buffer->get_buffer(), buffer->get_size());
 
     memset(&pps, 0, sizeof(pps));
 
@@ -485,40 +807,81 @@ mpeg4::p10::parse_pps(memory_cptr &buffer,
 
 /** Extract the pixel aspect ratio from the MPEG4 layer 10 (AVC) codec data
 
-   This function searches a buffer containing the MPEG4 layer 10 (AVC) codec
-   initialization for the pixel aspectc ratio. If it is found then the
-   numerator and the denominator are returned, and the aspect ratio
-   information is removed from the buffer. The new buffer is returned
-   in the variable \c buffer, and the new size is returned in \c buffer_size.
+   This function searches a buffer containing the MPEG4 layer 10 (AVC)
+   codec initialization for the pixel aspectc ratio. If it is found
+   then the numerator and the denominator are extracted, and the
+   aspect ratio information is removed from the buffer. A structure
+   containing the new buffer, the numerator/denominator and the
+   success status is returned.
 
    \param buffer The buffer containing the MPEG4 layer 10 codec data.
-   \param buffer_size The size of the buffer in bytes.
-   \param par_num The numerator, if found, is stored in this variable.
-   \param par_den The denominator, if found, is stored in this variable.
 
-   \return \c true if the pixel aspect ratio was found and \c false
-     otherwise.
+   \return A \c par_extraction_t structure.
 */
-bool
-mpeg4::p10::extract_par(uint8_t *&buffer,
-                        size_t &buffer_size,
-                        uint32_t &par_num,
-                        uint32_t &par_den) {
-  try {
-    mm_mem_io_c avcc(buffer, buffer_size), new_avcc(NULL, buffer_size, 1024);
-    memory_cptr nalu(new memory_c());
+mpeg4::p10::par_extraction_t
+mpeg4::p10::extract_par(memory_cptr const &buffer) {
+  static debugging_option_c s_debug_ar{"extract_par|avc_sps|sps_aspect_ratio"};
 
-    par_num       = 1;
-    par_den       = 1;
-    bool ar_found = false;
+  try {
+    auto avcc            = avcc_c::unpack(buffer);
+    auto new_avcc        = avcc;
+    bool ar_found        = false;
+    unsigned int par_num = 1;
+    unsigned int par_den = 1;
+
+    new_avcc.m_sps_list.clear();
+
+    for (auto &nalu : avcc.m_sps_list) {
+      if (!ar_found) {
+        nalu_to_rbsp(nalu);
+
+        try {
+          sps_info_t sps_info;
+          if (mpeg4::p10::parse_sps(nalu, sps_info)) {
+            if (s_debug_ar)
+              sps_info.dump();
+
+            ar_found = sps_info.ar_found;
+            if (ar_found) {
+              par_num = sps_info.par_num;
+              par_den = sps_info.par_den;
+            }
+          }
+        } catch (mtx::mm_io::end_of_file_x &) {
+        }
+
+        rbsp_to_nalu(nalu);
+      }
+
+      new_avcc.m_sps_list.push_back(nalu);
+    }
+
+    if (!new_avcc)
+      return par_extraction_t{buffer, 0, 0, false};
+
+    return par_extraction_t{new_avcc.pack(), ar_found ? par_num : 0, ar_found ? par_den : 0, true};
+
+  } catch(...) {
+    return par_extraction_t{buffer, 0, 0, false};
+  }
+}
+
+memory_cptr
+mpeg4::p10::fix_sps_fps(memory_cptr const &buffer,
+                        int64_t duration) {
+  try {
+    auto buffer_size = buffer->get_size();
+    mm_mem_io_c avcc(buffer->get_buffer(), buffer->get_size()), new_avcc(nullptr, buffer_size, 1024);
+    memory_cptr nalu(new memory_c());
 
     avcc.read(nalu, 5);
     new_avcc.write(nalu);
 
+    // parse and fix the sps
     unsigned int num_sps = avcc.read_uint8();
     new_avcc.write_uint8(num_sps);
     num_sps &= 0x1f;
-    mxverb(4, boost::format("mpeg4_p10_extract_par: num_sps %1%\n") % num_sps);
+    mxdebug_if(s_debug_fix_bistream_timing_info, boost::format("p_mpeg4_p10_fix_sps_fps: num_sps %1%\n") % num_sps);
 
     unsigned int sps;
     for (sps = 0; sps < num_sps; sps++) {
@@ -527,38 +890,28 @@ mpeg4::p10::extract_par(uint8_t *&buffer,
         length = buffer_size - avcc.getFilePointer();
       avcc.read(nalu, length);
 
-      bool abort = false;
-      if ((0 < length) && ((nalu->get_buffer()[0] & 0x1f) == 7)) {
+      if ((0 < length) && ((nalu->get_buffer()[0] & 0x1f) == NALU_TYPE_SEQ_PARAM)) {
         nalu_to_rbsp(nalu);
         sps_info_t sps_info;
-        if (mpeg4::p10::parse_sps(nalu, sps_info)) {
-          ar_found = sps_info.ar_found;
-          if (ar_found) {
-            par_num = sps_info.par_num;
-            par_den = sps_info.par_den;
-          }
-        }
+        parse_sps(nalu, sps_info, true, true, duration);
         rbsp_to_nalu(nalu);
-        abort = true;
       }
 
       new_avcc.write_uint16_be(nalu->get_size());
       new_avcc.write(nalu);
-
-      if (abort) {
-        avcc.read(nalu, buffer_size - avcc.getFilePointer());
-        new_avcc.write(nalu);
-        break;
-      }
     }
 
-    buffer_size = new_avcc.getFilePointer();
-    buffer      = new_avcc.get_and_lock_buffer();
+    // copy the pps
+    auto remaining_bytes = avcc.get_size() - avcc.getFilePointer();
+    if (remaining_bytes) {
+      avcc.read(nalu, remaining_bytes);
+      new_avcc.write(nalu);
+    }
 
-    return ar_found;
+    return memory_cptr{new memory_c{new_avcc.get_and_lock_buffer(), static_cast<size_t>(new_avcc.getFilePointer())}};
 
   } catch(...) {
-    return false;
+    return memory_cptr{};
   }
 }
 
@@ -567,18 +920,6 @@ mpeg4::p10::is_avc_fourcc(const char *fourcc) {
   return !strncasecmp(fourcc, "avc",  3)
       || !strncasecmp(fourcc, "h264", 4)
       || !strncasecmp(fourcc, "x264", 4);
-}
-
-static bool
-mpeg4::p10::compare_poc_by_poc(const poc_t &poc1,
-                               const poc_t &poc2) {
-  return poc1.poc < poc2.poc;
-}
-
-static bool
-mpeg4::p10::compare_poc_by_dec(const poc_t &poc1,
-                               const poc_t &poc2) {
-  return poc1.dec < poc2.dec;
 }
 
 memory_cptr
@@ -590,7 +931,7 @@ mpeg4::p10::avcc_to_nalus(const unsigned char *buffer,
 
     uint32_t marker = get_uint32_be(buffer);
     if (((marker & 0xffffff00) == 0x00000100) || (0x00000001 == marker))
-      return clone_memory(buffer, size);
+      return memory_c::clone(buffer, size);
 
     mm_mem_io_c mem(buffer, size);
     byte_buffer_c nalus(size * 2);
@@ -622,40 +963,54 @@ mpeg4::p10::avcc_to_nalus(const unsigned char *buffer,
     }
 
     if (mem.getFilePointer() == size)
-      return clone_memory(nalus.get_buffer(), nalus.get_size());
+      return memory_c::clone(nalus.get_buffer(), nalus.get_size());
 
   } catch (...) {
   }
 
-  return memory_cptr(NULL);
+  return memory_cptr{};
 }
 
 mpeg4::p10::avc_es_parser_c::avc_es_parser_c()
   : m_nalu_size_length(4)
   , m_keep_ar_info(true)
+  , m_fix_bitstream_frame_rate(false)
   , m_avcc_ready(false)
   , m_avcc_changed(false)
-  , m_default_duration(40000000)
+  , m_stream_default_duration(-1)
+  , m_forced_default_duration(-1)
+  , m_container_default_duration(-1)
   , m_frame_number(0)
   , m_num_skipped_frames(0)
   , m_first_keyframe_found(false)
   , m_recovery_point_valid(false)
   , m_b_frames_since_keyframe(false)
+  , m_par_found(false)
   , m_max_timecode(0)
-  , m_generate_timecodes(false)
+  , m_stream_position(0)
+  , m_parsed_position(0)
   , m_have_incomplete_frame(false)
   , m_ignore_nalu_size_length_errors(false)
   , m_discard_actual_frames(false)
-  , m_num_slices_by_type(11, 0)
-  , m_debug_keyframe_detection(debugging_requested("avc_keyframe_detection") || debugging_requested("avc_parser"))
-  , m_debug_nalu_types(debugging_requested("avc_nalu_types") || debugging_requested("avc_parser"))
+  , m_debug_keyframe_detection{"avc_parser|avc_keyframe_detection"}
+  , m_debug_nalu_types{        "avc_parser|avc_nalu_types"}
+  , m_debug_timecodes{         "avc_parser|avc_timecodes"}
+  , m_debug_sps_info{          "avc_parser|avc_sps|avc_sps_info"}
+  , m_debug_trailing_zero_byte_removal{"avc_parser|avc_trailing_zero_byte_removal"}
 {
   if (m_debug_nalu_types)
     init_nalu_names();
 }
 
 mpeg4::p10::avc_es_parser_c::~avc_es_parser_c() {
-  if (!debugging_requested("avc_num_slices_by_type"))
+  mxdebug_if(debugging_c::requested("avc_statistics"),
+             boost::format("AVC statistics: #frames: out %1% discarded %2% #timecodes: in %3% generated %4% discarded %5% num_fields: %6% num_frames: %7%\n")
+             % m_stats.num_frames_out % m_stats.num_frames_discarded % m_stats.num_timecodes_in % m_stats.num_timecodes_generated % m_stats.num_timecodes_discarded
+             % m_stats.num_field_slices % m_stats.num_frame_slices);
+
+  mxdebug_if(m_debug_timecodes, boost::format("stream_position %1% parsed_position %2%\n") % m_stream_position % m_parsed_position);
+
+  if (!debugging_c::requested("avc_num_slices_by_type"))
     return;
 
   static const char *s_type_names[] = {
@@ -665,10 +1020,10 @@ mpeg4::p10::avc_es_parser_c::~avc_es_parser_c() {
   };
 
   int i;
-  mxinfo("mpeg4::p10: Number of slices by type:\n");
+  mxdebug("mpeg4::p10: Number of slices by type:\n");
   for (i = 0; 10 >= i; ++i)
-    if (0 != m_num_slices_by_type[i])
-      mxinfo(boost::format("  %1%: %2%\n") % s_type_names[i] % m_num_slices_by_type[i]);
+    if (0 != m_stats.num_slices_by_type[i])
+      mxdebug(boost::format("  %1%: %2%\n") % s_type_names[i] % m_stats.num_slices_by_type[i]);
 }
 
 void
@@ -677,14 +1032,39 @@ mpeg4::p10::avc_es_parser_c::discard_actual_frames(bool discard) {
 }
 
 void
-mpeg4::p10::avc_es_parser_c::add_bytes(unsigned char *buffer,
-                                       int size) {
-  memory_slice_cursor_c cursor;
-  int marker_size          = 0;
-  int previous_marker_size = 0;
-  int previous_pos         = -1;
+mpeg4::p10::avc_es_parser_c::remove_trailing_zero_bytes(memory_c &memory) {
+  auto size = memory.get_size();
 
-  if (m_unparsed_buffer.is_set() && (0 != m_unparsed_buffer->get_size()))
+  if (size < 3)
+    return;
+
+  auto start = memory.get_buffer();
+  auto end   = start + size - 3;
+
+  if (get_uint24_be(end) != 0x000000)
+    return;
+
+  --end;
+
+  while ((end > start) && (!*end))
+    --end;
+
+  auto new_size = end - start + 1;
+  memory.set_size(new_size);
+
+  mxdebug_if(m_debug_trailing_zero_byte_removal, boost::format("Removing trailing zero bytes from old size %1% down to new size %2%, removed %3%\n") % size % new_size % (size - new_size));
+}
+
+void
+mpeg4::p10::avc_es_parser_c::add_bytes(unsigned char *buffer,
+                                       size_t size) {
+  memory_slice_cursor_c cursor;
+  int marker_size              = 0;
+  int previous_marker_size     = 0;
+  int previous_pos             = -1;
+  uint64_t previous_parsed_pos = m_parsed_position;
+
+  if (m_unparsed_buffer && (0 != m_unparsed_buffer->get_size()))
     cursor.add_slice(m_unparsed_buffer);
   cursor.add_slice(buffer, size);
 
@@ -705,6 +1085,8 @@ mpeg4::p10::avc_es_parser_c::add_bytes(unsigned char *buffer,
           int new_size = cursor.get_position() - marker_size - previous_pos - previous_marker_size;
           memory_cptr nalu(new memory_c(safemalloc(new_size), new_size, true));
           cursor.copy(nalu->get_buffer(), previous_pos + previous_marker_size, new_size);
+          m_parsed_position = previous_parsed_pos + previous_pos;
+          remove_trailing_zero_bytes(*nalu);
           handle_nalu(nalu);
         }
         previous_pos         = cursor.get_position() - marker_size;
@@ -723,23 +1105,27 @@ mpeg4::p10::avc_es_parser_c::add_bytes(unsigned char *buffer,
   if (-1 == previous_pos)
     previous_pos = 0;
 
+  m_stream_position += size;
+  m_parsed_position  = previous_parsed_pos + previous_pos;
+
   int new_size = cursor.get_size() - previous_pos;
   if (0 != new_size) {
     m_unparsed_buffer = memory_cptr(new memory_c(safemalloc(new_size), new_size, true));
     cursor.copy(m_unparsed_buffer->get_buffer(), previous_pos, new_size);
 
   } else
-    m_unparsed_buffer = memory_cptr(NULL);
+    m_unparsed_buffer.reset();
 }
 
 void
 mpeg4::p10::avc_es_parser_c::flush() {
-  if (m_unparsed_buffer.is_set() && (5 <= m_unparsed_buffer->get_size())) {
+  if (m_unparsed_buffer && (5 <= m_unparsed_buffer->get_size())) {
+    m_parsed_position += m_unparsed_buffer->get_size();
     int marker_size = get_uint32_be(m_unparsed_buffer->get_buffer()) == NALU_START_CODE ? 4 : 3;
-    handle_nalu(clone_memory(m_unparsed_buffer->get_buffer() + marker_size, m_unparsed_buffer->get_size() - marker_size));
+    handle_nalu(memory_c::clone(m_unparsed_buffer->get_buffer() + marker_size, m_unparsed_buffer->get_size() - marker_size));
   }
 
-  m_unparsed_buffer = memory_cptr(NULL);
+  m_unparsed_buffer.reset();
   if (m_have_incomplete_frame) {
     m_frames.push_back(m_incomplete_frame);
     m_have_incomplete_frame = false;
@@ -750,21 +1136,16 @@ mpeg4::p10::avc_es_parser_c::flush() {
 
 void
 mpeg4::p10::avc_es_parser_c::add_timecode(int64_t timecode) {
-  std::deque<int64_t>::iterator i = m_timecodes.end();
-  while (i != m_timecodes.begin()) {
-    if (timecode >= *(i - 1))
-      break;
-    --i;
-  }
-  m_timecodes.insert(i, timecode);
-
-  m_max_timecode = std::max(timecode, m_max_timecode);
+  m_provided_timecodes.push_back(timecode);
+  m_provided_stream_positions.push_back(m_stream_position);
+  ++m_stats.num_timecodes_in;
 }
 
 void
 mpeg4::p10::avc_es_parser_c::write_nalu_size(unsigned char *buffer,
                                              size_t size,
-                                             int this_nalu_size_length) {
+                                             int this_nalu_size_length)
+  const {
   unsigned int nalu_size_length = -1 == this_nalu_size_length ? m_nalu_size_length : this_nalu_size_length;
 
   if (!m_ignore_nalu_size_length_errors && (size >= ((uint64_t)1 << (nalu_size_length * 8)))) {
@@ -855,7 +1236,7 @@ mpeg4::p10::avc_es_parser_c::handle_slice_nalu(memory_cptr &nalu) {
     flush_incomplete_frame();
 
   if (m_have_incomplete_frame) {
-    memory_c &mem = *(m_incomplete_frame.m_data.get_object());
+    memory_c &mem = *(m_incomplete_frame.m_data.get());
     int offset    = mem.get_size();
     mem.resize(offset + m_nalu_size_length + nalu->get_size());
     write_nalu_size(mem.get_buffer() + offset, nalu->get_size());
@@ -881,7 +1262,8 @@ mpeg4::p10::avc_es_parser_c::handle_slice_nalu(memory_cptr &nalu) {
   if (m_incomplete_frame.m_keyframe) {
     m_first_keyframe_found    = true;
     m_b_frames_since_keyframe = false;
-    cleanup();
+    if (!si.field_pic_flag || !si.bottom_field_flag)
+      cleanup();
 
   } else
     m_b_frames_since_keyframe |= is_b_slice;
@@ -889,8 +1271,11 @@ mpeg4::p10::avc_es_parser_c::handle_slice_nalu(memory_cptr &nalu) {
   m_incomplete_frame.m_data = create_nalu_with_size(nalu, true);
   m_have_incomplete_frame   = true;
 
-  if (m_generate_timecodes)
-    add_timecode(m_frame_number * m_default_duration);
+  if (!m_provided_stream_positions.empty() && (m_parsed_position >= m_provided_stream_positions.front())) {
+    m_incomplete_frame.m_has_provided_timecode = true;
+    m_provided_stream_positions.pop_front();
+  }
+
   ++m_frame_number;
 }
 
@@ -899,8 +1284,10 @@ mpeg4::p10::avc_es_parser_c::handle_sps_nalu(memory_cptr &nalu) {
   sps_info_t sps_info;
 
   nalu_to_rbsp(nalu);
-  if (!parse_sps(nalu, sps_info, m_keep_ar_info))
+
+  if (!parse_sps(nalu, sps_info, m_keep_ar_info, m_fix_bitstream_frame_rate, duration_for(0, true)))
     return;
+
   rbsp_to_nalu(nalu);
 
   size_t i;
@@ -908,6 +1295,7 @@ mpeg4::p10::avc_es_parser_c::handle_sps_nalu(memory_cptr &nalu) {
     if (m_sps_info_list[i].id == sps_info.id)
       break;
 
+  bool use_sps_info = true;
   if (m_sps_info_list.size() == i) {
     m_sps_list.push_back(nalu);
     m_sps_info_list.push_back(sps_info);
@@ -919,9 +1307,30 @@ mpeg4::p10::avc_es_parser_c::handle_sps_nalu(memory_cptr &nalu) {
     m_sps_info_list[i] = sps_info;
     m_sps_list[i]      = nalu;
     m_avcc_changed     = true;
-  }
+
+  } else
+    use_sps_info = false;
 
   m_extra_data.push_back(create_nalu_with_size(nalu));
+
+  if (use_sps_info && m_debug_sps_info)
+    sps_info.dump();
+
+  if (!use_sps_info)
+    return;
+
+  if (   !has_stream_default_duration()
+      && sps_info.timing_info_valid()) {
+    m_stream_default_duration = sps_info.timing_info.default_duration();
+    mxdebug_if(m_debug_timecodes, boost::format("Stream default duration: %1%\n") % m_stream_default_duration);
+  }
+
+  if (   !m_par_found
+      && sps_info.ar_found
+      && (0 != sps_info.par_den)) {
+    m_par_found = true;
+    m_par       = int64_rational_c(sps_info.par_num, sps_info.par_den);
+  }
 }
 
 void
@@ -959,7 +1368,7 @@ mpeg4::p10::avc_es_parser_c::handle_sei_nalu(memory_cptr &nalu) {
   try {
     nalu_to_rbsp(nalu);
 
-    bit_cursor_c r(nalu->get_buffer(), nalu->get_size());
+    bit_reader_c r(nalu->get_buffer(), nalu->get_size());
 
     r.skip_bits(8);
 
@@ -994,8 +1403,7 @@ mpeg4::p10::avc_es_parser_c::handle_nalu(memory_cptr nalu) {
 
   int type = *(nalu->get_buffer()) & 0x1f;
 
-  if (m_debug_nalu_types)
-    mxinfo(boost::format("NALU type 0x%|1$02x| (%2%) size %3%\n") % type % get_nalu_type_name(type) % nalu->get_size());
+  mxdebug_if(m_debug_nalu_types, boost::format("NALU type 0x%|1$02x| (%2%) size %3%\n") % type % get_nalu_type_name(type) % nalu->get_size());
 
   switch (type) {
     case NALU_TYPE_SEQ_PARAM:
@@ -1049,7 +1457,7 @@ bool
 mpeg4::p10::avc_es_parser_c::parse_slice(memory_cptr &buffer,
                                          slice_info_t &si) {
   try {
-    bit_cursor_c r(buffer->get_buffer(), buffer->get_size());
+    bit_reader_c r(buffer->get_buffer(), buffer->get_size());
 
     memset(&si, 0, sizeof(si));
 
@@ -1063,7 +1471,7 @@ mpeg4::p10::avc_es_parser_c::parse_slice(memory_cptr &buffer,
     si.first_mb_in_slice = geread(r); // first_mb_in_slice
     si.type              = geread(r); // slice_type
 
-    ++m_num_slices_by_type[9 < si.type ? 10 : si.type];
+    ++m_stats.num_slices_by_type[9 < si.type ? 10 : si.type];
 
     if (9 < si.type) {
       mxverb(3, boost::format("slice parser error: 9 < si.type: %1%\n") % si.type);
@@ -1123,144 +1531,194 @@ mpeg4::p10::avc_es_parser_c::parse_slice(memory_cptr &buffer,
   }
 }
 
-void
-mpeg4::p10::avc_es_parser_c::default_cleanup() {
-  if (m_frames.size() > m_timecodes.size())
-    create_missing_timecodes();
+int64_t
+mpeg4::p10::avc_es_parser_c::duration_for(unsigned int sps,
+                                          bool field_pic_flag)
+  const {
+  int64_t duration = -1 != m_forced_default_duration                                            ? m_forced_default_duration
+                   : (m_sps_info_list.size() > sps) && m_sps_info_list[sps].timing_info_valid() ? m_sps_info_list[sps].timing_info.default_duration()
+                   : -1 != m_stream_default_duration                                            ? m_stream_default_duration
+                   : -1 != m_container_default_duration                                         ? m_container_default_duration
+                   :                                                                              20000000;
+  return duration * (field_pic_flag ? 1 : 2);
+}
 
-  std::deque<avc_frame_t>::iterator i(m_frames.begin());
-  std::deque<int64_t>::iterator t(m_timecodes.begin());
+int64_t
+mpeg4::p10::avc_es_parser_c::get_most_often_used_duration()
+  const {
+  int64_t const s_common_default_durations[] = {
+    1000000000ll / 50,
+    1000000000ll / 25,
+    1000000000ll / 60,
+    1000000000ll / 30,
+    1000000000ll * 1001 / 48000,
+    1000000000ll * 1001 / 24000,
+    1000000000ll * 1001 / 60000,
+    1000000000ll * 1001 / 30000,
+  };
 
-  int64_t r = i->m_start = i->m_end = *t;
+  auto most_often = m_duration_frequency.begin();
+  for (auto current = m_duration_frequency.begin(); m_duration_frequency.end() != current; ++current)
+    if (current->second > most_often->second)
+      most_often = current;
 
-  ++i;
-  ++t;
-
-  while ((m_frames.end() != i) && (m_timecodes.end() != t)) {
-    i->m_ref1        = r - *t;
-    r                =
-      i->m_start     =
-      (i - 1)->m_end = *t;
-    ++i;
-    ++t;
+  // No duration at all!? No frame?
+  if (m_duration_frequency.end() == most_often) {
+    mxdebug_if(m_debug_timecodes, boost::format("Duration frequency: none found, using 25 FPS\n"));
+    return 1000000000ll / 25;
   }
 
-  if ((m_frames.size() >= 2) && (m_timecodes.end() != t))
-    (i - 1)->m_end = *t;
+  auto best = std::make_pair(most_often->first, std::numeric_limits<uint64_t>::max());
 
-  m_frames_out.insert(m_frames_out.end(), m_frames.begin(), m_frames.end());
-  m_timecodes.erase(m_timecodes.begin(), m_timecodes.begin() + m_frames.size());
-  m_frames.clear();
+  for (auto common_default_duration : s_common_default_durations) {
+    uint64_t diff = std::abs(most_often->first - common_default_duration);
+    if ((diff < 20000) && (diff < best.second))
+      best = std::make_pair(common_default_duration, diff);
+  }
+
+  mxdebug_if(m_debug_timecodes, boost::format("Duration frequency. Result: %1%, diff %2%. Best before adjustment: %3%. All: %4%\n")
+             % best.first % best.second % most_often->first
+             % boost::accumulate(m_duration_frequency, std::string(""), [](std::string const &accu, std::pair<int64_t, int64_t> const &pair) {
+                 return accu + (boost::format(" <%1% %2%>") % pair.first % pair.second).str();
+               }));
+
+  return best.first;
 }
 
 void
 mpeg4::p10::avc_es_parser_c::cleanup() {
+  auto s_debug_force_simple_picture_order = debugging_option_c{"avc_parser_force_simple_picture_order"};
+
   if (m_frames.empty())
     return;
 
   if (m_discard_actual_frames) {
+    m_stats.num_frames_discarded    += m_frames.size();
+    m_stats.num_timecodes_discarded += m_provided_timecodes.size();
+
     m_frames.clear();
-    m_timecodes.clear();
+    m_provided_timecodes.clear();
+    m_provided_stream_positions.clear();
+
     return;
   }
 
-  if (m_frames.size() > m_timecodes.size())
-    create_missing_timecodes();
-
-  std::deque<avc_frame_t>::iterator i(m_frames.begin());
-  std::deque<int64_t>::iterator t(m_timecodes.begin());
+  auto frames_begin = m_frames.begin();
+  auto frames_end   = m_frames.end();
+  auto frame_itr    = frames_begin;
 
   // This may be wrong but is needed for mkvmerge to work correctly
   // (cluster_helper etc).
-  i->m_keyframe = true;
+  frame_itr->m_keyframe = true;
 
-  slice_info_t &idr = i->m_si;
-  sps_info_t &sps = m_sps_info_list[idr.sps];
+  slice_info_t &idr         = frame_itr->m_si;
+  sps_info_t &sps           = m_sps_info_list[idr.sps];
+  bool simple_picture_order = false;
+
   if (   (   (AVC_SLICE_TYPE_I   != idr.type)
           && (AVC_SLICE_TYPE_SI  != idr.type)
           && (AVC_SLICE_TYPE2_I  != idr.type)
           && (AVC_SLICE_TYPE2_SI != idr.type))
       || (0 == idr.nal_ref_idc)
-      || (2 == sps.pic_order_cnt_type)) {
-    default_cleanup();
-    return;
+      || (0 != sps.pic_order_cnt_type)) {
+    simple_picture_order = true;
+    // return;
   }
 
-  std::vector<poc_t> poc;
+  unsigned int idx                    = 0;
+  unsigned int prev_pic_order_cnt_msb = 0;
+  unsigned int prev_pic_order_cnt_lsb = 0;
+  unsigned int pic_order_cnt_msb      = 0;
 
-  if (0 == sps.pic_order_cnt_type) {
-    unsigned int j = 0;
+  while (frames_end != frame_itr) {
+    slice_info_t &si = frame_itr->m_si;
 
-    unsigned int prev_pic_order_cnt_msb = 0;
-    unsigned int prev_pic_order_cnt_lsb = 0;
-    unsigned int pic_order_cnt_msb      = 0;
-    bool first                          = true;
-
-    while (m_frames.end() != i) {
-      slice_info_t &si = i->m_si;
-
-      if (si.sps != idr.sps) {
-        default_cleanup();
-        return;
-      }
-
-      if (first)
-        first = false;
-
-      else if ((si.pic_order_cnt_lsb < prev_pic_order_cnt_lsb) && ((prev_pic_order_cnt_lsb - si.pic_order_cnt_lsb) >= (1u << (sps.log2_max_pic_order_cnt_lsb - 1))))
-        pic_order_cnt_msb = prev_pic_order_cnt_msb + (1 << sps.log2_max_pic_order_cnt_lsb);
-
-      else if ((si.pic_order_cnt_lsb > prev_pic_order_cnt_lsb) && ((si.pic_order_cnt_lsb - prev_pic_order_cnt_lsb) > (1u << (sps.log2_max_pic_order_cnt_lsb - 1))))
-        pic_order_cnt_msb = prev_pic_order_cnt_msb - (1 << sps.log2_max_pic_order_cnt_lsb);
-
-      else
-        pic_order_cnt_msb = prev_pic_order_cnt_msb;
-
-      poc.push_back(poc_t(pic_order_cnt_msb + si.pic_order_cnt_lsb, j));
-
-      if (0 != si.nal_ref_idc) {
-        prev_pic_order_cnt_lsb = si.pic_order_cnt_lsb;
-        prev_pic_order_cnt_msb = pic_order_cnt_msb;
-      }
-
-      ++i;
-      ++j;
+    if (si.sps != idr.sps) {
+      simple_picture_order = true;
+      break;
     }
 
-  } else {
-    default_cleanup();
-    return;
+    if (frames_begin == frame_itr)
+      ;
+
+    else if ((si.pic_order_cnt_lsb < prev_pic_order_cnt_lsb) && ((prev_pic_order_cnt_lsb - si.pic_order_cnt_lsb) >= (1u << (sps.log2_max_pic_order_cnt_lsb - 1))))
+      pic_order_cnt_msb = prev_pic_order_cnt_msb + (1 << sps.log2_max_pic_order_cnt_lsb);
+
+    else if ((si.pic_order_cnt_lsb > prev_pic_order_cnt_lsb) && ((si.pic_order_cnt_lsb - prev_pic_order_cnt_lsb) > (1u << (sps.log2_max_pic_order_cnt_lsb - 1))))
+      pic_order_cnt_msb = prev_pic_order_cnt_msb - (1 << sps.log2_max_pic_order_cnt_lsb);
+
+    else
+      pic_order_cnt_msb = prev_pic_order_cnt_msb;
+
+    frame_itr->m_presentation_order = pic_order_cnt_msb + si.pic_order_cnt_lsb;
+    frame_itr->m_decode_order       = idx;
+
+    ++frame_itr;
+    ++idx;
+
+    if (0 != si.nal_ref_idc) {
+      prev_pic_order_cnt_lsb = si.pic_order_cnt_lsb;
+      prev_pic_order_cnt_msb = pic_order_cnt_msb;
+    }
   }
 
-  std::sort(poc.begin(), poc.end(), compare_poc_by_poc);
+  if (!simple_picture_order && !s_debug_force_simple_picture_order)
+    brng::sort(m_frames, [](const avc_frame_t &f1, const avc_frame_t &f2) { return f1.m_presentation_order < f2.m_presentation_order; });
 
-  size_t num_frames    = m_frames.size();
-  size_t num_timecodes = m_timecodes.size();
+  brng::sort(m_provided_timecodes);
 
-  unsigned int j;
-  for (j = 0; num_frames > j; ++j, ++t) {
-    poc[j].timecode = *t;
-    poc[j].duration = num_frames > (j + 1)       ? *(t + 1)                - poc[j].timecode
-                    : num_frames < num_timecodes ? m_timecodes[num_frames] - poc[j].timecode
-                    :                              0;
+  frames_begin               = m_frames.begin();
+  frames_end                 = m_frames.end();
+  auto previous_frame_itr    = frames_begin;
+  auto provided_timecode_itr = m_provided_timecodes.begin();
+  for (frame_itr = frames_begin; frames_end != frame_itr; ++frame_itr) {
+    if (frame_itr->m_has_provided_timecode) {
+      frame_itr->m_start = *provided_timecode_itr;
+      ++provided_timecode_itr;
+
+      if (frames_begin != frame_itr)
+        previous_frame_itr->m_end = frame_itr->m_start;
+
+    } else {
+      frame_itr->m_start = frames_begin == frame_itr ? m_max_timecode : previous_frame_itr->m_end;
+      ++m_stats.num_timecodes_generated;
+    }
+
+    frame_itr->m_end = frame_itr->m_start + duration_for(frame_itr->m_si);
+
+    previous_frame_itr = frame_itr;
   }
 
-  std::sort(poc.begin(), poc.end(), compare_poc_by_dec);
+  m_max_timecode = m_frames.back().m_end;
+  m_provided_timecodes.erase(m_provided_timecodes.begin(), provided_timecode_itr);
 
-  i          = m_frames.begin();
-  i->m_start = poc[0].timecode;
-  i->m_end   = poc[0].timecode + poc[0].duration;
-  ++i;
+  mxdebug_if(m_debug_timecodes, boost::format("CLEANUP frames <pres_ord dec_ord has_prov_tc tc dur>: %1%\n")
+             % boost::accumulate(m_frames, std::string(""), [](std::string const &accu, avc_frame_t const &frame) {
+                 return accu + (boost::format(" <%1% %2% %3% %4% %5%>") % frame.m_presentation_order % frame.m_decode_order % frame.m_has_provided_timecode % frame.m_start % (frame.m_end - frame.m_start)).str();
+               }));
 
-  for (j = 1; poc.size() > j; ++j) {
-    i->m_ref1  = poc[j-1].timecode - poc[j].timecode;
-    i->m_start = poc[j].timecode;
-    i->m_end   = poc[j].timecode + poc[j].duration;
-    ++i;
+
+  if (!simple_picture_order)
+    brng::sort(m_frames, [](const avc_frame_t &f1, const avc_frame_t &f2) { return f1.m_decode_order < f2.m_decode_order; });
+
+  frames_begin       = m_frames.begin();
+  frames_end         = m_frames.end();
+  previous_frame_itr = frames_begin;
+  for (frame_itr = frames_begin; frames_end != frame_itr; ++frame_itr) {
+    if (frames_begin != frame_itr)
+      frame_itr->m_ref1 = previous_frame_itr->m_start - frame_itr->m_start;
+
+    previous_frame_itr = frame_itr;
+    m_duration_frequency[frame_itr->m_end - frame_itr->m_start]++;
+
+    if (frame_itr->m_si.field_pic_flag)
+      ++m_stats.num_field_slices;
+    else
+      ++m_stats.num_field_slices;
   }
 
-  m_frames_out.insert(m_frames_out.end(), m_frames.begin(), m_frames.end());
-  m_timecodes.erase(m_timecodes.begin(), m_timecodes.begin() + std::min(num_frames, num_timecodes));
+  m_stats.num_frames_out += m_frames.size();
+  m_frames_out.insert(m_frames_out.end(), frames_begin, frames_end);
   m_frames.clear();
 }
 
@@ -1291,53 +1749,56 @@ mpeg4::p10::avc_es_parser_c::create_nalu_with_size(const memory_cptr &src,
   return memory_cptr(new memory_c(buffer, final_size, true));
 }
 
-// TODO:DRY
 memory_cptr
-mpeg4::p10::avc_es_parser_c::get_avcc() {
-  int final_size = 6 + 1;
-  int offset     = 6;
+mpeg4::p10::avc_es_parser_c::get_avcc()
+  const {
+  return avcc_c{static_cast<unsigned int>(m_nalu_size_length), m_sps_list, m_pps_list}.pack();
+}
 
-  for (auto &mem : m_sps_list)
-    final_size += mem->get_size() + 2;
-  for (auto &mem : m_pps_list)
-    final_size += mem->get_size() + 2;
+bool
+mpeg4::p10::avc_es_parser_c::has_par_been_found()
+  const {
+  assert(m_avcc_ready);
+  return m_par_found;
+}
 
-  unsigned char *buffer = (unsigned char *)safemalloc(final_size);
+int64_rational_c const &
+mpeg4::p10::avc_es_parser_c::get_par()
+  const {
+  assert(m_avcc_ready && m_par_found);
+  return m_par;
+}
 
-  assert(!m_sps_list.empty());
-  sps_info_t &sps = *m_sps_info_list.begin();
+std::pair<int64_t, int64_t> const
+mpeg4::p10::avc_es_parser_c::get_display_dimensions(int width,
+                                                    int height)
+  const {
+  assert(m_avcc_ready && m_par_found);
 
-  buffer[0] = 1;
-  buffer[1] = sps.profile_idc;
-  buffer[2] = sps.profile_compat;
-  buffer[3] = sps.level_idc;
-  buffer[4] = 0xfc | (m_nalu_size_length - 1);
-  buffer[5] = 0xe0 | m_sps_list.size();
+  if (0 >= width)
+    width = get_width();
+  if (0 >= height)
+    height = get_height();
 
-  for (auto &mem : m_sps_list) {
-    int size = mem->get_size();
+  return std::make_pair<int64_t, int64_t>(1 <= m_par ? irnd(width * boost::rational_cast<double>(m_par)) : width,
+                                          1 <= m_par ? height                                            : irnd(height / boost::rational_cast<double>(m_par)));
+}
 
-    write_nalu_size(buffer + offset, size, 2);
-    memcpy(&buffer[offset + 2], mem->get_buffer(), size);
-    offset += 2 + size;
-  }
+size_t
+mpeg4::p10::avc_es_parser_c::get_num_field_slices()
+  const {
+  return m_stats.num_field_slices;
+}
 
-  buffer[offset] = m_pps_list.size();
-  ++offset;
-
-  for (auto &mem : m_pps_list) {
-    int size = mem->get_size();
-
-    write_nalu_size(buffer + offset, size, 2);
-    memcpy(&buffer[offset + 2], mem->get_buffer(), size);
-    offset += 2 + size;
-  }
-
-  return memory_cptr(new memory_c(buffer, final_size, true));
+size_t
+mpeg4::p10::avc_es_parser_c::get_num_frame_slices()
+  const {
+  return m_stats.num_frame_slices;
 }
 
 void
-mpeg4::p10::avc_es_parser_c::dump_info() {
+mpeg4::p10::avc_es_parser_c::dump_info()
+  const {
   mxinfo("Dumping m_frames_out:\n");
   for (auto &frame : m_frames_out) {
     mxinfo(boost::format("size %1% key %2% start %3% end %4% ref1 %5% adler32 0x%|6$08x|\n")
@@ -1351,12 +1812,10 @@ mpeg4::p10::avc_es_parser_c::dump_info() {
 }
 
 std::string
-mpeg4::p10::avc_es_parser_c::get_nalu_type_name(int type) {
-  std::string name = m_nalu_names_by_type[type];
-  if (name.empty())
-    return "unknown";
-
-  return name;
+mpeg4::p10::avc_es_parser_c::get_nalu_type_name(int type)
+  const {
+  auto name = m_nalu_names_by_type.find(type);
+  return (m_nalu_names_by_type.end() == name) ? "unknown" : name->second;
 }
 
 void
@@ -1373,15 +1832,4 @@ mpeg4::p10::avc_es_parser_c::init_nalu_names() {
   m_nalu_names_by_type[NALU_TYPE_END_OF_SEQ]    = "end of sequence";
   m_nalu_names_by_type[NALU_TYPE_END_OF_STREAM] = "end of stream";
   m_nalu_names_by_type[NALU_TYPE_FILLER_DATA]   = "filler";
-}
-
-void
-mpeg4::p10::avc_es_parser_c::create_missing_timecodes() {
-  size_t num_timecodes = m_timecodes.size();
-  size_t num_frames    = m_frames.size();
-
-  while (num_timecodes < num_frames) {
-    ++num_timecodes;
-    add_timecode(m_max_timecode + m_default_duration);
-  }
 }

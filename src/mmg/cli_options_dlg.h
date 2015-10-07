@@ -11,16 +11,13 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MMG_CLI_OPTIONS_DLG_H
-#define __MMG_CLI_OPTIONS_DLG_H
+#ifndef MTX_MMG_CLI_OPTIONS_DLG_H
+#define MTX_MMG_CLI_OPTIONS_DLG_H
 
-#include "common/os.h"
-
-#include <vector>
-#include <wx/wx.h>
+#include "common/common_pch.h"
 
 #include "mmg/mmg.h"
-#include "common/wx.h"
+#include "mmg/window_geometry_saver.h"
 
 #define ID_CLIOPTIONS_COB 2000
 #define ID_CLIOPTIONS_ADD 2001
@@ -41,19 +38,21 @@ class cli_options_dlg: public wxDialog {
 public:
   static std::vector<cli_option_t> all_cli_options;
 
-public:
+protected:
   wxMTX_COMBOBOX_TYPE *cob_option;
   wxTextCtrl *tc_options, *tc_description;
+  wxCheckBox *cb_save_as_default;
+  window_geometry_saver_c m_geometry_saver;
 
 public:
   cli_options_dlg(wxWindow *parent);
   void on_option_changed(wxCommandEvent &evt);
   void on_add_clicked(wxCommandEvent &evt);
-  bool go(wxString &options);
+  bool go(wxString &options, bool &save_as_default);
 
 public:
   static void init_cli_option_list();
   static void clear_cli_option_list();
 };
 
-#endif  // __MMG_CLI_OPTIONS_DLG_H
+#endif  // MTX_MMG_CLI_OPTIONS_DLG_H

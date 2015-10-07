@@ -26,22 +26,27 @@ file_type_t::get_supported() {
   s_supported_file_types.push_back(file_type_t(Y("AAC (Advanced Audio Coding)"),         "aac m4a mp4"));
   s_supported_file_types.push_back(file_type_t(Y("AVC/h.264 elementary streams"),        "264 avc h264 x264"));
   s_supported_file_types.push_back(file_type_t(Y("AVI (Audio/Video Interleaved)"),       "avi"));
+  s_supported_file_types.push_back(file_type_t(Y("ALAC (Apple Lossless Audio Codec)"),   "caf m4a mp4"));
   s_supported_file_types.push_back(file_type_t(Y("Dirac"),                               "drc"));
   s_supported_file_types.push_back(file_type_t(Y("Dolby TrueHD"),                        "thd thd+ac3 truehd true-hd"));
   s_supported_file_types.push_back(file_type_t(Y("DTS/DTS-HD (Digital Theater System)"), "dts dtshd dts-hd"));
 #if defined(HAVE_FLAC_FORMAT_H)
   s_supported_file_types.push_back(file_type_t(Y("FLAC (Free Lossless Audio Codec)"),    "flac ogg"));
 #endif
+  s_supported_file_types.push_back(file_type_t(Y("FLV (Flash Video)"),                   "flv"));
+  s_supported_file_types.push_back(file_type_t(Y("HEVC/h.265 elementary streams"),       "265 hevc h265 x265"));
   s_supported_file_types.push_back(file_type_t(Y("IVF with VP8 video files"),            "ivf"));
   s_supported_file_types.push_back(file_type_t(Y("MP4 audio/video files"),               "mp4 m4v"));
   s_supported_file_types.push_back(file_type_t(Y("MPEG audio files"),                    "mp2 mp3"));
   s_supported_file_types.push_back(file_type_t(Y("MPEG program streams"),                "mpg mpeg m2v mpv evo evob vob"));
-  s_supported_file_types.push_back(file_type_t(Y("MPEG transport streams"),              "ts m2ts"));
+  s_supported_file_types.push_back(file_type_t(Y("MPEG transport streams"),              "ts m2ts mts"));
   s_supported_file_types.push_back(file_type_t(Y("MPEG video elementary streams"),       "m1v m2v mpv"));
+  s_supported_file_types.push_back(file_type_t(Y("MPLS Blu-ray playlist"),               "mpls"));
   s_supported_file_types.push_back(file_type_t(Y("Matroska audio/video files"),          "mka mks mkv mk3d webm webmv webma"));
   s_supported_file_types.push_back(file_type_t(Y("PGS/SUP subtitles"),                   "sup"));
   s_supported_file_types.push_back(file_type_t(Y("QuickTime audio/video files"),         "mov"));
   s_supported_file_types.push_back(file_type_t(Y("Ogg/OGM audio/video files"),           "ogg ogm ogv"));
+  s_supported_file_types.push_back(file_type_t(Y("Opus (in Ogg) audio files"),           "opus ogg"));
   s_supported_file_types.push_back(file_type_t(Y("RealMedia audio/video files"),         "ra ram rm rmvb rv"));
   s_supported_file_types.push_back(file_type_t(Y("SRT text subtitles"),                  "srt"));
   s_supported_file_types.push_back(file_type_t(Y("SSA/ASS text subtitles"),              "ass ssa"));

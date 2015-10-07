@@ -11,16 +11,19 @@
    This code was taken from the ffmpeg project, files "libavutil/bswap.h".
 */
 
-#ifndef __MTX_COMMON_BSWAP_H
-#define __MTX_COMMON_BSWAP_H
+#ifndef MTX_COMMON_BSWAP_H
+#define MTX_COMMON_BSWAP_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
+#ifndef bswap_16
 inline uint16_t
 bswap_16(uint16_t x) {
   return (x >> 8) | (x << 8);
 }
+#endif
 
+#ifndef bswap_32
 inline uint32_t
 bswap_32(uint32_t x) {
   x = ((x <<  8) & 0xff00ff00) | ((x >>  8) & 0x00ff00ff);
@@ -28,7 +31,9 @@ bswap_32(uint32_t x) {
 
   return x;
 }
+#endif
 
+#ifndef bswap_64
 inline uint64_t
 bswap_64(uint64_t x) {
   union {
@@ -42,5 +47,6 @@ bswap_64(uint64_t x) {
 
   return r.ll;
 }
+#endif
 
-#endif  // __MTX_COMMON_BSWAP_H
+#endif  // MTX_COMMON_BSWAP_H

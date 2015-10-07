@@ -1,13 +1,13 @@
 '\" t
 .\"     Title: mkvinfo
 .\"    Author: Moritz Bunkus <moritz@bunkus.org>
-.\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
-.\"      Date: 2011-11-27
+.\" Generator: DocBook XSL Stylesheets v1.78.1 <http://docbook.sf.net/>
+.\"      Date: 2014-04-18
 .\"    Manual: 用户命令
-.\"    Source: MKVToolNix 5.1.0
+.\"    Source: MKVToolNix 6.9.1
 .\"  Language: Chinese
 .\"
-.TH "MKVINFO" "1" "2011\-11\-27" "MKVToolNix 5\&.1\&.0" "用户命令"
+.TH "MKVINFO" "1" "2014\-04\-18" "MKVToolNix 6\&.9\&.1" "用户命令"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -111,6 +111,27 @@ GUI
 将输出可用翻译的列表。
 .RE
 .PP
+\fB\-\-debug\fR \fI主题\fR
+.RS 4
+为特定功能开启调试。该选项仅对开发者有用。
+.RE
+.PP
+\fB\-\-engage\fR \fI功能\fR
+.RS 4
+开启实验性功能。可用功能列表可通过
+\fBmkvinfo \-\-engage list\fR
+获取。通常情况下不应该使用这些功能。
+.RE
+.PP
+\fB\-\-gui\-mode\fR
+.RS 4
+Turns on GUI mode\&. In this mode specially\-formatted lines may be output that can tell a controlling GUI what\*(Aqs happening\&. These messages follow the format \*(Aq#GUI#message\*(Aq\&. The message may be followed by key/value pairs as in \*(Aq#GUI#message#key1=value1#key2=value2\&...\*(Aq\&. Neither the messages nor the keys are ever translated and always output in English\&.
+.sp
+This switch has nothing to do with the
+\fB\-\-gui\fR
+parameter which causes mkvinfo to display its own GUI\&.
+.RE
+.PP
 \fB\-v\fR, \fB\-\-verbose\fR
 .RS 4
 使输出更详尽。请参阅关于
@@ -131,12 +152,12 @@ GUI
 \fB\-\-check\-for\-updates\fR
 .RS 4
 联机下载 URL
-http://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xml
-检查新版本。将以
+\m[blue]\fBhttp://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xml\fR\m[]
+以检查新版本。将以
 键=值
 的样式输出四行: 检索信息的 URL（键
 version_check_url），当前运行的版本（键
-running_version），最新版本（键
+running_version），最新版本号（键
 available_version）及其下载 URL（键
 download_url）。
 .sp
@@ -145,7 +166,7 @@ download_url）。
 此选项仅当程序附带 libcurl 支持编译时可用。
 .RE
 .PP
-\fB@\fR\fIoptions\-file\fR
+\fB@\fR\fI选项文件\fR
 .RS 4
 从文件
 \fI选项文件\fR
@@ -159,14 +180,14 @@ download_url）。
 .RS 4
 .\}
 .nf
-# Be more verbose
+# 更为详尽
 \-v
 \-v
-# Parse input\&.mkv
-input\&.mkv
-# and write the output to info\&.txt
+# 解析 输入\&.mkv
+输入\&.mkv
+# 并将输出信息写入 信息\&.txt
 \-\-redirect\-output
-info\&.txt
+信息\&.txt
 .fi
 .if n \{\
 .RE
@@ -174,7 +195,6 @@ info\&.txt
 .RE
 .SH "\(lq详细\(rq程度"
 .PP
-
 \fB\-v\fR
 选项可以使
 \fBmkvinfo\fR(1)
@@ -203,9 +223,13 @@ Matroska(TM)
 将输出一些与
 Matroska(TM)
 元素不直接相连的信息。对于其他元素，将只输出发现的基本信息。Level 3 增加了元信息以便调试（换句话说：它是为开发人员设计的）。Level 3 输出的所有行都以方括号嵌套以便过滤。
+.SH "文本文件与字符集转换"
+.PP
+For an in\-depth discussion about how all tools in the MKVToolNix suite handle character set conversions, input/output encoding, command line encoding and console encoding please see the identically\-named section in the
+\fBmkvmerge\fR(1)
+man page\&.
 .SH "退出代码"
 .PP
-
 \fBmkvinfo\fR(1)
 退出时会返回以下三个退出代码中的一个：
 .sp
@@ -217,7 +241,6 @@ Matroska(TM)
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB0\fR
 \-\- 此退出代码说明已成功完成运行。
 .RE
@@ -230,7 +253,6 @@ Matroska(TM)
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB1\fR
 \-\- 这种情况下
 \fBmkvinfo\fR(1)
@@ -245,7 +267,6 @@ Matroska(TM)
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB2\fR
 \-\- 此退出代码用于错误发生之后。
 \fBmkvinfo\fR(1)
@@ -255,10 +276,36 @@ Matroska(TM)
 .PP
 有时文本中的特殊字符必须或应该转义。转义规则很简单: 用反斜杠后接一字符替换需要转义的各字符。
 .PP
-The rules are: \*(Aq \*(Aq (a space) becomes \*(Aq\es\*(Aq, \*(Aq"\*(Aq (double quotes) becomes \*(Aq\e2\*(Aq, \*(Aq:\*(Aq becomes \*(Aq\ec\*(Aq, \*(Aq#\*(Aq becomes \*(Aq\eh\*(Aq and \*(Aq\e\*(Aq (a single backslash) itself becomes \*(Aq\e\e\*(Aq\&.
+规则为: \*(Aq \*(Aq (空格) 变为 \*(Aq\es\*(Aq、\*(Aq"\*(Aq (双引号) 变为 \*(Aq\e2\*(Aq、\*(Aq:\*(Aq 变为 \*(Aq\ec\*(Aq、\*(Aq#\*(Aq 变为 \*(Aq\eh\*(Aq，而 \*(Aq\e\*(Aq (单个反斜杠) 自己则变为 \*(Aq\e\e\*(Aq。
+.SH "环境变量"
+.PP
+\fBmkvinfo\fR(1)
+会使用决定系统区域设置的默认变量 (如
+\fILANG\fR
+与
+\fILC_*\fR
+族)。其他变量包括:
+.PP
+\fIMKVTOOLNIX_DEBUG\fR 及其缩写形式 \fIMTX_DEBUG\fR
+.RS 4
+内容将被当作通过
+\fB\-\-debug\fR
+选项传递的参数对待。
+.RE
+.PP
+\fIMKVTOOLNIX_ENGAGE\fR 及其缩写形式 \fIMTX_ENGAGE\fR
+.RS 4
+内容将被当作通过
+\fB\-\-engage\fR
+选项传递的参数对待。
+.RE
+.PP
+\fIMKVTOOLNIX_OPTIONS\fR 及其缩写形式 \fIMTX_OPTIONS\fR
+.RS 4
+内容将在空白处切割。最终得到的字符串部分将按命令行选项的格式处理。如果您需要传递特殊字符 (如空白) 则需要转义 (参见关于转义文本中特殊字符的段落)。
+.RE
 .SH "参阅"
 .PP
-
 \fBmkvmerge\fR(1),
 \fBmkvextract\fR(1),
 \fBmkvpropedit\fR(1),

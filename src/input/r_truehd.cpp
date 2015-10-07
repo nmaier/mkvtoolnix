@@ -13,12 +13,10 @@
 
 #include "common/common_pch.h"
 
-#include <algorithm>
-
-#include <avilib.h>
-
+#include "common/codec.h"
 #include "common/error.h"
 #include "common/id3.h"
+#include "common/mm_io_x.h"
 #include "input/r_truehd.h"
 #include "output/p_truehd.h"
 
@@ -102,7 +100,7 @@ truehd_reader_c::read(generic_packetizer_c *,
 void
 truehd_reader_c::identify() {
   id_result_container();
-  id_result_track(0, ID_RESULT_TRACK_AUDIO, m_header->is_truehd() ? "TrueHD" : "MLP");
+  id_result_track(0, ID_RESULT_TRACK_AUDIO, codec_c::get_name(m_header->is_truehd() ? CT_A_TRUEHD : CT_A_MLP, m_header->is_truehd() ? "TrueHD" : "MLP"));
 }
 
 bool

@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __R_FLAC_H
-#define __R_FLAC_H
+#ifndef MTX_R_FLAC_H
+#define MTX_R_FLAC_H
 
 #include "common/common_pch.h"
 
@@ -48,14 +48,17 @@ public:
   flac_reader_c(const track_info_c &ti, const mm_io_cptr &in);
   virtual ~flac_reader_c();
 
-  virtual const std::string get_format_name(bool translate = true) {
-    return translate ? Y("FLAC") : "FLAC";
+  virtual translatable_string_c get_format_name() const {
+    return YT("FLAC");
   }
 
   virtual void read_headers();
   virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false);
   virtual void identify();
   virtual void create_packetizer(int64_t id);
+  virtual bool is_providing_timecodes() const {
+    return false;
+  }
 
   static bool probe_file(mm_io_c *in, uint64_t size);
 
@@ -85,4 +88,4 @@ public:
 
 #endif // HAVE_FLAC_FORMAT_H
 
-#endif  // __R_FLAC_H
+#endif  // MTX_R_FLAC_H

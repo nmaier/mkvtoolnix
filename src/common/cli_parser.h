@@ -8,21 +8,16 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __COMMON_CLI_PARSER_H
-#define __COMMON_CLI_PARSER_H
+#ifndef MTX_COMMON_CLI_PARSER_H
+#define MTX_COMMON_CLI_PARSER_H
 
-#include "common/os.h"
-
-#include <boost/function.hpp>
-#include <map>
-#include <string>
-#include <vector>
+#include "common/common_pch.h"
 
 #include "common/translation.h"
 
 #define INDENT_DEFAULT -1
 
-typedef boost::function<void(void)> cli_parser_cb_t;
+typedef std::function<void(void)> cli_parser_cb_t;
 
 class cli_parser_c {
 protected:
@@ -81,4 +76,4 @@ protected:
   bool run_hooks(hook_type_e hook_type);
 };
 
-#endif // __COMMON_CLI_PARSER_H
+#endif // MTX_COMMON_CLI_PARSER_H

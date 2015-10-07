@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_BYTE_BUFFER_H
-#define __MTX_COMMON_BYTE_BUFFER_H
+#ifndef MTX_COMMON_BYTE_BUFFER_H
+#define MTX_COMMON_BYTE_BUFFER_H
 
 #include "common/common_pch.h"
 
@@ -85,6 +85,11 @@ public:
       trim();
   }
 
+  void clear() {
+    if (m_filled)
+      remove(m_filled);
+  }
+
   unsigned char *get_buffer() {
     return &m_data[m_offset];
   }
@@ -106,6 +111,6 @@ private:
   }
 };
 
-typedef counted_ptr<byte_buffer_c> byte_buffer_cptr;
+typedef std::shared_ptr<byte_buffer_c> byte_buffer_cptr;
 
-#endif // __MTX_COMMON_BYTE_BUFFER_H
+#endif // MTX_COMMON_BYTE_BUFFER_H

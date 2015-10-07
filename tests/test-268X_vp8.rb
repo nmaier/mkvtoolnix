@@ -6,7 +6,7 @@ class T_268X_vp8 < Test
   end
 
   def run
-    xtr_tracks "data/webm/live-stream.webm", "1:#{tmp}"
+    xtr_tracks "data/webm/live-stream.webm", "0:#{tmp}"
     return hash_tmp
   end
 end

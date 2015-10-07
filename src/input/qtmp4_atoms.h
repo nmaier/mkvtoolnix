@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __QTMP4_ATOMS_H
-#define __QTMP4_ATOMS_H
+#ifndef MTX_INPUT_QTMP4_ATOMS_H
+#define MTX_INPUT_QTMP4_ATOMS_H
 
 // 'Movie header' atom
 #if defined(COMP_MSC)
@@ -165,6 +165,9 @@ typedef struct PACKED_STRUCTURE {
   uint32_t size;
   video_stsd_atom_t id;
 } qt_image_description_t;
+#if defined(COMP_MSC)
+#pragma pack(pop)
+#endif
 
 // one byte tag identifiers
 #define MP4DT_O                 0x01
@@ -188,7 +191,7 @@ typedef struct PACKED_STRUCTURE {
 #define MP4DT_TAGS_END          0xFE
 
 // MPEG4 esds structure
-typedef struct PACKED_STRUCTURE {
+typedef struct {
   uint8_t        version;
   uint32_t       flags;
   uint16_t       esid;
@@ -198,33 +201,8 @@ typedef struct PACKED_STRUCTURE {
   uint32_t       buffer_size_db;
   uint32_t       max_bitrate;
   uint32_t       avg_bitrate;
-  uint8_t        decoder_config_len;
-  unsigned char *decoder_config;
-  uint8_t        sl_config_len;
-  unsigned char *sl_config;
+  memory_cptr    decoder_config;
+  memory_cptr    sl_config;
 } esds_t;
-#if defined(COMP_MSC)
-#pragma pack(pop)
-#endif
 
-// Object type identifications.
-// See http://gpac.sourceforge.net/tutorial/mediatypes.htm
-#define MP4OTI_MPEG4Systems1                   0x01
-#define MP4OTI_MPEG4Systems2                   0x02
-#define MP4OTI_MPEG4Visual                     0x20
-#define MP4OTI_MPEG4Audio                      0x40
-#define MP4OTI_MPEG2VisualSimple               0x60
-#define MP4OTI_MPEG2VisualMain                 0x61
-#define MP4OTI_MPEG2VisualSNR                  0x62
-#define MP4OTI_MPEG2VisualSpatial              0x63
-#define MP4OTI_MPEG2VisualHigh                 0x64
-#define MP4OTI_MPEG2Visual422                  0x65
-#define MP4OTI_MPEG2AudioMain                  0x66
-#define MP4OTI_MPEG2AudioLowComplexity         0x67
-#define MP4OTI_MPEG2AudioScaleableSamplingRate 0x68
-#define MP4OTI_MPEG2AudioPart3                 0x69
-#define MP4OTI_MPEG1Visual                     0x6A
-#define MP4OTI_MPEG1Audio                      0x6B
-#define MP4OTI_JPEG                            0x6C
-
-#endif // __QTMP4_ATOMS_H
+#endif // MTX_INPUT_QTMP4_ATOMS_H

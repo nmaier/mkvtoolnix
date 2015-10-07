@@ -11,13 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
-
-#include <algorithm>
-#include <string>
-#include <vector>
-
-#include <wx/wxprec.h>
+#include "common/common_pch.h"
 
 #include <wx/wx.h>
 #include <wx/config.h>
@@ -26,7 +20,6 @@
 #include <wx/process.h>
 #include <wx/statline.h>
 
-#include "common/common_pch.h"
 #include "common/strings/editing.h"
 #include "common/translation.h"
 #include "common/wx.h"
@@ -59,9 +52,10 @@ optdlg_mkvmerge_tab::optdlg_mkvmerge_tab(wxWindow *parent,
   wxButton *b_browse        = new wxButton(this, ID_B_BROWSEMKVMERGE, Z("Browse"));
 
   wxStaticText *st_priority = new wxStaticText(this, -1, Z("Process priority:"));
-  cob_priority              = new wxMTX_COMBOBOX_TYPE(this, ID_COB_PRIORITY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+  cob_priority              = new wxMTX_COMBOBOX_TYPE(this, ID_COB_PRIORITY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_DROPDOWN | wxCB_READONLY);
 
-  cob_priority->SetToolTip(TIP("Sets the priority that mkvmerge will run with."));
+  cob_priority->SetToolTip(TIP("Sets the priority that mkvmerge will run with. "
+                               "Chosing 'lowest' will cause mkvmerge to select a low I/O priority as well."));
 
   size_t i;
   for (i = 0; cob_priority_translations.entries.size() > i; ++i)
@@ -95,7 +89,7 @@ optdlg_mkvmerge_tab::optdlg_mkvmerge_tab(wxWindow *parent,
   siz_all->Add(siz_fg, 0, wxGROW | wxLEFT | wxRIGHT, 5);
   siz_all->AddSpacer(5);
 
-  SetSizer(siz_all);
+  SetSizerAndFit(siz_all);
 }
 
 void

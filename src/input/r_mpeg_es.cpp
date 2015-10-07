@@ -15,8 +15,10 @@
 
 #include <cstring>
 
+#include "common/codec.h"
 #include "common/endian.h"
 #include "common/error.h"
+#include "common/mm_io_x.h"
 #include "common/mpeg4_p2.h"
 #include "input/r_mpeg_es.h"
 #include "merge/output_control.h"
@@ -71,19 +73,19 @@ mpeg_es_reader_c::probe_file(mm_io_c *in,
       if (mpeg_is_start_code(value)) {
         mxverb(3, boost::format("mpeg_es_detection: start code found; fourth byte: 0x%|1$02x|\n") % (value & 0xff));
 
-        if (MPEGVIDEO_SEQUENCE_START_CODE == value)
+        if (MPEGVIDEO_SEQUENCE_HEADER_START_CODE == value)
           sequence_start_code_found = true;
 
         else if (MPEGVIDEO_PICTURE_START_CODE == value)
           picture_start_code_found  = true;
 
-        else if (MPEGVIDEO_GOP12_START_CODE   == value)
+        else if (MPEGVIDEO_GROUP_OF_PICTURES_START_CODE   == value)
           gop_start_code_found      = true;
 
         else if (MPEGVIDEO_EXT_START_CODE     == value)
           gop_start_code_found      = true;
 
-        else if ((MPEGVIDEO_FIRST_SLICE_START_CODE >= value) && (MPEGVIDEO_LAST_SLICE_START_CODE <= value))
+        else if ((MPEGVIDEO_FIRST_SLICE_START_CODE <= value) && (MPEGVIDEO_LAST_SLICE_START_CODE >= value))
           slice_start_code_found    = true;
 
         ok = sequence_start_code_found && picture_start_code_found && (gop_start_code_found || ext_start_code_found || slice_start_code_found);
@@ -149,10 +151,10 @@ mpeg_es_reader_c::read_headers() {
     dheight = height;
 
     MPEGChunk *raw_seq_hdr = parser.GetRealSequenceHeader();
-    if (NULL != raw_seq_hdr) {
-      m_ti.m_private_data = (unsigned char *)safememdup(raw_seq_hdr->GetPointer(), raw_seq_hdr->GetSize());
-      m_ti.m_private_size = raw_seq_hdr->GetSize();
-    }
+    if (raw_seq_hdr)
+      m_ti.m_private_data = memory_c::clone(raw_seq_hdr->GetPointer(), raw_seq_hdr->GetSize());
+    else
+      m_ti.m_private_data.reset();
 
     mxverb(2, boost::format("mpeg_es_reader: version %1% width %2% height %3% FPS %4% AR %5%\n") % version % width % height % frame_rate % aspect_ratio);
 
@@ -200,43 +202,38 @@ bool
 mpeg_es_reader_c::read_frame(M2VParser &parser,
                              mm_io_c &in,
                              int64_t max_size) {
-  int bytes_probed;
+  auto af_buffer = memory_c::alloc(READ_SIZE);
+  auto buffer    = af_buffer->get_buffer();
+  int bytes_probed = 0;
 
-  bytes_probed = 0;
   while (true) {
-    int state;
+    auto state = parser.GetState();
 
-    state = parser.GetState();
-
-    if (MPV_PARSER_STATE_NEED_DATA == state) {
-      if ((max_size != -1) && (bytes_probed > max_size))
-        return false;
-
-      int bytes_to_read     = (parser.GetFreeBufferSpace() < READ_SIZE) ? parser.GetFreeBufferSpace() : READ_SIZE;
-      unsigned char *buffer = new unsigned char[bytes_to_read];
-      int bytes_read        = in.read(buffer, bytes_to_read);
-      if (0 == bytes_read) {
-        delete [] buffer;
-        break;
-      }
-      bytes_probed += bytes_read;
-
-      parser.WriteData(buffer, bytes_read);
-      parser.SetEOS();
-      delete [] buffer;
-
-    } else if (MPV_PARSER_STATE_FRAME == state)
+    if (MPV_PARSER_STATE_FRAME == state)
       return true;
 
-    else if ((MPV_PARSER_STATE_EOS == state) || (MPV_PARSER_STATE_ERROR == state))
+    if ((MPV_PARSER_STATE_EOS == state) || (MPV_PARSER_STATE_ERROR == state))
       return false;
-  }
 
-  return false;
+    assert(MPV_PARSER_STATE_NEED_DATA == state);
+
+    if ((max_size != -1) && (bytes_probed > max_size))
+      return false;
+
+    int bytes_read = in.read(buffer, std::min<int>(parser.GetFreeBufferSpace(), READ_SIZE));
+    if (!bytes_read)
+      return false;
+
+    bytes_probed += bytes_read;
+
+    parser.WriteData(buffer, bytes_read);
+    parser.SetEOS();
+  }
 }
 
 void
 mpeg_es_reader_c::identify() {
+  auto codec = (boost::format("mpg%1%") % version).str();
   id_result_container();
-  id_result_track(0, ID_RESULT_TRACK_VIDEO, (boost::format("MPEG %1%") % version).str());
+  id_result_track(0, ID_RESULT_TRACK_VIDEO, codec_c::get_name(codec, codec));
 }

@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __P_MPEG1_2_H
-#define __P_MPEG1_2_H
+#ifndef MTX_OUTPUT_P_MPEG1_2_H
+#define MTX_OUTPUT_P_MPEG1_2_H
 
 #include "common/common_pch.h"
 
@@ -25,15 +25,17 @@ protected:
   M2VParser m_parser;
   memory_cptr m_seq_hdr;
   bool m_framed, m_aspect_ratio_extracted;
+  int64_t m_num_removed_stuffing_bytes;
+  debugging_option_c m_debug_stuffing_removal;
 
 public:
   mpeg1_2_video_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, int version, double fps, int width, int height, int dwidth, int dheight, bool framed);
+  virtual ~mpeg1_2_video_packetizer_c();
 
   virtual int process(packet_cptr packet);
-  virtual void flush();
 
-  virtual const std::string get_format_name(bool translate = true) {
-    return translate ? Y("MPEG-1/2") : "MPEG-1/2";
+  virtual translatable_string_c get_format_name() const {
+    return YT("MPEG-1/2");
   }
 
 protected:
@@ -41,7 +43,9 @@ protected:
   virtual void extract_aspect_ratio(const unsigned char *buffer, int size);
   virtual void create_private_data();
   virtual int process_framed(packet_cptr packet);
-  virtual bool put_sequence_headers_into_codec_state(packet_cptr packet);
+  virtual int process_unframed(packet_cptr packet);
+  virtual void remove_stuffing_bytes_and_handle_sequence_headers(packet_cptr packet);
+  virtual void flush_impl();
 };
 
-#endif  // __P_MPEG1_2_H
+#endif  // MTX_OUTPUT_P_MPEG1_2_H
